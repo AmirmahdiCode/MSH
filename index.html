@@ -30,7 +30,6 @@
       --announcement-bg: #f0fdfa;
       --announcement-border: #ccfbf1;
       --logo-filter: none;
-      --gallery-track-bg: #f1f5f9;
     }
     
     [data-theme="dark"] {
@@ -55,7 +54,6 @@
       --announcement-bg: #1a2e2b;
       --announcement-border: #164e4a;
       --logo-filter: brightness(0) invert(1);
-      --gallery-track-bg: #1e293b;
     }
     
     [data-muharram="true"] {
@@ -596,7 +594,7 @@
     <div class="header-inner">
       <div class="header-right">
         <div class="header-logo">
-          <img src="https://cdn.imgurl.ir/uploads/e780635_IMG_20260714_005429_302.png" alt="لوگو">
+          <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
         </div>
         <div>
           <div class="header-title">شهدای گمنام شورابیل</div>
@@ -861,48 +859,72 @@
       const track = document.getElementById('galleryTrack');
       
       try {
-        const res = await fetch(API_URL + '?action=getEvents');
-        const data = await res.json();
+        const eventsRes = await fetch(API_URL + '?action=getEvents');
+        const eventsData = await eventsRes.json();
         
-        if (data.success && data.data.length > 0) {
-          const eventsWithImages = data.data.filter(event => event.image);
-          
-          const last15 = eventsWithImages.slice(0, 15);
-          
-          if (last15.length > 0) {
-            track.innerHTML = last15.map(event => {
-              const eventDate = new Date(event.date);
-              const dateStr = eventDate.toLocaleDateString('fa-IR');
-              
-              return `
-                <div class="gallery-card" onclick="openEvent('${event.id}')">
-                  <img src="${event.image}" class="gallery-image" alt="${event.title}">
-                  <div class="gallery-info">
-                    <div class="gallery-title">${event.title}</div>
-                    <div class="gallery-meta">
-                      <i class="fa-solid fa-clock"></i> ${dateStr}
-                      <i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> ${event.location || 'مشخص نشده'}
-                    </div>
-                  </div>
-                </div>
-              `;
-            }).join('');
-          } else {
-            track.innerHTML = `
-              <div class="gallery-card">
-                <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
-                <div class="gallery-info">
-                  <div class="gallery-title">تصویری یافت نشد</div>
-                </div>
-              </div>
-            `;
-          }
-        } else {
+        if (!eventsData.success || eventsData.data.length === 0) {
           track.innerHTML = `
             <div class="gallery-card">
               <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
               <div class="gallery-info">
                 <div class="gallery-title">تصویری یافت نشد</div>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        const events = eventsData.data;
+        const archiveItems = [];
+        
+        for (const event of events) {
+          try {
+            const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', {
+              method: 'POST',
+              body: JSON.stringify({ eventId: event.id })
+            });
+            const archiveData = await archiveRes.json();
+            
+            if (archiveData.success && archiveData.data.images && archiveData.data.images.length > 0) {
+              archiveItems.push({
+                eventId: event.id,
+                title: event.title,
+                date: event.date,
+                location: event.location,
+                image: archiveData.data.images[0]
+              });
+            }
+          } catch (e) {
+            continue;
+          }
+        }
+        
+        const last15 = archiveItems.slice(0, 15);
+        
+        if (last15.length > 0) {
+          track.innerHTML = last15.map(item => {
+            const eventDate = new Date(item.date);
+            const dateStr = eventDate.toLocaleDateString('fa-IR');
+            
+            return `
+              <div class="gallery-card" onclick="openEvent('${item.eventId}')">
+                <img src="${item.image}" class="gallery-image" alt="${item.title}">
+                <div class="gallery-info">
+                  <div class="gallery-title">${item.title}</div>
+                  <div class="gallery-meta">
+                    <i class="fa-solid fa-clock"></i> ${dateStr}
+                    <i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> ${item.location || 'مشخص نشده'}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          track.innerHTML = `
+            <div class="gallery-card">
+              <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
+              <div class="gallery-info">
+                <div class="gallery-title">تصویری آرشیو نشده</div>
               </div>
             </div>
           `;
