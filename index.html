@@ -544,15 +544,16 @@
       transition: color 0.3s;
     }
     
-    @media (max-width: 900px) {
+    @media (max-width: 900px) and (min-width: 651px) {
       .events-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
       }
     }
     
     @media (max-width: 650px) {
       .events-grid {
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
       .event-image.placeholder {
