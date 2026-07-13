@@ -122,12 +122,13 @@
       justify-content: center;
       box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
       overflow: hidden;
+      padding: 6px;
     }
     
     .header-logo img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       filter: var(--logo-filter);
     }
     
@@ -178,6 +179,26 @@
       width: 100%;
       margin: 20px auto;
       padding: 0 12px;
+    }
+    
+    .loader-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+    
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--bg3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
     
     .announcements-section {
@@ -609,68 +630,10 @@
     </div>
   </header>
 
-  <section class="main-container">
-    
-    <div class="announcements-section" id="announcementsSection">
-      <div class="section-title">
-        <i class="fa-solid fa-bullhorn"></i>
-        اطلاعیه‌ها
-      </div>
-      <div id="announcementsList">
-        <div class="announcement-item">
-          <div class="announcement-icon"><i class="fa-solid fa-spinner fa-pulse"></i></div>
-          <div class="announcement-content">
-            <div class="announcement-title">در حال بارگذاری...</div>
-          </div>
-        </div>
-      </div>
+  <section class="main-container" id="mainContent">
+    <div class="loader-wrapper">
+      <div class="loader"></div>
     </div>
-
-    <div class="events-section">
-      <div class="section-title">
-        <i class="fa-solid fa-calendar-check"></i>
-        مراسم‌های پیش رو
-      </div>
-      <div class="events-grid" id="eventsGrid">
-        <div class="event-card">
-          <div class="event-image placeholder"><i class="fa-solid fa-spinner fa-pulse"></i></div>
-          <div class="event-info">
-            <div class="event-title">در حال بارگذاری...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="gallery-section">
-      <div class="section-title">
-        <i class="fa-solid fa-images"></i>
-        تصاویر
-      </div>
-      <div class="gallery-track" id="galleryTrack">
-        <div class="gallery-card">
-          <div class="gallery-image placeholder"><i class="fa-solid fa-spinner fa-pulse"></i></div>
-          <div class="gallery-info">
-            <div class="gallery-title">در حال بارگذاری...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="donation-section">
-      <div class="donation-banner" id="donationBanner">
-        <div class="donation-icon">
-          <i class="fa-solid fa-hand-holding-heart"></i>
-        </div>
-        <div class="donation-info">
-          <h3>منتظر کمک‌های نقدی شما هستیم</h3>
-          <p>با کمک‌های مردمی خود، ما را در برگزاری مراسم‌های باشکوه یاری کنید</p>
-        </div>
-        <div class="donation-arrow">
-          <i class="fa-solid fa-chevron-left"></i>
-        </div>
-      </div>
-    </div>
-
   </section>
 
   <footer class="footer">
@@ -729,125 +692,9 @@
       }
     }
     
-    async function loadAnnouncements() {
-      const list = document.getElementById('announcementsList');
-      
-      try {
-        const res = await fetch(API_URL + '?action=getActiveAnnouncements');
-        const data = await res.json();
-        
-        if (data.success && data.data.length > 0) {
-          list.innerHTML = data.data.map(item => `
-            <div class="announcement-item" onclick="openAnnouncement('${item.id}')">
-              <div class="announcement-icon">
-                <i class="fa-solid fa-bullhorn"></i>
-              </div>
-              <div class="announcement-content">
-                <div class="announcement-title">${item.title}</div>
-                <div class="announcement-text">${item.content ? item.content.substring(0, 100) + '...' : ''}</div>
-              </div>
-              <span class="announcement-tag">${item.tag || 'اطلاعیه'}</span>
-            </div>
-          `).join('');
-        } else {
-          list.innerHTML = `
-            <div class="announcement-item">
-              <div class="announcement-icon">
-                <i class="fa-solid fa-circle-info"></i>
-              </div>
-              <div class="announcement-content">
-                <div class="announcement-title">اطلاعیه‌ای برای نمایش وجود ندارد</div>
-              </div>
-            </div>
-          `;
-        }
-      } catch (e) {
-        list.innerHTML = `
-          <div class="announcement-item">
-            <div class="announcement-icon">
-              <i class="fa-solid fa-circle-exclamation"></i>
-            </div>
-            <div class="announcement-content">
-              <div class="announcement-title">خطا در دریافت اطلاعیه‌ها</div>
-            </div>
-          </div>
-        `;
-      }
-    }
-    
     function openAnnouncement(id) {
       localStorage.setItem('selectedAnnouncementId', id);
       window.location.href = 'list/Announcements.html';
-    }
-    
-    async function loadEvents() {
-      const grid = document.getElementById('eventsGrid');
-      
-      try {
-        const res = await fetch(API_URL + '?action=getEvents');
-        const data = await res.json();
-        
-        if (data.success && data.data.length > 0) {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          
-          const upcomingEvents = data.data.filter(event => {
-            const eventDate = new Date(event.date);
-            return eventDate >= today;
-          });
-          
-          if (upcomingEvents.length > 0) {
-            grid.innerHTML = upcomingEvents.map(event => {
-              const eventDate = new Date(event.date);
-              const dateStr = eventDate.toLocaleDateString('fa-IR');
-              
-              return `
-                <div class="event-card" onclick="openEvent('${event.id}')">
-                  ${event.image ? 
-                    `<img src="${event.image}" class="event-image" alt="${event.title}">` : 
-                    `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`
-                  }
-                  <div class="event-info">
-                    <div class="event-title">${event.title}</div>
-                    <div class="event-meta">
-                      <span class="event-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>
-                      <span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location || 'مشخص نشده'}</span>
-                    </div>
-                    <span class="event-tag">${event.tag || 'مراسم'}</span>
-                  </div>
-                </div>
-              `;
-            }).join('');
-          } else {
-            grid.innerHTML = `
-              <div class="event-card" style="grid-column: 1/-1;">
-                <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
-                <div class="event-info" style="text-align: center;">
-                  <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
-                </div>
-              </div>
-            `;
-          }
-        } else {
-          grid.innerHTML = `
-            <div class="event-card" style="grid-column: 1/-1;">
-              <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
-              <div class="event-info" style="text-align: center;">
-                <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
-              </div>
-            </div>
-          `;
-        }
-      } catch (e) {
-        grid.innerHTML = `
-          <div class="event-card" style="grid-column: 1/-1;">
-            <div class="event-image placeholder"><i class="fa-solid fa-circle-exclamation"></i></div>
-            <div class="event-info" style="text-align: center;">
-              <div class="event-title">خطا در دریافت اطلاعات</div>
-            </div>
-          </div>
-        `;
-      }
     }
     
     function openEvent(id) {
@@ -855,101 +702,267 @@
       window.location.href = 'list/Events.html';
     }
     
-    async function loadGallery() {
-      const track = document.getElementById('galleryTrack');
+    async function loadAllData() {
+      const container = document.getElementById('mainContent');
       
       try {
-        const eventsRes = await fetch(API_URL + '?action=getEvents');
+        const [announcementsRes, eventsRes] = await Promise.all([
+          fetch(API_URL + '?action=getActiveAnnouncements'),
+          fetch(API_URL + '?action=getEvents')
+        ]);
+        
+        const announcementsData = await announcementsRes.json();
         const eventsData = await eventsRes.json();
         
-        if (!eventsData.success || eventsData.data.length === 0) {
-          track.innerHTML = `
-            <div class="gallery-card">
-              <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
-              <div class="gallery-info">
-                <div class="gallery-title">تصویری یافت نشد</div>
+        let announcementsHTML = '';
+        let eventsHTML = '';
+        let galleryHTML = '';
+        
+        if (announcementsData.success && announcementsData.data.length > 0) {
+          announcementsHTML = `
+            <div class="announcements-section">
+              <div class="section-title">
+                <i class="fa-solid fa-bullhorn"></i>
+                اطلاعیه‌ها
+              </div>
+              ${announcementsData.data.map(item => `
+                <div class="announcement-item" onclick="openAnnouncement('${item.id}')">
+                  <div class="announcement-icon">
+                    <i class="fa-solid fa-bullhorn"></i>
+                  </div>
+                  <div class="announcement-content">
+                    <div class="announcement-title">${item.title}</div>
+                    <div class="announcement-text">${item.content ? item.content.substring(0, 100) + '...' : ''}</div>
+                  </div>
+                  <span class="announcement-tag">${item.tag || 'اطلاعیه'}</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          announcementsHTML = `
+            <div class="announcements-section">
+              <div class="section-title">
+                <i class="fa-solid fa-bullhorn"></i>
+                اطلاعیه‌ها
+              </div>
+              <div class="announcement-item">
+                <div class="announcement-icon">
+                  <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="announcement-content">
+                  <div class="announcement-title">اطلاعیه‌ای برای نمایش وجود ندارد</div>
+                </div>
               </div>
             </div>
           `;
-          return;
         }
         
-        const events = eventsData.data;
-        const archiveItems = [];
-        
-        for (const event of events) {
-          try {
-            const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', {
-              method: 'POST',
-              body: JSON.stringify({ eventId: event.id })
-            });
-            const archiveData = await archiveRes.json();
-            
-            if (archiveData.success && archiveData.data.images && archiveData.data.images.length > 0) {
-              archiveItems.push({
-                eventId: event.id,
-                title: event.title,
-                date: event.date,
-                location: event.location,
-                image: archiveData.data.images[0]
-              });
-            }
-          } catch (e) {
-            continue;
-          }
-        }
-        
-        const last15 = archiveItems.slice(0, 15);
-        
-        if (last15.length > 0) {
-          track.innerHTML = last15.map(item => {
-            const eventDate = new Date(item.date);
-            const dateStr = eventDate.toLocaleDateString('fa-IR');
-            
-            return `
-              <div class="gallery-card" onclick="openEvent('${item.eventId}')">
-                <img src="${item.image}" class="gallery-image" alt="${item.title}">
-                <div class="gallery-info">
-                  <div class="gallery-title">${item.title}</div>
-                  <div class="gallery-meta">
-                    <i class="fa-solid fa-clock"></i> ${dateStr}
-                    <i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> ${item.location || 'مشخص نشده'}
+        if (eventsData.success && eventsData.data.length > 0) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          const upcomingEvents = eventsData.data.filter(event => {
+            const eventDate = new Date(event.date);
+            return eventDate >= today;
+          });
+          
+          if (upcomingEvents.length > 0) {
+            eventsHTML = `
+              <div class="events-section">
+                <div class="section-title">
+                  <i class="fa-solid fa-calendar-check"></i>
+                  مراسم‌های پیش رو
+                </div>
+                <div class="events-grid">
+                  ${upcomingEvents.map(event => {
+                    const eventDate = new Date(event.date);
+                    const dateStr = eventDate.toLocaleDateString('fa-IR');
+                    
+                    return `
+                      <div class="event-card" onclick="openEvent('${event.id}')">
+                        ${event.image ? 
+                          `<img src="${event.image}" class="event-image" alt="${event.title}">` : 
+                          `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`
+                        }
+                        <div class="event-info">
+                          <div class="event-title">${event.title}</div>
+                          <div class="event-meta">
+                            <span class="event-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>
+                            <span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location || 'مشخص نشده'}</span>
+                          </div>
+                          <span class="event-tag">${event.tag || 'مراسم'}</span>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          } else {
+            eventsHTML = `
+              <div class="events-section">
+                <div class="section-title">
+                  <i class="fa-solid fa-calendar-check"></i>
+                  مراسم‌های پیش رو
+                </div>
+                <div class="events-grid">
+                  <div class="event-card" style="grid-column: 1/-1;">
+                    <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
+                    <div class="event-info" style="text-align: center;">
+                      <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
+                    </div>
                   </div>
                 </div>
               </div>
             `;
-          }).join('');
+          }
+          
+          const archiveItems = [];
+          
+          for (const event of eventsData.data) {
+            try {
+              const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', {
+                method: 'POST',
+                body: JSON.stringify({ eventId: event.id })
+              });
+              const archiveData = await archiveRes.json();
+              
+              if (archiveData.success && archiveData.data.images && archiveData.data.images.length > 0) {
+                archiveItems.push({
+                  eventId: event.id,
+                  title: event.title,
+                  date: event.date,
+                  location: event.location,
+                  image: archiveData.data.images[0]
+                });
+              }
+            } catch (e) {
+              continue;
+            }
+          }
+          
+          const last15 = archiveItems.slice(0, 15);
+          
+          if (last15.length > 0) {
+            galleryHTML = `
+              <div class="gallery-section">
+                <div class="section-title">
+                  <i class="fa-solid fa-images"></i>
+                  تصاویر
+                </div>
+                <div class="gallery-track">
+                  ${last15.map(item => {
+                    const eventDate = new Date(item.date);
+                    const dateStr = eventDate.toLocaleDateString('fa-IR');
+                    
+                    return `
+                      <div class="gallery-card" onclick="openEvent('${item.eventId}')">
+                        <img src="${item.image}" class="gallery-image" alt="${item.title}">
+                        <div class="gallery-info">
+                          <div class="gallery-title">${item.title}</div>
+                          <div class="gallery-meta">
+                            <i class="fa-solid fa-clock"></i> ${dateStr}
+                            <i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> ${item.location || 'مشخص نشده'}
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          } else {
+            galleryHTML = `
+              <div class="gallery-section">
+                <div class="section-title">
+                  <i class="fa-solid fa-images"></i>
+                  تصاویر
+                </div>
+                <div class="gallery-track">
+                  <div class="gallery-card">
+                    <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
+                    <div class="gallery-info">
+                      <div class="gallery-title">تصویری آرشیو نشده</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
         } else {
-          track.innerHTML = `
-            <div class="gallery-card">
-              <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
-              <div class="gallery-info">
-                <div class="gallery-title">تصویری آرشیو نشده</div>
+          eventsHTML = `
+            <div class="events-section">
+              <div class="section-title">
+                <i class="fa-solid fa-calendar-check"></i>
+                مراسم‌های پیش رو
+              </div>
+              <div class="events-grid">
+                <div class="event-card" style="grid-column: 1/-1;">
+                  <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
+                  <div class="event-info" style="text-align: center;">
+                    <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          galleryHTML = `
+            <div class="gallery-section">
+              <div class="section-title">
+                <i class="fa-solid fa-images"></i>
+                تصاویر
+              </div>
+              <div class="gallery-track">
+                <div class="gallery-card">
+                  <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
+                  <div class="gallery-info">
+                    <div class="gallery-title">تصویری یافت نشد</div>
+                  </div>
+                </div>
               </div>
             </div>
           `;
         }
+        
+        const donationHTML = `
+          <div class="donation-section">
+            <div class="donation-banner" onclick="window.location.href='list/donations.html'">
+              <div class="donation-icon">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+              </div>
+              <div class="donation-info">
+                <h3>منتظر کمک‌های نقدی شما هستیم</h3>
+                <p>با کمک‌های مردمی خود، ما را در برگزاری مراسم‌های باشکوه یاری کنید</p>
+              </div>
+              <div class="donation-arrow">
+                <i class="fa-solid fa-chevron-left"></i>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        container.innerHTML = announcementsHTML + eventsHTML + galleryHTML + donationHTML;
+        
       } catch (e) {
-        track.innerHTML = `
-          <div class="gallery-card">
-            <div class="gallery-image placeholder"><i class="fa-solid fa-circle-exclamation"></i></div>
-            <div class="gallery-info">
-              <div class="gallery-title">خطا در دریافت تصاویر</div>
+        container.innerHTML = `
+          <div class="loader-wrapper">
+            <div style="text-align: center;">
+              <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+              <p style="color: var(--text-light);">خطا در دریافت اطلاعات</p>
+              <button onclick="loadAllData()" style="margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px;">
+                <i class="fa-solid fa-rotate-right"></i> تلاش مجدد
+              </button>
             </div>
           </div>
         `;
       }
     }
     
-    document.getElementById('donationBanner').addEventListener('click', () => {
-      window.location.href = 'list/donations.html';
-    });
-    
     function init() {
       checkMuharram();
-      loadAnnouncements();
-      loadEvents();
-      loadGallery();
+      loadAllData();
     }
     
     init();
