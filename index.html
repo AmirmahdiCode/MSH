@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc;
+      --bg2: #f1f5f9;
+      --bg3: #e2e8f0;
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #5eead4;
+      --primary-rgb: 13, 148, 136;
+      --dark: #0f172a;
+      --text: #334155;
+      --text-light: #94a3b8;
+      --white: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
+      --header-bg: #ffffff;
+      --footer-bg: #ffffff;
+      --overlay: rgba(13, 148, 136, 0.05);
+      --announcement-bg: #f0fdfa;
+      --announcement-border: #ccfbf1;
+      --logo-filter: none;
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --primary: #14b8a6;
+      --primary-dark: #0d9488;
+      --primary-light: #5eead4;
+      --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9;
+      --text: #cbd5e1;
+      --text-light: #64748b;
+      --white: #1e293b;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+      --header-bg: #1e293b;
+      --footer-bg: #1e293b;
+      --overlay: rgba(20, 184, 166, 0.08);
+      --announcement-bg: #1a2e2b;
+      --announcement-border: #164e4a;
+      --logo-filter: brightness(0) invert(1);
+    }
+    
+    [data-muharram="true"] {
+      --primary: #dc2626;
+      --primary-dark: #b91c1c;
+      --primary-light: #fca5a5;
+      --primary-rgb: 220, 38, 38;
+      --overlay: rgba(220, 38, 38, 0.05);
+      --announcement-bg: #fef2f2;
+      --announcement-border: #fecaca;
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444;
+      --primary-dark: #dc2626;
+      --primary-light: #fca5a5;
+      --primary-rgb: 239, 68, 68;
+      --overlay: rgba(239, 68, 68, 0.08);
+      --announcement-bg: #2e1a1a;
+      --announcement-border: #4e1616;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    
+    .header {
+      background: var(--header-bg);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--bg3);
+      transition: all 0.3s ease;
+    }
+    
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .header-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
+      overflow: hidden;
+    }
+    
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: var(--logo-filter);
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      transition: color 0.3s;
+    }
+    
+    .header-subtitle {
+      font-size: 10px;
+      color: var(--text-light);
+      transition: color 0.3s;
+    }
+    
+    .header-btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .theme-toggle {
+      background: var(--bg2);
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: rotate(15deg);
+    }
+    
+    .main-container {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 12px;
+    }
+    
+    .announcements-section {
+      margin-bottom: 24px;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s;
+    }
+    
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--bg3);
+      transition: background 0.3s;
+    }
+    
+    .announcement-item {
+      background: var(--announcement-bg);
+      border: 1px solid var(--announcement-border);
+      border-right: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .announcement-item:hover {
+      transform: translateX(-4px);
+      box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.1);
+    }
+    
+    .announcement-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    
+    .announcement-content {
+      flex: 1;
+    }
+    
+    .announcement-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 2px;
+      transition: color 0.3s;
+    }
+    
+    .announcement-text {
+      font-size: 10px;
+      color: var(--text-light);
+    }
+    
+    .announcement-tag {
+      font-size: 9px;
+      background: var(--primary);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    
+    .events-section {
+      margin-bottom: 24px;
+    }
+    
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    
+    .event-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
+    }
+    
+    .event-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary-light);
+    }
+    
+    .event-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: var(--bg2);
+    }
+    
+    .event-image.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      color: var(--primary);
+    }
+    
+    .event-info {
+      padding: 10px 12px;
+    }
+    
+    .event-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+      line-height: 1.5;
+      transition: color 0.3s;
+    }
+    
+    .event-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    
+    .event-date {
+      font-size: 9px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    
+    .event-location {
+      font-size: 9px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    
+    .event-tag {
+      font-size: 9px;
+      color: var(--primary-dark);
+      background: var(--overlay);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    
+    .donation-section {
+      margin-bottom: 24px;
+    }
+    
+    .donation-banner {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .donation-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    
+    .donation-info h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .donation-info p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    .donation-link {
+      background: #fff;
+      color: var(--primary-dark);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .donation-link:hover {
+      background: rgba(255,255,255,0.9);
+      transform: scale(1.05);
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--footer-bg);
+      border-top: 1px solid var(--bg3);
+      margin-top: auto;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: var(--primary-dark);
+      font-size: 11px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--dark);
+    }
+    
+    .footer-text {
+      font-size: 10px;
+      color: var(--text-light);
+      transition: color 0.3s;
+    }
+    
+    @media (max-width: 900px) {
+      .events-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .event-image {
+        height: 140px;
+      }
+      .donation-banner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    
+    @media (max-width: 650px) {
+      .events-grid {
+        gap: 10px;
+      }
+      .event-image {
+        height: 170px;
+      }
+      .event-image.placeholder {
+        font-size: 48px;
+      }
+      .event-title {
+        font-size: 13px;
+      }
+      .event-info {
+        padding: 10px 12px;
+      }
+      .event-date, .event-location {
+        font-size: 10px;
+      }
+      .header-title {
+        font-size: 17px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .events-grid {
+        gap: 8px;
+      }
+      .event-image {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo">
+          <img src="https://cdn.imgurl.ir/uploads/e780635_IMG_20260714_005429_302.png" alt="لوگو">
+        </div>
+        <div>
+          <div class="header-title">شهدای گمنام شورابیل</div>
+          <div class="header-subtitle">پایگاه خبری هیأت</div>
+        </div>
+      </div>
+      <div class="header-btns">
+        <button class="theme-toggle" id="themeToggle" title="تغییر تم">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-container">
+    
+    <div class="announcements-section" id="announcementsSection">
+      <div class="section-title">
+        <i class="fa-solid fa-bullhorn"></i>
+        اطلاعیه‌ها
+      </div>
+      <div id="announcementsList">
+        <div class="announcement-item">
+          <div class="announcement-icon"><i class="fa-solid fa-spinner fa-pulse"></i></div>
+          <div class="announcement-content">
+            <div class="announcement-title">در حال بارگذاری...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="events-section">
+      <div class="section-title">
+        <i class="fa-solid fa-calendar-check"></i>
+        مراسم‌های پیش رو
+      </div>
+      <div class="events-grid" id="eventsGrid">
+        <div class="event-card">
+          <div class="event-image placeholder"><i class="fa-solid fa-spinner fa-pulse"></i></div>
+          <div class="event-info">
+            <div class="event-title">در حال بارگذاری...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="donation-section">
+      <div class="donation-banner">
+        <div class="donation-icon">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+        </div>
+        <div class="donation-info">
+          <h3>منتظر کمک‌های نقدی شما هستیم</h3>
+          <p>با کمک‌های مردمی خود، ما را در برگزاری مراسم‌های باشکوه یاری کنید</p>
+        </div>
+        <a href="#" class="donation-link">
+          <i class="fa-solid fa-circle-info"></i>
+          اطلاعات بیشتر
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#"><i class="fa-solid fa-phone"></i> تماس با هیأت</a>
+      <a href="#"><i class="fa-solid fa-location-dot"></i> آدرس حسینیه</a>
+      <a href="#"><i class="fa-solid fa-photo-film"></i> گالری تصاویر</a>
+      <a href="#"><i class="fa-solid fa-podcast"></i> آرشیو صوت</a>
+    </div>
+    <p class="footer-text">هیأت شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
+  </footer>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbw9Pmin5dp5YaayWcp-If4mqegvlcJrTeevgkgKA8EKMuAVwqUHsMk9ONPp8Oywz9CJ/exec';
+    
+    const themeToggle = document.getElementById('themeToggle');
+    const icon = themeToggle.querySelector('i');
+    
+    const savedTheme = localStorage.getItem('heyat-theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      icon.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      
+      if (currentTheme === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+        icon.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('heyat-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('heyat-theme', 'dark');
+      }
+    });
+    
+    async function checkMuharram() {
+      try {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${dateStr}`);
+        const data = await res.json();
+        
+        if (data.code === 200) {
+          const hijriMonth = data.data.hijri.month.number;
+          if (hijriMonth === 1) {
+            document.documentElement.setAttribute('data-muharram', 'true');
+          }
+        }
+      } catch (e) {
+        console.log('بررسی ماه محرم با خطا مواجه شد');
+      }
+    }
+    
+    async function loadAnnouncements() {
+      const list = document.getElementById('announcementsList');
+      
+      try {
+        const res = await fetch(API_URL + '?action=getActiveAnnouncements');
+        const data = await res.json();
+        
+        if (data.success && data.data.length > 0) {
+          list.innerHTML = data.data.map(item => `
+            <div class="announcement-item">
+              <div class="announcement-icon">
+                <i class="fa-solid fa-bullhorn"></i>
+              </div>
+              <div class="announcement-content">
+                <div class="announcement-title">${item.title}</div>
+                <div class="announcement-text">${item.content ? item.content.substring(0, 100) + '...' : ''}</div>
+              </div>
+              <span class="announcement-tag">${item.tag || 'اطلاعیه'}</span>
+            </div>
+          `).join('');
+        } else {
+          list.innerHTML = `
+            <div class="announcement-item">
+              <div class="announcement-icon">
+                <i class="fa-solid fa-circle-info"></i>
+              </div>
+              <div class="announcement-content">
+                <div class="announcement-title">اطلاعیه‌ای برای نمایش وجود ندارد</div>
+              </div>
+            </div>
+          `;
+        }
+      } catch (e) {
+        list.innerHTML = `
+          <div class="announcement-item">
+            <div class="announcement-icon">
+              <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <div class="announcement-content">
+              <div class="announcement-title">خطا در دریافت اطلاعیه‌ها</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    async function loadEvents() {
+      const grid = document.getElementById('eventsGrid');
+      
+      try {
+        const res = await fetch(API_URL + '?action=getEvents');
+        const data = await res.json();
+        
+        if (data.success && data.data.length > 0) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          const upcomingEvents = data.data.filter(event => {
+            const eventDate = new Date(event.date);
+            return eventDate >= today;
+          });
+          
+          if (upcomingEvents.length > 0) {
+            grid.innerHTML = upcomingEvents.map(event => {
+              const eventDate = new Date(event.date);
+              const dateStr = eventDate.toLocaleDateString('fa-IR');
+              
+              return `
+                <div class="event-card">
+                  ${event.image ? 
+                    `<img src="${event.image}" class="event-image" alt="${event.title}">` : 
+                    `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`
+                  }
+                  <div class="event-info">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-meta">
+                      <span class="event-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>
+                      <span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location || 'مشخص نشده'}</span>
+                    </div>
+                    <span class="event-tag">${event.tag || 'مراسم'}</span>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          } else {
+            grid.innerHTML = `
+              <div class="event-card" style="grid-column: 1/-1;">
+                <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
+                <div class="event-info" style="text-align: center;">
+                  <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          grid.innerHTML = `
+            <div class="event-card" style="grid-column: 1/-1;">
+              <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
+              <div class="event-info" style="text-align: center;">
+                <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
+              </div>
+            </div>
+          `;
+        }
+      } catch (e) {
+        grid.innerHTML = `
+          <div class="event-card" style="grid-column: 1/-1;">
+            <div class="event-image placeholder"><i class="fa-solid fa-circle-exclamation"></i></div>
+            <div class="event-info" style="text-align: center;">
+              <div class="event-title">خطا در دریافت اطلاعات</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    function init() {
+      checkMuharram();
+      loadAnnouncements();
+      loadEvents();
+    }
+    
+    init();
+  </script>
+
+</body>
+</html>
