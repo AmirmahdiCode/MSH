@@ -437,69 +437,6 @@
       display: inline-block;
     }
     
-    .gallery-section {
-      margin-bottom: 24px;
-    }
-    
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-    
-    .gallery-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--card-border);
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    
-    .gallery-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-hover);
-    }
-    
-    .gallery-image {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      background: var(--bg2);
-    }
-    
-    .gallery-image.placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      color: var(--primary);
-    }
-    
-    .gallery-info {
-      padding: 8px 10px;
-    }
-    
-    .gallery-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color 0.3s;
-    }
-    
-    .gallery-meta {
-      font-size: 9px;
-      color: var(--text-light);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
     .donation-section {
       margin-bottom: 24px;
     }
@@ -549,6 +486,75 @@
       font-size: 16px;
       flex-shrink: 0;
       margin-right: auto;
+    }
+    
+    .gallery-section {
+      margin-bottom: 24px;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    
+    .gallery-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--card-border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .gallery-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .gallery-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: var(--bg2);
+    }
+    
+    .gallery-image.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: var(--primary);
+    }
+    
+    .gallery-info {
+      padding: 8px 10px;
+    }
+    
+    .gallery-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.3s;
+    }
+    
+    .gallery-meta {
+      font-size: 9px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
     
     .image-modal {
@@ -620,7 +626,9 @@
       padding: 20px;
       background: var(--footer-bg);
       border-top: 1px solid var(--bg3);
-      margin-top: auto;
+      position: sticky;
+      bottom: 0;
+      z-index: 50;
       transition: all 0.3s ease;
     }
     
@@ -806,6 +814,48 @@
       }
     });
     
+    function renderGalleryCard(item) {
+      const eventDate = new Date(item.date);
+      const dateStr = eventDate.toLocaleDateString('fa-IR');
+      
+      const safeTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeLocation = (item.location || 'مشخص نشده').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      
+      return `
+        <div class="gallery-card" onclick="openModal('${item.image}', '${safeTitle}', '${dateStr} — ${safeLocation}')" data-title="${item.title}" data-date="${dateStr}" data-location="${item.location || ''}">
+          <img src="${item.image}" class="gallery-image" alt="${item.title}" loading="lazy">
+          <div class="gallery-info">
+            <div class="gallery-title">${item.title}</div>
+            <div class="gallery-meta">
+              <i class="fa-solid fa-clock"></i> ${dateStr}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    function lazyLoadGallery(allItems, startIndex, batchSize, delay, grid) {
+      let currentIndex = startIndex;
+      
+      function addBatch() {
+        const batch = allItems.slice(currentIndex, currentIndex + batchSize);
+        
+        if (batch.length === 0) return;
+        
+        batch.forEach(item => {
+          grid.insertAdjacentHTML('beforeend', renderGalleryCard(item));
+        });
+        
+        currentIndex += batchSize;
+        
+        if (currentIndex < allItems.length) {
+          setTimeout(addBatch, delay);
+        }
+      }
+      
+      setTimeout(addBatch, delay);
+    }
+    
     async function loadAllData() {
       const container = document.getElementById('mainContent');
       
@@ -820,6 +870,7 @@
         
         let announcementsHTML = '';
         let eventsHTML = '';
+        let donationHTML = '';
         let galleryHTML = '';
         
         if (announcementsData.success && announcementsData.data.length > 0) {
@@ -861,6 +912,23 @@
             </div>
           `;
         }
+        
+        donationHTML = `
+          <div class="donation-section">
+            <div class="donation-banner" onclick="window.location.href='list/donations.html'">
+              <div class="donation-icon">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+              </div>
+              <div class="donation-info">
+                <h3>منتظر کمک‌های نقدی شما هستیم</h3>
+                <p>با کمک‌های مردمی خود، ما را در برگزاری مراسم‌های باشکوه یاری کنید</p>
+              </div>
+              <div class="donation-arrow">
+                <i class="fa-solid fa-chevron-left"></i>
+              </div>
+            </div>
+          </div>
+        `;
         
         if (eventsData.success && eventsData.data.length > 0) {
           const today = new Date();
@@ -953,32 +1021,29 @@
           }
           
           if (archiveItems.length > 0) {
+            const initialCount = Math.min(15, archiveItems.length);
+            const initialItems = archiveItems.slice(0, initialCount);
+            const remainingItems = archiveItems.slice(initialCount);
+            
             galleryHTML = `
               <div class="gallery-section">
                 <div class="section-title">
                   <i class="fa-solid fa-images"></i>
                   تصاویر
                 </div>
-                <div class="gallery-grid">
-                  ${archiveItems.map(item => {
-                    const eventDate = new Date(item.date);
-                    const dateStr = eventDate.toLocaleDateString('fa-IR');
-                    
-                    return `
-                      <div class="gallery-card" onclick="openModal('${item.image}', '${item.title.replace(/'/g, "\\'")}', '${dateStr} — ${(item.location || 'مشخص نشده').replace(/'/g, "\\'")}')">
-                        <img src="${item.image}" class="gallery-image" alt="${item.title}" loading="lazy">
-                        <div class="gallery-info">
-                          <div class="gallery-title">${item.title}</div>
-                          <div class="gallery-meta">
-                            <i class="fa-solid fa-clock"></i> ${dateStr}
-                          </div>
-                        </div>
-                      </div>
-                    `;
-                  }).join('')}
+                <input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر...">
+                <div class="gallery-grid" id="galleryGrid">
+                  ${initialItems.map(item => renderGalleryCard(item)).join('')}
                 </div>
               </div>
             `;
+            
+            container.innerHTML = announcementsHTML + eventsHTML + donationHTML + galleryHTML;
+            
+            if (remainingItems.length > 0) {
+              const grid = document.getElementById('galleryGrid');
+              lazyLoadGallery(remainingItems, 0, 5, 300, grid);
+            }
           } else {
             galleryHTML = `
               <div class="gallery-section">
@@ -996,6 +1061,7 @@
                 </div>
               </div>
             `;
+            container.innerHTML = announcementsHTML + eventsHTML + donationHTML + galleryHTML;
           }
         } else {
           eventsHTML = `
@@ -1031,30 +1097,13 @@
               </div>
             </div>
           `;
+          
+          container.innerHTML = announcementsHTML + eventsHTML + donationHTML + galleryHTML;
         }
         
-        const donationHTML = `
-          <div class="donation-section">
-            <div class="donation-banner" onclick="window.location.href='list/donations.html'">
-              <div class="donation-icon">
-                <i class="fa-solid fa-hand-holding-heart"></i>
-              </div>
-              <div class="donation-info">
-                <h3>منتظر کمک‌های نقدی شما هستیم</h3>
-                <p>با کمک‌های مردمی خود، ما را در برگزاری مراسم‌های باشکوه یاری کنید</p>
-              </div>
-              <div class="donation-arrow">
-                <i class="fa-solid fa-chevron-left"></i>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        container.innerHTML = announcementsHTML + eventsHTML + galleryHTML + donationHTML;
-        
-        const searchBox = document.getElementById('eventSearch');
-        if (searchBox) {
-          searchBox.addEventListener('input', function() {
+        const eventSearch = document.getElementById('eventSearch');
+        if (eventSearch) {
+          eventSearch.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
             const track = document.getElementById('eventsTrack');
             const cards = track.querySelectorAll('.event-card');
@@ -1082,6 +1131,42 @@
                 noResult.className = 'no-result';
                 noResult.textContent = 'نتیجه‌ای یافت نشد';
                 track.appendChild(noResult);
+              }
+            } else {
+              if (noResult) noResult.remove();
+            }
+          });
+        }
+        
+        const gallerySearch = document.getElementById('gallerySearch');
+        if (gallerySearch) {
+          gallerySearch.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const grid = document.getElementById('galleryGrid');
+            const cards = grid.querySelectorAll('.gallery-card');
+            let hasVisible = false;
+            
+            cards.forEach(card => {
+              const title = (card.dataset.title || '').toLowerCase();
+              const date = (card.dataset.date || '').toLowerCase();
+              const location = (card.dataset.location || '').toLowerCase();
+              
+              if (query === '' || title.includes(query) || date.includes(query) || location.includes(query)) {
+                card.style.display = '';
+                hasVisible = true;
+              } else {
+                card.style.display = 'none';
+              }
+            });
+            
+            let noResult = grid.querySelector('.no-result');
+            if (!hasVisible) {
+              if (!noResult) {
+                noResult = document.createElement('div');
+                noResult.className = 'no-result';
+                noResult.textContent = 'نتیجه‌ای یافت نشد';
+                noResult.style.gridColumn = '1 / -1';
+                grid.appendChild(noResult);
               }
             } else {
               if (noResult) noResult.remove();
