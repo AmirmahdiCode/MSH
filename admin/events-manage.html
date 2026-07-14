@@ -30,7 +30,6 @@
       --danger-light: #fef2f2;
       --success: #10b981;
       --success-light: #ecfdf5;
-      --warning: #f59e0b;
     }
     
     [data-theme="dark"] {
@@ -713,17 +712,33 @@
       btn.textContent = 'در حال ذخیره...';
       
       try {
-        if (id) {
-          await updateEventInSheet(id, title, image, description, tag, date, location);
-        } else {
-          await addEventToSheet(title, image, description, tag, date, location);
-        }
+        const newId = id || ('EVT-' + Date.now());
         
-        closeEventModal();
-        loadEvents();
-        addLogToSheet(id || ('EVT-' + Date.now()), admin.id, id ? 'edit' : 'add', 'event');
+        const res = await fetch(API_URL + '?action=' + (id ? 'updateEvent' : 'addEvent'), {
+          method: 'POST',
+          body: JSON.stringify({
+            id: newId,
+            title,
+            image,
+            description,
+            tag,
+            date,
+            location
+          })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          addLogToSheet(newId, admin.id, id ? 'edit' : 'add', 'event');
+          closeEventModal();
+          loadEvents();
+        } else {
+          document.getElementById('eventError').textContent = data.message || 'خطا در ذخیره‌سازی';
+          document.getElementById('eventError').classList.add('show');
+        }
       } catch (e) {
-        document.getElementById('eventError').textContent = 'خطا در ذخیره‌سازی';
+        document.getElementById('eventError').textContent = 'خطا در ارتباط با سرور';
         document.getElementById('eventError').classList.add('show');
       } finally {
         btn.disabled = false;
@@ -731,31 +746,9 @@
       }
     });
     
-    async function addEventToSheet(title, image, description, tag, date, location) {
-      const id = 'EVT-' + Date.now();
-      
-      return fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'addEvent',
-          id, title, image, description, tag, date, location
-        })
-      });
-    }
-    
-    async function updateEventInSheet(id, title, image, description, tag, date, location) {
-      return fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'updateEvent',
-          id, title, image, description, tag, date, location
-        })
-      });
-    }
-    
     async function addLogToSheet(itemId, adminId, action, type) {
       try {
-        await fetch(ADMIN_API_URL + '?action=addLog', {
+        await fetch(API_URL + '?action=addLog', {
           method: 'POST',
           body: JSON.stringify({ itemId, adminId, action, type })
         });
@@ -783,16 +776,23 @@
       btn.textContent = 'در حال حذف...';
       
       try {
-        await fetch(API_URL, {
+        const res = await fetch(API_URL + '?action=deleteEvent', {
           method: 'POST',
-          body: JSON.stringify({ action: 'deleteEvent', id: eventId })
+          body: JSON.stringify({ id: eventId })
         });
         
-        addLogToSheet(eventId, admin.id, 'delete', 'event');
-        closeDeleteModal();
-        loadEvents();
+        const data = await res.json();
+        
+        if (data.success) {
+          addLogToSheet(eventId, admin.id, 'delete', 'event');
+          closeDeleteModal();
+          loadEvents();
+        } else {
+          document.getElementById('deleteError').textContent = data.message || 'خطا در حذف';
+          document.getElementById('deleteError').classList.add('show');
+        }
       } catch (e) {
-        document.getElementById('deleteError').textContent = 'خطا در حذف';
+        document.getElementById('deleteError').textContent = 'خطا در ارتباط با سرور';
         document.getElementById('deleteError').classList.add('show');
       } finally {
         btn.disabled = false;
