@@ -226,60 +226,92 @@
     }
     
     .announcement-item {
-      background: var(--announcement-bg);
-      border: 1px solid var(--announcement-border);
-      border-right: 4px solid var(--primary);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
       transition: all 0.3s ease;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .announcement-item::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
     }
     
     .announcement-item:hover {
-      transform: translateX(-4px);
-      box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.1);
+      transform: translateX(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary-light);
     }
     
     .announcement-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-size: 16px;
+      color: var(--primary);
+      font-size: 19px;
       flex-shrink: 0;
     }
     
     .announcement-content {
       flex: 1;
+      min-width: 0;
     }
     
     .announcement-title {
       font-size: 13px;
       font-weight: 700;
       color: var(--dark);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
       transition: color 0.3s;
     }
     
     .announcement-text {
       font-size: 10px;
       color: var(--text-light);
+      line-height: 1.5;
+    }
+    
+    .announcement-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
     }
     
     .announcement-tag {
+      font-size: 10px;
+      background: var(--overlay);
+      color: var(--primary-dark);
+      padding: 4px 10px;
+      border-radius: 8px;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+    
+    .announcement-date {
       font-size: 9px;
-      background: var(--primary);
-      color: #fff;
-      padding: 2px 8px;
-      border-radius: 10px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 4px;
       white-space: nowrap;
     }
     
@@ -674,11 +706,20 @@
       .header-title {
         font-size: 17px;
       }
+      .announcement-meta {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+      }
     }
     
     @media (max-width: 380px) {
       .gallery-grid {
         gap: 6px;
+      }
+      .announcement-item {
+        padding: 12px;
+        gap: 10px;
       }
     }
   </style>
@@ -880,18 +921,26 @@
                 <i class="fa-solid fa-bullhorn"></i>
                 اطلاعیه‌ها
               </div>
-              ${announcementsData.data.map(item => `
-                <div class="announcement-item" onclick="openAnnouncement('${item.id}')">
-                  <div class="announcement-icon">
-                    <i class="fa-solid fa-bullhorn"></i>
+              ${announcementsData.data.map(item => {
+                const annDate = item.date ? new Date(item.date) : null;
+                const dateStr = annDate ? annDate.toLocaleDateString('fa-IR') : '';
+                
+                return `
+                  <div class="announcement-item" onclick="openAnnouncement('${item.id}')">
+                    <div class="announcement-icon">
+                      <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div class="announcement-content">
+                      <div class="announcement-title">${item.title}</div>
+                      <div class="announcement-text">${item.content ? item.content.substring(0, 120) + '...' : ''}</div>
+                    </div>
+                    <div class="announcement-meta">
+                      ${dateStr ? `<span class="announcement-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>` : ''}
+                      <span class="announcement-tag">${item.tag || 'اطلاعیه'}</span>
+                    </div>
                   </div>
-                  <div class="announcement-content">
-                    <div class="announcement-title">${item.title}</div>
-                    <div class="announcement-text">${item.content ? item.content.substring(0, 100) + '...' : ''}</div>
-                  </div>
-                  <span class="announcement-tag">${item.tag || 'اطلاعیه'}</span>
-                </div>
-              `).join('')}
+                `;
+              }).join('')}
             </div>
           `;
         } else {
@@ -921,7 +970,7 @@
               </div>
               <div class="donation-info">
                 <h3>منتظر کمک‌های نقدی شما هستیم</h3>
-                <p>با کمک‌های مردمی خود، ما را در برگزاری مراسم‌های باشکوه یاری کنید</p>
+                <p>با کمک های خود، ما را در برگزاری مراسم‌ها یاری کنید.</p>
               </div>
               <div class="donation-arrow">
                 <i class="fa-solid fa-chevron-left"></i>
