@@ -206,6 +206,28 @@
       gap: 8px;
     }
     
+    .add-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+    }
+    
+    .add-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+    }
+    
     .archive-list {
       display: flex;
       flex-direction: column;
@@ -361,7 +383,7 @@
       border-radius: 16px;
       padding: 24px;
       width: 90%;
-      max-width: 550px;
+      max-width: 600px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.2);
       max-height: 90vh;
       overflow-y: auto;
@@ -375,7 +397,7 @@
     }
     
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     
     .form-group label {
@@ -383,7 +405,7 @@
       font-size: 11px;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     
     .form-group label .hint {
@@ -392,7 +414,7 @@
       font-size: 9px;
     }
     
-    .form-input, .form-textarea {
+    .form-input, .form-select {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid var(--card-border);
@@ -404,15 +426,106 @@
       transition: all 0.3s ease;
     }
     
-    .form-textarea {
-      resize: vertical;
-      min-height: 70px;
-    }
-    
-    .form-input:focus, .form-textarea:focus {
+    .form-input:focus, .form-select:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    }
+    
+    .form-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 12px center;
+      padding-left: 32px;
+    }
+    
+    .tag-input-wrapper {
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--bg);
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      cursor: text;
+      transition: all 0.3s ease;
+      min-height: 44px;
+    }
+    
+    .tag-input-wrapper:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    }
+    
+    .tag-input-wrapper .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg2);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 3px 6px;
+      font-size: 10px;
+      animation: fadeIn 0.2s ease;
+    }
+    
+    .tag-input-wrapper .tag img {
+      width: 28px;
+      height: 20px;
+      border-radius: 3px;
+      object-fit: cover;
+    }
+    
+    .tag-input-wrapper .tag i {
+      font-size: 11px;
+      color: var(--primary);
+    }
+    
+    .tag-input-wrapper .tag .tag-text {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .tag-input-wrapper .tag .tag-remove {
+      cursor: pointer;
+      color: var(--text-light);
+      font-size: 10px;
+      padding: 2px;
+      border-radius: 50%;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    
+    .tag-input-wrapper .tag .tag-remove:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+    
+    .tag-input-wrapper input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      min-width: 100px;
+      font-size: 11px;
+      font-family: inherit;
+      color: var(--text);
+      padding: 4px;
+    }
+    
+    .tag-input-wrapper input::placeholder {
+      color: var(--text-light);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
     
     .modal-btns {
@@ -543,16 +656,22 @@
         <div class="event-select-info" id="eventInfo" style="display:none;"></div>
       </div>
       <div class="form-group">
-        <label>لینک تصاویر <span class="hint">(با کاما جدا کنید)</span></label>
-        <textarea class="form-textarea" id="archiveImages" placeholder="https://... , https://..."></textarea>
+        <label>تصاویر <span class="hint">(لینک را وارد کنید و Enter بزنید)</span></label>
+        <div class="tag-input-wrapper" id="imagesWrapper">
+          <input type="url" id="imageInput" placeholder="https://...">
+        </div>
       </div>
       <div class="form-group">
-        <label>لینک ویدیوها <span class="hint">(با کاما جدا کنید)</span></label>
-        <textarea class="form-textarea" id="archiveVideos" placeholder="https://... , https://..."></textarea>
+        <label>ویدیوها <span class="hint">(لینک را وارد کنید و Enter بزنید)</span></label>
+        <div class="tag-input-wrapper" id="videosWrapper">
+          <input type="url" id="videoInput" placeholder="https://...">
+        </div>
       </div>
       <div class="form-group">
-        <label>لینک صوت‌ها <span class="hint">(با کاما جدا کنید)</span></label>
-        <textarea class="form-textarea" id="archiveAudios" placeholder="https://... , https://..."></textarea>
+        <label>صوت‌ها <span class="hint">(لینک را وارد کنید و Enter بزنید)</span></label>
+        <div class="tag-input-wrapper" id="audiosWrapper">
+          <input type="url" id="audioInput" placeholder="https://...">
+        </div>
       </div>
       <div class="error-text" id="archiveError"></div>
       <div class="modal-btns">
@@ -641,14 +760,96 @@
     let allEvents = [];
     let allArchives = [];
     
+    function setupTagInput(wrapperId, inputId, iconType) {
+      const wrapper = document.getElementById(wrapperId);
+      const input = document.getElementById(inputId);
+      
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const value = input.value.trim();
+          if (value) {
+            addTag(wrapper, value, iconType);
+            input.value = '';
+          }
+        }
+      });
+      
+      wrapper.addEventListener('click', function(e) {
+        if (e.target === wrapper) {
+          input.focus();
+        }
+      });
+    }
+    
+    function addTag(wrapper, value, iconType) {
+      const existingTags = wrapper.querySelectorAll('.tag');
+      for (const tag of existingTags) {
+        if (tag.dataset.value === value) return;
+      }
+      
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.dataset.value = value;
+      
+      let preview = '';
+      if (iconType === 'image') {
+        preview = `<img src="${value}" alt="" onerror="this.style.display='none'">`;
+      } else if (iconType === 'video') {
+        preview = `<i class="fa-solid fa-video"></i>`;
+      } else if (iconType === 'audio') {
+        preview = `<i class="fa-solid fa-music"></i>`;
+      }
+      
+      let displayText = value;
+      try {
+        const url = new URL(value);
+        displayText = url.hostname + url.pathname.substring(0, 15) + (url.pathname.length > 15 ? '...' : '');
+      } catch (e) {}
+      
+      tag.innerHTML = `
+        ${preview}
+        <span class="tag-text" title="${value}">${displayText}</span>
+        <span class="tag-remove"><i class="fa-solid fa-xmark"></i></span>
+      `;
+      
+      tag.querySelector('.tag-remove').addEventListener('click', function(e) {
+        e.stopPropagation();
+        tag.remove();
+      });
+      
+      const input = wrapper.querySelector('input');
+      wrapper.insertBefore(tag, input);
+    }
+    
+    function getTagValues(wrapperId) {
+      const wrapper = document.getElementById(wrapperId);
+      const tags = wrapper.querySelectorAll('.tag');
+      return Array.from(tags).map(tag => tag.dataset.value);
+    }
+    
+    function setTagValues(wrapperId, values, iconType) {
+      const wrapper = document.getElementById(wrapperId);
+      wrapper.querySelectorAll('.tag').forEach(tag => tag.remove());
+      
+      if (values && values.length > 0) {
+        values.forEach(value => {
+          if (value.trim()) {
+            addTag(wrapper, value.trim(), iconType);
+          }
+        });
+      }
+    }
+    
+    setupTagInput('imagesWrapper', 'imageInput', 'image');
+    setupTagInput('videosWrapper', 'videoInput', 'video');
+    setupTagInput('audiosWrapper', 'audioInput', 'audio');
+    
     async function loadData() {
       const list = document.getElementById('archiveList');
       
       try {
-        const [eventsRes] = await Promise.all([
-          fetch(API_URL + '?action=getEvents')
-        ]);
-        
+        const eventsRes = await fetch(API_URL + '?action=getEvents');
         const eventsData = await eventsRes.json();
         
         if (eventsData.success && eventsData.data.length > 0) {
@@ -696,7 +897,7 @@
           let html = '';
           
           if (eventsWithArchive.length > 0) {
-            html += eventsWithArchive.map((archive, index) => {
+            html += eventsWithArchive.map((archive) => {
               const eventDate = new Date(archive.eventDate);
               const dateStr = eventDate.toLocaleDateString('fa-IR');
               const realIndex = archiveItems.indexOf(archive);
@@ -737,7 +938,7 @@
               </div>
             `;
             
-            html += eventsWithoutArchive.map((archive, index) => {
+            html += eventsWithoutArchive.map((archive) => {
               const eventDate = new Date(archive.eventDate);
               const dateStr = eventDate.toLocaleDateString('fa-IR');
               const realIndex = archiveItems.indexOf(archive);
@@ -804,13 +1005,15 @@
     async function openAddModal() {
       document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> افزودن آرشیو جدید';
       document.getElementById('editEventId').value = '';
-      document.getElementById('archiveImages').value = '';
-      document.getElementById('archiveVideos').value = '';
-      document.getElementById('archiveAudios').value = '';
       document.getElementById('archiveError').classList.remove('show');
       document.getElementById('eventInfo').style.display = 'none';
       
+      setTagValues('imagesWrapper', [], 'image');
+      setTagValues('videosWrapper', [], 'video');
+      setTagValues('audiosWrapper', [], 'audio');
+      
       const select = document.getElementById('archiveEventSelect');
+      select.disabled = false;
       select.innerHTML = '<option value="">-- انتخاب مراسم --</option>';
       
       allArchives.forEach(archive => {
@@ -827,8 +1030,7 @@
           document.getElementById('eventInfo').style.display = 'block';
           document.getElementById('eventInfo').innerHTML = `
             <i class="fa-solid fa-circle-info"></i> 
-            تاریخ: ${dateStr} | 
-            ${selected.eventDate ? '' : 'بدون تاریخ'}
+            تاریخ: ${dateStr}
           `;
         } else {
           document.getElementById('eventInfo').style.display = 'none';
@@ -841,10 +1043,11 @@
     function editArchive(archive) {
       document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> ویرایش آرشیو';
       document.getElementById('editEventId').value = archive.eventId;
-      document.getElementById('archiveImages').value = archive.images.join(', ');
-      document.getElementById('archiveVideos').value = archive.videos.join(', ');
-      document.getElementById('archiveAudios').value = archive.audios.join(', ');
       document.getElementById('archiveError').classList.remove('show');
+      
+      setTagValues('imagesWrapper', archive.images, 'image');
+      setTagValues('videosWrapper', archive.videos, 'video');
+      setTagValues('audiosWrapper', archive.audios, 'audio');
       
       const select = document.getElementById('archiveEventSelect');
       select.innerHTML = `<option value="${archive.eventId}" selected>${archive.eventTitle} (فعلی)</option>`;
@@ -863,7 +1066,6 @@
     
     function closeArchiveModal() {
       document.getElementById('archiveModal').classList.remove('active');
-      document.getElementById('archiveEventSelect').disabled = false;
     }
     
     document.getElementById('addArchiveBtn').addEventListener('click', openAddModal);
@@ -874,9 +1076,9 @@
     document.getElementById('submitArchive').addEventListener('click', async () => {
       const id = document.getElementById('editEventId').value;
       const eventId = id || document.getElementById('archiveEventSelect').value;
-      const images = document.getElementById('archiveImages').value.trim();
-      const videos = document.getElementById('archiveVideos').value.trim();
-      const audios = document.getElementById('archiveAudios').value.trim();
+      const images = getTagValues('imagesWrapper').join(', ');
+      const videos = getTagValues('videosWrapper').join(', ');
+      const audios = getTagValues('audiosWrapper').join(', ');
       
       if (!eventId) {
         document.getElementById('archiveError').textContent = 'لطفاً یک مراسم انتخاب کنید';
@@ -917,7 +1119,6 @@
       } finally {
         btn.disabled = false;
         btn.textContent = 'ذخیره';
-        document.getElementById('archiveEventSelect').disabled = false;
       }
     });
     
