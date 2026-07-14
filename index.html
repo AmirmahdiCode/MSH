@@ -30,6 +30,7 @@
       --announcement-bg: #f0fdfa;
       --announcement-border: #ccfbf1;
       --logo-filter: none;
+      --modal-bg: rgba(0,0,0,0.9);
     }
     
     [data-theme="dark"] {
@@ -286,6 +287,38 @@
       margin-bottom: 24px;
     }
     
+    .search-box {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    }
+    
+    .search-box::placeholder {
+      color: var(--text-light);
+    }
+    
+    .no-result {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-light);
+      font-size: 13px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    
     .events-track {
       display: flex;
       gap: 10px;
@@ -408,40 +441,18 @@
       margin-bottom: 24px;
     }
     
-    .gallery-track {
-      display: flex;
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      overflow-x: auto;
-      padding: 8px 0 12px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-      scrollbar-color: var(--primary) var(--bg2);
-    }
-    
-    .gallery-track::-webkit-scrollbar {
-      height: 6px;
-    }
-    
-    .gallery-track::-webkit-scrollbar-track {
-      background: var(--bg2);
-      border-radius: 3px;
-    }
-    
-    .gallery-track::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 3px;
     }
     
     .gallery-card {
-      min-width: 200px;
-      max-width: 200px;
       background: var(--card-bg);
       border-radius: 12px;
       overflow: hidden;
       box-shadow: var(--shadow);
       border: 1px solid var(--card-border);
-      flex-shrink: 0;
       transition: all 0.3s ease;
       cursor: pointer;
     }
@@ -453,7 +464,7 @@
     
     .gallery-image {
       width: 100%;
-      aspect-ratio: 2 / 3;
+      aspect-ratio: 4 / 3;
       object-fit: cover;
       background: var(--bg2);
     }
@@ -540,6 +551,70 @@
       margin-right: auto;
     }
     
+    .image-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-bg);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    
+    .image-modal.active {
+      display: flex;
+    }
+    
+    .image-modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    
+    .image-modal .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .image-modal .modal-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .image-modal .modal-info {
+      color: #fff;
+      text-align: center;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+    
+    .image-modal .modal-info h4 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    
+    .image-modal .modal-info p {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+    
     .footer {
       text-align: center;
       padding: 20px;
@@ -576,6 +651,28 @@
       color: var(--text-light);
       transition: color 0.3s;
     }
+    
+    @media (max-width: 900px) and (min-width: 651px) {
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (max-width: 650px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .header-title {
+        font-size: 17px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .gallery-grid {
+        gap: 6px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -588,7 +685,7 @@
         </div>
         <div>
           <div class="header-title">شهدای گمنام شورابیل</div>
-          <div class="header-subtitle">پایگاه خبری هیأت</div>
+          <div class="header-subtitle">سایت رسمی اطلاع رسانی و گزارش مراسمات</div>
         </div>
       </div>
       <div class="header-btns">
@@ -605,12 +702,23 @@
     </div>
   </section>
 
+  <div class="image-modal" id="imageModal">
+    <button class="modal-close" onclick="closeModal()">
+      <i class="fa-solid fa-times"></i>
+    </button>
+    <img src="" alt="" id="modalImage">
+    <div class="modal-info">
+      <h4 id="modalTitle"></h4>
+      <p id="modalMeta"></p>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-links">
-      <a href="list/Communication.html"><i class="fa-solid fa-phone"></i> تماس با هیأت</a>
-      <a href="list/map.html"><i class="fa-solid fa-location-dot"></i> آدرس حسینیه</a>
+      <a href="list/Communication.html"><i class="fa-solid fa-phone"></i> ارتباط با ما</a>
+      <a href="list/map.html"><i class="fa-solid fa-location-dot"></i> نشانی ما</a>
     </div>
-    <p class="footer-text">هیأت شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
+    <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
   </footer>
 
   <script>
@@ -670,6 +778,33 @@
       localStorage.setItem('selectedEventId', id);
       window.location.href = 'list/Events.html';
     }
+    
+    function openModal(imageSrc, title, meta) {
+      const modal = document.getElementById('imageModal');
+      document.getElementById('modalImage').src = imageSrc;
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMeta').textContent = meta;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
     
     async function loadAllData() {
       const container = document.getElementById('mainContent');
@@ -745,14 +880,15 @@
                   <i class="fa-solid fa-calendar-check"></i>
                   مراسمات
                 </div>
-                <div class="events-track">
+                <input type="text" class="search-box" id="eventSearch" placeholder="جستجو در مراسمات...">
+                <div class="events-track" id="eventsTrack">
                   ${allEvents.map(event => {
                     const eventDate = new Date(event.date);
                     const isPast = eventDate < today;
                     const dateStr = eventDate.toLocaleDateString('fa-IR');
                     
                     return `
-                      <div class="event-card ${isPast ? 'past' : ''}" onclick="openEvent('${event.id}')">
+                      <div class="event-card ${isPast ? 'past' : ''}" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description || ''}" data-tag="${event.tag || ''}" data-location="${event.location || ''}" data-date="${dateStr}">
                         ${event.image ? 
                           `<img src="${event.image}" class="event-image" alt="${event.title}">` : 
                           `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`
@@ -801,12 +937,14 @@
               const archiveData = await archiveRes.json();
               
               if (archiveData.success && archiveData.data.images && archiveData.data.images.length > 0) {
-                archiveItems.push({
-                  eventId: event.id,
-                  title: event.title,
-                  date: event.date,
-                  location: event.location,
-                  image: archiveData.data.images[0]
+                archiveData.data.images.forEach(img => {
+                  archiveItems.push({
+                    eventId: event.id,
+                    title: event.title,
+                    date: event.date,
+                    location: event.location,
+                    image: img
+                  });
                 });
               }
             } catch (e) {
@@ -814,28 +952,25 @@
             }
           }
           
-          const last15 = archiveItems.slice(0, 15);
-          
-          if (last15.length > 0) {
+          if (archiveItems.length > 0) {
             galleryHTML = `
               <div class="gallery-section">
                 <div class="section-title">
                   <i class="fa-solid fa-images"></i>
                   تصاویر
                 </div>
-                <div class="gallery-track">
-                  ${last15.map(item => {
+                <div class="gallery-grid">
+                  ${archiveItems.map(item => {
                     const eventDate = new Date(item.date);
                     const dateStr = eventDate.toLocaleDateString('fa-IR');
                     
                     return `
-                      <div class="gallery-card" onclick="openEvent('${item.eventId}')">
-                        <img src="${item.image}" class="gallery-image" alt="${item.title}">
+                      <div class="gallery-card" onclick="openModal('${item.image}', '${item.title.replace(/'/g, "\\'")}', '${dateStr} — ${(item.location || 'مشخص نشده').replace(/'/g, "\\'")}')">
+                        <img src="${item.image}" class="gallery-image" alt="${item.title}" loading="lazy">
                         <div class="gallery-info">
                           <div class="gallery-title">${item.title}</div>
                           <div class="gallery-meta">
                             <i class="fa-solid fa-clock"></i> ${dateStr}
-                            <i class="fa-solid fa-location-dot" style="margin-right: 6px;"></i> ${item.location || 'مشخص نشده'}
                           </div>
                         </div>
                       </div>
@@ -851,10 +986,10 @@
                   <i class="fa-solid fa-images"></i>
                   تصاویر
                 </div>
-                <div class="gallery-track">
-                  <div class="gallery-card">
+                <div class="gallery-grid">
+                  <div class="gallery-card" style="grid-column: 1/-1;">
                     <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
-                    <div class="gallery-info">
+                    <div class="gallery-info" style="text-align: center;">
                       <div class="gallery-title">تصویری آرشیو نشده</div>
                     </div>
                   </div>
@@ -886,10 +1021,10 @@
                 <i class="fa-solid fa-images"></i>
                 تصاویر
               </div>
-              <div class="gallery-track">
-                <div class="gallery-card">
+              <div class="gallery-grid">
+                <div class="gallery-card" style="grid-column: 1/-1;">
                   <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
-                  <div class="gallery-info">
+                  <div class="gallery-info" style="text-align: center;">
                     <div class="gallery-title">تصویری یافت نشد</div>
                   </div>
                 </div>
@@ -916,6 +1051,43 @@
         `;
         
         container.innerHTML = announcementsHTML + eventsHTML + galleryHTML + donationHTML;
+        
+        const searchBox = document.getElementById('eventSearch');
+        if (searchBox) {
+          searchBox.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const track = document.getElementById('eventsTrack');
+            const cards = track.querySelectorAll('.event-card');
+            let hasVisible = false;
+            
+            cards.forEach(card => {
+              const title = (card.dataset.title || '').toLowerCase();
+              const description = (card.dataset.description || '').toLowerCase();
+              const tag = (card.dataset.tag || '').toLowerCase();
+              const location = (card.dataset.location || '').toLowerCase();
+              const date = (card.dataset.date || '').toLowerCase();
+              
+              if (query === '' || title.includes(query) || description.includes(query) || tag.includes(query) || location.includes(query) || date.includes(query)) {
+                card.style.display = '';
+                hasVisible = true;
+              } else {
+                card.style.display = 'none';
+              }
+            });
+            
+            let noResult = track.querySelector('.no-result');
+            if (!hasVisible) {
+              if (!noResult) {
+                noResult = document.createElement('div');
+                noResult.className = 'no-result';
+                noResult.textContent = 'نتیجه‌ای یافت نشد';
+                track.appendChild(noResult);
+              }
+            } else {
+              if (noResult) noResult.remove();
+            }
+          });
+        }
         
       } catch (e) {
         container.innerHTML = `
