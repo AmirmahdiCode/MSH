@@ -262,8 +262,13 @@
     }
     
     .contact-icon.eitaa {
-      background: linear-gradient(135deg, #f7941d, #f15a24);
-      color: #fff;
+      background: #ffffff;
+    }
+    
+    .contact-icon.eitaa img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
     }
     
     .contact-icon.telegram {
@@ -326,6 +331,18 @@
       background: #fff5f5;
     }
     
+    [data-theme="dark"] .support-card:hover {
+      background: #2e1a1a;
+    }
+    
+    .support-image {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    
     .support-badge {
       font-size: 9px;
       background: #f43f5e;
@@ -385,6 +402,14 @@
         height: 40px;
         font-size: 18px;
       }
+      .contact-icon.eitaa img {
+        width: 20px;
+        height: 20px;
+      }
+      .support-image {
+        width: 40px;
+        height: 40px;
+      }
     }
   </style>
 </head>
@@ -436,10 +461,7 @@
       
       <a href="https://eitaa.com/shohada_gomnam_shorabil" target="_blank" class="contact-card">
         <div class="contact-icon eitaa">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-            <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">e</text>
-          </svg>
+          <img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا">
         </div>
         <div class="contact-info">
           <h4>کانال ایتا</h4>
@@ -465,10 +487,7 @@
       
       <a href="https://eitaa.com/ya_zahraaaaaaaaaaaaa" target="_blank" class="contact-card">
         <div class="contact-icon eitaa">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-            <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">e</text>
-          </svg>
+          <img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا">
         </div>
         <div class="contact-info">
           <h4>ادمین ایتا</h4>
@@ -480,9 +499,7 @@
       </a>
       
       <a href="https://eitaa.com/Amirmahdi_code" target="_blank" class="support-card">
-        <div class="contact-icon support">
-          <i class="fa-solid fa-heart"></i>
-        </div>
+        <img src="https://cdn.imgurl.ir/uploads/m87412_4b5310ee-fa5a-4d2e-a58c-a9337ddb4f92.png" class="support-image" alt="حمایت از سازنده">
         <div class="contact-info">
           <h4 style="color: #f43f5e;">حمایت از سازنده</h4>
           <p>@Amirmahdi_code</p>
