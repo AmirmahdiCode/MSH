@@ -539,7 +539,6 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
-    const ADMIN_API_URL = 'https://script.google.com/macros/s/AKfycbx_D5O9clLXUkq3gwfnT4diExFfmZ1XWEDMkMTHOekDBBVYbi07oH2A4X7rrBzGrUtb/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -601,6 +600,8 @@
       window.location.href = 'login.html';
     });
     
+    let allEvents = [];
+    
     async function loadEvents() {
       const list = document.getElementById('eventsList');
       
@@ -609,14 +610,16 @@
         const data = await res.json();
         
         if (data.success && data.data.length > 0) {
-          list.innerHTML = data.data.map(event => {
+          allEvents = data.data;
+          
+          list.innerHTML = allEvents.map((event, index) => {
             const eventDate = new Date(event.date);
             const dateStr = eventDate.toLocaleDateString('fa-IR');
             
             return `
               <div class="event-card">
                 ${event.image ? 
-                  `<img src="${event.image}" class="event-image" alt="${event.title}">` : 
+                  `<img src="${event.image}" class="event-image" alt="">` : 
                   `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`
                 }
                 <div class="event-info">
@@ -628,16 +631,33 @@
                   </div>
                 </div>
                 <div class="event-actions">
-                  <button class="action-btn" onclick="editEvent('${event.id}', '${event.title.replace(/'/g, "\\'")}', '${(event.image || '').replace(/'/g, "\\'")}', '${(event.description || '').replace(/'/g, "\\'")}', '${(event.tag || '').replace(/'/g, "\\'")}', '${event.date}', '${(event.location || '').replace(/'/g, "\\'")}')" title="ویرایش">
+                  <button class="action-btn edit-btn" data-index="${index}" title="ویرایش">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-                  <button class="action-btn delete" onclick="openDeleteModal('${event.id}')" title="حذف">
+                  <button class="action-btn delete delete-btn" data-index="${index}" title="حذف">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
               </div>
             `;
           }).join('');
+          
+          document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const index = parseInt(this.dataset.index);
+              const event = allEvents[index];
+              editEvent(event);
+            });
+          });
+          
+          document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const index = parseInt(this.dataset.index);
+              const event = allEvents[index];
+              openDeleteModal(event.id);
+            });
+          });
+          
         } else {
           list.innerHTML = `
             <div style="text-align: center; padding: 32px; color: var(--text-light);">
@@ -670,15 +690,15 @@
       document.getElementById('eventModal').classList.add('active');
     }
     
-    function editEvent(id, title, image, description, tag, date, location) {
+    function editEvent(event) {
       document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> ویرایش مراسم';
-      document.getElementById('editEventId').value = id;
-      document.getElementById('eventTitle').value = title;
-      document.getElementById('eventImage').value = image;
-      document.getElementById('eventDescription').value = description;
-      document.getElementById('eventTag').value = tag;
-      document.getElementById('eventDate').value = date;
-      document.getElementById('eventLocation').value = location;
+      document.getElementById('editEventId').value = event.id;
+      document.getElementById('eventTitle').value = event.title;
+      document.getElementById('eventImage').value = event.image || '';
+      document.getElementById('eventDescription').value = event.description || '';
+      document.getElementById('eventTag').value = event.tag || '';
+      document.getElementById('eventDate').value = event.date;
+      document.getElementById('eventLocation').value = event.location || '';
       document.getElementById('eventError').classList.remove('show');
       document.getElementById('eventModal').classList.add('active');
     }
