@@ -286,13 +286,34 @@
       margin-bottom: 24px;
     }
     
-    .events-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+    .events-track {
+      display: flex;
       gap: 10px;
+      overflow-x: auto;
+      padding: 8px 0 12px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) var(--bg2);
+    }
+    
+    .events-track::-webkit-scrollbar {
+      height: 6px;
+    }
+    
+    .events-track::-webkit-scrollbar-track {
+      background: var(--bg2);
+      border-radius: 3px;
+    }
+    
+    .events-track::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
     }
     
     .event-card {
+      min-width: 220px;
+      max-width: 220px;
       background: var(--card-bg);
       border-radius: 14px;
       overflow: hidden;
@@ -300,12 +321,21 @@
       transition: all 0.3s ease;
       cursor: pointer;
       border: 1px solid var(--card-border);
+      flex-shrink: 0;
     }
     
     .event-card:hover {
       transform: translateY(-3px);
       box-shadow: var(--shadow-hover);
       border-color: var(--primary-light);
+    }
+    
+    .event-card.past {
+      opacity: 0.5;
+    }
+    
+    .event-card.past:hover {
+      opacity: 0.8;
     }
     
     .event-image {
@@ -319,7 +349,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 44px;
+      font-size: 40px;
       color: var(--primary);
     }
     
@@ -334,6 +364,9 @@
       margin-bottom: 6px;
       line-height: 1.5;
       transition: color 0.3s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .event-meta {
@@ -543,41 +576,6 @@
       color: var(--text-light);
       transition: color 0.3s;
     }
-    
-    @media (max-width: 900px) and (min-width: 651px) {
-      .events-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-      }
-    }
-    
-    @media (max-width: 650px) {
-      .events-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .event-image.placeholder {
-        font-size: 48px;
-      }
-      .event-title {
-        font-size: 13px;
-      }
-      .event-info {
-        padding: 10px 12px;
-      }
-      .event-date, .event-location {
-        font-size: 10px;
-      }
-      .header-title {
-        font-size: 17px;
-      }
-    }
-    
-    @media (max-width: 380px) {
-      .events-grid {
-        gap: 8px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -733,25 +731,28 @@
           const today = new Date();
           today.setHours(0, 0, 0, 0);
           
-          const upcomingEvents = eventsData.data.filter(event => {
-            const eventDate = new Date(event.date);
-            return eventDate >= today;
-          });
+          eventsData.data.sort((a, b) => new Date(a.date) - new Date(b.date));
           
-          if (upcomingEvents.length > 0) {
+          const upcomingEvents = eventsData.data.filter(event => new Date(event.date) >= today);
+          const pastEvents = eventsData.data.filter(event => new Date(event.date) < today);
+          
+          const allEvents = [...upcomingEvents, ...pastEvents];
+          
+          if (allEvents.length > 0) {
             eventsHTML = `
               <div class="events-section">
                 <div class="section-title">
                   <i class="fa-solid fa-calendar-check"></i>
-                  مراسم‌های پیش رو
+                  مراسمات
                 </div>
-                <div class="events-grid">
-                  ${upcomingEvents.map(event => {
+                <div class="events-track">
+                  ${allEvents.map(event => {
                     const eventDate = new Date(event.date);
+                    const isPast = eventDate < today;
                     const dateStr = eventDate.toLocaleDateString('fa-IR');
                     
                     return `
-                      <div class="event-card" onclick="openEvent('${event.id}')">
+                      <div class="event-card ${isPast ? 'past' : ''}" onclick="openEvent('${event.id}')">
                         ${event.image ? 
                           `<img src="${event.image}" class="event-image" alt="${event.title}">` : 
                           `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`
@@ -775,13 +776,13 @@
               <div class="events-section">
                 <div class="section-title">
                   <i class="fa-solid fa-calendar-check"></i>
-                  مراسم‌های پیش رو
+                  مراسمات
                 </div>
-                <div class="events-grid">
-                  <div class="event-card" style="grid-column: 1/-1;">
+                <div class="events-track">
+                  <div class="event-card">
                     <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
                     <div class="event-info" style="text-align: center;">
-                      <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
+                      <div class="event-title">مراسمی ثبت نشده است</div>
                     </div>
                   </div>
                 </div>
@@ -866,13 +867,13 @@
             <div class="events-section">
               <div class="section-title">
                 <i class="fa-solid fa-calendar-check"></i>
-                مراسم‌های پیش رو
+                مراسمات
               </div>
-              <div class="events-grid">
-                <div class="event-card" style="grid-column: 1/-1;">
+              <div class="events-track">
+                <div class="event-card">
                   <div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div>
                   <div class="event-info" style="text-align: center;">
-                    <div class="event-title">مراسمی برای آینده ثبت نشده است</div>
+                    <div class="event-title">مراسمی ثبت نشده است</div>
                   </div>
                 </div>
               </div>
