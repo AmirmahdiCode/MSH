@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جزئیات مراسم | شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc;
+      --bg2: #f1f5f9;
+      --bg3: #e2e8f0;
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #5eead4;
+      --primary-rgb: 13, 148, 136;
+      --dark: #0f172a;
+      --text: #334155;
+      --text-light: #94a3b8;
+      --white: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
+      --header-bg: #ffffff;
+      --footer-bg: #ffffff;
+      --overlay: rgba(13, 148, 136, 0.05);
+      --logo-filter: none;
+      --modal-bg: rgba(0,0,0,0.9);
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --primary: #14b8a6;
+      --primary-dark: #0d9488;
+      --primary-light: #5eead4;
+      --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9;
+      --text: #cbd5e1;
+      --text-light: #64748b;
+      --white: #1e293b;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+      --header-bg: #1e293b;
+      --footer-bg: #1e293b;
+      --overlay: rgba(20, 184, 166, 0.08);
+      --logo-filter: brightness(0) invert(1);
+    }
+    
+    [data-muharram="true"] {
+      --primary: #dc2626;
+      --primary-dark: #b91c1c;
+      --primary-light: #fca5a5;
+      --primary-rgb: 220, 38, 38;
+      --overlay: rgba(220, 38, 38, 0.05);
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444;
+      --primary-dark: #dc2626;
+      --primary-light: #fca5a5;
+      --primary-rgb: 239, 68, 68;
+      --overlay: rgba(239, 68, 68, 0.08);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    
+    .header {
+      background: var(--header-bg);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--bg3);
+      transition: all 0.3s ease;
+    }
+    
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .header-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
+      overflow: hidden;
+      padding: 6px;
+    }
+    
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: var(--logo-filter);
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      transition: color 0.3s;
+    }
+    
+    .header-subtitle {
+      font-size: 10px;
+      color: var(--text-light);
+      transition: color 0.3s;
+    }
+    
+    .header-btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .back-btn {
+      background: var(--bg2);
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      text-decoration: none;
+    }
+    
+    .back-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    
+    .theme-toggle {
+      background: var(--bg2);
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: rotate(15deg);
+    }
+    
+    .main-container {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 12px;
+    }
+    
+    .loader-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+    
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--bg3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .event-header {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .event-header::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    }
+    
+    .event-header-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+      transition: color 0.3s;
+    }
+    
+    .event-header-description {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+      transition: color 0.3s;
+    }
+    
+    .event-header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .event-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-light);
+      background: var(--bg2);
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+    
+    .event-meta-item i {
+      color: var(--primary);
+    }
+    
+    .event-tag {
+      font-size: 10px;
+      color: var(--primary-dark);
+      background: var(--overlay);
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s;
+    }
+    
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--bg3);
+      transition: background 0.3s;
+    }
+    
+    .gallery-section {
+      margin-bottom: 24px;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    
+    .gallery-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--card-border);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .gallery-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .gallery-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: var(--bg2);
+    }
+    
+    .gallery-video-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: var(--bg2);
+    }
+    
+    .video-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+    }
+    
+    .gallery-card.video-card {
+      position: relative;
+    }
+    
+    .audio-section {
+      margin-bottom: 24px;
+    }
+    
+    .audio-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .audio-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+    
+    .audio-item:hover {
+      border-color: var(--primary-light);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .audio-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    .audio-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .audio-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .audio-meta {
+      font-size: 10px;
+      color: var(--text-light);
+    }
+    
+    .audio-download {
+      width: 36px;
+      height: 36px;
+      background: var(--bg2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-dark);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .audio-download:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    
+    .image-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-bg);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    
+    .image-modal.active {
+      display: flex;
+    }
+    
+    .image-modal img,
+    .image-modal video,
+    .image-modal iframe {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    
+    .image-modal iframe {
+      width: 80%;
+      height: 60vh;
+    }
+    
+    .image-modal .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .image-modal .modal-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--text-light);
+      grid-column: 1 / -1;
+    }
+    
+    .empty-state i {
+      font-size: 40px;
+      margin-bottom: 10px;
+      display: block;
+      color: var(--primary-light);
+    }
+    
+    .empty-state p {
+      font-size: 13px;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--footer-bg);
+      border-top: 1px solid var(--bg3);
+      margin-top: auto;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: var(--primary-dark);
+      font-size: 11px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--dark);
+    }
+    
+    .footer-text {
+      font-size: 10px;
+      color: var(--text-light);
+      transition: color 0.3s;
+    }
+    
+    @media (max-width: 900px) and (min-width: 651px) {
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (max-width: 650px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .header-title {
+        font-size: 17px;
+      }
+      .event-header {
+        padding: 16px;
+      }
+      .event-header-title {
+        font-size: 17px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .gallery-grid {
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo">
+          <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
+        </div>
+        <div>
+          <div class="header-title">شهدای گمنام شورابیل</div>
+          <div class="header-subtitle">سایت رسمی اطلاع رسانی و گزارش مراسمات</div>
+        </div>
+      </div>
+      <div class="header-btns">
+        <a href="../index.html" class="back-btn" title="بازگشت">
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <button class="theme-toggle" id="themeToggle" title="تغییر تم">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-container" id="mainContent">
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+    </div>
+  </section>
+
+  <div class="image-modal" id="mediaModal">
+    <button class="modal-close" onclick="closeModal()">
+      <i class="fa-solid fa-times"></i>
+    </button>
+    <div id="modalContent"></div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="Communication.html"><i class="fa-solid fa-phone"></i> ارتباط با ما</a>
+      <a href="map.html"><i class="fa-solid fa-location-dot"></i> نشانی ما</a>
+    </div>
+    <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
+  </footer>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbw9Pmin5dp5YaayWcp-If4mqegvlcJrTeevgkgKA8EKMuAVwqUHsMk9ONPp8Oywz9CJ/exec';
+    const EVENT_ID = localStorage.getItem('selectedEventId');
+    
+    const themeToggle = document.getElementById('themeToggle');
+    const icon = themeToggle.querySelector('i');
+    
+    const savedTheme = localStorage.getItem('heyat-theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      icon.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      
+      if (currentTheme === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+        icon.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('heyat-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('heyat-theme', 'dark');
+      }
+    });
+    
+    async function checkMuharram() {
+      try {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${dateStr}`);
+        const data = await res.json();
+        
+        if (data.code === 200) {
+          const hijriMonth = data.data.hijri.month.number;
+          if (hijriMonth === 1) {
+            document.documentElement.setAttribute('data-muharram', 'true');
+          }
+        }
+      } catch (e) {
+        console.log('بررسی ماه محرم با خطا مواجه شد');
+      }
+    }
+    
+    function openImageModal(src) {
+      const modal = document.getElementById('mediaModal');
+      document.getElementById('modalContent').innerHTML = `<img src="${src}" alt="">`;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function openVideoModal(src) {
+      const modal = document.getElementById('mediaModal');
+      let content;
+      
+      if (src.includes('aparat.com') || src.includes('youtube.com') || src.includes('youtu.be') || src.includes('namasha.com')) {
+        let embedSrc = src;
+        if (src.includes('aparat.com/v/')) {
+          const videoId = src.split('/v/')[1]?.split('?')[0];
+          embedSrc = `https://www.aparat.com/video/video/embed/videohash/${videoId}/vt/frame`;
+        } else if (src.includes('youtube.com/watch?v=')) {
+          const videoId = src.split('v=')[1]?.split('&')[0];
+          embedSrc = `https://www.youtube.com/embed/${videoId}`;
+        } else if (src.includes('youtu.be/')) {
+          const videoId = src.split('youtu.be/')[1]?.split('?')[0];
+          embedSrc = `https://www.youtube.com/embed/${videoId}`;
+        }
+        content = `<iframe src="${embedSrc}" frameborder="0" allowfullscreen></iframe>`;
+      } else {
+        content = `<video src="${src}" controls></video>`;
+      }
+      
+      document.getElementById('modalContent').innerHTML = content;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+      const modal = document.getElementById('mediaModal');
+      modal.classList.remove('active');
+      document.getElementById('modalContent').innerHTML = '';
+      document.body.style.overflow = '';
+    }
+    
+    document.getElementById('mediaModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+    
+    function getFileNameFromUrl(url) {
+      const parts = url.split('/');
+      const lastPart = parts[parts.length - 1];
+      const cleanName = lastPart.split('?')[0];
+      return decodeURIComponent(cleanName) || 'فایل صوتی';
+    }
+    
+    async function loadEventData() {
+      const container = document.getElementById('mainContent');
+      
+      if (!EVENT_ID) {
+        container.innerHTML = `
+          <div class="loader-wrapper">
+            <div style="text-align: center;">
+              <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+              <p style="color: var(--text-light);">مراسمی انتخاب نشده است</p>
+              <a href="../index.html" style="display: inline-block; margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none;">
+                <i class="fa-solid fa-arrow-right"></i> بازگشت به صفحه اصلی
+              </a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      try {
+        const [eventRes, archiveRes] = await Promise.all([
+          fetch(API_URL + '?action=getEventById', {
+            method: 'POST',
+            body: JSON.stringify({ eventId: EVENT_ID })
+          }),
+          fetch(API_URL + '?action=getArchiveByEventId', {
+            method: 'POST',
+            body: JSON.stringify({ eventId: EVENT_ID })
+          })
+        ]);
+        
+        const eventData = await eventRes.json();
+        const archiveData = await archiveRes.json();
+        
+        if (!eventData.success) {
+          container.innerHTML = `
+            <div class="loader-wrapper">
+              <div style="text-align: center;">
+                <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+                <p style="color: var(--text-light);">مراسم پیدا نشد</p>
+                <a href="../index.html" style="display: inline-block; margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none;">
+                  <i class="fa-solid fa-arrow-right"></i> بازگشت
+                </a>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        const event = eventData.data;
+        const archive = archiveData.success ? archiveData.data : { images: [], videos: [], audios: [] };
+        const eventDate = new Date(event.date);
+        const dateStr = eventDate.toLocaleDateString('fa-IR');
+        
+        let html = '';
+        
+        html += `
+          <div class="event-header">
+            <div class="event-header-title">${event.title}</div>
+            ${event.description ? `<div class="event-header-description">${event.description}</div>` : ''}
+            <div class="event-header-meta">
+              <div class="event-meta-item">
+                <i class="fa-solid fa-clock"></i>
+                ${dateStr}
+              </div>
+              ${event.location ? `
+              <div class="event-meta-item">
+                <i class="fa-solid fa-location-dot"></i>
+                ${event.location}
+              </div>
+              ` : ''}
+              ${event.tag ? `<span class="event-tag">${event.tag}</span>` : ''}
+            </div>
+          </div>
+        `;
+        
+        if (archive.images && archive.images.length > 0) {
+          html += `
+            <div class="gallery-section">
+              <div class="section-title">
+                <i class="fa-solid fa-images"></i>
+                تصاویر
+              </div>
+              <div class="gallery-grid">
+                ${archive.images.map(img => `
+                  <div class="gallery-card" onclick="openImageModal('${img}')">
+                    <img src="${img}" class="gallery-image" alt="" loading="lazy">
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="gallery-section">
+              <div class="section-title">
+                <i class="fa-solid fa-images"></i>
+                تصاویر
+              </div>
+              <div class="gallery-grid">
+                <div class="empty-state">
+                  <i class="fa-solid fa-image"></i>
+                  <p>تصویری برای این مراسم آرشیو نشده است</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        
+        if (archive.videos && archive.videos.length > 0) {
+          html += `
+            <div class="gallery-section">
+              <div class="section-title">
+                <i class="fa-solid fa-video"></i>
+                ویدیوها
+              </div>
+              <div class="gallery-grid">
+                ${archive.videos.map(video => `
+                  <div class="gallery-card video-card" onclick="openVideoModal('${video}')">
+                    <div class="gallery-video-thumb" style="background: var(--bg2); display: flex; align-items: center; justify-content: center;">
+                      <i class="fa-solid fa-play" style="font-size: 36px; color: var(--primary);"></i>
+                    </div>
+                    <div class="video-play-icon">
+                      <i class="fa-solid fa-play"></i>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="gallery-section">
+              <div class="section-title">
+                <i class="fa-solid fa-video"></i>
+                ویدیوها
+              </div>
+              <div class="gallery-grid">
+                <div class="empty-state">
+                  <i class="fa-solid fa-video"></i>
+                  <p>ویدیویی برای این مراسم آرشیو نشده است</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        
+        if (archive.audios && archive.audios.length > 0) {
+          html += `
+            <div class="audio-section">
+              <div class="section-title">
+                <i class="fa-solid fa-podcast"></i>
+                صوت‌ها
+              </div>
+              <div class="audio-list">
+                ${archive.audios.map(audio => `
+                  <div class="audio-item">
+                    <div class="audio-icon">
+                      <i class="fa-solid fa-music"></i>
+                    </div>
+                    <div class="audio-info">
+                      <div class="audio-name">${getFileNameFromUrl(audio)}</div>
+                      <div class="audio-meta">${dateStr} — ${event.title}</div>
+                    </div>
+                    <a href="${audio}" download class="audio-download" title="دانلود">
+                      <i class="fa-solid fa-download"></i>
+                    </a>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="audio-section">
+              <div class="section-title">
+                <i class="fa-solid fa-podcast"></i>
+                صوت‌ها
+              </div>
+              <div class="audio-list">
+                <div class="empty-state" style="grid-column: 1/-1;">
+                  <i class="fa-solid fa-podcast"></i>
+                  <p>صوتی برای این مراسم آرشیو نشده است</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        
+        container.innerHTML = html;
+        
+      } catch (e) {
+        container.innerHTML = `
+          <div class="loader-wrapper">
+            <div style="text-align: center;">
+              <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+              <p style="color: var(--text-light);">خطا در دریافت اطلاعات</p>
+              <button onclick="loadEventData()" style="margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px;">
+                <i class="fa-solid fa-rotate-right"></i> تلاش مجدد
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    function init() {
+      checkMuharram();
+      loadEventData();
+    }
+    
+    init();
+  </script>
+
+</body>
+</html>
