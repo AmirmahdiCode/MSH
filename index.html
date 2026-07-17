@@ -770,8 +770,8 @@
     <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
   </footer>
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbw9Pmin5dp5YaayWcp-If4mqegvlcJrTeevgkgKA8EKMuAVwqUHsMk9ONPp8Oywz9CJ/exec';
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
     
     const themeToggle = document.getElementById('themeToggle');
     const icon = themeToggle.querySelector('i');
@@ -983,10 +983,11 @@
           const today = new Date();
           today.setHours(0, 0, 0, 0);
           
-          eventsData.data.sort((a, b) => new Date(a.date) - new Date(b.date));
-          
           const upcomingEvents = eventsData.data.filter(event => new Date(event.date) >= today);
           const pastEvents = eventsData.data.filter(event => new Date(event.date) < today);
+          
+          upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+          pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
           
           const allEvents = [...upcomingEvents, ...pastEvents];
           
@@ -1244,7 +1245,4 @@
     }
     
     init();
-  </script>
-
-</body>
-</html>
+</script>
