@@ -254,6 +254,13 @@
       justify-content: center;
       font-size: 20px;
       flex-shrink: 0;
+      overflow: hidden;
+    }
+    
+    .contact-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
     .contact-icon.instagram {
@@ -262,18 +269,38 @@
     }
     
     .contact-icon.eitaa {
-      background: #ffffff;
+      background: #fff7ed;
     }
     
     .contact-icon.eitaa img {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       object-fit: contain;
     }
     
     .contact-icon.telegram {
       background: linear-gradient(135deg, #2AABEE, #229ED9);
       color: #fff;
+    }
+    
+    .contact-icon.rubika {
+      background: #ffffff;
+    }
+    
+    .contact-icon.rubika img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .contact-icon.bale {
+      background: #ffffff;
+    }
+    
+    .contact-icon.bale img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
     .contact-icon.support {
@@ -402,10 +429,6 @@
         height: 40px;
         font-size: 18px;
       }
-      .contact-icon.eitaa img {
-        width: 20px;
-        height: 20px;
-      }
       .support-image {
         width: 40px;
         height: 40px;
@@ -498,6 +521,32 @@
         </div>
       </a>
       
+      <a href="https://rubika.ir/shohada_gomnam_shorabil" target="_blank" class="contact-card">
+        <div class="contact-icon rubika">
+          <img src="https://cdn.imgurl.ir/uploads/d223339_InShot_20260718_003716233.png" alt="روبیکا">
+        </div>
+        <div class="contact-info">
+          <h4>روبیکا</h4>
+          <p>@shohada_gomnam_shorabil</p>
+        </div>
+        <div class="contact-arrow">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+      </a>
+      
+      <a href="https://ble.ir/shohada_gomnam_shorabil" target="_blank" class="contact-card">
+        <div class="contact-icon bale">
+          <img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله">
+        </div>
+        <div class="contact-info">
+          <h4>بله</h4>
+          <p>@shohada_gomnam_shorabil</p>
+        </div>
+        <div class="contact-arrow">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+      </a>
+      
       <a href="https://eitaa.com/Amirmahdi_code" target="_blank" class="support-card">
         <img src="https://cdn.imgurl.ir/uploads/m87412_4b5310ee-fa5a-4d2e-a58c-a9337ddb4f92.png" class="support-image" alt="حمایت از سازنده">
         <div class="contact-info">
@@ -521,12 +570,12 @@
 
   <script>
     const themeToggle = document.getElementById('themeToggle');
-    const icon = themeToggle.querySelector('i');
+    const themeIcon = themeToggle.querySelector('i');
     
     const savedTheme = localStorage.getItem('heyat-theme');
     if (savedTheme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
-      icon.classList.replace('fa-moon', 'fa-sun');
+      themeIcon.classList.replace('fa-moon', 'fa-sun');
     }
     
     themeToggle.addEventListener('click', () => {
@@ -534,11 +583,11 @@
       
       if (currentTheme === 'dark') {
         document.documentElement.removeAttribute('data-theme');
-        icon.classList.replace('fa-sun', 'fa-moon');
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
         localStorage.setItem('heyat-theme', 'light');
       } else {
         document.documentElement.setAttribute('data-theme', 'dark');
-        icon.classList.replace('fa-moon', 'fa-sun');
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
         localStorage.setItem('heyat-theme', 'dark');
       }
     });
