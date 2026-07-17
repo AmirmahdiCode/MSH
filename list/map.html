@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>آدرس حسینیه | شهدای گمنام شورابیل</title>
+  <title>نشانی ما | شهدای گمنام شورابیل</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -259,6 +259,7 @@
       align-items: center;
       gap: 4px;
       white-space: nowrap;
+      font-family: inherit;
     }
     
     .copy-btn:hover {
@@ -402,7 +403,7 @@
         </div>
         <div>
           <div class="header-title">شهدای گمنام شورابیل</div>
-          <div class="header-subtitle">پایگاه خبری هیأت</div>
+          <div class="header-subtitle">سایت رسمی اطلاع رسانی و گزارش مراسمات</div>
         </div>
       </div>
       <div class="header-btns">
@@ -420,7 +421,7 @@
     
     <div class="page-title">
       <i class="fa-solid fa-location-dot"></i>
-      آدرس حسینیه
+      نشانی ما
     </div>
     
     <div class="address-card">
@@ -456,7 +457,7 @@
       <iframe 
         id="googleMap" 
         class="active"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3180.605408212345!2d48.29171467656234!3d38.21737797176512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzjCsDEzJzAyLjYiTiA0OMKwMTcnMzkuNSJF!5e0!3m2!1sen!2s!4v1620000000000"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3180.6!2d48.2943!3d38.2174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzjCsDEzJzAyLjYiTiA0OMKwMTcnMzkuNSJF!5e0!3m2!1sen!2s!4v1620000000000"
         allowfullscreen="" 
         loading="lazy" 
         referrerpolicy="no-referrer-when-downgrade">
@@ -464,14 +465,14 @@
       
       <iframe 
         id="neshanMap"
-        src="https://nshn.ir/sbChG1N5asY4"
+        src="https://nshn.ir/8aQbChFKO5arKn"
         allowfullscreen="" 
         loading="lazy">
       </iframe>
       
       <iframe 
         id="baladMap"
-        src="https://balad.ir/embed?latitude=38.217378&longitude=48.294300&zoom=16.5"
+        src="https://balad.ir/embed?p=2K6i1BBAyiOlEi"
         allowfullscreen="" 
         loading="lazy">
       </iframe>
@@ -481,20 +482,20 @@
 
   <footer class="footer">
     <div class="footer-links">
-      <a href="Communication.html"><i class="fa-solid fa-phone"></i> تماس با هیأت</a>
-      <a href="map.html"><i class="fa-solid fa-location-dot"></i> آدرس حسینیه</a>
+      <a href="Communication.html"><i class="fa-solid fa-phone"></i> ارتباط با ما</a>
+      <a href="map.html"><i class="fa-solid fa-location-dot"></i> نشانی ما</a>
     </div>
-    <p class="footer-text">هیأت شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
+    <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
   </footer>
 
   <script>
     const themeToggle = document.getElementById('themeToggle');
-    const icon = themeToggle.querySelector('i');
+    const themeIcon = themeToggle.querySelector('i');
     
     const savedTheme = localStorage.getItem('heyat-theme');
     if (savedTheme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
-      icon.classList.replace('fa-moon', 'fa-sun');
+      themeIcon.classList.replace('fa-moon', 'fa-sun');
     }
     
     themeToggle.addEventListener('click', () => {
@@ -502,11 +503,11 @@
       
       if (currentTheme === 'dark') {
         document.documentElement.removeAttribute('data-theme');
-        icon.classList.replace('fa-sun', 'fa-moon');
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
         localStorage.setItem('heyat-theme', 'light');
       } else {
         document.documentElement.setAttribute('data-theme', 'dark');
-        icon.classList.replace('fa-moon', 'fa-sun');
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
         localStorage.setItem('heyat-theme', 'dark');
       }
     });
