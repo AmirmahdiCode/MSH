@@ -429,8 +429,8 @@
         <i class="fa-solid fa-map-pin"></i>
       </div>
       <div class="address-text">
-        <h4>حسینیه شهدای گمنام شورابیل</h4>
-        <p>اردبیل، شورابیل، حسینیه شهدای گمنام</p>
+        <h4>شهدای گمنام شورابیل</h4>
+        <p>اردبیل، شورابیل</p>
       </div>
       <button class="copy-btn" onclick="copyAddress()">
         <i class="fa-solid fa-copy"></i>
@@ -465,7 +465,7 @@
       
       <iframe 
         id="neshanMap"
-        src="https://nshn.ir/8aQbChFKO5arKn"
+        src="https://nshn.ir/sbChG1N5asY4"
         allowfullscreen="" 
         loading="lazy">
       </iframe>
@@ -543,7 +543,7 @@
     }
     
     function copyAddress() {
-      const address = 'اردبیل، شورابیل، حسینیه شهدای گمنام';
+      const address = 'اردبیل، شورابیل، شهدای گمنام شورابیل';
       navigator.clipboard.writeText(address).then(() => {
         const btn = document.querySelector('.copy-btn');
         const originalHTML = btn.innerHTML;
