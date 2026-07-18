@@ -385,7 +385,7 @@
       box-shadow: var(--shadow);
       transition: all 0.3s ease;
       cursor: pointer;
-      border: 1px solid var(--card-border);
+      border: 2px solid transparent;
       flex-shrink: 0;
     }
     
@@ -393,6 +393,21 @@
       transform: translateY(-3px);
       box-shadow: var(--shadow-hover);
       border-color: var(--primary-light);
+    }
+    
+    .event-card.today {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4), 0 0 40px rgba(var(--primary-rgb), 0.2);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    .event-card.today:hover {
+      border-color: var(--primary);
+    }
+    
+    @keyframes glow {
+      from { box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.3), 0 0 30px rgba(var(--primary-rgb), 0.1); }
+      to { box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.5), 0 0 50px rgba(var(--primary-rgb), 0.3); }
     }
     
     .event-card.past {
@@ -467,6 +482,24 @@
       font-weight: 600;
       margin-top: 6px;
       display: inline-block;
+    }
+    
+    .today-tag {
+      font-size: 9px;
+      background: var(--primary);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      margin-right: 4px;
+      animation: pulse 1.5s ease-in-out infinite;
+      display: inline-block;
+      margin-top: 6px;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
     
     .donation-section {
@@ -770,7 +803,7 @@
     <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
   </footer>
 
-<script>
+  <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
     
     const themeToggle = document.getElementById('themeToggle');
@@ -1003,10 +1036,11 @@
                   ${allEvents.map(event => {
                     const eventDate = new Date(event.date);
                     const isPast = eventDate < today;
+                    const isToday = eventDate.toDateString() === today.toDateString();
                     const dateStr = eventDate.toLocaleDateString('fa-IR');
                     
                     return `
-                      <div class="event-card ${isPast ? 'past' : ''}" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description || ''}" data-tag="${event.tag || ''}" data-location="${event.location || ''}" data-date="${dateStr}">
+                      <div class="event-card ${isPast ? 'past' : ''} ${isToday ? 'today' : ''}" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description || ''}" data-tag="${event.tag || ''}" data-location="${event.location || ''}" data-date="${dateStr}">
                         ${event.image ? 
                           `<img src="${event.image}" class="event-image" alt="${event.title}">` : 
                           `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`
@@ -1017,7 +1051,7 @@
                             <span class="event-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>
                             <span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location || 'مشخص نشده'}</span>
                           </div>
-                          <span class="event-tag">${event.tag || 'مراسم'}</span>
+                          ${isToday ? '<span class="today-tag"><i class="fa-solid fa-calendar-check"></i> امروز</span>' : `<span class="event-tag">${event.tag || 'مراسم'}</span>`}
                         </div>
                       </div>
                     `;
@@ -1245,4 +1279,7 @@
     }
     
     init();
-</script>
+  </script>
+
+</body>
+</html>
