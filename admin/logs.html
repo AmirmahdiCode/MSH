@@ -254,29 +254,29 @@
     }
     
     .log-title {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--dark);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     
     .log-details {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--text-light);
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
     
     .log-details span {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
     }
     
     .log-badge {
-      font-size: 9px;
-      padding: 3px 8px;
+      font-size: 10px;
+      padding: 4px 10px;
       border-radius: 6px;
       font-weight: 600;
       white-space: nowrap;
@@ -387,6 +387,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbx_D5O9clLXUkq3gwfnT4diExFfmZ1XWEDMkMTHOekDBBVYbi07oH2A4X7rrBzGrUtb/exec';
+    const MAIN_API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -467,6 +468,37 @@
       'admin': 'مدیر'
     };
     
+    async function getItemName(itemId, type) {
+      try {
+        if (type === 'admin') {
+          const res = await fetch(API_URL + '?action=getAdmins', {
+            method: 'POST',
+            body: JSON.stringify({ adminId: admin.id })
+          });
+          const data = await res.json();
+          if (data.success) {
+            const found = data.data.find(a => a.id === itemId);
+            if (found) return found.name || found.username || itemId;
+          }
+        } else if (type === 'event') {
+          const res = await fetch(MAIN_API_URL + '?action=getEvents');
+          const data = await res.json();
+          if (data.success) {
+            const found = data.data.find(e => e.id === itemId);
+            if (found) return found.title || itemId;
+          }
+        } else if (type === 'announcement') {
+          const res = await fetch(MAIN_API_URL + '?action=getAnnouncements');
+          const data = await res.json();
+          if (data.success) {
+            const found = data.data.find(a => a.id === itemId);
+            if (found) return found.title || itemId;
+          }
+        }
+      } catch (e) {}
+      return itemId;
+    }
+    
     async function loadLogs() {
       const list = document.getElementById('logsList');
       
@@ -497,8 +529,9 @@
             return new Date(b.date) - new Date(a.date);
           });
           
-          list.innerHTML = logsData.data.map(log => {
+          const logsHTML = await Promise.all(logsData.data.map(async (log) => {
             const adminName = adminMap[log.adminId] || log.adminId;
+            const itemName = await getItemName(log.itemId, log.type);
             
             return `
               <div class="log-card">
@@ -507,10 +540,9 @@
                 </div>
                 <div class="log-info">
                   <div class="log-title">
-                    ${actionLabels[log.action] || log.action} ${typeLabels[log.type] || log.type}
+                    ${adminName} — ${actionLabels[log.action] || log.action} ${typeLabels[log.type] || log.type}: ${itemName}
                   </div>
                   <div class="log-details">
-                    <span><i class="fa-solid fa-user"></i> ${adminName}</span>
                     <span><i class="fa-solid fa-clock"></i> ${log.date}</span>
                   </div>
                 </div>
@@ -518,7 +550,9 @@
                 <span class="log-badge ${log.action}">${actionLabels[log.action] || log.action}</span>
               </div>
             `;
-          }).join('');
+          }));
+          
+          list.innerHTML = logsHTML.join('');
         } else {
           list.innerHTML = `
             <div style="text-align: center; padding: 40px; color: var(--text-light);">
