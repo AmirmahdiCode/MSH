@@ -387,6 +387,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbx_D5O9clLXUkq3gwfnT4diExFfmZ1XWEDMkMTHOekDBBVYbi07oH2A4X7rrBzGrUtb/exec';
+    const MAIN_API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -471,31 +472,55 @@
       const list = document.getElementById('logsList');
       
       try {
-        const res = await fetch(API_URL + '?action=getLogs', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: admin.id })
-        });
+        const [logsRes, adminsRes] = await Promise.all([
+          fetch(API_URL + '?action=getLogs', {
+            method: 'POST',
+            body: JSON.stringify({ adminId: admin.id })
+          }),
+          fetch(API_URL + '?action=getAdmins', {
+            method: 'POST',
+            body: JSON.stringify({ adminId: admin.id })
+          })
+        ]);
         
-        const data = await res.json();
+        const logsData = await logsRes.json();
+        const adminsData = await adminsRes.json();
         
-        if (data.success && data.data.length > 0) {
-          list.innerHTML = data.data.map(log => `
-            <div class="log-card">
-              <div class="log-icon ${log.action}">
-                <i class="fa-solid ${actionIcons[log.action] || 'fa-circle'}"></i>
-              </div>
-              <div class="log-info">
-                <div class="log-title">${actionLabels[log.action] || log.action} ${typeLabels[log.type] || log.type}</div>
-                <div class="log-details">
-                  <span><i class="fa-solid fa-key"></i> ${log.itemId}</span>
-                  <span><i class="fa-solid fa-user"></i> ${log.adminId}</span>
-                  <span><i class="fa-solid fa-clock"></i> ${log.date}</span>
+        const adminMap = {};
+        if (adminsData.success && adminsData.data.length > 0) {
+          adminsData.data.forEach(a => {
+            adminMap[a.id] = a.name || a.username || a.id;
+          });
+        }
+        
+        if (logsData.success && logsData.data.length > 0) {
+          logsData.data.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB - dateA;
+          });
+          
+          list.innerHTML = logsData.data.map(log => {
+            const adminName = adminMap[log.adminId] || log.adminId;
+            
+            return `
+              <div class="log-card">
+                <div class="log-icon ${log.action}">
+                  <i class="fa-solid ${actionIcons[log.action] || 'fa-circle'}"></i>
                 </div>
+                <div class="log-info">
+                  <div class="log-title">${actionLabels[log.action] || log.action} ${typeLabels[log.type] || log.type}</div>
+                  <div class="log-details">
+                    <span><i class="fa-solid fa-user"></i> ${adminName}</span>
+                    <span><i class="fa-solid fa-key"></i> ${log.itemId}</span>
+                    <span><i class="fa-solid fa-clock"></i> ${log.date}</span>
+                  </div>
+                </div>
+                <span class="log-badge ${log.type}">${typeLabels[log.type] || log.type}</span>
+                <span class="log-badge ${log.action}">${actionLabels[log.action] || log.action}</span>
               </div>
-              <span class="log-badge ${log.type}">${typeLabels[log.type] || log.type}</span>
-              <span class="log-badge ${log.action}">${actionLabels[log.action] || log.action}</span>
-            </div>
-          `).join('');
+            `;
+          }).join('');
         } else {
           list.innerHTML = `
             <div style="text-align: center; padding: 40px; color: var(--text-light);">
