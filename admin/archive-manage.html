@@ -441,18 +441,23 @@
       padding-left: 32px;
     }
     
+    .tag-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    
     .tag-input-wrapper {
       border: 1px solid var(--card-border);
       border-radius: 8px;
       background: var(--bg);
-      padding: 8px;
+      padding: 6px 8px;
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       align-items: center;
-      cursor: text;
+      flex: 1;
+      min-height: 42px;
       transition: all 0.3s ease;
-      min-height: 44px;
     }
     
     .tag-input-wrapper:focus-within {
@@ -473,19 +478,19 @@
     }
     
     .tag-input-wrapper .tag img {
-      width: 28px;
-      height: 20px;
+      width: 24px;
+      height: 18px;
       border-radius: 3px;
       object-fit: cover;
     }
     
     .tag-input-wrapper .tag i {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--primary);
     }
     
     .tag-input-wrapper .tag .tag-text {
-      max-width: 120px;
+      max-width: 100px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -494,7 +499,7 @@
     .tag-input-wrapper .tag .tag-remove {
       cursor: pointer;
       color: var(--text-light);
-      font-size: 10px;
+      font-size: 9px;
       padding: 2px;
       border-radius: 50%;
       transition: all 0.2s;
@@ -512,7 +517,7 @@
       outline: none;
       background: transparent;
       flex: 1;
-      min-width: 100px;
+      min-width: 80px;
       font-size: 11px;
       font-family: inherit;
       color: var(--text);
@@ -521,6 +526,26 @@
     
     .tag-input-wrapper input::placeholder {
       color: var(--text-light);
+    }
+    
+    .add-tag-btn {
+      width: 42px;
+      height: 42px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .add-tag-btn:hover {
+      background: var(--primary-dark);
     }
     
     @keyframes fadeIn {
@@ -656,21 +681,36 @@
         <div class="event-select-info" id="eventInfo" style="display:none;"></div>
       </div>
       <div class="form-group">
-        <label>تصاویر <span class="hint">(لینک را وارد کنید و Enter بزنید)</span></label>
-        <div class="tag-input-wrapper" id="imagesWrapper">
-          <input type="url" id="imageInput" placeholder="https://...">
+        <label>تصاویر <span class="hint">(لینک را وارد کنید و + بزنید)</span></label>
+        <div class="tag-input-row">
+          <div class="tag-input-wrapper" id="imagesWrapper">
+            <input type="url" id="imageInput" placeholder="https://...">
+          </div>
+          <button type="button" class="add-tag-btn" id="addImageBtn">
+            <i class="fa-solid fa-plus"></i>
+          </button>
         </div>
       </div>
       <div class="form-group">
-        <label>ویدیوها <span class="hint">(لینک را وارد کنید و Enter بزنید)</span></label>
-        <div class="tag-input-wrapper" id="videosWrapper">
-          <input type="url" id="videoInput" placeholder="https://...">
+        <label>ویدیوها <span class="hint">(لینک را وارد کنید و + بزنید)</span></label>
+        <div class="tag-input-row">
+          <div class="tag-input-wrapper" id="videosWrapper">
+            <input type="url" id="videoInput" placeholder="https://...">
+          </div>
+          <button type="button" class="add-tag-btn" id="addVideoBtn">
+            <i class="fa-solid fa-plus"></i>
+          </button>
         </div>
       </div>
       <div class="form-group">
-        <label>صوت‌ها <span class="hint">(لینک را وارد کنید و Enter بزنید)</span></label>
-        <div class="tag-input-wrapper" id="audiosWrapper">
-          <input type="url" id="audioInput" placeholder="https://...">
+        <label>صوت‌ها <span class="hint">(لینک را وارد کنید و + بزنید)</span></label>
+        <div class="tag-input-row">
+          <div class="tag-input-wrapper" id="audiosWrapper">
+            <input type="url" id="audioInput" placeholder="https://...">
+          </div>
+          <button type="button" class="add-tag-btn" id="addAudioBtn">
+            <i class="fa-solid fa-plus"></i>
+          </button>
         </div>
       </div>
       <div class="error-text" id="archiveError"></div>
@@ -760,28 +800,6 @@
     let allEvents = [];
     let allArchives = [];
     
-    function setupTagInput(wrapperId, inputId, iconType) {
-      const wrapper = document.getElementById(wrapperId);
-      const input = document.getElementById(inputId);
-      
-      input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          const value = input.value.trim();
-          if (value) {
-            addTag(wrapper, value, iconType);
-            input.value = '';
-          }
-        }
-      });
-      
-      wrapper.addEventListener('click', function(e) {
-        if (e.target === wrapper) {
-          input.focus();
-        }
-      });
-    }
-    
     function addTag(wrapper, value, iconType) {
       const existingTags = wrapper.querySelectorAll('.tag');
       for (const tag of existingTags) {
@@ -804,7 +822,7 @@
       let displayText = value;
       try {
         const url = new URL(value);
-        displayText = url.hostname + url.pathname.substring(0, 15) + (url.pathname.length > 15 ? '...' : '');
+        displayText = url.hostname + url.pathname.substring(0, 12) + (url.pathname.length > 12 ? '...' : '');
       } catch (e) {}
       
       tag.innerHTML = `
@@ -820,6 +838,28 @@
       
       const input = wrapper.querySelector('input');
       wrapper.insertBefore(tag, input);
+    }
+    
+    function setupTagInput(wrapperId, inputId, addBtnId, iconType) {
+      const input = document.getElementById(inputId);
+      const addBtn = document.getElementById(addBtnId);
+      const wrapper = document.getElementById(wrapperId);
+      
+      addBtn.addEventListener('click', () => {
+        const value = input.value.trim();
+        if (value) {
+          addTag(wrapper, value, iconType);
+          input.value = '';
+          input.focus();
+        }
+      });
+      
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addBtn.click();
+        }
+      });
     }
     
     function getTagValues(wrapperId) {
@@ -841,156 +881,160 @@
       }
     }
     
-    setupTagInput('imagesWrapper', 'imageInput', 'image');
-    setupTagInput('videosWrapper', 'videoInput', 'video');
-    setupTagInput('audiosWrapper', 'audioInput', 'audio');
+    setupTagInput('imagesWrapper', 'imageInput', 'addImageBtn', 'image');
+    setupTagInput('videosWrapper', 'videoInput', 'addVideoBtn', 'video');
+    setupTagInput('audiosWrapper', 'audioInput', 'addAudioBtn', 'audio');
     
     async function loadData() {
       const list = document.getElementById('archiveList');
+      list.innerHTML = `
+        <div style="text-align: center; padding: 32px; color: var(--text-light);">
+          <i class="fa-solid fa-spinner fa-pulse"></i>
+          <p style="margin-top: 8px; font-size: 12px;">در حال بارگذاری...</p>
+        </div>
+      `;
       
       try {
         const eventsRes = await fetch(API_URL + '?action=getEvents');
         const eventsData = await eventsRes.json();
         
-        if (eventsData.success && eventsData.data.length > 0) {
-          allEvents = eventsData.data;
-          
-          const archiveItems = [];
-          
-          for (const event of allEvents) {
-            try {
-              const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', {
-                method: 'POST',
-                body: JSON.stringify({ eventId: event.id })
-              });
-              const archiveData = await archiveRes.json();
-              
-              if (archiveData.success) {
-                archiveItems.push({
-                  eventId: event.id,
-                  eventTitle: event.title,
-                  eventDate: event.date,
-                  images: archiveData.data.images || [],
-                  videos: archiveData.data.videos || [],
-                  audios: archiveData.data.audios || [],
-                  hasArchive: archiveData.data.images.length > 0 || archiveData.data.videos.length > 0 || archiveData.data.audios.length > 0
-                });
-              }
-            } catch (e) {
-              archiveItems.push({
-                eventId: event.id,
-                eventTitle: event.title,
-                eventDate: event.date,
-                images: [],
-                videos: [],
-                audios: [],
-                hasArchive: false
-              });
-            }
-          }
-          
-          allArchives = archiveItems;
-          
-          const eventsWithArchive = archiveItems.filter(a => a.hasArchive);
-          const eventsWithoutArchive = archiveItems.filter(a => !a.hasArchive);
-          
-          let html = '';
-          
-          if (eventsWithArchive.length > 0) {
-            html += eventsWithArchive.map((archive) => {
-              const eventDate = new Date(archive.eventDate);
-              const dateStr = eventDate.toLocaleDateString('fa-IR');
-              const realIndex = archiveItems.indexOf(archive);
-              
-              return `
-                <div class="archive-card">
-                  <div class="archive-icon images">
-                    <i class="fa-solid fa-images"></i>
-                  </div>
-                  <div class="archive-info">
-                    <div class="archive-event-name">${archive.eventTitle}</div>
-                    <div class="archive-meta">
-                      <span><i class="fa-solid fa-clock"></i> ${dateStr}</span>
-                    </div>
-                  </div>
-                  <div class="archive-counts">
-                    <span class="count-badge images"><i class="fa-solid fa-image"></i> ${archive.images.length}</span>
-                    <span class="count-badge videos"><i class="fa-solid fa-video"></i> ${archive.videos.length}</span>
-                    <span class="count-badge audios"><i class="fa-solid fa-music"></i> ${archive.audios.length}</span>
-                  </div>
-                  <div class="archive-actions">
-                    <button class="action-btn edit-btn" data-index="${realIndex}" title="ویرایش">
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="action-btn delete delete-btn" data-index="${realIndex}" title="حذف">
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              `;
-            }).join('');
-          }
-          
-          if (eventsWithoutArchive.length > 0) {
-            html += `
-              <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--text-light); padding: 8px 0;">
-                <i class="fa-solid fa-circle-plus"></i> مراسم‌های بدون آرشیو
-              </div>
-            `;
-            
-            html += eventsWithoutArchive.map((archive) => {
-              const eventDate = new Date(archive.eventDate);
-              const dateStr = eventDate.toLocaleDateString('fa-IR');
-              const realIndex = archiveItems.indexOf(archive);
-              
-              return `
-                <div class="archive-card" style="opacity: 0.6;">
-                  <div class="archive-icon images" style="background: var(--bg2); color: var(--text-light);">
-                    <i class="fa-solid fa-circle-plus"></i>
-                  </div>
-                  <div class="archive-info">
-                    <div class="archive-event-name">${archive.eventTitle}</div>
-                    <div class="archive-meta">
-                      <span><i class="fa-solid fa-clock"></i> ${dateStr}</span>
-                      <span style="color: var(--warning);">بدون آرشیو</span>
-                    </div>
-                  </div>
-                  <div class="archive-actions">
-                    <button class="action-btn edit-btn" data-index="${realIndex}" title="افزودن آرشیو" style="background: var(--warning-light); color: var(--warning);">
-                      <i class="fa-solid fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-              `;
-            }).join('');
-          }
-          
-          list.innerHTML = html;
-          
-          document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-              const index = parseInt(this.dataset.index);
-              const archive = allArchives[index];
-              editArchive(archive);
-            });
-          });
-          
-          document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-              const index = parseInt(this.dataset.index);
-              const archive = allArchives[index];
-              openDeleteModal(archive.eventId, archive.eventTitle);
-            });
-          });
-          
-        } else {
+        if (!eventsData.success || eventsData.data.length === 0) {
           list.innerHTML = `
             <div style="text-align: center; padding: 32px; color: var(--text-light);">
               <i class="fa-solid fa-calendar-xmark" style="font-size: 36px; margin-bottom: 8px; display: block;"></i>
               <p style="font-size: 13px;">مراسمی ثبت نشده است</p>
             </div>
           `;
+          return;
         }
+        
+        allEvents = eventsData.data;
+        const archiveItems = [];
+        
+        for (const event of allEvents) {
+          try {
+            const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', {
+              method: 'POST',
+              body: JSON.stringify({ eventId: event.id })
+            });
+            const archiveData = await archiveRes.json();
+            
+            archiveItems.push({
+              eventId: event.id,
+              eventTitle: event.title,
+              eventDate: event.date,
+              images: archiveData.success ? (archiveData.data.images || []) : [],
+              videos: archiveData.success ? (archiveData.data.videos || []) : [],
+              audios: archiveData.success ? (archiveData.data.audios || []) : [],
+              hasArchive: archiveData.success && (archiveData.data.images?.length > 0 || archiveData.data.videos?.length > 0 || archiveData.data.audios?.length > 0)
+            });
+          } catch (e) {
+            archiveItems.push({
+              eventId: event.id,
+              eventTitle: event.title,
+              eventDate: event.date,
+              images: [],
+              videos: [],
+              audios: [],
+              hasArchive: false
+            });
+          }
+        }
+        
+        allArchives = archiveItems;
+        
+        const eventsWithArchive = archiveItems.filter(a => a.hasArchive);
+        const eventsWithoutArchive = archiveItems.filter(a => !a.hasArchive);
+        
+        let html = '';
+        
+        if (eventsWithArchive.length > 0) {
+          eventsWithArchive.forEach((archive) => {
+            const eventDate = new Date(archive.eventDate);
+            const dateStr = eventDate.toLocaleDateString('fa-IR');
+            const realIndex = archiveItems.indexOf(archive);
+            
+            html += `
+              <div class="archive-card">
+                <div class="archive-icon images">
+                  <i class="fa-solid fa-images"></i>
+                </div>
+                <div class="archive-info">
+                  <div class="archive-event-name">${archive.eventTitle}</div>
+                  <div class="archive-meta">
+                    <span><i class="fa-solid fa-clock"></i> ${dateStr}</span>
+                  </div>
+                </div>
+                <div class="archive-counts">
+                  <span class="count-badge images"><i class="fa-solid fa-image"></i> ${archive.images.length}</span>
+                  <span class="count-badge videos"><i class="fa-solid fa-video"></i> ${archive.videos.length}</span>
+                  <span class="count-badge audios"><i class="fa-solid fa-music"></i> ${archive.audios.length}</span>
+                </div>
+                <div class="archive-actions">
+                  <button class="action-btn edit-btn" data-index="${realIndex}" title="ویرایش">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button class="action-btn delete delete-btn" data-index="${realIndex}" title="حذف">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+        }
+        
+        if (eventsWithoutArchive.length > 0) {
+          html += `
+            <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--text-light); padding: 8px 0;">
+              <i class="fa-solid fa-circle-plus"></i> مراسم‌های بدون آرشیو
+            </div>
+          `;
+          
+          eventsWithoutArchive.forEach((archive) => {
+            const eventDate = new Date(archive.eventDate);
+            const dateStr = eventDate.toLocaleDateString('fa-IR');
+            const realIndex = archiveItems.indexOf(archive);
+            
+            html += `
+              <div class="archive-card" style="opacity: 0.6;">
+                <div class="archive-icon images" style="background: var(--bg2); color: var(--text-light);">
+                  <i class="fa-solid fa-circle-plus"></i>
+                </div>
+                <div class="archive-info">
+                  <div class="archive-event-name">${archive.eventTitle}</div>
+                  <div class="archive-meta">
+                    <span><i class="fa-solid fa-clock"></i> ${dateStr}</span>
+                    <span style="color: var(--warning);">بدون آرشیو</span>
+                  </div>
+                </div>
+                <div class="archive-actions">
+                  <button class="action-btn edit-btn" data-index="${realIndex}" title="افزودن آرشیو" style="background: var(--warning-light); color: var(--warning);">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+        }
+        
+        list.innerHTML = html;
+        
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            const archive = allArchives[index];
+            editArchive(archive);
+          });
+        });
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            const archive = allArchives[index];
+            openDeleteModal(archive.eventId, archive.eventTitle);
+          });
+        });
+        
       } catch (e) {
         list.innerHTML = `
           <div style="text-align: center; padding: 32px; color: var(--text-light);">
@@ -1021,6 +1065,10 @@
           select.innerHTML += `<option value="${archive.eventId}">${archive.eventTitle}</option>`;
         }
       });
+      
+      if (select.options.length === 1) {
+        select.innerHTML += '<option value="" disabled>همه مراسم‌ها آرشیو دارند</option>';
+      }
       
       select.onchange = function() {
         const selected = allArchives.find(a => a.eventId === this.value);
@@ -1066,6 +1114,7 @@
     
     function closeArchiveModal() {
       document.getElementById('archiveModal').classList.remove('active');
+      document.getElementById('archiveEventSelect').disabled = false;
     }
     
     document.getElementById('addArchiveBtn').addEventListener('click', openAddModal);
