@@ -26,7 +26,6 @@
       --header-bg: #ffffff;
       --footer-bg: #ffffff;
       --logo-filter: none;
-      --modal-bg: rgba(0,0,0,0.9);
     }
     
     [data-theme="dark"] {
@@ -218,11 +217,20 @@
       box-shadow: var(--shadow);
     }
     
+    .announcement-detail-image-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 24px 24px 0 24px;
+    }
+    
     .announcement-detail-image {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      max-width: 350px;
+      aspect-ratio: 2 / 3;
       object-fit: cover;
+      border-radius: 12px;
       background: var(--bg2);
+      display: block;
     }
     
     .announcement-detail-image.placeholder {
@@ -232,6 +240,10 @@
       font-size: 56px;
       color: var(--primary);
       background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.05), rgba(var(--primary-rgb), 0.02));
+      max-width: 350px;
+      aspect-ratio: 2 / 3;
+      border-radius: 12px;
+      margin: 0 auto;
     }
     
     .announcement-detail-body {
@@ -320,6 +332,15 @@
     }
     
     @media (max-width: 650px) {
+      .announcement-detail-image-wrapper {
+        padding: 16px 16px 0 16px;
+      }
+      .announcement-detail-image {
+        max-width: 280px;
+      }
+      .announcement-detail-image.placeholder {
+        max-width: 280px;
+      }
       .announcement-detail-body {
         padding: 18px;
       }
@@ -331,6 +352,15 @@
       }
       .header-title {
         font-size: 17px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .announcement-detail-image {
+        max-width: 240px;
+      }
+      .announcement-detail-image.placeholder {
+        max-width: 240px;
       }
     }
   </style>
@@ -454,8 +484,8 @@
             container.innerHTML = `
               <div class="announcement-detail">
                 ${announcement.image ? 
-                  `<img src="${announcement.image}" class="announcement-detail-image" alt="${announcement.title}">` :
-                  `<div class="announcement-detail-image placeholder"><i class="fa-solid fa-bullhorn"></i></div>`
+                  `<div class="announcement-detail-image-wrapper"><img src="${announcement.image}" class="announcement-detail-image" alt="${announcement.title}"></div>` :
+                  `<div class="announcement-detail-image-wrapper"><div class="announcement-detail-image placeholder"><i class="fa-solid fa-bullhorn"></i></div></div>`
                 }
                 <div class="announcement-detail-body">
                   <h1 class="announcement-detail-title">${announcement.title}</h1>
