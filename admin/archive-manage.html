@@ -262,16 +262,6 @@
       color: var(--info);
     }
     
-    .archive-icon.videos {
-      background: var(--danger-light);
-      color: var(--danger);
-    }
-    
-    .archive-icon.audios {
-      background: var(--success-light);
-      color: var(--success);
-    }
-    
     .archive-info {
       flex: 1;
       min-width: 0;
@@ -444,6 +434,7 @@
     .tag-input-row {
       display: flex;
       gap: 8px;
+      margin-bottom: 8px;
     }
     
     .tag-input-wrapper {
@@ -546,6 +537,43 @@
     
     .add-tag-btn:hover {
       background: var(--primary-dark);
+    }
+    
+    .upload-btn {
+      width: 42px;
+      height: 42px;
+      background: var(--info);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .upload-btn:hover {
+      background: #2563eb;
+    }
+    
+    .upload-btn input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .upload-btn.loading {
+      pointer-events: none;
+      opacity: 0.7;
     }
     
     @keyframes fadeIn {
@@ -681,13 +709,17 @@
         <div class="event-select-info" id="eventInfo" style="display:none;"></div>
       </div>
       <div class="form-group">
-        <label>تصاویر <span class="hint">(لینک را وارد کنید و + بزنید)</span></label>
+        <label>تصاویر <span class="hint">(لینک را وارد کنید و + بزنید یا آپلود کنید)</span></label>
         <div class="tag-input-row">
           <div class="tag-input-wrapper" id="imagesWrapper">
             <input type="url" id="imageInput" placeholder="https://...">
           </div>
           <button type="button" class="add-tag-btn" id="addImageBtn">
             <i class="fa-solid fa-plus"></i>
+          </button>
+          <button type="button" class="upload-btn" id="uploadImageBtn">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <input type="file" accept="image/*" id="imageFileInput">
           </button>
         </div>
       </div>
@@ -735,7 +767,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -884,6 +916,50 @@
     setupTagInput('imagesWrapper', 'imageInput', 'addImageBtn', 'image');
     setupTagInput('videosWrapper', 'videoInput', 'addVideoBtn', 'video');
     setupTagInput('audiosWrapper', 'audioInput', 'addAudioBtn', 'audio');
+    
+    document.getElementById('imageFileInput').addEventListener('change', async function() {
+      const file = this.files[0];
+      if (!file) return;
+      
+      const uploadBtn = document.getElementById('uploadImageBtn');
+      uploadBtn.classList.add('loading');
+      const originalHTML = uploadBtn.innerHTML;
+      uploadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-pulse"></i>';
+      
+      try {
+        const reader = new FileReader();
+        
+        reader.onload = async function(e) {
+          const base64 = e.target.result.split(',')[1];
+          const mimeType = file.type;
+          const fileName = file.name;
+          
+          const res = await fetch(API_URL + '?action=uploadImage', {
+            method: 'POST',
+            body: JSON.stringify({ base64, mimeType, fileName })
+          });
+          
+          const data = await res.json();
+          
+          if (data.success) {
+            addTag(document.getElementById('imagesWrapper'), data.url, 'image');
+            document.getElementById('imageInput').value = data.url;
+          } else {
+            alert('خطا در آپلود: ' + data.message);
+          }
+          
+          uploadBtn.classList.remove('loading');
+          uploadBtn.innerHTML = originalHTML;
+          document.getElementById('imageFileInput').value = '';
+        };
+        
+        reader.readAsDataURL(file);
+      } catch (e) {
+        alert('خطا در خواندن فایل');
+        uploadBtn.classList.remove('loading');
+        uploadBtn.innerHTML = originalHTML;
+      }
+    });
     
     async function loadData() {
       const list = document.getElementById('archiveList');
