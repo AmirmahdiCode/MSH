@@ -385,7 +385,7 @@
       box-shadow: var(--shadow);
       transition: all 0.3s ease;
       cursor: pointer;
-      border: 2px solid transparent;
+      border: 1px solid var(--card-border);
       flex-shrink: 0;
     }
     
@@ -397,17 +397,16 @@
     
     .event-card.today {
       border-color: var(--primary);
-      box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4), 0 0 40px rgba(var(--primary-rgb), 0.2);
-      animation: glow 2s ease-in-out infinite alternate;
+      animation: glowBorder 2s ease-in-out infinite alternate;
     }
     
     .event-card.today:hover {
       border-color: var(--primary);
     }
     
-    @keyframes glow {
-      from { box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.3), 0 0 30px rgba(var(--primary-rgb), 0.1); }
-      to { box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.5), 0 0 50px rgba(var(--primary-rgb), 0.3); }
+    @keyframes glowBorder {
+      from { border-color: var(--primary); box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.2); }
+      to { border-color: var(--primary-light); box-shadow: 0 0 16px rgba(var(--primary-rgb), 0.4); }
     }
     
     .event-card.past {
@@ -473,6 +472,13 @@
       gap: 3px;
     }
     
+    .event-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    
     .event-tag {
       font-size: 9px;
       color: var(--primary-dark);
@@ -480,7 +486,6 @@
       padding: 3px 10px;
       border-radius: 12px;
       font-weight: 600;
-      margin-top: 6px;
       display: inline-block;
     }
     
@@ -491,10 +496,8 @@
       padding: 3px 10px;
       border-radius: 10px;
       font-weight: 700;
-      margin-right: 4px;
       animation: pulse 1.5s ease-in-out infinite;
       display: inline-block;
-      margin-top: 6px;
     }
     
     @keyframes pulse {
@@ -1051,7 +1054,10 @@
                             <span class="event-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>
                             <span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location || 'مشخص نشده'}</span>
                           </div>
-                          ${isToday ? '<span class="today-tag"><i class="fa-solid fa-calendar-check"></i> امروز</span>' : `<span class="event-tag">${event.tag || 'مراسم'}</span>`}
+                          <div class="event-tags">
+                            ${isToday ? '<span class="today-tag"><i class="fa-solid fa-calendar-check"></i> امروز</span>' : ''}
+                            <span class="event-tag">${event.tag || 'مراسم'}</span>
+                          </div>
                         </div>
                       </div>
                     `;
