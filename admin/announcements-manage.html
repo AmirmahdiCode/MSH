@@ -30,6 +30,8 @@
       --danger-light: #fef2f2;
       --success: #10b981;
       --success-light: #ecfdf5;
+      --info: #3b82f6;
+      --purple: #8b5cf6;
     }
     
     [data-theme="dark"] {
@@ -350,7 +352,7 @@
       border-radius: 16px;
       padding: 24px;
       width: 90%;
-      max-width: 500px;
+      max-width: 520px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.2);
       max-height: 90vh;
       overflow-y: auto;
@@ -375,6 +377,12 @@
       margin-bottom: 4px;
     }
     
+    .form-group label .hint {
+      font-weight: 400;
+      color: var(--text-light);
+      font-size: 9px;
+    }
+    
     .form-input, .form-select, .form-textarea {
       width: 100%;
       padding: 10px 12px;
@@ -396,6 +404,79 @@
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    }
+    
+    .image-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .image-input-row .form-input {
+      flex: 1;
+    }
+    
+    .upload-btn {
+      width: 42px;
+      height: 42px;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+    }
+    
+    .upload-btn.drive-upload {
+      background: var(--info);
+    }
+    
+    .upload-btn.drive-upload:hover {
+      background: #2563eb;
+    }
+    
+    .upload-btn.web-upload {
+      background: var(--purple);
+    }
+    
+    .upload-btn.web-upload:hover {
+      background: #7c3aed;
+    }
+    
+    .upload-btn input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .upload-btn.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    
+    .image-preview {
+      width: 100%;
+      max-width: 200px;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: none;
+      background: var(--bg2);
+    }
+    
+    .image-preview.show {
+      display: block;
     }
     
     .modal-btns {
@@ -452,6 +533,9 @@
       .announcement-actions {
         width: 100%;
         justify-content: flex-end;
+      }
+      .image-input-row {
+        flex-wrap: wrap;
       }
     }
   </style>
@@ -510,8 +594,18 @@
         <input type="text" class="form-input" id="annTitle" placeholder="عنوان اطلاعیه">
       </div>
       <div class="form-group">
-        <label>لینک تصویر</label>
-        <input type="url" class="form-input" id="annImage" placeholder="https://...">
+        <label>تصویر اطلاعیه <span class="hint">(لینک مستقیم وارد کنید یا آپلود نمایید)</span></label>
+        <div class="image-input-row">
+          <input type="url" class="form-input" id="annImage" placeholder="لینک تصویر را وارد کنید...">
+          <button type="button" class="upload-btn drive-upload" id="uploadDriveBtn" title="آپلود در گوگل درایو">
+            <i class="fa-brands fa-google-drive"></i>
+            <input type="file" accept="image/*" id="driveFileInput">
+          </button>
+          <a href="https://imgurl.ir" target="_blank" class="upload-btn web-upload" title="آپلود در imgurl">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </a>
+        </div>
+        <img src="" class="image-preview" id="imagePreview" alt="پیش‌نمایش">
       </div>
       <div class="form-group">
         <label>متن اطلاعیه</label>
@@ -554,7 +648,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -617,6 +711,63 @@
     });
     
     let allAnnouncements = [];
+    
+    document.getElementById('driveFileInput').addEventListener('change', async function() {
+      const file = this.files[0];
+      if (!file) return;
+      
+      const uploadBtn = document.getElementById('uploadDriveBtn');
+      uploadBtn.classList.add('loading');
+      const originalHTML = uploadBtn.innerHTML;
+      uploadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-pulse"></i>';
+      
+      try {
+        const reader = new FileReader();
+        
+        reader.onload = async function(e) {
+          const base64 = e.target.result.split(',')[1];
+          const mimeType = file.type;
+          const fileName = file.name;
+          
+          const res = await fetch(API_URL + '?action=uploadImage', {
+            method: 'POST',
+            body: JSON.stringify({ base64, mimeType, fileName })
+          });
+          
+          const data = await res.json();
+          
+          if (data.success) {
+            document.getElementById('annImage').value = data.url;
+            const preview = document.getElementById('imagePreview');
+            preview.src = data.url;
+            preview.classList.add('show');
+          } else {
+            alert('خطا در آپلود: ' + data.message);
+          }
+          
+          uploadBtn.classList.remove('loading');
+          uploadBtn.innerHTML = originalHTML;
+          document.getElementById('driveFileInput').value = '';
+        };
+        
+        reader.readAsDataURL(file);
+      } catch (e) {
+        alert('خطا در خواندن فایل');
+        uploadBtn.classList.remove('loading');
+        uploadBtn.innerHTML = originalHTML;
+      }
+    });
+    
+    document.getElementById('annImage').addEventListener('input', function() {
+      const url = this.value.trim();
+      const preview = document.getElementById('imagePreview');
+      if (url) {
+        preview.src = url;
+        preview.classList.add('show');
+      } else {
+        preview.classList.remove('show');
+      }
+    });
     
     async function loadAnnouncements() {
       const list = document.getElementById('announcementsList');
@@ -704,6 +855,7 @@
       document.getElementById('annDate').value = '';
       document.getElementById('annStatus').value = 'فعال';
       document.getElementById('annError').classList.remove('show');
+      document.getElementById('imagePreview').classList.remove('show');
       document.getElementById('announcementModal').classList.add('active');
     }
     
@@ -717,6 +869,15 @@
       document.getElementById('annDate').value = ann.date || '';
       document.getElementById('annStatus').value = ann.status || 'فعال';
       document.getElementById('annError').classList.remove('show');
+      
+      const preview = document.getElementById('imagePreview');
+      if (ann.image) {
+        preview.src = ann.image;
+        preview.classList.add('show');
+      } else {
+        preview.classList.remove('show');
+      }
+      
       document.getElementById('announcementModal').classList.add('active');
     }
     
