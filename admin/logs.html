@@ -387,7 +387,6 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbx_D5O9clLXUkq3gwfnT4diExFfmZ1XWEDMkMTHOekDBBVYbi07oH2A4X7rrBzGrUtb/exec';
-    const MAIN_API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -495,9 +494,7 @@
         
         if (logsData.success && logsData.data.length > 0) {
           logsData.data.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-            return dateB - dateA;
+            return new Date(b.date) - new Date(a.date);
           });
           
           list.innerHTML = logsData.data.map(log => {
@@ -509,10 +506,11 @@
                   <i class="fa-solid ${actionIcons[log.action] || 'fa-circle'}"></i>
                 </div>
                 <div class="log-info">
-                  <div class="log-title">${actionLabels[log.action] || log.action} ${typeLabels[log.type] || log.type}</div>
+                  <div class="log-title">
+                    ${actionLabels[log.action] || log.action} ${typeLabels[log.type] || log.type}
+                  </div>
                   <div class="log-details">
                     <span><i class="fa-solid fa-user"></i> ${adminName}</span>
-                    <span><i class="fa-solid fa-key"></i> ${log.itemId}</span>
                     <span><i class="fa-solid fa-clock"></i> ${log.date}</span>
                   </div>
                 </div>
