@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اطلاعیه | شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc;
+      --bg2: #f1f5f9;
+      --bg3: #e2e8f0;
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #5eead4;
+      --primary-rgb: 13, 148, 136;
+      --dark: #0f172a;
+      --text: #334155;
+      --text-light: #94a3b8;
+      --white: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --header-bg: #ffffff;
+      --footer-bg: #ffffff;
+      --logo-filter: none;
+      --modal-bg: rgba(0,0,0,0.9);
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --primary: #14b8a6;
+      --primary-dark: #0d9488;
+      --primary-light: #5eead4;
+      --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9;
+      --text: #cbd5e1;
+      --text-light: #64748b;
+      --white: #1e293b;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      --header-bg: #1e293b;
+      --footer-bg: #1e293b;
+      --logo-filter: brightness(0) invert(1);
+    }
+    
+    [data-muharram="true"] {
+      --primary: #dc2626;
+      --primary-dark: #b91c1c;
+      --primary-light: #fca5a5;
+      --primary-rgb: 220, 38, 38;
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444;
+      --primary-dark: #dc2626;
+      --primary-light: #fca5a5;
+      --primary-rgb: 239, 68, 68;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    
+    .header {
+      background: var(--header-bg);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--bg3);
+      transition: all 0.3s ease;
+    }
+    
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .header-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
+      overflow: hidden;
+      padding: 6px;
+    }
+    
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: var(--logo-filter);
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      transition: color 0.3s;
+    }
+    
+    .header-subtitle {
+      font-size: 10px;
+      color: var(--text-light);
+      transition: color 0.3s;
+    }
+    
+    .header-btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .back-btn {
+      background: var(--bg2);
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      text-decoration: none;
+    }
+    
+    .back-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    
+    .theme-toggle {
+      background: var(--bg2);
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: rotate(15deg);
+    }
+    
+    .main-container {
+      flex: 1;
+      max-width: 800px;
+      width: 100%;
+      margin: 24px auto;
+      padding: 0 12px;
+    }
+    
+    .loader-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50vh;
+    }
+    
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--bg3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .announcement-detail {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    
+    .announcement-detail-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: var(--bg2);
+    }
+    
+    .announcement-detail-image.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      color: var(--primary);
+      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.05), rgba(var(--primary-rgb), 0.02));
+    }
+    
+    .announcement-detail-body {
+      padding: 24px;
+    }
+    
+    .announcement-detail-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 16px;
+      line-height: 1.6;
+      transition: color 0.3s;
+    }
+    
+    .announcement-detail-content {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 2;
+      margin-bottom: 20px;
+      transition: color 0.3s;
+      white-space: pre-line;
+    }
+    
+    .announcement-detail-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 16px;
+      border-top: 1px solid var(--bg3);
+    }
+    
+    .announcement-detail-date {
+      font-size: 12px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .announcement-detail-tag {
+      font-size: 11px;
+      background: rgba(var(--primary-rgb), 0.08);
+      color: var(--primary-dark);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--footer-bg);
+      border-top: 1px solid var(--bg3);
+      margin-top: auto;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: var(--primary-dark);
+      font-size: 11px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--dark);
+    }
+    
+    .footer-text {
+      font-size: 10px;
+      color: var(--text-light);
+      transition: color 0.3s;
+    }
+    
+    @media (max-width: 650px) {
+      .announcement-detail-body {
+        padding: 18px;
+      }
+      .announcement-detail-title {
+        font-size: 17px;
+      }
+      .announcement-detail-content {
+        font-size: 13px;
+      }
+      .header-title {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo">
+          <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
+        </div>
+        <div>
+          <div class="header-title">شهدای گمنام شورابیل</div>
+          <div class="header-subtitle">سایت رسمی اطلاع رسانی و گزارش مراسمات</div>
+        </div>
+      </div>
+      <div class="header-btns">
+        <a href="../index.html" class="back-btn" title="بازگشت">
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <button class="theme-toggle" id="themeToggle" title="تغییر تم">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-container" id="mainContent">
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="Communication.html"><i class="fa-solid fa-phone"></i> ارتباط با ما</a>
+      <a href="map.html"><i class="fa-solid fa-location-dot"></i> نشانی ما</a>
+    </div>
+    <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
+  </footer>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
+    const ANNOUNCEMENT_ID = localStorage.getItem('selectedAnnouncementId');
+    
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    
+    const savedTheme = localStorage.getItem('heyat-theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeIcon.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      
+      if (currentTheme === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('heyat-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('heyat-theme', 'dark');
+      }
+    });
+    
+    async function checkMuharram() {
+      try {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${dateStr}`);
+        const data = await res.json();
+        
+        if (data.code === 200) {
+          const hijriMonth = data.data.hijri.month.number;
+          if (hijriMonth === 1) {
+            document.documentElement.setAttribute('data-muharram', 'true');
+          }
+        }
+      } catch (e) {
+        console.log('بررسی ماه محرم با خطا مواجه شد');
+      }
+    }
+    
+    async function loadAnnouncement() {
+      const container = document.getElementById('mainContent');
+      
+      if (!ANNOUNCEMENT_ID) {
+        container.innerHTML = `
+          <div class="loader-wrapper">
+            <div style="text-align: center;">
+              <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+              <p style="color: var(--text-light);">اطلاعیه‌ای انتخاب نشده است</p>
+              <a href="../index.html" style="display: inline-block; margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none;">
+                <i class="fa-solid fa-arrow-right"></i> بازگشت به صفحه اصلی
+              </a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      try {
+        const res = await fetch(API_URL + '?action=getAnnouncements');
+        const data = await res.json();
+        
+        if (data.success && data.data.length > 0) {
+          const announcement = data.data.find(item => item.id === ANNOUNCEMENT_ID);
+          
+          if (announcement) {
+            const annDate = announcement.date ? new Date(announcement.date) : null;
+            const dateStr = annDate ? annDate.toLocaleDateString('fa-IR') : '';
+            
+            container.innerHTML = `
+              <div class="announcement-detail">
+                ${announcement.image ? 
+                  `<img src="${announcement.image}" class="announcement-detail-image" alt="${announcement.title}">` :
+                  `<div class="announcement-detail-image placeholder"><i class="fa-solid fa-bullhorn"></i></div>`
+                }
+                <div class="announcement-detail-body">
+                  <h1 class="announcement-detail-title">${announcement.title}</h1>
+                  ${announcement.content ? `<div class="announcement-detail-content">${announcement.content}</div>` : ''}
+                  <div class="announcement-detail-footer">
+                    ${dateStr ? `<span class="announcement-detail-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>` : ''}
+                    ${announcement.tag ? `<span class="announcement-detail-tag">${announcement.tag}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            container.innerHTML = `
+              <div class="loader-wrapper">
+                <div style="text-align: center;">
+                  <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+                  <p style="color: var(--text-light);">اطلاعیه پیدا نشد</p>
+                  <a href="../index.html" style="display: inline-block; margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none;">
+                    <i class="fa-solid fa-arrow-right"></i> بازگشت
+                  </a>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          container.innerHTML = `
+            <div class="loader-wrapper">
+              <div style="text-align: center;">
+                <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+                <p style="color: var(--text-light);">اطلاعیه‌ای یافت نشد</p>
+                <a href="../index.html" style="display: inline-block; margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; text-decoration: none;">
+                  <i class="fa-solid fa-arrow-right"></i> بازگشت
+                </a>
+              </div>
+            </div>
+          `;
+        }
+      } catch (e) {
+        container.innerHTML = `
+          <div class="loader-wrapper">
+            <div style="text-align: center;">
+              <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; color: var(--text-light); margin-bottom: 12px;"></i>
+              <p style="color: var(--text-light);">خطا در دریافت اطلاعات</p>
+              <button onclick="loadAnnouncement()" style="margin-top: 12px; padding: 8px 20px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px;">
+                <i class="fa-solid fa-rotate-right"></i> تلاش مجدد
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    function init() {
+      checkMuharram();
+      loadAnnouncement();
+    }
+    
+    init();
+  </script>
+
+</body>
+</html>
