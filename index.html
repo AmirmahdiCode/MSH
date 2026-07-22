@@ -27,6 +27,8 @@
       --header-bg: #ffffff;
       --footer-bg: #ffffff;
       --overlay: rgba(13, 148, 136, 0.05);
+      --announcement-bg: #f0fdfa;
+      --announcement-border: #ccfbf1;
       --logo-filter: none;
       --modal-bg: rgba(0,0,0,0.9);
     }
@@ -50,6 +52,8 @@
       --header-bg: #1e293b;
       --footer-bg: #1e293b;
       --overlay: rgba(20, 184, 166, 0.08);
+      --announcement-bg: #1a2e2b;
+      --announcement-border: #164e4a;
       --logo-filter: brightness(0) invert(1);
     }
     
@@ -59,6 +63,8 @@
       --primary-light: #fca5a5;
       --primary-rgb: 220, 38, 38;
       --overlay: rgba(220, 38, 38, 0.05);
+      --announcement-bg: #fef2f2;
+      --announcement-border: #fecaca;
     }
     
     [data-theme="dark"][data-muharram="true"] {
@@ -67,6 +73,8 @@
       --primary-light: #fca5a5;
       --primary-rgb: 239, 68, 68;
       --overlay: rgba(239, 68, 68, 0.08);
+      --announcement-bg: #2e1a1a;
+      --announcement-border: #4e1616;
     }
     
     body {
@@ -240,6 +248,12 @@
       width: 3px;
       height: 100%;
       background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    }
+    
+    .announcement-item:hover {
+      transform: translateX(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary-light);
     }
     
     .announcement-image {
@@ -623,6 +637,27 @@
       gap: 4px;
     }
     
+    .empty-gallery {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      color: var(--text-light);
+      text-align: center;
+    }
+    
+    .empty-gallery i {
+      font-size: 44px;
+      color: var(--primary-light);
+      margin-bottom: 10px;
+    }
+    
+    .empty-gallery p {
+      font-size: 13px;
+    }
+    
     .image-modal {
       display: none;
       position: fixed;
@@ -813,7 +848,7 @@
   </footer>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     
     const themeToggle = document.getElementById('themeToggle');
     const icon = themeToggle.querySelector('i');
@@ -841,12 +876,11 @@
     async function checkMuharram() {
       try {
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
-        const dateStr = `${year}-${month}-${day}`;
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
         
-        const res = await fetch(`https://api.aladhan.com/v1/gToH/${dateStr}`);
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
         const data = await res.json();
         
         if (data.code === 200) {
@@ -957,13 +991,15 @@
         let galleryHTML = '';
         
         if (announcementsData.success && announcementsData.data.length > 0) {
+          const reversedAnnouncements = [...announcementsData.data].reverse();
+          
           announcementsHTML = `
             <div class="announcements-section">
               <div class="section-title">
                 <i class="fa-solid fa-bullhorn"></i>
                 اطلاعیه‌ها
               </div>
-              ${announcementsData.data.map(item => {
+              ${reversedAnnouncements.map(item => {
                 const annDate = item.date ? new Date(item.date) : null;
                 const dateStr = annDate ? annDate.toLocaleDateString('fa-IR') : '';
                 
@@ -1148,11 +1184,9 @@
                   تصاویر
                 </div>
                 <div class="gallery-grid">
-                  <div class="gallery-card" style="grid-column: 1/-1;">
-                    <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
-                    <div class="gallery-info" style="text-align: center;">
-                      <div class="gallery-title">تصویری آرشیو نشده</div>
-                    </div>
+                  <div class="empty-gallery">
+                    <i class="fa-solid fa-image"></i>
+                    <p>تاکنون تصویری آرشیو نشده است</p>
                   </div>
                 </div>
               </div>
@@ -1184,11 +1218,9 @@
                 تصاویر
               </div>
               <div class="gallery-grid">
-                <div class="gallery-card" style="grid-column: 1/-1;">
-                  <div class="gallery-image placeholder"><i class="fa-solid fa-image"></i></div>
-                  <div class="gallery-info" style="text-align: center;">
-                    <div class="gallery-title">تصویری یافت نشد</div>
-                  </div>
+                <div class="empty-gallery">
+                  <i class="fa-solid fa-image"></i>
+                  <p>تاکنون تصویری آرشیو نشده است</p>
                 </div>
               </div>
             </div>
