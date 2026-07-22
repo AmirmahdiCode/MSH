@@ -251,6 +251,7 @@
       font-size: 20px;
       flex-shrink: 0;
       overflow: hidden;
+      position: relative;
     }
     
     .contact-icon img {
@@ -294,6 +295,22 @@
     .contact-icon.support {
       background: linear-gradient(135deg, #f43f5e, #e11d48);
       color: #fff;
+    }
+    
+    .admin-badge {
+      position: absolute;
+      bottom: -2px;
+      left: -2px;
+      width: 18px;
+      height: 18px;
+      background: #f59e0b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #fff;
+      border: 2px solid var(--card-bg);
     }
     
     .contact-info {
@@ -556,6 +573,7 @@
       <a href="https://eitaa.com/ya_zahraaaaaaaaaaaaa" target="_blank" class="contact-card">
         <div class="contact-icon eitaa">
           <img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا">
+          <span class="admin-badge"><i class="fa-solid fa-user-tie"></i></span>
         </div>
         <div class="contact-info">
           <h4>ادمین ایتا</h4>
@@ -569,6 +587,7 @@
       <a href="https://t.me/Ummolbanin8566" target="_blank" class="contact-card">
         <div class="contact-icon telegram">
           <i class="fa-brands fa-telegram-plane"></i>
+          <span class="admin-badge"><i class="fa-solid fa-user-tie"></i></span>
         </div>
         <div class="contact-info">
           <h4>ادمین تلگرام</h4>
@@ -582,6 +601,7 @@
       <a href="https://ble.ir/ommolbanin8566" target="_blank" class="contact-card">
         <div class="contact-icon bale">
           <img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله">
+          <span class="admin-badge"><i class="fa-solid fa-user-tie"></i></span>
         </div>
         <div class="contact-info">
           <h4>ادمین بله</h4>
