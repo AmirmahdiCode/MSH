@@ -294,6 +294,15 @@
       font-family: inherit;
     }
     
+    .map-tab img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      padding: 2px;
+    }
+    
     .map-tab.active {
       background: var(--tab-active-bg);
       color: var(--primary-dark);
@@ -377,6 +386,10 @@
         font-size: 11px;
         padding: 8px 10px;
       }
+      .map-tab img {
+        width: 16px;
+        height: 16px;
+      }
       .address-card {
         flex-wrap: wrap;
       }
@@ -440,15 +453,15 @@
     
     <div class="map-tabs">
       <button class="map-tab active" onclick="switchMap('google')">
-        <i class="fa-brands fa-google"></i>
+        <img src="https://cdn.imgurl.ir/uploads/n02419_IMG__.png" alt="گوگل مپ">
         گوگل مپ
       </button>
       <button class="map-tab" onclick="switchMap('neshan')">
-        <i class="fa-solid fa-map"></i>
+        <img src="https://cdn.imgurl.ir/uploads/m267695_neshan-icon-7tbu1v42sv8bzw757jhx72xlpyv2mfy38u.png" alt="نشان">
         نشان
       </button>
       <button class="map-tab" onclick="switchMap('balad')">
-        <i class="fa-solid fa-map-location-dot"></i>
+        <img src="https://cdn.imgurl.ir/uploads/f11966_balad-for-iphone.png" alt="بلد">
         بلد
       </button>
     </div>
@@ -465,7 +478,7 @@
       
       <iframe 
         id="neshanMap"
-        src="https://nshn.ir/8aQbChFKO5arKn"
+        src="https://nshn.ir/7bChGWQ5ascR"
         allowfullscreen="" 
         loading="lazy">
       </iframe>
