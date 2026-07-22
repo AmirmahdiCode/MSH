@@ -287,8 +287,8 @@
     }
     
     .contact-icon.rubika img {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
     }
     
     .contact-icon.bale {
@@ -429,10 +429,13 @@
         width: 15px;
         height: 15px;
       }
-      .contact-icon.eitaa img,
-      .contact-icon.rubika img {
+      .contact-icon.eitaa img {
         width: 18px;
         height: 18px;
+      }
+      .contact-icon.rubika img {
+        width: 17px;
+        height: 17px;
       }
       .support-image {
         width: 40px;
@@ -481,6 +484,19 @@
         <div class="contact-info">
           <h4>اینستاگرام</h4>
           <p>@mehman_parvanehha</p>
+        </div>
+        <div class="contact-arrow">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+      </a>
+      
+      <a href="https://eitaa.com/abna135" target="_blank" class="contact-card">
+        <div class="contact-icon eitaa">
+          <img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا">
+        </div>
+        <div class="contact-info">
+          <h4>هیئت نوجوانان ابناالزهرا</h4>
+          <p>@abna135</p>
         </div>
         <div class="contact-arrow">
           <i class="fa-solid fa-chevron-left"></i>
@@ -567,6 +583,19 @@
         </div>
       </a>
       
+      <a href="https://ble.ir/ommolbanin8566" target="_blank" class="contact-card">
+        <div class="contact-icon bale">
+          <img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله">
+        </div>
+        <div class="contact-info">
+          <h4>ادمین بله</h4>
+          <p>@ommolbanin8566</p>
+        </div>
+        <div class="contact-arrow">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+      </a>
+      
       <div class="divider"></div>
       
       <a href="https://eitaa.com/Amirmahdi_code" target="_blank" class="support-card">
@@ -617,12 +646,11 @@
     async function checkMuharram() {
       try {
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
-        const dateStr = `${year}-${month}-${day}`;
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
         
-        const res = await fetch(`https://api.aladhan.com/v1/gToH/${dateStr}`);
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
         const data = await res.json();
         
         if (data.code === 200) {
