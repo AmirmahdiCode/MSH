@@ -233,19 +233,6 @@
       display: block;
     }
     
-    .announcement-detail-image.placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 56px;
-      color: var(--primary);
-      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.05), rgba(var(--primary-rgb), 0.02));
-      max-width: 350px;
-      aspect-ratio: 2 / 3;
-      border-radius: 12px;
-      margin: 0 auto;
-    }
-    
     .announcement-detail-body {
       padding: 24px;
     }
@@ -338,9 +325,6 @@
       .announcement-detail-image {
         max-width: 280px;
       }
-      .announcement-detail-image.placeholder {
-        max-width: 280px;
-      }
       .announcement-detail-body {
         padding: 18px;
       }
@@ -357,9 +341,6 @@
     
     @media (max-width: 380px) {
       .announcement-detail-image {
-        max-width: 240px;
-      }
-      .announcement-detail-image.placeholder {
         max-width: 240px;
       }
     }
@@ -404,7 +385,7 @@
   </footer>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwS7_upFNhRFx_yc_EDinq__A-JeChjVABVrtuE8OuCnLciUaw0KqO9uVzdYdRQJxea/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     const ANNOUNCEMENT_ID = localStorage.getItem('selectedAnnouncementId');
     
     const themeToggle = document.getElementById('themeToggle');
@@ -433,12 +414,11 @@
     async function checkMuharram() {
       try {
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
-        const dateStr = `${year}-${month}-${day}`;
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
         
-        const res = await fetch(`https://api.aladhan.com/v1/gToH/${dateStr}`);
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
         const data = await res.json();
         
         if (data.code === 200) {
@@ -481,12 +461,15 @@
             const annDate = announcement.date ? new Date(announcement.date) : null;
             const dateStr = annDate ? annDate.toLocaleDateString('fa-IR') : '';
             
+            const imageSection = announcement.image ? `
+              <div class="announcement-detail-image-wrapper">
+                <img src="${announcement.image}" class="announcement-detail-image" alt="${announcement.title}">
+              </div>
+            ` : '';
+            
             container.innerHTML = `
               <div class="announcement-detail">
-                ${announcement.image ? 
-                  `<div class="announcement-detail-image-wrapper"><img src="${announcement.image}" class="announcement-detail-image" alt="${announcement.title}"></div>` :
-                  `<div class="announcement-detail-image-wrapper"><div class="announcement-detail-image placeholder"><i class="fa-solid fa-bullhorn"></i></div></div>`
-                }
+                ${imageSection}
                 <div class="announcement-detail-body">
                   <h1 class="announcement-detail-title">${announcement.title}</h1>
                   ${announcement.content ? `<div class="announcement-detail-content">${announcement.content}</div>` : ''}
