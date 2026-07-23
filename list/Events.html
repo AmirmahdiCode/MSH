@@ -192,7 +192,7 @@
       flex: 1;
       max-width: 1100px;
       width: 100%;
-      margin: 20px auto;
+      margin: 24px auto;
       padding: 0 12px;
     }
     
@@ -200,7 +200,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 60vh;
+      min-height: 50vh;
     }
     
     .loader {
@@ -216,71 +216,85 @@
       to { transform: rotate(360deg); }
     }
     
-    .event-header {
+    .event-detail {
       background: var(--card-bg);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
       border: 1px solid var(--card-border);
-      box-shadow: var(--shadow);
-      position: relative;
+      border-radius: 16px;
       overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
     }
     
-    .event-header::before {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    .event-detail-image-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 24px 24px 0 24px;
     }
     
-    .event-header-title {
+    .event-detail-image {
+      width: 100%;
+      max-width: 350px;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 12px;
+      background: var(--bg2);
+      display: block;
+    }
+    
+    .event-detail-body {
+      padding: 24px;
+    }
+    
+    .event-detail-title {
       font-size: 20px;
       font-weight: 700;
       color: var(--dark);
-      margin-bottom: 10px;
+      margin-bottom: 6px;
+      line-height: 1.6;
       transition: color 0.3s;
     }
     
-    .event-header-description {
-      font-size: 13px;
-      color: var(--text);
-      line-height: 1.8;
-      margin-bottom: 14px;
-      transition: color 0.3s;
-    }
-    
-    .event-header-meta {
+    .event-detail-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
     
     .event-meta-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-size: 12px;
       color: var(--text-light);
       background: var(--bg2);
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 8px;
     }
     
     .event-meta-item i {
       color: var(--primary);
+      font-size: 13px;
     }
     
-    .event-tag {
-      font-size: 10px;
+    .event-tag-badge {
+      font-size: 11px;
+      background: rgba(var(--primary-rgb), 0.08);
       color: var(--primary-dark);
-      background: var(--overlay);
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: 8px;
       font-weight: 600;
+    }
+    
+    .event-detail-description {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 2;
+      transition: color 0.3s;
+      white-space: pre-line;
+      margin-bottom: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--bg3);
     }
     
     .section-title {
@@ -502,7 +516,7 @@
     }
     
     .empty-state i {
-      font-size: 40px;
+      font-size: 44px;
       margin-bottom: 10px;
       display: block;
       color: var(--primary-light);
@@ -563,17 +577,26 @@
       .header-title {
         font-size: 17px;
       }
-      .event-header {
-        padding: 16px;
+      .event-detail-body {
+        padding: 18px;
       }
-      .event-header-title {
+      .event-detail-title {
         font-size: 17px;
+      }
+      .event-detail-description {
+        font-size: 13px;
+      }
+      .event-detail-image {
+        max-width: 280px;
       }
     }
     
     @media (max-width: 380px) {
       .gallery-grid {
         gap: 6px;
+      }
+      .event-detail-image {
+        max-width: 240px;
       }
     }
   </style>
@@ -624,7 +647,7 @@
   </footer>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbw9Pmin5dp5YaayWcp-If4mqegvlcJrTeevgkgKA8EKMuAVwqUHsMk9ONPp8Oywz9CJ/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz74XMEmnI1JH7uQcBGUWLnPGxMxKwX2HJmpRkbcAaNLV3m7lJ2AFKdZbIZFP9s0kfg/exec';
     const EVENT_ID = localStorage.getItem('selectedEventId');
     
     const themeToggle = document.getElementById('themeToggle');
@@ -653,12 +676,11 @@
     async function checkMuharram() {
       try {
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
-        const dateStr = `${year}-${month}-${day}`;
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
         
-        const res = await fetch(`https://api.aladhan.com/v1/gToH/${dateStr}`);
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
         const data = await res.json();
         
         if (data.code === 200) {
@@ -786,22 +808,31 @@
         
         let html = '';
         
+        const imageSection = event.image ? `
+          <div class="event-detail-image-wrapper">
+            <img src="${event.image}" class="event-detail-image" alt="${event.title}">
+          </div>
+        ` : '';
+        
         html += `
-          <div class="event-header">
-            <div class="event-header-title">${event.title}</div>
-            ${event.description ? `<div class="event-header-description">${event.description}</div>` : ''}
-            <div class="event-header-meta">
-              <div class="event-meta-item">
-                <i class="fa-solid fa-clock"></i>
-                ${dateStr}
+          <div class="event-detail">
+            ${imageSection}
+            <div class="event-detail-body">
+              <div class="event-detail-title">${event.title}</div>
+              <div class="event-detail-meta">
+                <span class="event-meta-item">
+                  <i class="fa-solid fa-clock"></i>
+                  ${dateStr}
+                </span>
+                ${event.location ? `
+                <span class="event-meta-item">
+                  <i class="fa-solid fa-location-dot"></i>
+                  ${event.location}
+                </span>
+                ` : ''}
+                ${event.tag ? `<span class="event-tag-badge">${event.tag}</span>` : ''}
               </div>
-              ${event.location ? `
-              <div class="event-meta-item">
-                <i class="fa-solid fa-location-dot"></i>
-                ${event.location}
-              </div>
-              ` : ''}
-              ${event.tag ? `<span class="event-tag">${event.tag}</span>` : ''}
+              ${event.description ? `<div class="event-detail-description">${event.description}</div>` : ''}
             </div>
           </div>
         `;
