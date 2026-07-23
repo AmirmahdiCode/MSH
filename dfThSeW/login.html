@@ -22,6 +22,10 @@
       --shadow: 0 2px 12px rgba(0,0,0,0.04);
       --input-bg: #f8fafc;
       --input-border: #e2e8f0;
+      --danger: #dc2626;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --info: #3b82f6;
     }
     
     [data-theme="dark"] {
@@ -62,6 +66,71 @@
       justify-content: center;
       transition: all 0.3s ease;
       padding: 20px;
+    }
+    
+    .floating-toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      z-index: 9999;
+      min-width: 300px;
+      max-width: 90%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .floating-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    .floating-toast.error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+    }
+    
+    .floating-toast.warning {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #d97706;
+    }
+    
+    .floating-toast.success {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
+    }
+    
+    .floating-toast.info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #2563eb;
+    }
+    
+    .floating-toast i {
+      font-size: 18px;
+    }
+    
+    .floating-toast .toast-close {
+      margin-right: auto;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      font-size: 14px;
+    }
+    
+    .floating-toast .toast-close:hover {
+      opacity: 1;
     }
     
     .login-container {
@@ -216,22 +285,6 @@
       transform: none;
     }
     
-    .error-message {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: #dc2626;
-      font-size: 11px;
-      margin-bottom: 16px;
-      display: none;
-      text-align: center;
-    }
-    
-    .error-message.show {
-      display: block;
-    }
-    
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -274,6 +327,12 @@
 </head>
 <body>
 
+  <div class="floating-toast" id="floatingToast">
+    <i id="toastIcon"></i>
+    <span id="toastMessage"></span>
+    <span class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></span>
+  </div>
+
   <button class="theme-toggle" id="themeToggle" title="تغییر تم">
     <i class="fa-solid fa-moon"></i>
   </button>
@@ -288,8 +347,6 @@
     </div>
     
     <div class="login-card">
-      <div class="error-message" id="errorMessage"></div>
-      
       <div class="form-group">
         <label><i class="fa-solid fa-user"></i> نام کاربری</label>
         <input type="text" class="form-input" id="username" placeholder="نام کاربری خود را وارد کنید" autocomplete="username">
@@ -315,6 +372,44 @@
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbxPKAkYCaaG2xIVDUBARVQwOhKRwRb4b1J2723Lc-jYYRdRKd5aSKiuS0i0Hl-SJPep/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
+    
+    const toast = document.getElementById('floatingToast');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastMessage = document.getElementById('toastMessage');
+    let toastTimeout;
+    
+    function showToast(message, type = 'error') {
+      clearTimeout(toastTimeout);
+      
+      toast.className = 'floating-toast ' + type;
+      
+      switch(type) {
+        case 'error':
+          toastIcon.className = 'fa-solid fa-circle-xmark';
+          break;
+        case 'warning':
+          toastIcon.className = 'fa-solid fa-triangle-exclamation';
+          break;
+        case 'success':
+          toastIcon.className = 'fa-solid fa-circle-check';
+          break;
+        case 'info':
+          toastIcon.className = 'fa-solid fa-circle-info';
+          break;
+      }
+      
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      
+      toastTimeout = setTimeout(() => {
+        hideToast();
+      }, 6000);
+    }
+    
+    function hideToast() {
+      toast.classList.remove('show');
+      clearTimeout(toastTimeout);
+    }
     
     function checkSession() {
       const sessionData = localStorage.getItem('admin_session');
@@ -347,7 +442,7 @@
         const data = await res.json();
         return data.ip;
       } catch (e) {
-        return 'unknown';
+        return '0.0.0.0';
       }
     }
     
@@ -407,7 +502,6 @@
     const loginBtn = document.getElementById('loginBtn');
     const spinner = document.getElementById('spinner');
     const btnText = document.getElementById('btnText');
-    const errorMessage = document.getElementById('errorMessage');
     const usernameInput = document.getElementById('username');
     
     async function login() {
@@ -415,14 +509,13 @@
       const password = passwordInput.value;
       
       if (!username || !password) {
-        showError('لطفاً نام کاربری و رمز عبور را وارد کنید');
+        showToast('لطفاً نام کاربری و رمز عبور را وارد کنید', 'warning');
         return;
       }
       
       loginBtn.disabled = true;
       spinner.style.display = 'block';
       btnText.innerHTML = 'در حال ورود...';
-      errorMessage.classList.remove('show');
       
       try {
         const ip = await getClientIP();
@@ -435,6 +528,8 @@
         const data = await res.json();
         
         if (data.success) {
+          showToast('ورود موفقیت‌آمیز! در حال انتقال...', 'success');
+          
           const sessionData = {
             admin: {
               id: data.data.id,
@@ -446,25 +541,30 @@
           };
           localStorage.setItem('admin_session', JSON.stringify(sessionData));
           localStorage.setItem('session_token', data.data.sessionToken);
-          window.location.href = 'dashboard.html';
+          
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 800);
         } else {
-          showError(data.message || 'نام کاربری یا رمز عبور اشتباه است');
+          if (data.message.includes('قفل')) {
+            showToast(data.message, 'error');
+          } else if (data.message.includes('تلاش')) {
+            showToast(data.message, 'warning');
+          } else if (data.message.includes('آی‌پی')) {
+            showToast(data.message + ' — لطفاً با مدیر سیستم تماس بگیرید', 'error');
+          } else if (data.message.includes('یافت نشد')) {
+            showToast('نام کاربری در سیستم وجود ندارد', 'error');
+          } else {
+            showToast(data.message || 'نام کاربری یا رمز عبور اشتباه است', 'error');
+          }
         }
       } catch (e) {
-        showError('خطا در ارتباط با سرور');
+        showToast('خطا در ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید', 'error');
       } finally {
         loginBtn.disabled = false;
         spinner.style.display = 'none';
         btnText.innerHTML = '<i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل';
       }
-    }
-    
-    function showError(msg) {
-      errorMessage.textContent = msg;
-      errorMessage.classList.add('show');
-      setTimeout(() => {
-        errorMessage.classList.remove('show');
-      }, 5000);
     }
     
     loginBtn.addEventListener('click', login);
