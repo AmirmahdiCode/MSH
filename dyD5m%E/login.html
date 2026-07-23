@@ -40,6 +40,18 @@
       --input-border: #334155;
     }
     
+    [data-muharram="true"] {
+      --primary: #dc2626;
+      --primary-dark: #b91c1c;
+      --primary-rgb: 220, 38, 38;
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444;
+      --primary-dark: #dc2626;
+      --primary-rgb: 239, 68, 68;
+    }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg);
@@ -301,7 +313,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbx_D5O9clLXUkq3gwfnT4diExFfmZ1XWEDMkMTHOekDBBVYbi07oH2A4X7rrBzGrUtb/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxPKAkYCaaG2xIVDUBARVQwOhKRwRb4b1J2723Lc-jYYRdRKd5aSKiuS0i0Hl-SJPep/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -311,19 +323,33 @@
       try {
         const session = JSON.parse(sessionData);
         if (Date.now() - session.timestamp < SESSION_DURATION) {
-          window.location.href = 'dashboard.html';
-          return true;
+          const sessionToken = localStorage.getItem('session_token');
+          if (sessionToken) {
+            window.location.href = 'dashboard.html';
+            return true;
+          }
         } else {
           localStorage.removeItem('admin_session');
-          return false;
+          localStorage.removeItem('session_token');
         }
       } catch (e) {
         localStorage.removeItem('admin_session');
-        return false;
+        localStorage.removeItem('session_token');
       }
+      return false;
     }
     
     checkSession();
+    
+    async function getClientIP() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip;
+      } catch (e) {
+        return 'unknown';
+      }
+    }
     
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');
@@ -347,6 +373,27 @@
         localStorage.setItem('heyat-theme', 'dark');
       }
     });
+    
+    async function checkMuharram() {
+      try {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
+        const data = await res.json();
+        
+        if (data.code === 200) {
+          const hijriMonth = data.data.hijri.month.number;
+          if (hijriMonth === 1) {
+            document.documentElement.setAttribute('data-muharram', 'true');
+          }
+        }
+      } catch (e) {
+        console.log('بررسی ماه محرم با خطا مواجه شد');
+      }
+    }
     
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
@@ -378,19 +425,27 @@
       errorMessage.classList.remove('show');
       
       try {
+        const ip = await getClientIP();
+        
         const res = await fetch(API_URL + '?action=login', {
           method: 'POST',
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ username, password, ip })
         });
         
         const data = await res.json();
         
         if (data.success) {
           const sessionData = {
-            admin: data.data,
+            admin: {
+              id: data.data.id,
+              name: data.data.name,
+              username: data.data.username,
+              role: data.data.role
+            },
             timestamp: Date.now()
           };
           localStorage.setItem('admin_session', JSON.stringify(sessionData));
+          localStorage.setItem('session_token', data.data.sessionToken);
           window.location.href = 'dashboard.html';
         } else {
           showError(data.message || 'نام کاربری یا رمز عبور اشتباه است');
@@ -409,7 +464,7 @@
       errorMessage.classList.add('show');
       setTimeout(() => {
         errorMessage.classList.remove('show');
-      }, 4000);
+      }, 5000);
     }
     
     loginBtn.addEventListener('click', login);
@@ -422,6 +477,7 @@
       if (e.key === 'Enter') passwordInput.focus();
     });
     
+    checkMuharram();
     usernameInput.focus();
   </script>
 
