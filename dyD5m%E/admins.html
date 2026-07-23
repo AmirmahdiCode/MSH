@@ -51,6 +51,20 @@
       --danger-light: #2e1a1a;
     }
     
+    [data-muharram="true"] {
+      --primary: #dc2626;
+      --primary-dark: #b91c1c;
+      --primary-light: #fca5a5;
+      --primary-rgb: 220, 38, 38;
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444;
+      --primary-dark: #dc2626;
+      --primary-light: #fca5a5;
+      --primary-rgb: 239, 68, 68;
+    }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg);
@@ -547,7 +561,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbx_D5O9clLXUkq3gwfnT4diExFfmZ1XWEDMkMTHOekDBBVYbi07oH2A4X7rrBzGrUtb/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxPKAkYCaaG2xIVDUBARVQwOhKRwRb4b1J2723Lc-jYYRdRKd5aSKiuS0i0Hl-SJPep/exec';
     const SESSION_DURATION = 30 * 60 * 1000;
     
     function checkSession() {
@@ -561,12 +575,14 @@
         const session = JSON.parse(sessionData);
         if (Date.now() - session.timestamp > SESSION_DURATION) {
           localStorage.removeItem('admin_session');
+          localStorage.removeItem('session_token');
           window.location.href = 'login.html';
           return null;
         }
         return session;
       } catch (e) {
         localStorage.removeItem('admin_session');
+        localStorage.removeItem('session_token');
         window.location.href = 'login.html';
         return null;
       }
@@ -576,8 +592,15 @@
     if (!session) throw new Error('Session expired');
     
     const admin = session.admin;
+    const sessionToken = localStorage.getItem('session_token');
     
-    if (admin.role !== 'سازنده' && admin.role !== 'مالک') {
+    if (!sessionToken) {
+      localStorage.removeItem('admin_session');
+      window.location.href = 'login.html';
+    }
+    
+    const allowedRoles = ['سازنده', 'مالک'];
+    if (!allowedRoles.includes(admin.role)) {
       window.location.href = 'dashboard.html';
     }
     
@@ -604,8 +627,30 @@
       }
     });
     
+    async function checkMuharram() {
+      try {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
+        const data = await res.json();
+        
+        if (data.code === 200) {
+          const hijriMonth = data.data.hijri.month.number;
+          if (hijriMonth === 1) {
+            document.documentElement.setAttribute('data-muharram', 'true');
+          }
+        }
+      } catch (e) {
+        console.log('بررسی ماه محرم با خطا مواجه شد');
+      }
+    }
+    
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('admin_session');
+      localStorage.removeItem('session_token');
       window.location.href = 'login.html';
     });
     
@@ -615,7 +660,7 @@
       try {
         const res = await fetch(API_URL + '?action=getAdmins', {
           method: 'POST',
-          body: JSON.stringify({ adminId: admin.id })
+          body: JSON.stringify({ adminId: admin.id, sessionToken })
         });
         
         const data = await res.json();
@@ -667,7 +712,7 @@
           list.innerHTML = `
             <div style="text-align: center; padding: 32px; color: var(--text-light);">
               <i class="fa-solid fa-users-slash" style="font-size: 36px; margin-bottom: 8px; display: block;"></i>
-              <p style="font-size: 13px;">مدیری یافت نشد</p>
+              <p style="font-size: 13px;">${data.message || 'مدیری یافت نشد'}</p>
             </div>
           `;
         }
@@ -676,7 +721,6 @@
           <div style="text-align: center; padding: 32px; color: var(--text-light);">
             <i class="fa-solid fa-circle-exclamation" style="font-size: 36px; margin-bottom: 8px; display: block;"></i>
             <p style="font-size: 13px;">خطا در دریافت اطلاعات</p>
-            <button onclick="loadAdmins()" style="margin-top: 8px; padding: 6px 14px; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: inherit;">تلاش مجدد</button>
           </div>
         `;
       }
@@ -720,7 +764,7 @@
       try {
         const res = await fetch(API_URL + '?action=addAdmin', {
           method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, name, username, password, role })
+          body: JSON.stringify({ adminId: admin.id, sessionToken, name, username, password, role })
         });
         
         const data = await res.json();
@@ -733,7 +777,7 @@
           document.getElementById('addError').classList.add('show');
         }
       } catch (e) {
-        document.getElementById('addError').textContent = 'خطا در ارتباط با سرور';
+        document.getElementById('addError').textContent = 'خطای سرور رخ داده است';
         document.getElementById('addError').classList.add('show');
       } finally {
         btn.disabled = false;
@@ -767,7 +811,7 @@
       try {
         const res = await fetch(API_URL + '?action=changeRole', {
           method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, targetId, newRole })
+          body: JSON.stringify({ adminId: admin.id, sessionToken, targetId, newRole })
         });
         
         const data = await res.json();
@@ -780,7 +824,7 @@
           document.getElementById('editError').classList.add('show');
         }
       } catch (e) {
-        document.getElementById('editError').textContent = 'خطا در ارتباط با سرور';
+        document.getElementById('editError').textContent = 'خطای سرور رخ داده است';
         document.getElementById('editError').classList.add('show');
       } finally {
         btn.disabled = false;
@@ -812,7 +856,7 @@
       try {
         const res = await fetch(API_URL + '?action=deleteAdmin', {
           method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, targetId })
+          body: JSON.stringify({ adminId: admin.id, sessionToken, targetId })
         });
         
         const data = await res.json();
@@ -825,7 +869,7 @@
           document.getElementById('deleteError').classList.add('show');
         }
       } catch (e) {
-        document.getElementById('deleteError').textContent = 'خطا در ارتباط با سرور';
+        document.getElementById('deleteError').textContent = 'خطای سرور رخ داده است';
         document.getElementById('deleteError').classList.add('show');
       } finally {
         btn.disabled = false;
@@ -833,6 +877,7 @@
       }
     });
     
+    checkMuharram();
     loadAdmins();
   </script>
 
