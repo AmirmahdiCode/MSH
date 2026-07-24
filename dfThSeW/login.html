@@ -22,6 +22,10 @@
       --shadow: 0 2px 12px rgba(0,0,0,0.04);
       --input-bg: #f8fafc;
       --input-border: #e2e8f0;
+      --danger: #dc2626;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --info: #3b82f6;
     }
     
     [data-theme="dark"] {
@@ -62,6 +66,71 @@
       justify-content: center;
       transition: all 0.3s ease;
       padding: 20px;
+    }
+    
+    .floating-toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      z-index: 9999;
+      min-width: 300px;
+      max-width: 90%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .floating-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    .floating-toast.error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+    }
+    
+    .floating-toast.warning {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #d97706;
+    }
+    
+    .floating-toast.success {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
+    }
+    
+    .floating-toast.info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #2563eb;
+    }
+    
+    .floating-toast i {
+      font-size: 18px;
+    }
+    
+    .floating-toast .toast-close {
+      margin-right: auto;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      font-size: 14px;
+    }
+    
+    .floating-toast .toast-close:hover {
+      opacity: 1;
     }
     
     .login-container {
@@ -216,22 +285,6 @@
       transform: none;
     }
     
-    .error-message {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: #dc2626;
-      font-size: 11px;
-      margin-bottom: 16px;
-      display: none;
-      text-align: center;
-    }
-    
-    .error-message.show {
-      display: block;
-    }
-    
     .theme-toggle {
       position: fixed;
       top: 20px;
@@ -274,6 +327,12 @@
 </head>
 <body>
 
+  <div class="floating-toast" id="floatingToast">
+    <i id="toastIcon"></i>
+    <span id="toastMessage"></span>
+    <span class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></span>
+  </div>
+
   <button class="theme-toggle" id="themeToggle" title="تغییر تم">
     <i class="fa-solid fa-moon"></i>
   </button>
@@ -288,8 +347,6 @@
     </div>
     
     <div class="login-card">
-      <div class="error-message" id="errorMessage"></div>
-      
       <div class="form-group">
         <label><i class="fa-solid fa-user"></i> نام کاربری</label>
         <input type="text" class="form-input" id="username" placeholder="نام کاربری خود را وارد کنید" autocomplete="username">
@@ -314,16 +371,60 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyOUyob6F-5heJiU9MmfewQzPwj_HrrobSwNyC-SwQTKZsW0ho2sMjfiNdm4d6SLxkH/exec';
+    const SESSION_DURATION = 30 * 60 * 1000;
+    
+    const toast = document.getElementById('floatingToast');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastMessage = document.getElementById('toastMessage');
+    let toastTimeout;
+    
+    function showToast(message, type = 'error') {
+      clearTimeout(toastTimeout);
+      toast.className = 'floating-toast ' + type;
+      switch(type) {
+        case 'error': toastIcon.className = 'fa-solid fa-circle-xmark'; break;
+        case 'warning': toastIcon.className = 'fa-solid fa-triangle-exclamation'; break;
+        case 'success': toastIcon.className = 'fa-solid fa-circle-check'; break;
+        case 'info': toastIcon.className = 'fa-solid fa-circle-info'; break;
+      }
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      toastTimeout = setTimeout(() => { hideToast(); }, 6000);
+    }
+    
+    function hideToast() {
+      toast.classList.remove('show');
+      clearTimeout(toastTimeout);
+    }
+    
+    function checkSession() {
+      const sessionData = localStorage.getItem('admin_session');
+      if (!sessionData) return false;
+      try {
+        const session = JSON.parse(sessionData);
+        if (Date.now() - session.timestamp < SESSION_DURATION) {
+          const st = localStorage.getItem('session_token');
+          if (st) { window.location.replace('dashboard.html'); return true; }
+        } else {
+          localStorage.removeItem('admin_session');
+          localStorage.removeItem('session_token');
+        }
+      } catch (e) {
+        localStorage.removeItem('admin_session');
+        localStorage.removeItem('session_token');
+      }
+      return false;
+    }
+    
+    checkSession();
     
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');
-    
     const savedTheme = localStorage.getItem('heyat-theme');
     if (savedTheme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
       themeIcon.classList.replace('fa-moon', 'fa-sun');
     }
-    
     themeToggle.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       if (currentTheme === 'dark') {
@@ -340,10 +441,10 @@
     async function checkMuharram() {
       try {
         const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const year = today.getFullYear();
-        const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
+        const d = String(today.getDate()).padStart(2, '0');
+        const m = String(today.getMonth() + 1).padStart(2, '0');
+        const y = today.getFullYear();
+        const res = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
         const data = await res.json();
         if (data.code === 200 && data.data.hijri.month.number === 1) {
           document.documentElement.setAttribute('data-muharram', 'true');
@@ -362,7 +463,6 @@
     const loginBtn = document.getElementById('loginBtn');
     const spinner = document.getElementById('spinner');
     const btnText = document.getElementById('btnText');
-    const errorMessage = document.getElementById('errorMessage');
     const usernameInput = document.getElementById('username');
     
     async function login() {
@@ -370,44 +470,44 @@
       const password = passwordInput.value;
       
       if (!username || !password) {
-        errorMessage.textContent = 'لطفاً نام کاربری و رمز عبور را وارد کنید';
-        errorMessage.classList.add('show');
+        showToast('لطفاً نام کاربری و رمز عبور را وارد کنید', 'warning');
         return;
       }
       
       loginBtn.disabled = true;
       spinner.style.display = 'block';
       btnText.innerHTML = 'در حال ورود...';
-      errorMessage.classList.remove('show');
       
-      try {
-        const res = await fetch(API_URL + '?action=login', {
-          method: 'POST',
-          body: JSON.stringify({ username, password, ip: '0.0.0.0' })
-        });
-        
-        const data = await res.json();
-        
-        if (data.success) {
-          localStorage.setItem('admin_session', JSON.stringify({
-            admin: {
-              id: data.data.id,
-              name: data.data.name,
-              username: data.data.username,
-              role: data.data.role
-            },
-            timestamp: Date.now()
-          }));
-          localStorage.setItem('session_token', data.data.sessionToken);
-          window.location.href = 'dashboard.html';
-          return;
-        }
-        
-        errorMessage.textContent = data.message || 'نام کاربری یا رمز عبور اشتباه است';
-        errorMessage.classList.add('show');
-      } catch (e) {
-        errorMessage.textContent = 'خطا در ارتباط با سرور';
-        errorMessage.classList.add('show');
+      const res = await fetch(API_URL + '?action=login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password, ip: '0.0.0.0' })
+      });
+      
+      const data = await res.json();
+      
+      if (data.success) {
+        localStorage.setItem('admin_session', JSON.stringify({
+          admin: {
+            id: data.data.id,
+            name: data.data.name,
+            username: data.data.username,
+            role: data.data.role
+          },
+          timestamp: Date.now()
+        }));
+        localStorage.setItem('session_token', data.data.sessionToken);
+        window.location.href = 'dashboard.html';
+        return;
+      }
+      
+      if (data.message.includes('قفل')) {
+        showToast(data.message, 'error');
+      } else if (data.message.includes('تلاش')) {
+        showToast(data.message, 'warning');
+      } else if (data.message.includes('آی‌پی')) {
+        showToast(data.message, 'error');
+      } else {
+        showToast(data.message || 'نام کاربری یا رمز عبور اشتباه است', 'error');
       }
       
       loginBtn.disabled = false;
