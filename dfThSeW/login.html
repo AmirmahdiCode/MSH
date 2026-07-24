@@ -41,48 +41,27 @@
     }
     
     [data-muharram="true"] {
-      --primary: #dc2626;
-      --primary-dark: #b91c1c;
-      --primary-rgb: 220, 38, 38;
+      --primary: #dc2626; --primary-dark: #b91c1c; --primary-rgb: 220, 38, 38;
     }
     
     [data-theme="dark"][data-muharram="true"] {
-      --primary: #ef4444;
-      --primary-dark: #dc2626;
-      --primary-rgb: 239, 68, 68;
+      --primary: #ef4444; --primary-dark: #dc2626; --primary-rgb: 239, 68, 68;
     }
     
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s ease, color 0.3s ease;
-      padding: 20px;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s ease, color 0.3s ease; padding: 20px;
     }
     
     .floating-toast {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-120px);
-      z-index: 9999;
-      min-width: 300px;
-      max-width: 90%;
-      padding: 14px 20px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      text-align: center;
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120px);
+      z-index: 9999; min-width: 300px; max-width: 90%; padding: 14px 20px;
+      border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
     }
     
     .floating-toast.show { transform: translateX(-50%) translateY(0); }
@@ -95,20 +74,17 @@
     .floating-toast .toast-close:hover { opacity: 1; }
     
     .login-container { width: 100%; max-width: 420px; }
-    
     .login-header { text-align: center; margin-bottom: 28px; }
     
     .login-logo {
       width: 72px; height: 72px; border-radius: 20px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-      box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+      margin: 0 auto 16px; box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
       overflow: hidden; padding: 10px;
     }
     
     .login-logo img { width: 100%; height: 100%; object-fit: contain; }
-    
     .login-header h2 { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 4px; transition: color 0.3s; }
     .login-header p { font-size: 12px; color: var(--text-light); transition: color 0.3s; }
     
@@ -119,20 +95,13 @@
     }
     
     .form-group { margin-bottom: 18px; }
-    
-    .form-group label {
-      display: block; font-size: 12px; font-weight: 600;
-      color: var(--text); margin-bottom: 6px; transition: color 0.3s;
-    }
-    
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; transition: color 0.3s; }
     .form-group label i { color: var(--primary); margin-left: 4px; width: 16px; text-align: center; }
     
     .form-input {
-      width: 100%; padding: 12px 14px;
-      border: 1px solid var(--input-border); border-radius: 10px;
-      background: var(--input-bg); color: var(--text);
-      font-size: 13px; font-family: inherit;
-      transition: all 0.3s ease;
+      width: 100%; padding: 12px 14px; border: 1px solid var(--input-border);
+      border-radius: 10px; background: var(--input-bg); color: var(--text);
+      font-size: 13px; font-family: inherit; transition: all 0.3s ease;
     }
     
     .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); }
@@ -142,21 +111,17 @@
     
     .toggle-password {
       position: absolute; left: 0; top: 0; height: 100%; width: 44px;
-      background: none; border: none; cursor: pointer;
-      color: var(--text-light); font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-      transition: color 0.3s;
+      background: none; border: none; cursor: pointer; color: var(--text-light);
+      font-size: 14px; display: flex; align-items: center; justify-content: center; transition: color 0.3s;
     }
-    
     .toggle-password:hover { color: var(--primary); }
     
     .login-btn {
       width: 100%; padding: 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: #fff; border: none; border-radius: 10px;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      font-family: inherit; display: flex; align-items: center;
-      justify-content: center; gap: 8px;
+      font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
       box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
     }
     
@@ -164,11 +129,9 @@
     .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     
     .theme-toggle {
-      position: fixed; top: 20px; left: 20px;
-      width: 40px; height: 40px;
+      position: fixed; top: 20px; left: 20px; width: 40px; height: 40px;
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 50%; cursor: pointer;
-      font-size: 18px; color: var(--text);
+      border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
       z-index: 10; transition: all 0.3s ease;
     }
@@ -176,12 +139,9 @@
     .theme-toggle:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
     
     .spinner {
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      display: none;
+      width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.6s linear infinite; display: none;
     }
     
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -232,7 +192,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycby-M8E6ITPRf6NKFi7WYmf_P66qD8uoCQaWrjJR0BH9VF0aw3pL_9oWTmSzdj27RVwq/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzXwQAAM1zGoVoG7MnFt-yEB7CSY5Qa8xnxpbkdZ_S6kUzPhZV_BdIkeasayEqz_lcQ/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -264,10 +224,7 @@
     
     (function() {
       const t = localStorage.getItem('heyat-theme');
-      if (t === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        $('themeToggle').querySelector('i').className = 'fa-solid fa-sun';
-      }
+      if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); $('themeToggle').querySelector('i').className = 'fa-solid fa-sun'; }
       $('themeToggle').onclick = () => {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
@@ -297,10 +254,7 @@
       const username = $('username').value.trim();
       const password = $('password').value;
       
-      if (!username || !password) {
-        showToast('لطفاً نام کاربری و رمز عبور را وارد کنید', 'warning');
-        return;
-      }
+      if (!username || !password) { showToast('لطفاً نام کاربری و رمز عبور را وارد کنید', 'warning'); return; }
       
       $('loginBtn').disabled = true;
       $('spinner').style.display = 'block';
