@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تست API</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #f8fafc;
+      padding: 20px;
+      text-align: center;
+      margin-top: 30px;
+    }
+    button {
+      padding: 14px 28px;
+      font-size: 16px;
+      background: #0d9488;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      margin: 8px;
+    }
+    button:disabled { opacity: 0.5; }
+    pre {
+      background: #1e293b;
+      color: #10b981;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: left;
+      direction: ltr;
+      margin-top: 20px;
+      font-size: 13px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      overflow-x: auto;
+    }
+    .section {
+      margin: 16px 0;
+      font-weight: bold;
+      color: #334155;
+    }
+  </style>
+</head>
+<body>
+  <h2>تست API</h2>
+  
+  <div class="section">لاگین:</div>
+  <button onclick="testLogin()">تست لاگین</button>
+  
+  <div class="section">گرفتن IP:</div>
+  <button onclick="testIP()">تست IP</button>
+  
+  <div class="section">گرفتن ادمین‌ها (با session):</div>
+  <button onclick="testAdmins()">تست getAdmins</button>
+  
+  <pre id="result">منتظر کلیک...</pre>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycby-M8E6ITPRf6NKFi7WYmf_P66qD8uoCQaWrjJR0BH9VF0aw3pL_9oWTmSzdj27RVwq/exec';
+    
+    function show(msg) {
+      document.getElementById('result').textContent = msg;
+    }
+    
+    async function testLogin() {
+      show('در حال تست لاگین...');
+      try {
+        const res = await fetch(API_URL + '?action=login', {
+          method: 'POST',
+          body: JSON.stringify({ username: 'Amirmahdi', password: 'Amir@mahdi_89', ip: '0.0.0.0' })
+        });
+        const data = await res.json();
+        show('LOGIN:\n' + JSON.stringify(data, null, 2));
+      } catch(e) {
+        show('ERROR: ' + e.message);
+      }
+    }
+    
+    async function testIP() {
+      show('در حال گرفتن IP...');
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        show('IP شما: ' + data.ip);
+      } catch(e) {
+        show('ERROR: ' + e.message);
+      }
+    }
+    
+    async function testAdmins() {
+      const sessionData = localStorage.getItem('admin_session');
+      const sessionToken = localStorage.getItem('session_token');
+      
+      if (!sessionData || !sessionToken) {
+        show('❌ session توی localStorage نیست!\n\nadmin_session: ' + (sessionData || 'null') + '\nsession_token: ' + (sessionToken || 'null'));
+        return;
+      }
+      
+      show('در حال تست...');
+      
+      try {
+        const session = JSON.parse(sessionData);
+        const admin = session.admin;
+        
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        const ip = ipData.ip;
+        
+        const info = 'adminId: ' + admin.id + '\nsessionToken: ' + sessionToken.substring(0, 20) + '...\nclientIP: ' + ip + '\n\nدر حال ارسال به API...';
+        show(info);
+        
+        const res = await fetch(API_URL + '?action=getAdmins', {
+          method: 'POST',
+          body: JSON.stringify({ adminId: admin.id, sessionToken, clientIP: ip })
+        });
+        
+        const data = await res.json();
+        show(info + '\n\nپاسخ API:\n' + JSON.stringify(data, null, 2));
+      } catch(e) {
+        show('ERROR: ' + e.message);
+      }
+    }
+  </script>
+</body>
+</html>
