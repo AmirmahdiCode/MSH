@@ -8,7 +8,6 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    
     :root {
       --bg: #f8fafc;
       --primary: #0d9488;
@@ -23,10 +22,6 @@
       --shadow: 0 2px 12px rgba(0,0,0,0.04);
       --input-bg: #f8fafc;
       --input-border: #e2e8f0;
-      --danger: #dc2626;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --info: #3b82f6;
     }
     
     [data-theme="dark"] {
@@ -65,7 +60,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: background 0.3s ease, color 0.3s ease;
       padding: 20px;
     }
     
@@ -99,176 +94,89 @@
     .floating-toast .toast-close { margin-right: auto; cursor: pointer; opacity: 0.6; font-size: 14px; }
     .floating-toast .toast-close:hover { opacity: 1; }
     
-    .login-container {
-      width: 100%;
-      max-width: 420px;
-    }
+    .login-container { width: 100%; max-width: 420px; }
     
-    .login-header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
+    .login-header { text-align: center; margin-bottom: 28px; }
     
     .login-logo {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
+      width: 72px; height: 72px; border-radius: 20px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       margin: 0 auto 16px;
       box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
-      overflow: hidden;
-      padding: 10px;
+      overflow: hidden; padding: 10px;
     }
     
-    .login-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+    .login-logo img { width: 100%; height: 100%; object-fit: contain; }
     
-    .login-header h2 {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-    
-    .login-header p {
-      font-size: 12px;
-      color: var(--text-light);
-    }
+    .login-header h2 { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 4px; transition: color 0.3s; }
+    .login-header p { font-size: 12px; color: var(--text-light); transition: color 0.3s; }
     
     .login-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: var(--shadow);
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 28px; box-shadow: var(--shadow);
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
     
-    .form-group {
-      margin-bottom: 18px;
-    }
+    .form-group { margin-bottom: 18px; }
     
     .form-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
+      display: block; font-size: 12px; font-weight: 600;
+      color: var(--text); margin-bottom: 6px; transition: color 0.3s;
     }
     
-    .form-group label i {
-      color: var(--primary);
-      margin-left: 4px;
-      width: 16px;
-      text-align: center;
-    }
+    .form-group label i { color: var(--primary); margin-left: 4px; width: 16px; text-align: center; }
     
     .form-input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--input-border);
-      border-radius: 10px;
-      background: var(--input-bg);
-      color: var(--text);
-      font-size: 13px;
-      font-family: inherit;
+      width: 100%; padding: 12px 14px;
+      border: 1px solid var(--input-border); border-radius: 10px;
+      background: var(--input-bg); color: var(--text);
+      font-size: 13px; font-family: inherit;
+      transition: all 0.3s ease;
     }
     
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
-    }
+    .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); }
     
-    .password-wrapper {
-      position: relative;
-    }
-    
-    .password-wrapper .form-input {
-      padding-left: 44px;
-    }
+    .password-wrapper { position: relative; }
+    .password-wrapper .form-input { padding-left: 44px; }
     
     .toggle-password {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 44px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-light);
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; left: 0; top: 0; height: 100%; width: 44px;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-light); font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.3s;
     }
     
-    .toggle-password:hover {
-      color: var(--primary);
-    }
+    .toggle-password:hover { color: var(--primary); }
     
     .login-btn {
-      width: 100%;
-      padding: 12px;
+      width: 100%; padding: 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: inherit; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
       box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
     }
     
-    .login-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.4);
-    }
-    
-    .login-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.4); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     
     .theme-toggle {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 40px;
-      height: 40px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 18px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
+      position: fixed; top: 20px; left: 20px;
+      width: 40px; height: 40px;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 50%; cursor: pointer;
+      font-size: 18px; color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10; transition: all 0.3s ease;
     }
     
-    .theme-toggle:hover {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
+    .theme-toggle:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
     
     .spinner {
-      width: 18px;
-      height: 18px;
+      width: 18px; height: 18px;
       border: 2px solid rgba(255,255,255,0.3);
       border-top-color: #fff;
       border-radius: 50%;
@@ -276,9 +184,7 @@
       display: none;
     }
     
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
