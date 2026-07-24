@@ -15,7 +15,7 @@
   </style>
 </head>
 <body>
-  <h2>تست API - نسخه جدید</h2>
+  <h2>تست کامل API</h2>
   
   <div class="section">مرحله ۱: پاک کردن localStorage</div>
   <button class="danger" onclick="clearStorage()">پاک کردن localStorage</button>
@@ -23,10 +23,13 @@
   <div class="section">مرحله ۲: لاگین</div>
   <button onclick="testLogin()">تست لاگین</button>
   
-  <div class="section">مرحله ۳: تست getAdmins (با session جدید)</div>
+  <div class="section">مرحله ۳: بررسی محتوای sessionToken</div>
+  <button onclick="testValidateToken()">بررسی Token</button>
+  
+  <div class="section">مرحله ۴: تست getAdmins (با session جدید)</div>
   <button onclick="testAdmins()">تست getAdmins</button>
   
-  <div class="section">مرحله ۴: تست مستقیم با sessionToken ذخیره شده</div>
+  <div class="section">مرحله ۵: تست با session ذخیره شده</div>
   <button class="warning-btn" onclick="testWithStoredSession()">تست با session موجود</button>
   
   <pre id="result">منتظر کلیک...</pre>
@@ -69,6 +72,42 @@
           show('❌ لاگین ناموفق:\n' + JSON.stringify(data, null, 2));
         }
       } catch(e) { show('ERROR: ' + e.message); }
+    }
+    
+    function testValidateToken() {
+      const sessionToken = localStorage.getItem('session_token');
+      const sessionData = localStorage.getItem('admin_session');
+      
+      if (!sessionToken || !sessionData) {
+        show('❌ session وجود نداره. اول مرحله ۲ رو بزن.');
+        return;
+      }
+      
+      const session = JSON.parse(sessionData);
+      
+      let output = 'admin_session.admin.id: ' + session.admin.id + '\n';
+      output += 'admin_session.admin.role: ' + session.admin.role + '\n\n';
+      output += 'sessionToken (کامل):\n' + sessionToken + '\n\n';
+      
+      try {
+        const decoded = atob(sessionToken);
+        const parts = decoded.split('|');
+        output += 'Decoded Token:\n' + decoded + '\n\n';
+        output += 'Parts:\n';
+        output += '  [0] adminId: ' + parts[0] + '\n';
+        output += '  [1] timestamp: ' + parts[1] + ' (' + new Date(parseInt(parts[1])).toLocaleString('fa-IR') + ')\n';
+        output += '  [2] hash: ' + parts[2] + '\n\n';
+        
+        const now = Date.now();
+        const diff = now - parseInt(parts[1]);
+        output += 'Time since token created: ' + Math.floor(diff / 1000) + ' seconds\n';
+        output += 'Expired: ' + (diff > 1800000 ? '❌ بله' : '✅ خیر') + '\n\n';
+        output += 'adminId match: ' + (parts[0] === session.admin.id ? '✅ بله' : '❌ خیر');
+      } catch(e) {
+        output += '❌ Cannot decode:\n' + e.message;
+      }
+      
+      show(output);
     }
     
     async function testAdmins() {
