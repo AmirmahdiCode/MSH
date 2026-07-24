@@ -3,28 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مدیریت مدیران | شهدای گمنام شورابیل</title>
+  <title>ورود مدیریت | شهدای گمنام شورابیل</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     :root {
-      --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
-      --primary: #0d9488; --primary-dark: #0f766e; --primary-rgb: 13, 148, 136;
-      --dark: #0f172a; --text: #334155; --text-light: #94a3b8;
-      --white: #ffffff; --card-bg: #ffffff; --card-border: #e2e8f0;
-      --shadow: 0 2px 12px rgba(0,0,0,0.04); --header-bg: #ffffff;
-      --logo-filter: none; --danger: #dc2626; --danger-light: #fef2f2;
-      --success: #10b981; --warning: #f59e0b; --info: #3b82f6;
+      --bg: #f8fafc;
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-rgb: 13, 148, 136;
+      --dark: #0f172a;
+      --text: #334155;
+      --text-light: #94a3b8;
+      --white: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --input-bg: #f8fafc;
+      --input-border: #e2e8f0;
     }
     
     [data-theme="dark"] {
-      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
-      --primary: #14b8a6; --primary-dark: #0d9488; --primary-rgb: 20, 184, 166;
-      --dark: #f1f5f9; --text: #cbd5e1; --text-light: #64748b;
-      --white: #1e293b; --card-bg: #1e293b; --card-border: #334155;
-      --shadow: 0 2px 12px rgba(0,0,0,0.3); --header-bg: #1e293b;
-      --logo-filter: brightness(0) invert(1); --danger-light: #2e1a1a;
+      --bg: #0f172a;
+      --primary: #14b8a6;
+      --primary-dark: #0d9488;
+      --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9;
+      --text: #cbd5e1;
+      --text-light: #64748b;
+      --white: #1e293b;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      --input-bg: #0f172a;
+      --input-border: #334155;
     }
     
     [data-muharram="true"] {
@@ -37,7 +50,9 @@
     
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg); color: var(--text); min-height: 100vh; transition: all 0.3s ease;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s ease, color 0.3s ease; padding: 20px;
     }
     
     .floating-toast {
@@ -58,140 +73,78 @@
     .floating-toast .toast-close { margin-right: auto; cursor: pointer; opacity: 0.6; font-size: 14px; }
     .floating-toast .toast-close:hover { opacity: 1; }
     
-    .header {
-      background: var(--header-bg); box-shadow: 0 1px 8px rgba(0,0,0,0.03);
-      padding: 14px 20px; border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
-    }
+    .login-container { width: 100%; max-width: 420px; }
+    .login-header { text-align: center; margin-bottom: 28px; }
     
-    .header-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; max-width: 1100px; margin: 0 auto;
-    }
-    
-    .header-right { display: flex; align-items: center; gap: 10px; }
-    
-    .header-logo {
-      width: 42px; height: 42px; border-radius: 12px;
+    .login-logo {
+      width: 72px; height: 72px; border-radius: 20px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2); overflow: hidden; padding: 6px;
+      margin: 0 auto 16px; box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+      overflow: hidden; padding: 10px;
     }
     
-    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
-    .header-title { font-size: 18px; font-weight: 700; color: var(--dark); }
-    .header-btns { display: flex; align-items: center; gap: 8px; }
+    .login-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .login-header h2 { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 4px; transition: color 0.3s; }
+    .login-header p { font-size: 12px; color: var(--text-light); transition: color 0.3s; }
     
-    .back-btn {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
-      cursor: pointer; font-size: 18px; color: var(--text);
-      display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; text-decoration: none;
+    .login-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 28px; box-shadow: var(--shadow);
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
-    .back-btn:hover { background: var(--primary); color: #fff; }
+    
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; transition: color 0.3s; }
+    .form-group label i { color: var(--primary); margin-left: 4px; width: 16px; text-align: center; }
+    
+    .form-input {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--input-border);
+      border-radius: 10px; background: var(--input-bg); color: var(--text);
+      font-size: 13px; font-family: inherit; transition: all 0.3s ease;
+    }
+    
+    .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); }
+    
+    .password-wrapper { position: relative; }
+    .password-wrapper .form-input { padding-left: 44px; }
+    
+    .toggle-password {
+      position: absolute; left: 0; top: 0; height: 100%; width: 44px;
+      background: none; border: none; cursor: pointer; color: var(--text-light);
+      font-size: 14px; display: flex; align-items: center; justify-content: center; transition: color 0.3s;
+    }
+    .toggle-password:hover { color: var(--primary); }
+    
+    .login-btn {
+      width: 100%; padding: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+    }
+    
+    .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.4); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     
     .theme-toggle {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
-      cursor: pointer; font-size: 18px; color: var(--text);
-      display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;
-    }
-    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
-    
-    .logout-btn {
-      background: var(--danger-light); border: 1px solid #fecaca; padding: 8px 14px;
-      border-radius: 8px; cursor: pointer; font-size: 12px; color: var(--danger);
-      display: flex; align-items: center; gap: 6px; font-family: inherit;
-    }
-    .logout-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
-    
-    .main-container { max-width: 900px; width: 100%; margin: 24px auto; padding: 0 12px; }
-    
-    .page-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-    
-    .add-btn {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff; border: none; padding: 10px 18px; border-radius: 10px;
-      font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
-      margin-right: auto; display: flex; align-items: center; gap: 6px;
-    }
-    .add-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3); }
-    
-    .admins-list { display: flex; flex-direction: column; gap: 8px; }
-    
-    .admin-card {
+      position: fixed; top: 20px; left: 20px; width: 40px; height: 40px;
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 14px 18px; display: flex; align-items: center;
-      gap: 14px; box-shadow: var(--shadow);
-    }
-    
-    .admin-avatar {
-      width: 44px; height: 44px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 18px; flex-shrink: 0;
+      z-index: 10; transition: all 0.3s ease;
     }
     
-    .admin-info { flex: 1; min-width: 0; }
-    .admin-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
-    .admin-username { font-size: 10px; color: var(--text-light); }
+    .theme-toggle:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
     
-    .admin-role {
-      font-size: 10px; padding: 4px 10px; border-radius: 6px;
-      font-weight: 600; background: var(--bg2); color: var(--primary-dark);
-    }
-    .admin-role.owner { background: #fef3c7; color: #d97706; }
-    .admin-role.maker { background: #fce7f3; color: #db2777; }
-    
-    .admin-actions { display: flex; gap: 6px; }
-    
-    .action-btn {
-      width: 34px; height: 34px; border-radius: 8px; border: none;
-      cursor: pointer; font-size: 13px; display: flex; align-items: center;
-      justify-content: center; background: var(--bg2); color: var(--text);
-    }
-    .action-btn:hover { background: var(--primary); color: #fff; }
-    .action-btn.delete:hover { background: var(--danger); color: #fff; }
-    
-    .modal-overlay {
-      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center;
-    }
-    .modal-overlay.active { display: flex; }
-    
-    .modal {
-      background: var(--card-bg); border-radius: 16px; padding: 24px;
-      width: 90%; max-width: 440px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    .spinner {
+      width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.6s linear infinite; display: none;
     }
     
-    .modal h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 16px; }
-    
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    
-    .form-input, .form-select {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--card-border);
-      border-radius: 8px; background: var(--bg); color: var(--text);
-      font-size: 12px; font-family: inherit;
-    }
-    .form-input:focus, .form-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); }
-    
-    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-    
-    .btn-cancel {
-      padding: 8px 16px; border-radius: 8px; border: 1px solid var(--card-border);
-      background: var(--bg); color: var(--text); cursor: pointer; font-size: 12px; font-family: inherit;
-    }
-    
-    .btn-submit {
-      padding: 8px 16px; border-radius: 8px; border: none;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit;
-    }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    
-    @media (max-width: 650px) {
-      .admin-card { flex-wrap: wrap; gap: 10px; }
-      .admin-actions { width: 100%; justify-content: flex-end; }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -202,75 +155,44 @@
     <span class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></span>
   </div>
 
-  <header class="header">
-    <div class="header-inner">
-      <div class="header-right">
-        <div class="header-logo">
-          <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
-        </div>
-        <div><div class="header-title">مدیریت مدیران</div></div>
-      </div>
-      <div class="header-btns">
-        <a href="dashboard.html" class="back-btn" title="بازگشت"><i class="fa-solid fa-arrow-right"></i></a>
-        <button class="theme-toggle" id="themeToggle" title="تغییر تم"><i class="fa-solid fa-moon"></i></button>
-        <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
-      </div>
-    </div>
-  </header>
+  <button class="theme-toggle" id="themeToggle" title="تغییر تم">
+    <i class="fa-solid fa-moon"></i>
+  </button>
 
-  <section class="main-container">
-    <div class="page-title">
-      <i class="fa-solid fa-users-gear"></i> لیست مدیران
-      <button class="add-btn" id="addAdminBtn"><i class="fa-solid fa-plus"></i> افزودن مدیر</button>
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">
+        <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
+      </div>
+      <h2>پنل مدیریت</h2>
+      <p>شهدای گمنام شورابیل</p>
     </div>
     
-    <div class="admins-list" id="adminsList">
-      <div style="text-align: center; padding: 32px; color: var(--text-light);">
-        <i class="fa-solid fa-spinner fa-pulse"></i>
-        <p style="margin-top: 8px; font-size: 12px;">در حال بارگذاری...</p>
+    <div class="login-card">
+      <div class="form-group">
+        <label><i class="fa-solid fa-user"></i> نام کاربری</label>
+        <input type="text" class="form-input" id="username" placeholder="نام کاربری خود را وارد کنید" autocomplete="username">
       </div>
-    </div>
-  </section>
-
-  <div class="modal-overlay" id="addModal">
-    <div class="modal">
-      <h3><i class="fa-solid fa-user-plus"></i> افزودن مدیر جدید</h3>
-      <div class="form-group"><label>نام</label><input type="text" class="form-input" id="addName" placeholder="نام مدیر"></div>
-      <div class="form-group"><label>نام کاربری</label><input type="text" class="form-input" id="addUsername" placeholder="نام کاربری"></div>
-      <div class="form-group"><label>رمز عبور</label><input type="password" class="form-input" id="addPassword" placeholder="رمز عبور"></div>
-      <div class="form-group"><label>مقام</label><select class="form-select" id="addRole"><option value="ادمین">ادمین</option><option value="ادمین ویژه">ادمین ویژه</option></select></div>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeAddModal()">انصراف</button>
-        <button class="btn-submit" id="submitAdd">افزودن</button>
+      
+      <div class="form-group">
+        <label><i class="fa-solid fa-lock"></i> رمز عبور</label>
+        <div class="password-wrapper">
+          <input type="password" class="form-input" id="password" placeholder="رمز عبور خود را وارد کنید" autocomplete="current-password">
+          <button type="button" class="toggle-password" id="togglePassword">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="editModal">
-    <div class="modal">
-      <h3><i class="fa-solid fa-pen-to-square"></i> تغییر مقام</h3>
-      <div class="form-group"><label>مقام جدید</label><select class="form-select" id="editRole"><option value="سازنده">سازنده</option><option value="مالک">مالک</option><option value="ادمین ویژه">ادمین ویژه</option><option value="ادمین">ادمین</option></select><input type="hidden" id="editTargetId"></div>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeEditModal()">انصراف</button>
-        <button class="btn-submit" id="submitEdit">ذخیره</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="deleteModal">
-    <div class="modal">
-      <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> حذف مدیر</h3>
-      <p style="font-size: 13px; color: var(--text); margin-bottom: 16px;">آیا از حذف این مدیر اطمینان دارید؟</p>
-      <input type="hidden" id="deleteTargetId">
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeDeleteModal()">انصراف</button>
-        <button class="btn-submit" id="submitDelete" style="background: var(--danger);">حذف</button>
-      </div>
+      
+      <button class="login-btn" id="loginBtn">
+        <span class="spinner" id="spinner"></span>
+        <span id="btnText"><i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل</span>
+      </button>
     </div>
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycby-M8E6ITPRf6NKFi7WYmf_P66qD8uoCQaWrjJR0BH9VF0aw3pL_9oWTmSzdj27RVwq/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzXwQAAM1zGoVoG7MnFt-yEB7CSY5Qa8xnxpbkdZ_S6kUzPhZV_BdIkeasayEqz_lcQ/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -288,32 +210,17 @@
     
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
     
-    async function getClientIP() {
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        return data.ip;
-      } catch(e) { return '0.0.0.0'; }
-    }
-    
-    function checkSession() {
+    (function() {
       const d = localStorage.getItem('admin_session');
-      if (!d) { window.location.href = 'login.html'; return null; }
-      try {
-        const s = JSON.parse(d);
-        if (Date.now() - s.timestamp > 1800000) { localStorage.clear(); window.location.href = 'login.html'; return null; }
-        return s;
-      } catch(e) { localStorage.clear(); window.location.href = 'login.html'; return null; }
-    }
-    
-    const session = checkSession();
-    if (!session) throw new Error();
-    
-    const admin = session.admin;
-    const sessionToken = localStorage.getItem('session_token');
-    
-    if (!sessionToken) { localStorage.clear(); window.location.href = 'login.html'; }
-    if (admin.role !== 'سازنده' && admin.role !== 'مالک') { window.location.href = 'dashboard.html'; }
+      if (d) {
+        try {
+          const s = JSON.parse(d);
+          if (Date.now() - s.timestamp < 1800000 && localStorage.getItem('session_token')) {
+            window.location.replace('dashboard.html');
+          }
+        } catch(e) {}
+      }
+    })();
     
     (function() {
       const t = localStorage.getItem('heyat-theme');
@@ -336,134 +243,54 @@
       } catch(e) {}
     })();
     
-    $('logoutBtn').onclick = () => { localStorage.clear(); window.location.href = 'login.html'; };
+    $('togglePassword').onclick = () => {
+      const pw = $('password');
+      const isPass = pw.type === 'password';
+      pw.type = isPass ? 'text' : 'password';
+      $('togglePassword').querySelector('i').className = isPass ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+    };
     
-    async function loadAdmins() {
-      const list = $('adminsList');
-      try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=getAdmins', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, sessionToken, clientIP: ip })
-        });
-        const data = await res.json();
-        
-        if (data.success && data.data.length > 0) {
-          list.innerHTML = data.data.map(item => {
-            let roleClass = '';
-            if (item.role === 'سازنده') roleClass = 'maker';
-            else if (item.role === 'مالک') roleClass = 'owner';
-            
-            let actionsHTML = '';
-            if (admin.role === 'سازنده' && item.role !== 'سازنده') {
-              actionsHTML = `
-                <button class="action-btn" onclick="openEditModal('${item.id}', '${item.role}')"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="action-btn delete" onclick="openDeleteModal('${item.id}')"><i class="fa-solid fa-trash"></i></button>
-              `;
-            } else if (admin.role === 'مالک' && (item.role === 'ادمین' || item.role === 'ادمین ویژه')) {
-              actionsHTML = `<button class="action-btn delete" onclick="openDeleteModal('${item.id}')"><i class="fa-solid fa-trash"></i></button>`;
-            }
-            
-            return `
-              <div class="admin-card">
-                <div class="admin-avatar"><i class="fa-solid fa-user"></i></div>
-                <div class="admin-info"><div class="admin-name">${item.name}</div><div class="admin-username">@${item.username}</div></div>
-                <span class="admin-role ${roleClass}">${item.role}</span>
-                ${actionsHTML ? `<div class="admin-actions">${actionsHTML}</div>` : ''}
-              </div>
-            `;
-          }).join('');
-        } else {
-          list.innerHTML = `<div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-users-slash" style="font-size: 36px; margin-bottom: 8px; display: block;"></i><p style="font-size: 13px;">مدیری یافت نشد</p></div>`;
-        }
-      } catch(e) {
-        showToast('خطا در دریافت لیست مدیران', 'error');
+    $('loginBtn').onclick = async () => {
+      const username = $('username').value.trim();
+      const password = $('password').value;
+      
+      if (!username || !password) { showToast('لطفاً نام کاربری و رمز عبور را وارد کنید', 'warning'); return; }
+      
+      $('loginBtn').disabled = true;
+      $('spinner').style.display = 'block';
+      $('btnText').textContent = 'در حال ورود...';
+      
+      const res = await fetch(API_URL + '?action=login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password, ip: '0.0.0.0' })
+      });
+      
+      const data = await res.json();
+      
+      if (data.success) {
+        localStorage.setItem('admin_session', JSON.stringify({
+          admin: { id: data.data.id, name: data.data.name, username: data.data.username, role: data.data.role },
+          timestamp: Date.now()
+        }));
+        localStorage.setItem('session_token', data.data.sessionToken);
+        window.location.href = 'dashboard.html';
+        return;
       }
-    }
-    
-    function openAddModal() { $('addModal').classList.add('active'); $('addName').focus(); }
-    function closeAddModal() { $('addModal').classList.remove('active'); $('addName').value = ''; $('addUsername').value = ''; $('addPassword').value = ''; $('addRole').value = 'ادمین'; }
-    
-    $('addAdminBtn').onclick = openAddModal;
-    $('addModal').onclick = (e) => { if (e.target === $('addModal')) closeAddModal(); };
-    
-    $('submitAdd').onclick = async () => {
-      const name = $('addName').value.trim();
-      const username = $('addUsername').value.trim();
-      const password = $('addPassword').value;
-      const role = $('addRole').value;
       
-      if (!name || !username || !password) { showToast('لطفاً همه فیلدها را پر کنید', 'warning'); return; }
+      const msg = data.message || '';
+      if (msg.includes('قفل')) showToast(msg, 'error');
+      else if (msg.includes('تلاش')) showToast(msg, 'warning');
+      else if (msg.includes('آی‌پی')) showToast(msg, 'error');
+      else showToast(msg || 'نام کاربری یا رمز عبور اشتباه است', 'error');
       
-      $('submitAdd').disabled = true; $('submitAdd').textContent = 'در حال افزودن...';
-      
-      try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=addAdmin', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, sessionToken, clientIP: ip, name, username, password, role })
-        });
-        const data = await res.json();
-        
-        if (data.success) { showToast('مدیر جدید با موفقیت اضافه شد', 'success'); closeAddModal(); loadAdmins(); }
-        else showToast(data.message, 'error');
-      } catch(e) { showToast('خطای سرور رخ داده است', 'error'); }
-      
-      $('submitAdd').disabled = false; $('submitAdd').textContent = 'افزودن';
+      $('loginBtn').disabled = false;
+      $('spinner').style.display = 'none';
+      $('btnText').innerHTML = '<i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل';
     };
     
-    function openEditModal(targetId, currentRole) { $('editTargetId').value = targetId; $('editRole').value = currentRole; $('editModal').classList.add('active'); }
-    function closeEditModal() { $('editModal').classList.remove('active'); }
-    
-    $('editModal').onclick = (e) => { if (e.target === $('editModal')) closeEditModal(); };
-    
-    $('submitEdit').onclick = async () => {
-      const targetId = $('editTargetId').value;
-      const newRole = $('editRole').value;
-      
-      $('submitEdit').disabled = true; $('submitEdit').textContent = 'در حال ذخیره...';
-      
-      try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=changeRole', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, sessionToken, clientIP: ip, targetId, newRole })
-        });
-        const data = await res.json();
-        
-        if (data.success) { showToast('مقام با موفقیت تغییر کرد', 'success'); closeEditModal(); loadAdmins(); }
-        else showToast(data.message, 'error');
-      } catch(e) { showToast('خطای سرور رخ داده است', 'error'); }
-      
-      $('submitEdit').disabled = false; $('submitEdit').textContent = 'ذخیره';
-    };
-    
-    function openDeleteModal(targetId) { $('deleteTargetId').value = targetId; $('deleteModal').classList.add('active'); }
-    function closeDeleteModal() { $('deleteModal').classList.remove('active'); }
-    
-    $('deleteModal').onclick = (e) => { if (e.target === $('deleteModal')) closeDeleteModal(); };
-    
-    $('submitDelete').onclick = async () => {
-      const targetId = $('deleteTargetId').value;
-      
-      $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
-      
-      try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=deleteAdmin', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, sessionToken, clientIP: ip, targetId })
-        });
-        const data = await res.json();
-        
-        if (data.success) { showToast('مدیر با موفقیت حذف شد', 'success'); closeDeleteModal(); loadAdmins(); }
-        else showToast(data.message, 'error');
-      } catch(e) { showToast('خطای سرور رخ داده است', 'error'); }
-      
-      $('submitDelete').disabled = false; $('submitDelete').textContent = 'حذف';
-    };
-    
-    loadAdmins();
+    $('password').onkeydown = (e) => { if (e.key === 'Enter') $('loginBtn').click(); };
+    $('username').onkeydown = (e) => { if (e.key === 'Enter') $('password').focus(); };
+    $('username').focus();
   </script>
 
 </body>
