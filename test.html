@@ -5,124 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تست API</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: #f8fafc;
-      padding: 20px;
-      text-align: center;
-      margin-top: 30px;
-    }
-    button {
-      padding: 14px 28px;
-      font-size: 16px;
-      background: #0d9488;
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-family: inherit;
-      margin: 8px;
-    }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8fafc; padding: 20px; text-align: center; }
+    button { padding: 14px 28px; font-size: 16px; background: #0d9488; color: #fff; border: none; border-radius: 12px; cursor: pointer; font-family: inherit; margin: 8px; }
     button:disabled { opacity: 0.5; }
-    pre {
-      background: #1e293b;
-      color: #10b981;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: left;
-      direction: ltr;
-      margin-top: 20px;
-      font-size: 13px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      overflow-x: auto;
-    }
-    .section {
-      margin: 16px 0;
-      font-weight: bold;
-      color: #334155;
-    }
+    pre { background: #1e293b; color: #10b981; padding: 20px; border-radius: 12px; text-align: left; direction: ltr; margin-top: 20px; font-size: 13px; max-width: 600px; margin-left: auto; margin-right: auto; overflow-x: auto; }
+    .section { margin: 16px 0; font-weight: bold; color: #334155; }
+    .danger { background: #dc2626 !important; }
+    .warning-btn { background: #f59e0b !important; }
   </style>
 </head>
 <body>
-  <h2>تست API</h2>
+  <h2>تست API - نسخه جدید</h2>
   
-  <div class="section">لاگین:</div>
+  <div class="section">مرحله ۱: پاک کردن localStorage</div>
+  <button class="danger" onclick="clearStorage()">پاک کردن localStorage</button>
+  
+  <div class="section">مرحله ۲: لاگین</div>
   <button onclick="testLogin()">تست لاگین</button>
   
-  <div class="section">گرفتن IP:</div>
-  <button onclick="testIP()">تست IP</button>
-  
-  <div class="section">گرفتن ادمین‌ها (با session):</div>
+  <div class="section">مرحله ۳: تست getAdmins (با session جدید)</div>
   <button onclick="testAdmins()">تست getAdmins</button>
+  
+  <div class="section">مرحله ۴: تست مستقیم با sessionToken ذخیره شده</div>
+  <button class="warning-btn" onclick="testWithStoredSession()">تست با session موجود</button>
   
   <pre id="result">منتظر کلیک...</pre>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycby-M8E6ITPRf6NKFi7WYmf_P66qD8uoCQaWrjJR0BH9VF0aw3pL_9oWTmSzdj27RVwq/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzXwQAAM1zGoVoG7MnFt-yEB7CSY5Qa8xnxpbkdZ_S6kUzPhZV_BdIkeasayEqz_lcQ/exec';
+    let storedSessionToken = null;
+    let storedAdminId = null;
     
-    function show(msg) {
-      document.getElementById('result').textContent = msg;
+    function show(msg) { document.getElementById('result').textContent = msg; }
+    
+    function clearStorage() {
+      localStorage.clear();
+      storedSessionToken = null;
+      storedAdminId = null;
+      show('✅ localStorage پاک شد. حالا مرحله ۲ رو بزن.');
     }
     
     async function testLogin() {
-      show('در حال تست لاگین...');
+      show('در حال لاگین...');
       try {
         const res = await fetch(API_URL + '?action=login', {
           method: 'POST',
           body: JSON.stringify({ username: 'Amirmahdi', password: 'Amir@mahdi_89', ip: '0.0.0.0' })
         });
         const data = await res.json();
-        show('LOGIN:\n' + JSON.stringify(data, null, 2));
-      } catch(e) {
-        show('ERROR: ' + e.message);
-      }
-    }
-    
-    async function testIP() {
-      show('در حال گرفتن IP...');
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        show('IP شما: ' + data.ip);
-      } catch(e) {
-        show('ERROR: ' + e.message);
-      }
+        
+        if (data.success) {
+          storedSessionToken = data.data.sessionToken;
+          storedAdminId = data.data.id;
+          
+          localStorage.setItem('admin_session', JSON.stringify({
+            admin: { id: data.data.id, name: data.data.name, username: data.data.username, role: data.data.role },
+            timestamp: Date.now()
+          }));
+          localStorage.setItem('session_token', data.data.sessionToken);
+          
+          show('✅ لاگین موفق!\n\nadminId: ' + data.data.id + '\nrole: ' + data.data.role + '\nsessionToken: ' + data.data.sessionToken.substring(0, 30) + '...\n\nحالا مرحله ۳ رو بزن.');
+        } else {
+          show('❌ لاگین ناموفق:\n' + JSON.stringify(data, null, 2));
+        }
+      } catch(e) { show('ERROR: ' + e.message); }
     }
     
     async function testAdmins() {
+      if (!storedSessionToken || !storedAdminId) {
+        show('❌ اول باید لاگین کنی (مرحله ۲)');
+        return;
+      }
+      
+      show('در حال گرفتن لیست مدیران...\n\nadminId: ' + storedAdminId + '\nsessionToken: ' + storedSessionToken.substring(0, 30) + '...');
+      
+      try {
+        const res = await fetch(API_URL + '?action=getAdmins', {
+          method: 'POST',
+          body: JSON.stringify({ adminId: storedAdminId, sessionToken: storedSessionToken })
+        });
+        const data = await res.json();
+        show('✅ پاسخ API:\n' + JSON.stringify(data, null, 2));
+      } catch(e) { show('ERROR: ' + e.message); }
+    }
+    
+    async function testWithStoredSession() {
       const sessionData = localStorage.getItem('admin_session');
       const sessionToken = localStorage.getItem('session_token');
       
       if (!sessionData || !sessionToken) {
-        show('❌ session توی localStorage نیست!\n\nadmin_session: ' + (sessionData || 'null') + '\nsession_token: ' + (sessionToken || 'null'));
+        show('❌ هیچ session ذخیره شده‌ای نیست. اول مراحل ۱ و ۲ رو انجام بده.');
         return;
       }
-      
-      show('در حال تست...');
       
       try {
         const session = JSON.parse(sessionData);
         const admin = session.admin;
         
-        const ipRes = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipRes.json();
-        const ip = ipData.ip;
-        
-        const info = 'adminId: ' + admin.id + '\nsessionToken: ' + sessionToken.substring(0, 20) + '...\nclientIP: ' + ip + '\n\nدر حال ارسال به API...';
-        show(info);
+        show('session موجود:\nadminId: ' + admin.id + '\nsessionToken: ' + sessionToken.substring(0, 30) + '...\n\nدر حال ارسال به API...');
         
         const res = await fetch(API_URL + '?action=getAdmins', {
           method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, sessionToken, clientIP: ip })
+          body: JSON.stringify({ adminId: admin.id, sessionToken: sessionToken })
         });
-        
         const data = await res.json();
-        show(info + '\n\nپاسخ API:\n' + JSON.stringify(data, null, 2));
-      } catch(e) {
-        show('ERROR: ' + e.message);
-      }
+        show('✅ پاسخ API:\n' + JSON.stringify(data, null, 2));
+      } catch(e) { show('ERROR: ' + e.message); }
     }
   </script>
 </body>
