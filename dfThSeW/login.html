@@ -360,7 +360,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyOUyob6F-5heJiU9MmfewQzPwj_HrrobSwNyC-SwQTKZsW0ho2sMjfiNdm4d6SLxkH/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzWROa3yXApWXECRh9MO3N_p0HcwzGF2f5vTbWMO8JdeP3BZMKpn6NMoOZ4r7XUw9W6/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast');
@@ -403,22 +403,19 @@
       }
       $('themeToggle').onclick = () => {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        if (isDark) {
-          document.documentElement.removeAttribute('data-theme');
-          $('themeToggle').querySelector('i').className = 'fa-solid fa-moon';
-          localStorage.setItem('heyat-theme', 'light');
-        } else {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          $('themeToggle').querySelector('i').className = 'fa-solid fa-sun';
-          localStorage.setItem('heyat-theme', 'dark');
-        }
+        document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        $('themeToggle').querySelector('i').className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
       };
     })();
     
     (async function() {
       try {
         const now = new Date();
-        const r = await fetch(`https://api.aladhan.com/v1/gToH/${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()}`);
+        const d = String(now.getDate()).padStart(2,'0');
+        const m = String(now.getMonth()+1).padStart(2,'0');
+        const y = now.getFullYear();
+        const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
         const j = await r.json();
         if (j.code === 200 && j.data.hijri.month.number === 1) {
           document.documentElement.setAttribute('data-muharram', 'true');
@@ -446,32 +443,28 @@
       $('spinner').style.display = 'block';
       $('btnText').textContent = 'در حال ورود...';
       
-      try {
-        const res = await fetch(API_URL + '?action=login', {
-          method: 'POST',
-          body: JSON.stringify({ username, password, ip: '0.0.0.0' })
-        });
-        const data = await res.json();
-        
-        if (data.success) {
-          localStorage.setItem('admin_session', JSON.stringify({
-            admin: { id: data.data.id, name: data.data.name, username: data.data.username, role: data.data.role },
-            timestamp: Date.now()
-          }));
-          localStorage.setItem('session_token', data.data.sessionToken);
-          window.location.href = 'dashboard.html';
-          return;
-        }
-        
-        const msg = data.message || '';
-        if (msg.includes('قفل')) showToast(msg, 'error');
-        else if (msg.includes('تلاش')) showToast(msg, 'warning');
-        else if (msg.includes('آی‌پی')) showToast(msg, 'error');
-        else showToast(msg || 'نام کاربری یا رمز عبور اشتباه است', 'error');
-        
-      } catch(e) {
-        showToast('خطا در ارتباط با سرور', 'error');
+      const res = await fetch(API_URL + '?action=login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password, ip: '0.0.0.0' })
+      });
+      
+      const data = await res.json();
+      
+      if (data.success) {
+        localStorage.setItem('admin_session', JSON.stringify({
+          admin: { id: data.data.id, name: data.data.name, username: data.data.username, role: data.data.role },
+          timestamp: Date.now()
+        }));
+        localStorage.setItem('session_token', data.data.sessionToken);
+        window.location.href = 'dashboard.html';
+        return;
       }
+      
+      const msg = data.message || '';
+      if (msg.includes('قفل')) showToast(msg, 'error');
+      else if (msg.includes('تلاش')) showToast(msg, 'warning');
+      else if (msg.includes('آی‌پی')) showToast(msg, 'error');
+      else showToast(msg || 'نام کاربری یا رمز عبور اشتباه است', 'error');
       
       $('loginBtn').disabled = false;
       $('spinner').style.display = 'none';
