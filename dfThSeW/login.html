@@ -517,8 +517,6 @@
       spinner.style.display = 'block';
       btnText.innerHTML = 'در حال ورود...';
       
-      let loginSuccess = false;
-      
       try {
         const ip = await getClientIP();
         
@@ -530,9 +528,6 @@
         const data = await res.json();
         
         if (data.success) {
-          loginSuccess = true;
-          showToast('ورود موفقیت‌آمیز! در حال انتقال...', 'success');
-          
           const sessionData = {
             admin: {
               id: data.data.id,
@@ -546,9 +541,8 @@
           localStorage.setItem('admin_session', JSON.stringify(sessionData));
           localStorage.setItem('session_token', data.data.sessionToken);
           
-          setTimeout(() => {
-            window.location.replace('dashboard.html');
-          }, 800);
+          window.location.href = 'dashboard.html';
+          return;
           
         } else {
           if (data.message.includes('قفل')) {
@@ -564,15 +558,11 @@
           }
         }
       } catch (e) {
-        if (!loginSuccess) {
-          showToast('خطا در ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید', 'error');
-        }
+        showToast('خطا در ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید', 'error');
       } finally {
-        if (!loginSuccess) {
-          loginBtn.disabled = false;
-          spinner.style.display = 'none';
-          btnText.innerHTML = '<i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل';
-        }
+        loginBtn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.innerHTML = '<i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل';
       }
     }
     
