@@ -492,10 +492,6 @@
     const btnText = document.getElementById('btnText');
     const usernameInput = document.getElementById('username');
     
-    function goToDashboard() {
-      window.location.href = 'dashboard.html';
-    }
-    
     async function login() {
       const username = usernameInput.value.trim();
       const password = passwordInput.value;
@@ -533,7 +529,7 @@
           localStorage.setItem('admin_session', JSON.stringify(sessionData));
           localStorage.setItem('session_token', data.data.sessionToken);
           
-          goToDashboard();
+          window.location.href = 'dashboard.html';
           return;
         }
         
@@ -543,21 +539,17 @@
           showToast(data.message, 'warning');
         } else if (data.message.includes('آی‌پی')) {
           showToast(data.message + ' — لطفاً با مدیر سیستم تماس بگیرید', 'error');
-        } else if (data.message.includes('یافت نشد')) {
-          showToast('نام کاربری در سیستم وجود ندارد', 'error');
         } else {
           showToast(data.message || 'نام کاربری یا رمز عبور اشتباه است', 'error');
         }
         
-        loginBtn.disabled = false;
-        spinner.style.display = 'none';
-        btnText.innerHTML = '<i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل';
-        
       } catch (e) {
-        loginBtn.disabled = false;
-        spinner.style.display = 'none';
-        btnText.innerHTML = '<i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل';
+        // هیچ خطایی نشون نده
       }
+      
+      loginBtn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.innerHTML = '<i class="fa-solid fa-arrow-left-to-line"></i> ورود به پنل';
     }
     
     loginBtn.addEventListener('click', login);
