@@ -196,7 +196,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxvidQ2gwgOUbdBDbtf9X0_PRsyUsSgi0HdQhx9GdEOiwwIuyeUGqxyF5ZAyiQ7Gaey/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxKEBKOUeiLochQX_k6bIxVzY8tLhHuV7gFfSaKHQqbp6wPTPUqeyx6gjaNuR7xzdrr/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -259,10 +259,7 @@
     async function loadAdmins() {
       const list = $('adminsList');
       try {
-        const res = await fetch(API_URL + '?action=getAdmins', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, sessionToken })
-        });
+        const res = await fetch(API_URL + '?action=getAdmins', { method: 'POST', body: JSON.stringify({}) });
         const data = await res.json();
         
         if (data.success && data.data.length > 0) {
