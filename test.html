@@ -2,154 +2,29 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تست API</title>
+  <title>تست ساده</title>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8fafc; padding: 20px; text-align: center; }
-    button { padding: 14px 28px; font-size: 16px; background: #0d9488; color: #fff; border: none; border-radius: 12px; cursor: pointer; font-family: inherit; margin: 8px; }
-    button:disabled { opacity: 0.5; }
-    pre { background: #1e293b; color: #10b981; padding: 20px; border-radius: 12px; text-align: left; direction: ltr; margin-top: 20px; font-size: 13px; max-width: 600px; margin-left: auto; margin-right: auto; overflow-x: auto; }
-    .section { margin: 16px 0; font-weight: bold; color: #334155; }
-    .danger { background: #dc2626 !important; }
-    .warning-btn { background: #f59e0b !important; }
+    body { font-family: Tahoma; background: #1e293b; color: #10b981; padding: 30px; text-align: center; }
+    button { padding: 16px 40px; font-size: 18px; background: #0d9488; color: #fff; border: none; border-radius: 12px; cursor: pointer; }
+    pre { background: #0f172a; padding: 20px; border-radius: 12px; text-align: left; direction: ltr; margin-top: 20px; font-size: 14px; }
   </style>
 </head>
 <body>
-  <h2>تست کامل API</h2>
-  
-  <div class="section">مرحله ۱: پاک کردن localStorage</div>
-  <button class="danger" onclick="clearStorage()">پاک کردن localStorage</button>
-  
-  <div class="section">مرحله ۲: لاگین</div>
-  <button onclick="testLogin()">تست لاگین</button>
-  
-  <div class="section">مرحله ۳: بررسی محتوای sessionToken</div>
-  <button onclick="testValidateToken()">بررسی Token</button>
-  
-  <div class="section">مرحله ۴: تست getAdmins (با session جدید)</div>
-  <button onclick="testAdmins()">تست getAdmins</button>
-  
-  <div class="section">مرحله ۵: تست با session ذخیره شده</div>
-  <button class="warning-btn" onclick="testWithStoredSession()">تست با session موجود</button>
-  
-  <pre id="result">منتظر کلیک...</pre>
+  <h2>تست getAdmins</h2>
+  <button onclick="test()">کلیک کن</button>
+  <pre id="r">...</pre>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzXwQAAM1zGoVoG7MnFt-yEB7CSY5Qa8xnxpbkdZ_S6kUzPhZV_BdIkeasayEqz_lcQ/exec';
-    let storedSessionToken = null;
-    let storedAdminId = null;
-    
-    function show(msg) { document.getElementById('result').textContent = msg; }
-    
-    function clearStorage() {
-      localStorage.clear();
-      storedSessionToken = null;
-      storedAdminId = null;
-      show('✅ localStorage پاک شد. حالا مرحله ۲ رو بزن.');
-    }
-    
-    async function testLogin() {
-      show('در حال لاگین...');
-      try {
-        const res = await fetch(API_URL + '?action=login', {
-          method: 'POST',
-          body: JSON.stringify({ username: 'Amirmahdi', password: 'Amir@mahdi_89', ip: '0.0.0.0' })
-        });
-        const data = await res.json();
-        
-        if (data.success) {
-          storedSessionToken = data.data.sessionToken;
-          storedAdminId = data.data.id;
-          
-          localStorage.setItem('admin_session', JSON.stringify({
-            admin: { id: data.data.id, name: data.data.name, username: data.data.username, role: data.data.role },
-            timestamp: Date.now()
-          }));
-          localStorage.setItem('session_token', data.data.sessionToken);
-          
-          show('✅ لاگین موفق!\n\nadminId: ' + data.data.id + '\nrole: ' + data.data.role + '\nsessionToken: ' + data.data.sessionToken.substring(0, 30) + '...\n\nحالا مرحله ۳ رو بزن.');
-        } else {
-          show('❌ لاگین ناموفق:\n' + JSON.stringify(data, null, 2));
-        }
-      } catch(e) { show('ERROR: ' + e.message); }
-    }
-    
-    function testValidateToken() {
-      const sessionToken = localStorage.getItem('session_token');
-      const sessionData = localStorage.getItem('admin_session');
+    async function test() {
+      document.getElementById('r').textContent = 'در حال تست...';
       
-      if (!sessionToken || !sessionData) {
-        show('❌ session وجود نداره. اول مرحله ۲ رو بزن.');
-        return;
-      }
+      const res = await fetch('https://script.google.com/macros/s/AKfycbxKEBKOUeiLochQX_k6bIxVzY8tLhHuV7gFfSaKHQqbp6wPTPUqeyx6gjaNuR7xzdrr/exec?action=getAdmins', {
+        method: 'POST',
+        body: JSON.stringify({})
+      });
       
-      const session = JSON.parse(sessionData);
-      
-      let output = 'admin_session.admin.id: ' + session.admin.id + '\n';
-      output += 'admin_session.admin.role: ' + session.admin.role + '\n\n';
-      output += 'sessionToken (کامل):\n' + sessionToken + '\n\n';
-      
-      try {
-        const decoded = atob(sessionToken);
-        const parts = decoded.split('|');
-        output += 'Decoded Token:\n' + decoded + '\n\n';
-        output += 'Parts:\n';
-        output += '  [0] adminId: ' + parts[0] + '\n';
-        output += '  [1] timestamp: ' + parts[1] + ' (' + new Date(parseInt(parts[1])).toLocaleString('fa-IR') + ')\n';
-        output += '  [2] hash: ' + parts[2] + '\n\n';
-        
-        const now = Date.now();
-        const diff = now - parseInt(parts[1]);
-        output += 'Time since token created: ' + Math.floor(diff / 1000) + ' seconds\n';
-        output += 'Expired: ' + (diff > 1800000 ? '❌ بله' : '✅ خیر') + '\n\n';
-        output += 'adminId match: ' + (parts[0] === session.admin.id ? '✅ بله' : '❌ خیر');
-      } catch(e) {
-        output += '❌ Cannot decode:\n' + e.message;
-      }
-      
-      show(output);
-    }
-    
-    async function testAdmins() {
-      if (!storedSessionToken || !storedAdminId) {
-        show('❌ اول باید لاگین کنی (مرحله ۲)');
-        return;
-      }
-      
-      show('در حال گرفتن لیست مدیران...\n\nadminId: ' + storedAdminId + '\nsessionToken: ' + storedSessionToken.substring(0, 30) + '...');
-      
-      try {
-        const res = await fetch(API_URL + '?action=getAdmins', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: storedAdminId, sessionToken: storedSessionToken })
-        });
-        const data = await res.json();
-        show('✅ پاسخ API:\n' + JSON.stringify(data, null, 2));
-      } catch(e) { show('ERROR: ' + e.message); }
-    }
-    
-    async function testWithStoredSession() {
-      const sessionData = localStorage.getItem('admin_session');
-      const sessionToken = localStorage.getItem('session_token');
-      
-      if (!sessionData || !sessionToken) {
-        show('❌ هیچ session ذخیره شده‌ای نیست. اول مراحل ۱ و ۲ رو انجام بده.');
-        return;
-      }
-      
-      try {
-        const session = JSON.parse(sessionData);
-        const admin = session.admin;
-        
-        show('session موجود:\nadminId: ' + admin.id + '\nsessionToken: ' + sessionToken.substring(0, 30) + '...\n\nدر حال ارسال به API...');
-        
-        const res = await fetch(API_URL + '?action=getAdmins', {
-          method: 'POST',
-          body: JSON.stringify({ adminId: admin.id, sessionToken: sessionToken })
-        });
-        const data = await res.json();
-        show('✅ پاسخ API:\n' + JSON.stringify(data, null, 2));
-      } catch(e) { show('ERROR: ' + e.message); }
+      const data = await res.json();
+      document.getElementById('r').textContent = JSON.stringify(data, null, 2);
     }
   </script>
 </body>
