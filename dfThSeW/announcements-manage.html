@@ -329,7 +329,7 @@
       try {
         const ip = await getClientIP();
         const newId = id || ('ANN-' + Date.now());
-        const res = await fetch(API_URL + '?action=' + (id ? 'updateAnnouncement' : 'addAnnouncement'), { method: 'POST', body: JSON.stringify({ id: newId, title, image, content, tag, date, status, clientIP: ip, adminId: admin.id }) });
+        const res = await fetch(API_URL + '?action=' + (id ? 'updateAnnouncement' : 'addAnnouncement'), { method: 'POST', body: JSON.stringify({ id: newId, title, image, content, tag, date, status, clientIP: ip }) });
         const data = await res.json();
         if (data.success) { closeAnnModal(); loadAnnouncements(); showToast(id ? 'اطلاعیه ویرایش شد' : 'اطلاعیه اضافه شد', 'success'); }
         else showToast(data.message || 'خطا', 'error');
@@ -346,7 +346,7 @@
       $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
       try {
         const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=deleteAnnouncement', { method: 'POST', body: JSON.stringify({ id: annId, clientIP: ip, adminId: admin.id }) });
+        const res = await fetch(API_URL + '?action=deleteAnnouncement', { method: 'POST', body: JSON.stringify({ id: annId, clientIP: ip }) });
         const data = await res.json();
         if (data.success) { closeDeleteModal(); loadAnnouncements(); showToast('اطلاعیه حذف شد', 'success'); }
         else showToast(data.message || 'خطا', 'error');
