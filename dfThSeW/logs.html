@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>گزارش تغییرات | شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
+      --primary: #0d9488; --primary-dark: #0f766e; --primary-rgb: 13, 148, 136;
+      --dark: #0f172a; --text: #334155; --text-light: #94a3b8;
+      --white: #ffffff; --card-bg: #ffffff; --card-border: #e2e8f0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04); --header-bg: #ffffff;
+      --logo-filter: none; --danger: #dc2626; --danger-light: #fef2f2;
+      --success: #10b981; --success-light: #ecfdf5;
+      --warning: #f59e0b; --warning-light: #fffbeb;
+      --info: #3b82f6; --info-light: #eff6ff;
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --primary: #14b8a6; --primary-dark: #0d9488; --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9; --text: #cbd5e1; --text-light: #64748b;
+      --white: #1e293b; --card-bg: #1e293b; --card-border: #334155;
+      --shadow: 0 2px 12px rgba(0,0,0,0.3); --header-bg: #1e293b;
+      --logo-filter: brightness(0) invert(1); --danger-light: #2e1a1a;
+      --success-light: #1a2e2b; --warning-light: #2e2a1a; --info-light: #1a1e2e;
+    }
+    
+    [data-muharram="true"] {
+      --primary: #dc2626; --primary-dark: #b91c1c; --primary-rgb: 220, 38, 38;
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444; --primary-dark: #dc2626; --primary-rgb: 239, 68, 68;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh; transition: all 0.3s ease;
+    }
+    
+    .floating-toast {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120px);
+      z-index: 9999; min-width: 300px; max-width: 90%; padding: 14px 20px;
+      border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    
+    .floating-toast.show { transform: translateX(-50%) translateY(0); }
+    .floating-toast.error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
+    .floating-toast.warning { background: #fffbeb; border: 1px solid #fde68a; color: #d97706; }
+    .floating-toast.success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; }
+    .floating-toast.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; }
+    .floating-toast i { font-size: 18px; }
+    .floating-toast .toast-close { margin-right: auto; cursor: pointer; opacity: 0.6; font-size: 14px; }
+    .floating-toast .toast-close:hover { opacity: 1; }
+    
+    .header { background: var(--header-bg); box-shadow: 0 1px 8px rgba(0,0,0,0.03); padding: 14px 20px; border-bottom: 1px solid var(--bg3); transition: all 0.3s ease; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1100px; margin: 0 auto; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-logo { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2); overflow: hidden; padding: 6px; }
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
+    .header-title { font-size: 18px; font-weight: 700; color: var(--dark); }
+    .header-btns { display: flex; align-items: center; gap: 8px; }
+    .back-btn { background: var(--bg2); border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--text); display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; text-decoration: none; }
+    .back-btn:hover { background: var(--primary); color: #fff; }
+    .theme-toggle { background: var(--bg2); border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--text); display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
+    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
+    .logout-btn { background: var(--danger-light); border: 1px solid #fecaca; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; color: var(--danger); display: flex; align-items: center; gap: 6px; font-family: inherit; }
+    .logout-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+    
+    .main-container { max-width: 900px; width: 100%; margin: 24px auto; padding: 0 12px; }
+    .page-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    
+    .log-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 16px 18px; margin-bottom: 8px;
+      box-shadow: var(--shadow); transition: all 0.3s ease;
+    }
+    
+    .log-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+    }
+    
+    .log-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0;
+    }
+    .log-icon.add { background: var(--success-light); color: var(--success); }
+    .log-icon.edit { background: var(--warning-light); color: var(--warning); }
+    .log-icon.delete { background: var(--danger-light); color: var(--danger); }
+    
+    .log-admin-info { flex: 1; min-width: 0; }
+    .log-admin-name { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .log-admin-detail { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+    
+    .log-body {
+      background: var(--bg2); border-radius: 8px; padding: 12px 14px;
+      display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px;
+    }
+    
+    .log-field { display: flex; align-items: center; gap: 5px; color: var(--text); }
+    .log-field i { color: var(--primary); width: 14px; text-align: center; font-size: 12px; }
+    .log-field strong { color: var(--dark); margin-left: 2px; }
+    
+    .log-badges { display: flex; gap: 6px; flex-shrink: 0; }
+    .log-badge {
+      font-size: 10px; padding: 4px 10px; border-radius: 6px;
+      font-weight: 600; white-space: nowrap;
+    }
+    .log-badge.add { background: var(--success-light); color: var(--success); }
+    .log-badge.edit { background: var(--warning-light); color: var(--warning); }
+    .log-badge.delete { background: var(--danger-light); color: var(--danger); }
+    .log-badge.event { background: var(--info-light); color: var(--info); }
+    .log-badge.announcement { background: #fce7f3; color: #db2777; }
+    .log-badge.archive { background: #ede9fe; color: #7c3aed; }
+    .log-badge.admin { background: #fef3c7; color: #d97706; }
+    
+    [data-theme="dark"] .log-badge.announcement { background: #2e1a2e; color: #f472b6; }
+    [data-theme="dark"] .log-badge.archive { background: #1e1a2e; color: #a78bfa; }
+    [data-theme="dark"] .log-badge.admin { background: #2e2a1a; color: #fbbf24; }
+    
+    @media (max-width: 650px) {
+      .log-body { flex-direction: column; gap: 6px; }
+      .log-header { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-toast" id="floatingToast">
+    <i id="toastIcon"></i>
+    <span id="toastMessage"></span>
+    <span class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></span>
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo"><img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو"></div>
+        <div><div class="header-title">گزارش تغییرات</div></div>
+      </div>
+      <div class="header-btns">
+        <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        <button class="theme-toggle" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-container">
+    <div class="page-title"><i class="fa-solid fa-clock-rotate-left"></i> گزارش فعالیت مدیران</div>
+    <div id="logsList">
+      <div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-spinner fa-pulse"></i><p style="margin-top: 8px; font-size: 12px;">در حال بارگذاری...</p></div>
+    </div>
+  </section>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxieKNrkN-g2-WsVCOvIrRjNHcBM_6rh-LdY-UQRrmXXLnFjfqqndLTSeZh-R0ZqmjT/exec';
+    
+    const $ = (id) => document.getElementById(id);
+    const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
+    let toastTimer;
+    
+    function showToast(msg, type) {
+      clearTimeout(toastTimer);
+      toast.className = 'floating-toast ' + (type || 'error');
+      const icons = { error: 'fa-circle-xmark', warning: 'fa-triangle-exclamation', success: 'fa-circle-check', info: 'fa-circle-info' };
+      toastIcon.className = 'fa-solid ' + (icons[type] || icons.error);
+      toastMessage.textContent = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 5000);
+    }
+    
+    function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
+    
+    function checkSession() {
+      const d = localStorage.getItem('admin_session');
+      if (!d) { window.location.href = 'login.html'; return null; }
+      try { const s = JSON.parse(d); if (Date.now() - s.timestamp > 1800000) { localStorage.clear(); window.location.href = 'login.html'; return null; } return s; }
+      catch(e) { localStorage.clear(); window.location.href = 'login.html'; return null; }
+    }
+    
+    const session = checkSession(); if (!session) throw new Error();
+    const admin = session.admin;
+    
+    (function() {
+      const t = localStorage.getItem('heyat-theme');
+      if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); $('themeToggle').querySelector('i').className = 'fa-solid fa-sun'; }
+      $('themeToggle').onclick = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        $('themeToggle').querySelector('i').className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
+      };
+    })();
+    
+    (async function() {
+      try {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
+        const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
+        const j = await r.json();
+        if (j.code === 200 && j.data.hijri.month.number === 1) document.documentElement.setAttribute('data-muharram', 'true');
+      } catch(e) {}
+    })();
+    
+    $('logoutBtn').onclick = () => { localStorage.clear(); window.location.href = 'login.html'; };
+    
+    const actionLabels = { add: 'افزودن', edit: 'ویرایش', delete: 'حذف' };
+    const actionIcons = { add: 'fa-plus-circle', edit: 'fa-pen-to-square', delete: 'fa-trash-can' };
+    const typeLabels = { event: 'مراسم', announcement: 'اطلاعیه', archive: 'آرشیو', admin: 'مدیر' };
+    const typeIcons = { event: 'fa-calendar-check', announcement: 'fa-bullhorn', archive: 'fa-images', admin: 'fa-user-gear' };
+    
+    async function loadLogs() {
+      const list = $('logsList');
+      
+      try {
+        const [logsRes, adminsRes] = await Promise.all([
+          fetch(API_URL + '?action=getLogs', { method: 'POST', body: JSON.stringify({}) }),
+          fetch(API_URL + '?action=getAdmins', { method: 'POST', body: JSON.stringify({}) })
+        ]);
+        
+        const logsData = await logsRes.json();
+        const adminsData = await adminsRes.json();
+        
+        const adminMap = {};
+        if (adminsData.success && adminsData.data.length > 0) {
+          adminsData.data.forEach(a => { adminMap[a.id] = { name: a.name || a.username, username: a.username, role: a.role }; });
+        }
+        
+        if (logsData.success && logsData.data.length > 0) {
+          logsData.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+          
+          list.innerHTML = logsData.data.map(log => {
+            const adminInfo = adminMap[log.adminId] || { name: log.adminId, username: '', role: '' };
+            const actionLabel = actionLabels[log.action] || log.action;
+            const typeLabel = typeLabels[log.type] || log.type;
+            
+            return `
+              <div class="log-card">
+                <div class="log-header">
+                  <div class="log-icon ${log.action}"><i class="fa-solid ${actionIcons[log.action] || 'fa-circle'}"></i></div>
+                  <div class="log-admin-info">
+                    <div class="log-admin-name">${adminInfo.name}</div>
+                    <div class="log-admin-detail">@${adminInfo.username} — ${adminInfo.role}</div>
+                  </div>
+                  <div class="log-badges">
+                    <span class="log-badge ${log.action}">${actionLabel}</span>
+                    <span class="log-badge ${log.type}">${typeLabel}</span>
+                  </div>
+                </div>
+                <div class="log-body">
+                  <div class="log-field"><i class="fa-solid fa-key"></i> کد آیتم: <strong>${log.itemId}</strong></div>
+                  <div class="log-field"><i class="fa-solid ${typeIcons[log.type] || 'fa-circle'}"></i> نوع: <strong>${typeLabel}</strong></div>
+                  <div class="log-field"><i class="fa-solid fa-clock"></i> تاریخ: <strong>${log.date}</strong></div>
+                  <div class="log-field"><i class="fa-solid fa-user"></i> مدیر: <strong>${adminInfo.name}</strong></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          list.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-light);"><i class="fa-solid fa-clock-rotate-left" style="font-size: 44px; margin-bottom: 10px; display: block; opacity: 0.5;"></i><p style="font-size: 13px;">گزارشی ثبت نشده است</p></div>`;
+        }
+      } catch(e) {
+        list.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size: 44px; margin-bottom: 10px; display: block;"></i><p style="font-size: 13px;">خطا در دریافت گزارش‌ها</p><button onclick="loadLogs()" style="margin-top: 8px; padding: 6px 14px; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: inherit;">تلاش مجدد</button></div>`;
+      }
+    }
+    
+    loadLogs();
+  </script>
+
+</body>
+</html>
