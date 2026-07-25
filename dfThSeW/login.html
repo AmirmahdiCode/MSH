@@ -10,34 +10,20 @@
     
     :root {
       --bg: #f8fafc;
-      --primary: #0d9488;
-      --primary-dark: #0f766e;
-      --primary-rgb: 13, 148, 136;
-      --dark: #0f172a;
-      --text: #334155;
-      --text-light: #94a3b8;
-      --white: #ffffff;
-      --card-bg: #ffffff;
-      --card-border: #e2e8f0;
+      --primary: #0d9488; --primary-dark: #0f766e; --primary-rgb: 13, 148, 136;
+      --dark: #0f172a; --text: #334155; --text-light: #94a3b8;
+      --white: #ffffff; --card-bg: #ffffff; --card-border: #e2e8f0;
       --shadow: 0 2px 12px rgba(0,0,0,0.04);
-      --input-bg: #f8fafc;
-      --input-border: #e2e8f0;
+      --input-bg: #f8fafc; --input-border: #e2e8f0;
     }
     
     [data-theme="dark"] {
       --bg: #0f172a;
-      --primary: #14b8a6;
-      --primary-dark: #0d9488;
-      --primary-rgb: 20, 184, 166;
-      --dark: #f1f5f9;
-      --text: #cbd5e1;
-      --text-light: #64748b;
-      --white: #1e293b;
-      --card-bg: #1e293b;
-      --card-border: #334155;
+      --primary: #14b8a6; --primary-dark: #0d9488; --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9; --text: #cbd5e1; --text-light: #64748b;
+      --white: #1e293b; --card-bg: #1e293b; --card-border: #334155;
       --shadow: 0 2px 12px rgba(0,0,0,0.3);
-      --input-bg: #0f172a;
-      --input-border: #334155;
+      --input-bg: #0f172a; --input-border: #334155;
     }
     
     [data-muharram="true"] {
@@ -192,7 +178,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzXwQAAM1zGoVoG7MnFt-yEB7CSY5Qa8xnxpbkdZ_S6kUzPhZV_BdIkeasayEqz_lcQ/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxajTyAI64jpDLyvemtBk4yqjEyRVF3goa4igq_OswKU47i5lOgRY5abe6Sr2GsXt0/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -209,6 +195,11 @@
     }
     
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
+    
+    async function getClientIP() {
+      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
+      catch(e) { return '0.0.0.0'; }
+    }
     
     (function() {
       const d = localStorage.getItem('admin_session');
@@ -260,9 +251,11 @@
       $('spinner').style.display = 'block';
       $('btnText').textContent = 'در حال ورود...';
       
+      const ip = await getClientIP();
+      
       const res = await fetch(API_URL + '?action=login', {
         method: 'POST',
-        body: JSON.stringify({ username, password, ip: '0.0.0.0' })
+        body: JSON.stringify({ username, password, ip })
       });
       
       const data = await res.json();
