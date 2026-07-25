@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدیریت آرشیو | شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
+      --primary: #0d9488; --primary-dark: #0f766e; --primary-rgb: 13, 148, 136;
+      --dark: #0f172a; --text: #334155; --text-light: #94a3b8;
+      --white: #ffffff; --card-bg: #ffffff; --card-border: #e2e8f0;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04); --header-bg: #ffffff;
+      --logo-filter: none; --danger: #dc2626; --danger-light: #fef2f2;
+      --success: #10b981; --success-light: #ecfdf5;
+      --warning: #f59e0b; --warning-light: #fffbeb;
+      --info: #3b82f6; --info-light: #eff6ff;
+      --purple: #8b5cf6; --orange: #f97316;
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --primary: #14b8a6; --primary-dark: #0d9488; --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9; --text: #cbd5e1; --text-light: #64748b;
+      --white: #1e293b; --card-bg: #1e293b; --card-border: #334155;
+      --shadow: 0 2px 12px rgba(0,0,0,0.3); --header-bg: #1e293b;
+      --logo-filter: brightness(0) invert(1); --danger-light: #2e1a1a;
+      --success-light: #1a2e2b; --warning-light: #2e2a1a; --info-light: #1a1e2e;
+    }
+    
+    [data-muharram="true"] {
+      --primary: #dc2626; --primary-dark: #b91c1c; --primary-rgb: 220, 38, 38;
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444; --primary-dark: #dc2626; --primary-rgb: 239, 68, 68;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh; transition: all 0.3s ease;
+    }
+    
+    .floating-toast {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120px);
+      z-index: 9999; min-width: 300px; max-width: 90%; padding: 14px 20px;
+      border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    
+    .floating-toast.show { transform: translateX(-50%) translateY(0); }
+    .floating-toast.error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
+    .floating-toast.warning { background: #fffbeb; border: 1px solid #fde68a; color: #d97706; }
+    .floating-toast.success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; }
+    .floating-toast.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; }
+    .floating-toast i { font-size: 18px; }
+    .floating-toast .toast-close { margin-right: auto; cursor: pointer; opacity: 0.6; font-size: 14px; }
+    .floating-toast .toast-close:hover { opacity: 1; }
+    
+    .header { background: var(--header-bg); box-shadow: 0 1px 8px rgba(0,0,0,0.03); padding: 14px 20px; border-bottom: 1px solid var(--bg3); transition: all 0.3s ease; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1100px; margin: 0 auto; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-logo { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2); overflow: hidden; padding: 6px; }
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
+    .header-title { font-size: 18px; font-weight: 700; color: var(--dark); }
+    .header-btns { display: flex; align-items: center; gap: 8px; }
+    .back-btn { background: var(--bg2); border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--text); display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; text-decoration: none; }
+    .back-btn:hover { background: var(--primary); color: #fff; }
+    .theme-toggle { background: var(--bg2); border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 18px; color: var(--text); display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
+    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
+    .logout-btn { background: var(--danger-light); border: 1px solid #fecaca; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; color: var(--danger); display: flex; align-items: center; gap: 6px; font-family: inherit; }
+    .logout-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+    
+    .main-container { max-width: 1000px; width: 100%; margin: 24px auto; padding: 0 12px; }
+    .page-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .add-btn { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; border: none; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; margin-right: auto; display: flex; align-items: center; gap: 6px; }
+    .add-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3); }
+    
+    .archive-list { display: flex; flex-direction: column; gap: 8px; }
+    
+    .archive-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); }
+    .archive-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .archive-icon.images { background: var(--info-light); color: var(--info); }
+    .archive-info { flex: 1; min-width: 0; }
+    .archive-event-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .archive-meta { font-size: 10px; color: var(--text-light); display: flex; flex-wrap: wrap; gap: 8px; }
+    .archive-meta span { display: flex; align-items: center; gap: 3px; }
+    .archive-counts { display: flex; gap: 8px; flex-shrink: 0; }
+    .count-badge { font-size: 9px; padding: 4px 8px; border-radius: 6px; font-weight: 600; display: flex; align-items: center; gap: 3px; }
+    .count-badge.images { background: var(--info-light); color: var(--info); }
+    .count-badge.videos { background: var(--danger-light); color: var(--danger); }
+    .count-badge.audios { background: var(--success-light); color: var(--success); }
+    .archive-actions { display: flex; gap: 6px; }
+    
+    .action-btn { width: 34px; height: 34px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; background: var(--bg2); color: var(--text); }
+    .action-btn:hover { background: var(--primary); color: #fff; }
+    .action-btn.delete:hover { background: var(--danger); color: #fff; }
+    
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--card-bg); border-radius: 16px; padding: 24px; width: 90%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+    .modal h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .form-group label .hint { font-weight: 400; color: var(--text-light); font-size: 9px; }
+    .form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 12px; font-family: inherit; }
+    .form-input:focus, .form-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); }
+    .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left 12px center; padding-left: 32px; }
+    
+    .tag-input-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .tag-input-wrapper { border: 1px solid var(--card-border); border-radius: 8px; background: var(--bg); padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex: 1; min-height: 42px; }
+    .tag-input-wrapper:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); }
+    .tag-input-wrapper .tag { display: inline-flex; align-items: center; gap: 4px; background: var(--bg2); border: 1px solid var(--card-border); border-radius: 6px; padding: 3px 6px; font-size: 10px; animation: fadeIn 0.2s ease; }
+    .tag-input-wrapper .tag img { width: 24px; height: 18px; border-radius: 3px; object-fit: cover; }
+    .tag-input-wrapper .tag i { font-size: 10px; }
+    .tag-input-wrapper .tag .tag-text { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tag-input-wrapper .tag .tag-remove { cursor: pointer; color: var(--text-light); font-size: 9px; padding: 2px; border-radius: 50%; display: flex; align-items: center; }
+    .tag-input-wrapper .tag .tag-remove:hover { background: var(--danger); color: #fff; }
+    .tag-input-wrapper input { border: none; outline: none; background: transparent; flex: 1; min-width: 80px; font-size: 11px; font-family: inherit; color: var(--text); padding: 4px; }
+    
+    .add-tag-btn { width: 42px; height: 42px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .add-tag-btn:hover { background: var(--primary-dark); }
+    
+    .upload-btn { width: 42px; height: 42px; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; text-decoration: none; }
+    .upload-btn.image-upload { background: var(--info); }
+    .upload-btn.image-upload:hover { background: #2563eb; }
+    .upload-btn.video-upload { background: var(--purple); }
+    .upload-btn.video-upload:hover { background: #7c3aed; }
+    .upload-btn.audio-upload { background: var(--orange); }
+    .upload-btn.audio-upload:hover { background: #ea580c; }
+    .upload-btn input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .upload-btn.loading { pointer-events: none; opacity: 0.7; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    
+    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+    .btn-cancel { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--card-border); background: var(--bg); color: var(--text); cursor: pointer; font-size: 12px; font-family: inherit; }
+    .btn-submit { padding: 8px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .event-select-info { font-size: 11px; color: var(--text-light); margin-bottom: 12px; padding: 8px 12px; background: var(--bg2); border-radius: 8px; }
+    
+    @media (max-width: 650px) {
+      .archive-card { flex-wrap: wrap; gap: 10px; }
+      .archive-counts { width: 100%; justify-content: flex-start; }
+      .archive-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-toast" id="floatingToast">
+    <i id="toastIcon"></i>
+    <span id="toastMessage"></span>
+    <span class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></span>
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo"><img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو"></div>
+        <div><div class="header-title">مدیریت آرشیو</div></div>
+      </div>
+      <div class="header-btns">
+        <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        <button class="theme-toggle" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-container">
+    <div class="page-title">
+      <i class="fa-solid fa-images"></i> لیست آرشیو مراسمات
+      <button class="add-btn" id="addArchiveBtn"><i class="fa-solid fa-plus"></i> افزودن آرشیو</button>
+    </div>
+    <div class="archive-list" id="archiveList">
+      <div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-spinner fa-pulse"></i><p style="margin-top: 8px; font-size: 12px;">در حال بارگذاری...</p></div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="archiveModal">
+    <div class="modal">
+      <h3 id="modalTitle"><i class="fa-solid fa-plus"></i> افزودن آرشیو جدید</h3>
+      <input type="hidden" id="editEventId">
+      <div class="form-group">
+        <label>انتخاب مراسم</label>
+        <select class="form-select" id="archiveEventSelect"><option value="">-- انتخاب مراسم --</option></select>
+        <div class="event-select-info" id="eventInfo" style="display:none;"></div>
+      </div>
+      <div class="form-group">
+        <label>تصاویر <span class="hint">(لینک را وارد کنید و + بزنید یا آپلود کنید)</span></label>
+        <div class="tag-input-row">
+          <div class="tag-input-wrapper" id="imagesWrapper"><input type="url" id="imageInput" placeholder="https://..."></div>
+          <button type="button" class="add-tag-btn" id="addImageBtn"><i class="fa-solid fa-plus"></i></button>
+          <button type="button" class="upload-btn image-upload" id="uploadImageBtn"><i class="fa-solid fa-cloud-arrow-up"></i><input type="file" accept="image/*" id="imageFileInput"></button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>ویدیوها <span class="hint">(لینک را وارد کنید و + بزنید یا آپلود کنید)</span></label>
+        <div class="tag-input-row">
+          <div class="tag-input-wrapper" id="videosWrapper"><input type="url" id="videoInput" placeholder="https://..."></div>
+          <button type="button" class="add-tag-btn" id="addVideoBtn"><i class="fa-solid fa-plus"></i></button>
+          <a href="https://imgurl.ir" target="_blank" class="upload-btn video-upload" title="آپلود ویدیو"><i class="fa-solid fa-cloud-arrow-up"></i></a>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>صوت‌ها <span class="hint">(لینک را وارد کنید و + بزنید یا آپلود کنید)</span></label>
+        <div class="tag-input-row">
+          <div class="tag-input-wrapper" id="audiosWrapper"><input type="url" id="audioInput" placeholder="https://..."></div>
+          <button type="button" class="add-tag-btn" id="addAudioBtn"><i class="fa-solid fa-plus"></i></button>
+          <a href="https://imgurl.ir" target="_blank" class="upload-btn audio-upload" title="آپلود صوت"><i class="fa-solid fa-cloud-arrow-up"></i></a>
+        </div>
+      </div>
+      <div class="modal-btns"><button class="btn-cancel" onclick="closeArchiveModal()">انصراف</button><button class="btn-submit" id="submitArchive">ذخیره</button></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> حذف آرشیو</h3>
+      <p style="font-size: 13px; color: var(--text); margin-bottom: 16px;">آیا از حذف آرشیو این مراسم اطمینان دارید؟</p>
+      <input type="hidden" id="deleteEventId">
+      <div class="modal-btns"><button class="btn-cancel" onclick="closeDeleteModal()">انصراف</button><button class="btn-submit" id="submitDelete" style="background: var(--danger);">حذف</button></div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxajTyAI64jpDLyvemtBk4yqjEyRVF3goa4igq_OswKU47i5lOgRY5abe6Sr2GsXt0/exec';
+    
+    const $ = (id) => document.getElementById(id);
+    const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
+    let toastTimer;
+    
+    function showToast(msg, type) {
+      clearTimeout(toastTimer);
+      toast.className = 'floating-toast ' + (type || 'error');
+      const icons = { error: 'fa-circle-xmark', warning: 'fa-triangle-exclamation', success: 'fa-circle-check', info: 'fa-circle-info' };
+      toastIcon.className = 'fa-solid ' + (icons[type] || icons.error);
+      toastMessage.textContent = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 5000);
+    }
+    
+    function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
+    
+    async function getClientIP() {
+      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
+      catch(e) { return '0.0.0.0'; }
+    }
+    
+    function checkSession() {
+      const d = localStorage.getItem('admin_session');
+      if (!d) { window.location.href = 'login.html'; return null; }
+      try { const s = JSON.parse(d); if (Date.now() - s.timestamp > 1800000) { localStorage.clear(); window.location.href = 'login.html'; return null; } return s; }
+      catch(e) { localStorage.clear(); window.location.href = 'login.html'; return null; }
+    }
+    
+    const session = checkSession(); if (!session) throw new Error();
+    const admin = session.admin;
+    
+    (function() {
+      const t = localStorage.getItem('heyat-theme');
+      if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); $('themeToggle').querySelector('i').className = 'fa-solid fa-sun'; }
+      $('themeToggle').onclick = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        $('themeToggle').querySelector('i').className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
+      };
+    })();
+    
+    (async function() {
+      try {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
+        const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
+        const j = await r.json();
+        if (j.code === 200 && j.data.hijri.month.number === 1) document.documentElement.setAttribute('data-muharram', 'true');
+      } catch(e) {}
+    })();
+    
+    $('logoutBtn').onclick = () => { localStorage.clear(); window.location.href = 'login.html'; };
+    
+    let allArchives = [];
+    
+    function addTag(wrapper, value, iconType) {
+      const existing = wrapper.querySelectorAll('.tag');
+      for (const t of existing) { if (t.dataset.value === value) return; }
+      const tag = document.createElement('span'); tag.className = 'tag'; tag.dataset.value = value;
+      let preview = '';
+      if (iconType === 'image') preview = `<img src="${value}" onerror="this.style.display='none'">`;
+      else if (iconType === 'video') preview = '<i class="fa-solid fa-video"></i>';
+      else preview = '<i class="fa-solid fa-music"></i>';
+      let display = value; try { const u = new URL(value); display = u.hostname + u.pathname.substring(0,12) + (u.pathname.length>12?'...':''); } catch(e) {}
+      tag.innerHTML = `${preview}<span class="tag-text" title="${value}">${display}</span><span class="tag-remove"><i class="fa-solid fa-xmark"></i></span>`;
+      tag.querySelector('.tag-remove').onclick = function(e) { e.stopPropagation(); tag.remove(); };
+      wrapper.insertBefore(tag, wrapper.querySelector('input'));
+    }
+    
+    function setupTagInput(wrapperId, inputId, addBtnId, iconType) {
+      const input = $(inputId), addBtn = $(addBtnId), wrapper = $(wrapperId);
+      addBtn.onclick = () => { const v = input.value.trim(); if (v) { addTag(wrapper, v, iconType); input.value = ''; input.focus(); } };
+      input.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); addBtn.click(); } };
+    }
+    
+    function getTagValues(wrapperId) { return Array.from($(wrapperId).querySelectorAll('.tag')).map(t => t.dataset.value); }
+    
+    function setTagValues(wrapperId, values, iconType) {
+      $(wrapperId).querySelectorAll('.tag').forEach(t => t.remove());
+      if (values && values.length > 0) values.forEach(v => { if (v.trim()) addTag($(wrapperId), v.trim(), iconType); });
+    }
+    
+    setupTagInput('imagesWrapper', 'imageInput', 'addImageBtn', 'image');
+    setupTagInput('videosWrapper', 'videoInput', 'addVideoBtn', 'video');
+    setupTagInput('audiosWrapper', 'audioInput', 'addAudioBtn', 'audio');
+    
+    $('imageFileInput').onchange = async function() {
+      const file = this.files[0]; if (!file) return;
+      const btn = $('uploadImageBtn'); btn.classList.add('loading'); const orig = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-spinner fa-pulse"></i>';
+      try {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          const base64 = e.target.result.split(',')[1];
+          const ip = await getClientIP();
+          const res = await fetch(API_URL + '?action=uploadImage', { method: 'POST', body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name, clientIP: ip }) });
+          const data = await res.json();
+          if (data.success) { addTag($('imagesWrapper'), data.url, 'image'); $('imageInput').value = data.url; }
+          else showToast(data.message || 'خطا در آپلود', 'error');
+          btn.classList.remove('loading'); btn.innerHTML = orig; $('imageFileInput').value = '';
+        };
+        reader.readAsDataURL(file);
+      } catch(e) { btn.classList.remove('loading'); btn.innerHTML = orig; }
+    };
+    
+    async function loadData() {
+      const list = $('archiveList');
+      list.innerHTML = '<div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-spinner fa-pulse"></i><p style="margin-top: 8px; font-size: 12px;">در حال بارگذاری...</p></div>';
+      
+      try {
+        const [eventsRes] = await Promise.all([fetch(API_URL + '?action=getEvents')]);
+        const eventsData = await eventsRes.json();
+        if (!eventsData.success || eventsData.data.length === 0) {
+          list.innerHTML = '<div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-calendar-xmark" style="font-size: 36px; margin-bottom: 8px; display: block;"></i><p style="font-size: 13px;">مراسمی ثبت نشده است</p></div>';
+          return;
+        }
+        
+        const archiveItems = [];
+        for (const event of eventsData.data) {
+          try {
+            const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', { method: 'POST', body: JSON.stringify({ eventId: event.id }) });
+            const archiveData = await archiveRes.json();
+            archiveItems.push({
+              eventId: event.id, eventTitle: event.title, eventDate: event.date,
+              images: archiveData.success ? (archiveData.data.images || []) : [],
+              videos: archiveData.success ? (archiveData.data.videos || []) : [],
+              audios: archiveData.success ? (archiveData.data.audios || []) : [],
+              hasArchive: archiveData.success && (archiveData.data.images?.length > 0 || archiveData.data.videos?.length > 0 || archiveData.data.audios?.length > 0)
+            });
+          } catch(e) {
+            archiveItems.push({ eventId: event.id, eventTitle: event.title, eventDate: event.date, images: [], videos: [], audios: [], hasArchive: false });
+          }
+        }
+        
+        allArchives = archiveItems;
+        const withArchive = archiveItems.filter(a => a.hasArchive);
+        const withoutArchive = archiveItems.filter(a => !a.hasArchive);
+        
+        let html = '';
+        withArchive.forEach(a => {
+          const d = new Date(a.eventDate), idx = archiveItems.indexOf(a);
+          html += `<div class="archive-card"><div class="archive-icon images"><i class="fa-solid fa-images"></i></div><div class="archive-info"><div class="archive-event-name">${a.eventTitle}</div><div class="archive-meta"><span><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span></div></div><div class="archive-counts"><span class="count-badge images"><i class="fa-solid fa-image"></i> ${a.images.length}</span><span class="count-badge videos"><i class="fa-solid fa-video"></i> ${a.videos.length}</span><span class="count-badge audios"><i class="fa-solid fa-music"></i> ${a.audios.length}</span></div><div class="archive-actions"><button class="action-btn edit-btn" data-index="${idx}"><i class="fa-solid fa-pen-to-square"></i></button><button class="action-btn delete delete-btn" data-index="${idx}"><i class="fa-solid fa-trash"></i></button></div></div>`;
+        });
+        
+        if (withoutArchive.length > 0) {
+          html += '<div style="margin-top:12px;font-size:12px;font-weight:600;color:var(--text-light);padding:8px 0;"><i class="fa-solid fa-circle-plus"></i> مراسم‌های بدون آرشیو</div>';
+          withoutArchive.forEach(a => {
+            const d = new Date(a.eventDate), idx = archiveItems.indexOf(a);
+            html += `<div class="archive-card" style="opacity:0.6;"><div class="archive-icon images" style="background:var(--bg2);color:var(--text-light);"><i class="fa-solid fa-circle-plus"></i></div><div class="archive-info"><div class="archive-event-name">${a.eventTitle}</div><div class="archive-meta"><span><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span style="color:var(--warning);">بدون آرشیو</span></div></div><div class="archive-actions"><button class="action-btn edit-btn" data-index="${idx}" style="background:var(--warning-light);color:var(--warning);"><i class="fa-solid fa-plus"></i></button></div></div>`;
+          });
+        }
+        
+        list.innerHTML = html;
+        document.querySelectorAll('.edit-btn').forEach(b => b.onclick = function() { editArchive(allArchives[parseInt(this.dataset.index)]); });
+        document.querySelectorAll('.delete-btn').forEach(b => b.onclick = function() { openDeleteModal(allArchives[parseInt(this.dataset.index)].eventId, allArchives[parseInt(this.dataset.index)].eventTitle); });
+      } catch(e) { list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:36px;margin-bottom:8px;display:block;"></i><p style="font-size:13px;">خطا در دریافت اطلاعات</p><button onclick="loadData()" style="margin-top:8px;padding:6px 14px;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">تلاش مجدد</button></div>'; }
+    }
+    
+    function openAddModal() {
+      $('modalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> افزودن آرشیو جدید';
+      $('editEventId').value = ''; $('eventInfo').style.display = 'none';
+      setTagValues('imagesWrapper', [], 'image'); setTagValues('videosWrapper', [], 'video'); setTagValues('audiosWrapper', [], 'audio');
+      const select = $('archiveEventSelect'); select.disabled = false; select.innerHTML = '<option value="">-- انتخاب مراسم --</option>';
+      allArchives.forEach(a => { if (!a.hasArchive) select.innerHTML += `<option value="${a.eventId}">${a.eventTitle}</option>`; });
+      if (select.options.length === 1) select.innerHTML += '<option value="" disabled>همه مراسم‌ها آرشیو دارند</option>';
+      select.onchange = function() {
+        const s = allArchives.find(a => a.eventId === this.value);
+        if (s) { $('eventInfo').style.display = 'block'; $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(s.eventDate).toLocaleDateString('fa-IR')}`; }
+        else $('eventInfo').style.display = 'none';
+      };
+      $('archiveModal').classList.add('active');
+    }
+    
+    function editArchive(archive) {
+      $('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> ویرایش آرشیو';
+      $('editEventId').value = archive.eventId;
+      setTagValues('imagesWrapper', archive.images, 'image'); setTagValues('videosWrapper', archive.videos, 'video'); setTagValues('audiosWrapper', archive.audios, 'audio');
+      const select = $('archiveEventSelect'); select.innerHTML = `<option value="${archive.eventId}" selected>${archive.eventTitle} (فعلی)</option>`; select.disabled = true;
+      $('eventInfo').style.display = 'block'; $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(archive.eventDate).toLocaleDateString('fa-IR')}`;
+      $('archiveModal').classList.add('active');
+    }
+    
+    function closeArchiveModal() { $('archiveModal').classList.remove('active'); $('archiveEventSelect').disabled = false; }
+    
+    $('addArchiveBtn').onclick = openAddModal;
+    $('archiveModal').onclick = (e) => { if (e.target === $('archiveModal')) closeArchiveModal(); };
+    
+    $('submitArchive').onclick = async () => {
+      const id = $('editEventId').value;
+      const eventId = id || $('archiveEventSelect').value;
+      const images = getTagValues('imagesWrapper').join(', ');
+      const videos = getTagValues('videosWrapper').join(', ');
+      const audios = getTagValues('audiosWrapper').join(', ');
+      
+      if (!eventId) { showToast('لطفاً یک مراسم انتخاب کنید', 'warning'); return; }
+      
+      $('submitArchive').disabled = true; $('submitArchive').textContent = 'در حال ذخیره...';
+      try {
+        const ip = await getClientIP();
+        const isUpdate = !!id;
+        const res = await fetch(API_URL + '?action=' + (isUpdate ? 'updateArchive' : 'addArchive'), {
+          method: 'POST', body: JSON.stringify({ eventId, images, videos, audios, clientIP: ip, adminId: admin.id })
+        });
+        const data = await res.json();
+        if (data.success) { showToast(isUpdate ? 'آرشیو ویرایش شد' : 'آرشیو اضافه شد', 'success'); closeArchiveModal(); loadData(); }
+        else showToast(data.message || 'خطا', 'error');
+      } catch(e) { showToast('خطای سرور', 'error'); }
+      $('submitArchive').disabled = false; $('submitArchive').textContent = 'ذخیره';
+    };
+    
+    function openDeleteModal(eventId, eventTitle) {
+      $('deleteEventId').value = eventId;
+      document.querySelector('#deleteModal p').textContent = `آیا از حذف آرشیو مراسم "${eventTitle}" اطمینان دارید؟`;
+      $('deleteModal').classList.add('active');
+    }
+    
+    function closeDeleteModal() { $('deleteModal').classList.remove('active'); }
+    $('deleteModal').onclick = (e) => { if (e.target === $('deleteModal')) closeDeleteModal(); };
+    
+    $('submitDelete').onclick = async () => {
+      const eventId = $('deleteEventId').value;
+      $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
+      try {
+        const ip = await getClientIP();
+        const res = await fetch(API_URL + '?action=deleteArchive', { method: 'POST', body: JSON.stringify({ eventId, clientIP: ip, adminId: admin.id }) });
+        const data = await res.json();
+        if (data.success) { showToast('آرشیو حذف شد', 'success'); closeDeleteModal(); loadData(); }
+        else showToast(data.message || 'خطا', 'error');
+      } catch(e) { showToast('خطای سرور', 'error'); }
+      $('submitDelete').disabled = false; $('submitDelete').textContent = 'حذف';
+    };
+    
+    loadData();
+  </script>
+
+</body>
+</html>
