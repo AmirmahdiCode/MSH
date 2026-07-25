@@ -171,15 +171,15 @@
       <input type="hidden" id="editAnnouncementId">
       <div class="form-group"><label>عنوان</label><input type="text" class="form-input" id="annTitle" placeholder="عنوان اطلاعیه"></div>
       <div class="form-group">
-        <label>تصویر اطلاعیه <span class="hint">(لینک وارد کنید یا آپلود نمایید)</span></label>
+        <label>تصویر <span class="hint">(لینک وارد کنید یا آپلود نمایید)</span></label>
         <div class="image-input-row">
           <input type="url" class="form-input" id="annImage" placeholder="لینک تصویر...">
-          <button type="button" class="upload-btn drive-upload" id="uploadDriveBtn" title="آپلود در گوگل درایو"><i class="fa-brands fa-google-drive"></i><input type="file" accept="image/*" id="driveFileInput"></button>
-          <a href="https://imgurl.ir" target="_blank" class="upload-btn web-upload" title="آپلود در imgurl"><i class="fa-solid fa-cloud-arrow-up"></i></a>
+          <button type="button" class="upload-btn drive-upload" id="uploadDriveBtn"><i class="fa-brands fa-google-drive"></i><input type="file" accept="image/*" id="driveFileInput"></button>
+          <a href="https://imgurl.ir" target="_blank" class="upload-btn web-upload"><i class="fa-solid fa-cloud-arrow-up"></i></a>
         </div>
         <img src="" class="image-preview" id="imagePreview" alt="پیش‌نمایش">
       </div>
-      <div class="form-group"><label>متن اطلاعیه</label><textarea class="form-textarea" id="annContent" placeholder="متن اطلاعیه..."></textarea></div>
+      <div class="form-group"><label>متن</label><textarea class="form-textarea" id="annContent" placeholder="متن اطلاعیه..."></textarea></div>
       <div class="form-group"><label>تگ</label><input type="text" class="form-input" id="annTag" placeholder="مثلاً: فوری، خیریه"></div>
       <div class="form-group"><label>تاریخ</label><input type="date" class="form-input" id="annDate"></div>
       <div class="form-group"><label>وضعیت</label><select class="form-select" id="annStatus"><option value="فعال">فعال</option><option value="غیرفعال">غیرفعال</option></select></div>
@@ -197,7 +197,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxieKNrkN-g2-WsVCOvIrRjNHcBM_6rh-LdY-UQRrmXXLnFjfqqndLTSeZh-R0ZqmjT/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxKYZCQCaWlCi21agCeKEeKEkIhQGG_XTATGeGPtCiEt6Na_tcrSZ66qZ3sbHvbCA8c/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -214,6 +214,11 @@
     }
     
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
+    
+    async function getClientIP() {
+      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
+      catch(e) { return '0.0.0.0'; }
+    }
     
     function checkSession() {
       const d = localStorage.getItem('admin_session');
@@ -257,10 +262,11 @@
         const reader = new FileReader();
         reader.onload = async function(e) {
           const base64 = e.target.result.split(',')[1];
-          const res = await fetch(API_URL + '?action=uploadImage', { method: 'POST', body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name }) });
+          const ip = await getClientIP();
+          const res = await fetch(API_URL + '?action=uploadImage', { method: 'POST', body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name, clientIP: ip }) });
           const data = await res.json();
           if (data.success) { $('annImage').value = data.url; $('imagePreview').src = data.url; $('imagePreview').classList.add('show'); }
-          else showToast('خطا در آپلود', 'error');
+          else showToast(data.message || 'خطا در آپلود', 'error');
           btn.classList.remove('loading'); btn.innerHTML = orig; $('driveFileInput').value = '';
         };
         reader.readAsDataURL(file);
@@ -284,25 +290,14 @@
             const d = ann.date ? new Date(ann.date) : null;
             return `<div class="announcement-card">
               <div class="announcement-icon"><i class="fa-solid fa-bullhorn"></i></div>
-              <div class="announcement-info">
-                <div class="announcement-name">${ann.title}</div>
-                <div class="announcement-meta">
-                  <span><i class="fa-solid fa-clock"></i> ${d ? d.toLocaleDateString('fa-IR') : 'بدون تاریخ'}</span>
-                  <span><i class="fa-solid fa-tag"></i> ${ann.tag || 'بدون تگ'}</span>
-                  <span class="status-badge ${ann.status === 'فعال' ? 'active' : 'inactive'}">${ann.status || 'فعال'}</span>
-                </div>
-              </div>
-              <div class="announcement-actions">
-                <button class="action-btn edit-btn" data-index="${index}"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button class="action-btn delete delete-btn" data-index="${index}"><i class="fa-solid fa-trash"></i></button>
-              </div>
+              <div class="announcement-info"><div class="announcement-name">${ann.title}</div><div class="announcement-meta"><span><i class="fa-solid fa-clock"></i> ${d ? d.toLocaleDateString('fa-IR') : 'بدون تاریخ'}</span><span><i class="fa-solid fa-tag"></i> ${ann.tag || 'بدون تگ'}</span><span class="status-badge ${ann.status === 'فعال' ? 'active' : 'inactive'}">${ann.status || 'فعال'}</span></div></div>
+              <div class="announcement-actions"><button class="action-btn edit-btn" data-index="${index}"><i class="fa-solid fa-pen-to-square"></i></button><button class="action-btn delete delete-btn" data-index="${index}"><i class="fa-solid fa-trash"></i></button></div>
             </div>`;
           }).join('');
-          
-          document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = function() { editAnnouncement(allAnnouncements[parseInt(this.dataset.index)]); });
-          document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = function() { openDeleteModal(allAnnouncements[parseInt(this.dataset.index)].id); });
+          document.querySelectorAll('.edit-btn').forEach(b => b.onclick = function() { editAnnouncement(allAnnouncements[parseInt(this.dataset.index)]); });
+          document.querySelectorAll('.delete-btn').forEach(b => b.onclick = function() { openDeleteModal(allAnnouncements[parseInt(this.dataset.index)].id); });
         } else {
-          list.innerHTML = `<div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-bullhorn" style="font-size: 36px; margin-bottom: 8px; display: block; opacity: 0.5;"></i><p style="font-size: 13px;">اطلاعیه‌ای ثبت نشده است</p></div>`;
+          list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-light);"><i class="fa-solid fa-bullhorn" style="font-size:36px;margin-bottom:8px;display:block;opacity:0.5;"></i><p style="font-size:13px;">اطلاعیه‌ای ثبت نشده است</p></div>`;
         }
       } catch(e) { showToast('خطا در دریافت اطلاعیه‌ها', 'error'); }
     }
@@ -332,8 +327,9 @@
       
       $('submitAnn').disabled = true; $('submitAnn').textContent = 'در حال ذخیره...';
       try {
+        const ip = await getClientIP();
         const newId = id || ('ANN-' + Date.now());
-        const res = await fetch(API_URL + '?action=' + (id ? 'updateAnnouncement' : 'addAnnouncement'), { method: 'POST', body: JSON.stringify({ id: newId, title, image, content, tag, date, status }) });
+        const res = await fetch(API_URL + '?action=' + (id ? 'updateAnnouncement' : 'addAnnouncement'), { method: 'POST', body: JSON.stringify({ id: newId, title, image, content, tag, date, status, clientIP: ip, adminId: admin.id }) });
         const data = await res.json();
         if (data.success) { closeAnnModal(); loadAnnouncements(); showToast(id ? 'اطلاعیه ویرایش شد' : 'اطلاعیه اضافه شد', 'success'); }
         else showToast(data.message || 'خطا', 'error');
@@ -349,7 +345,8 @@
       const annId = $('deleteAnnId').value;
       $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
       try {
-        const res = await fetch(API_URL + '?action=deleteAnnouncement', { method: 'POST', body: JSON.stringify({ id: annId }) });
+        const ip = await getClientIP();
+        const res = await fetch(API_URL + '?action=deleteAnnouncement', { method: 'POST', body: JSON.stringify({ id: annId, clientIP: ip, adminId: admin.id }) });
         const data = await res.json();
         if (data.success) { closeDeleteModal(); loadAnnouncements(); showToast('اطلاعیه حذف شد', 'success'); }
         else showToast(data.message || 'خطا', 'error');
