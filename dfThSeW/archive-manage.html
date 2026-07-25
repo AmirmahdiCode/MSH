@@ -193,7 +193,7 @@
         <div class="event-select-info" id="eventInfo" style="display:none;"></div>
       </div>
       <div class="form-group">
-        <label>تصاویر <span class="hint">(لینک را وارد کنید و + بزنید یا آپلود کنید)</span></label>
+        <label>تصاویر <span class="hint">(لینک وارد کنید و + بزنید یا آپلود کنید)</span></label>
         <div class="tag-input-row">
           <div class="tag-input-wrapper" id="imagesWrapper"><input type="url" id="imageInput" placeholder="https://..."></div>
           <button type="button" class="add-tag-btn" id="addImageBtn"><i class="fa-solid fa-plus"></i></button>
@@ -201,7 +201,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label>ویدیوها <span class="hint">(لینک را وارد کنید و + بزنید یا آپلود کنید)</span></label>
+        <label>ویدیوها <span class="hint">(لینک وارد کنید و + بزنید یا آپلود کنید)</span></label>
         <div class="tag-input-row">
           <div class="tag-input-wrapper" id="videosWrapper"><input type="url" id="videoInput" placeholder="https://..."></div>
           <button type="button" class="add-tag-btn" id="addVideoBtn"><i class="fa-solid fa-plus"></i></button>
@@ -209,7 +209,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label>صوت‌ها <span class="hint">(لینک را وارد کنید و + بزنید یا آپلود کنید)</span></label>
+        <label>صوت‌ها <span class="hint">(لینک وارد کنید و + بزنید یا آپلود کنید)</span></label>
         <div class="tag-input-row">
           <div class="tag-input-wrapper" id="audiosWrapper"><input type="url" id="audioInput" placeholder="https://..."></div>
           <button type="button" class="add-tag-btn" id="addAudioBtn"><i class="fa-solid fa-plus"></i></button>
@@ -230,7 +230,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxajTyAI64jpDLyvemtBk4yqjEyRVF3goa4igq_OswKU47i5lOgRY5abe6Sr2GsXt0/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyJlSVIO4r7z2scxaMINEykuKDEE37yDOqD_fV18tGk0qCJhK6Ip2t0Tx8HrxyGAL78/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -339,13 +339,13 @@
     
     async function loadData() {
       const list = $('archiveList');
-      list.innerHTML = '<div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-spinner fa-pulse"></i><p style="margin-top: 8px; font-size: 12px;">در حال بارگذاری...</p></div>';
+      list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-light);"><i class="fa-solid fa-spinner fa-pulse"></i><p style="margin-top:8px;font-size:12px;">در حال بارگذاری...</p></div>';
       
       try {
-        const [eventsRes] = await Promise.all([fetch(API_URL + '?action=getEvents')]);
+        const eventsRes = await fetch(API_URL + '?action=getEvents');
         const eventsData = await eventsRes.json();
         if (!eventsData.success || eventsData.data.length === 0) {
-          list.innerHTML = '<div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-calendar-xmark" style="font-size: 36px; margin-bottom: 8px; display: block;"></i><p style="font-size: 13px;">مراسمی ثبت نشده است</p></div>';
+          list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-light);"><i class="fa-solid fa-calendar-xmark" style="font-size:36px;margin-bottom:8px;display:block;"></i><p style="font-size:13px;">مراسمی ثبت نشده است</p></div>';
           return;
         }
         
@@ -380,92 +380,4 @@
           html += '<div style="margin-top:12px;font-size:12px;font-weight:600;color:var(--text-light);padding:8px 0;"><i class="fa-solid fa-circle-plus"></i> مراسم‌های بدون آرشیو</div>';
           withoutArchive.forEach(a => {
             const d = new Date(a.eventDate), idx = archiveItems.indexOf(a);
-            html += `<div class="archive-card" style="opacity:0.6;"><div class="archive-icon images" style="background:var(--bg2);color:var(--text-light);"><i class="fa-solid fa-circle-plus"></i></div><div class="archive-info"><div class="archive-event-name">${a.eventTitle}</div><div class="archive-meta"><span><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span style="color:var(--warning);">بدون آرشیو</span></div></div><div class="archive-actions"><button class="action-btn edit-btn" data-index="${idx}" style="background:var(--warning-light);color:var(--warning);"><i class="fa-solid fa-plus"></i></button></div></div>`;
-          });
-        }
-        
-        list.innerHTML = html;
-        document.querySelectorAll('.edit-btn').forEach(b => b.onclick = function() { editArchive(allArchives[parseInt(this.dataset.index)]); });
-        document.querySelectorAll('.delete-btn').forEach(b => b.onclick = function() { openDeleteModal(allArchives[parseInt(this.dataset.index)].eventId, allArchives[parseInt(this.dataset.index)].eventTitle); });
-      } catch(e) { list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:36px;margin-bottom:8px;display:block;"></i><p style="font-size:13px;">خطا در دریافت اطلاعات</p><button onclick="loadData()" style="margin-top:8px;padding:6px 14px;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">تلاش مجدد</button></div>'; }
-    }
-    
-    function openAddModal() {
-      $('modalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> افزودن آرشیو جدید';
-      $('editEventId').value = ''; $('eventInfo').style.display = 'none';
-      setTagValues('imagesWrapper', [], 'image'); setTagValues('videosWrapper', [], 'video'); setTagValues('audiosWrapper', [], 'audio');
-      const select = $('archiveEventSelect'); select.disabled = false; select.innerHTML = '<option value="">-- انتخاب مراسم --</option>';
-      allArchives.forEach(a => { if (!a.hasArchive) select.innerHTML += `<option value="${a.eventId}">${a.eventTitle}</option>`; });
-      if (select.options.length === 1) select.innerHTML += '<option value="" disabled>همه مراسم‌ها آرشیو دارند</option>';
-      select.onchange = function() {
-        const s = allArchives.find(a => a.eventId === this.value);
-        if (s) { $('eventInfo').style.display = 'block'; $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(s.eventDate).toLocaleDateString('fa-IR')}`; }
-        else $('eventInfo').style.display = 'none';
-      };
-      $('archiveModal').classList.add('active');
-    }
-    
-    function editArchive(archive) {
-      $('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> ویرایش آرشیو';
-      $('editEventId').value = archive.eventId;
-      setTagValues('imagesWrapper', archive.images, 'image'); setTagValues('videosWrapper', archive.videos, 'video'); setTagValues('audiosWrapper', archive.audios, 'audio');
-      const select = $('archiveEventSelect'); select.innerHTML = `<option value="${archive.eventId}" selected>${archive.eventTitle} (فعلی)</option>`; select.disabled = true;
-      $('eventInfo').style.display = 'block'; $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(archive.eventDate).toLocaleDateString('fa-IR')}`;
-      $('archiveModal').classList.add('active');
-    }
-    
-    function closeArchiveModal() { $('archiveModal').classList.remove('active'); $('archiveEventSelect').disabled = false; }
-    
-    $('addArchiveBtn').onclick = openAddModal;
-    $('archiveModal').onclick = (e) => { if (e.target === $('archiveModal')) closeArchiveModal(); };
-    
-    $('submitArchive').onclick = async () => {
-      const id = $('editEventId').value;
-      const eventId = id || $('archiveEventSelect').value;
-      const images = getTagValues('imagesWrapper').join(', ');
-      const videos = getTagValues('videosWrapper').join(', ');
-      const audios = getTagValues('audiosWrapper').join(', ');
-      
-      if (!eventId) { showToast('لطفاً یک مراسم انتخاب کنید', 'warning'); return; }
-      
-      $('submitArchive').disabled = true; $('submitArchive').textContent = 'در حال ذخیره...';
-      try {
-        const ip = await getClientIP();
-        const isUpdate = !!id;
-        const res = await fetch(API_URL + '?action=' + (isUpdate ? 'updateArchive' : 'addArchive'), {
-          method: 'POST', body: JSON.stringify({ eventId, images, videos, audios, clientIP: ip, adminId: admin.id })
-        });
-        const data = await res.json();
-        if (data.success) { showToast(isUpdate ? 'آرشیو ویرایش شد' : 'آرشیو اضافه شد', 'success'); closeArchiveModal(); loadData(); }
-        else showToast(data.message || 'خطا', 'error');
-      } catch(e) { showToast('خطای سرور', 'error'); }
-      $('submitArchive').disabled = false; $('submitArchive').textContent = 'ذخیره';
-    };
-    
-    function openDeleteModal(eventId, eventTitle) {
-      $('deleteEventId').value = eventId;
-      document.querySelector('#deleteModal p').textContent = `آیا از حذف آرشیو مراسم "${eventTitle}" اطمینان دارید؟`;
-      $('deleteModal').classList.add('active');
-    }
-    
-    function closeDeleteModal() { $('deleteModal').classList.remove('active'); }
-    $('deleteModal').onclick = (e) => { if (e.target === $('deleteModal')) closeDeleteModal(); };
-    
-    $('submitDelete').onclick = async () => {
-      const eventId = $('deleteEventId').value;
-      $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
-      try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=deleteArchive', { method: 'POST', body: JSON.stringify({ eventId, clientIP: ip, adminId: admin.id }) });
-        const data = await res.json();
-        if (data.success) { showToast('آرشیو حذف شد', 'success'); closeDeleteModal(); loadData(); }
-        else showToast(data.message || 'خطا', 'error');
-      } catch(e) { showToast('خطای سرور', 'error'); }
-      $('submitDelete').disabled = false; $('submitDelete').textContent = 'حذف';
-    };
-    
-    loadData();
-  </script>
-
-</body>
-</html>
+            html += `<div class="archive-card" style="opacity:0.6;"><div class="archive-icon images" style="background:var(--bg2);color:var(--text-light);"><i class="fa-solid fa-circle-plus"></i></div><div class="archive-info"><div class="archive-event-name">${a.eventTitle}</div><div class="archive-meta"><span><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span style="color:var(--warning);">بدون آرشیو</span></div></div><div class="archive-actions"><button class="action-btn edit-btn" data-index="${idx}" style="background:var(--warning-light
