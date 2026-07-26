@@ -389,29 +389,61 @@
     
     function openAddModal() {
       $('modalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> افزودن آرشیو جدید';
-      $('editEventId').value = ''; $('eventInfo').style.display = 'none';
-      setTagValues('imagesWrapper', [], 'image'); setTagValues('videosWrapper', [], 'video'); setTagValues('audiosWrapper', [], 'audio');
-      const select = $('archiveEventSelect'); select.disabled = false; select.innerHTML = '<option value="">-- انتخاب مراسم --</option>';
-      allArchives.forEach(a => { if (!a.hasArchive) select.innerHTML += `<option value="${a.eventId}">${a.eventTitle}</option>`; });
-      if (select.options.length === 1) select.innerHTML += '<option value="" disabled>همه مراسم‌ها آرشیو دارند</option>';
+      $('editEventId').value = '';
+      $('eventInfo').style.display = 'none';
+      setTagValues('imagesWrapper', [], 'image');
+      setTagValues('videosWrapper', [], 'video');
+      setTagValues('audiosWrapper', [], 'audio');
+      
+      const select = $('archiveEventSelect');
+      select.disabled = false;
+      select.innerHTML = '<option value="">-- انتخاب مراسم --</option>';
+      
+      allArchives.forEach(a => {
+        if (!a.hasArchive) {
+          select.innerHTML += `<option value="${a.eventId}">${a.eventTitle}</option>`;
+        }
+      });
+      
+      if (select.options.length === 1) {
+        select.innerHTML += '<option value="" disabled>همه مراسم‌ها آرشیو دارند</option>';
+      }
+      
       select.onchange = function() {
         const s = allArchives.find(a => a.eventId === this.value);
-        if (s) { $('eventInfo').style.display = 'block'; $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(s.eventDate).toLocaleDateString('fa-IR')}`; }
-        else $('eventInfo').style.display = 'none';
+        if (s) {
+          $('eventInfo').style.display = 'block';
+          $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(s.eventDate).toLocaleDateString('fa-IR')}`;
+        } else {
+          $('eventInfo').style.display = 'none';
+        }
       };
+      
       $('archiveModal').classList.add('active');
     }
     
     function editArchive(archive) {
       $('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> ویرایش آرشیو';
       $('editEventId').value = archive.eventId;
-      setTagValues('imagesWrapper', archive.images, 'image'); setTagValues('videosWrapper', archive.videos, 'video'); setTagValues('audiosWrapper', archive.audios, 'audio');
-      const select = $('archiveEventSelect'); select.innerHTML = `<option value="${archive.eventId}" selected>${archive.eventTitle} (فعلی)</option>`; select.disabled = true;
-      $('eventInfo').style.display = 'block'; $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(archive.eventDate).toLocaleDateString('fa-IR')}`;
+      
+      setTagValues('imagesWrapper', archive.images, 'image');
+      setTagValues('videosWrapper', archive.videos, 'video');
+      setTagValues('audiosWrapper', archive.audios, 'audio');
+      
+      const select = $('archiveEventSelect');
+      select.innerHTML = `<option value="${archive.eventId}" selected>${archive.eventTitle} (فعلی)</option>`;
+      select.disabled = true;
+      
+      $('eventInfo').style.display = 'block';
+      $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(archive.eventDate).toLocaleDateString('fa-IR')}`;
+      
       $('archiveModal').classList.add('active');
     }
     
-    function closeArchiveModal() { $('archiveModal').classList.remove('active'); $('archiveEventSelect').disabled = false; }
+    function closeArchiveModal() {
+      $('archiveModal').classList.remove('active');
+      $('archiveEventSelect').disabled = false;
+    }
     
     $('addArchiveBtn').onclick = openAddModal;
     $('archiveModal').onclick = (e) => { if (e.target === $('archiveModal')) closeArchiveModal(); };
@@ -426,15 +458,32 @@
       if (!eventId) { showToast('لطفاً یک مراسم انتخاب کنید', 'warning'); return; }
       
       $('submitArchive').disabled = true; $('submitArchive').textContent = 'در حال ذخیره...';
+      
       try {
         const ip = await getClientIP();
         const isUpdate = !!id;
-        const res = await fetch(API_URL + '?action=' + (isUpdate ? 'updateArchive' : 'addArchive'), { method: 'POST', body: JSON.stringify({ eventId, images, videos, audios, clientIP: ip }) });
+        
+        const res = await fetch(API_URL + '?action=' + (isUpdate ? 'updateArchive' : 'addArchive'), {
+          method: 'POST',
+          body: JSON.stringify({ eventId, images, videos, audios, clientIP: ip })
+        });
+        
         const data = await res.json();
-        if (data.success) { showToast(isUpdate ? 'آرشیو ویرایش شد' : 'آرشیو اضافه شد', 'success'); closeArchiveModal(); loadData(); }
-        else showToast(data.message || 'خطا', 'error');
-      } catch(e) { showToast('خطای سرور', 'error'); }
-      $('submitArchive').disabled = false; $('submitArchive').textContent = 'ذخیره';
+        
+        if (data.success) {
+          showToast(isUpdate ? 'آرشیو ویرایش شد' : 'آرشیو اضافه شد', 'success');
+          closeArchiveModal();
+          loadData();
+        } else {
+          showToast(data.message || 'خطا', 'error');
+        }
+      } catch(e) {
+        showToast('خطای سرور', 'error');
+      }
+      
+      $('submitArchive').disabled = false;
+      $('submitArchive').textContent = 'ذخیره';
+      $('archiveEventSelect').disabled = false;
     };
     
     function openDeleteModal(eventId, eventTitle) {
@@ -449,13 +498,27 @@
     $('submitDelete').onclick = async () => {
       const eventId = $('deleteEventId').value;
       $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
+      
       try {
         const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=deleteArchive', { method: 'POST', body: JSON.stringify({ eventId, clientIP: ip }) });
+        const res = await fetch(API_URL + '?action=deleteArchive', {
+          method: 'POST',
+          body: JSON.stringify({ eventId, clientIP: ip })
+        });
+        
         const data = await res.json();
-        if (data.success) { showToast('آرشیو حذف شد', 'success'); closeDeleteModal(); loadData(); }
-        else showToast(data.message || 'خطا', 'error');
-      } catch(e) { showToast('خطای سرور', 'error'); }
+        
+        if (data.success) {
+          showToast('آرشیو حذف شد', 'success');
+          closeDeleteModal();
+          loadData();
+        } else {
+          showToast(data.message || 'خطا', 'error');
+        }
+      } catch(e) {
+        showToast('خطای سرور', 'error');
+      }
+      
       $('submitDelete').disabled = false; $('submitDelete').textContent = 'حذف';
     };
     
