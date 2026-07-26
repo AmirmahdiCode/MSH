@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کمک‌های نقدی | شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
+      --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
+      --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
+      --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
+      --card-border: #e2e8f0; --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
+      --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
+      --gold: #d97706; --gold-light: #fef3c7;
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
+      --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
+      --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
+      --card-border: #334155; --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+      --header-bg: #1e293b; --footer-bg: #1e293b;
+      --logo-filter: brightness(0) invert(1);
+      --gold-light: #2e2a1a;
+    }
+    
+    [data-muharram="true"] {
+      --primary: #dc2626; --primary-dark: #b91c1c; --primary-light: #fca5a5;
+      --primary-rgb: 220, 38, 38;
+    }
+    
+    [data-theme="dark"][data-muharram="true"] {
+      --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fca5a5;
+      --primary-rgb: 239, 68, 68;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    
+    .header {
+      background: var(--header-bg); box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      padding: 14px 20px; position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
+    }
+    
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; max-width: 1100px; margin: 0 auto;
+    }
+    
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    
+    .header-logo {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
+      overflow: hidden; padding: 6px;
+    }
+    
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
+    .header-title { font-size: 20px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
+    .header-subtitle { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
+    .header-btns { display: flex; align-items: center; gap: 8px; }
+    
+    .back-btn {
+      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
+      cursor: pointer; font-size: 18px; color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; text-decoration: none; transition: all 0.3s ease;
+    }
+    .back-btn:hover { background: var(--primary); color: #fff; }
+    
+    .theme-toggle {
+      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
+      cursor: pointer; font-size: 18px; color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; transition: all 0.3s ease;
+    }
+    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
+    
+    .main-container { flex: 1; max-width: 650px; width: 100%; margin: 24px auto; padding: 0 12px; }
+    
+    .page-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+    
+    .card-number-card {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      border-radius: 18px; padding: 28px 24px; margin-bottom: 20px;
+      color: #fff; text-align: center;
+      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.3);
+    }
+    
+    .card-number-card .label {
+      font-size: 12px; opacity: 0.8; margin-bottom: 8px;
+    }
+    
+    .card-number {
+      font-size: 32px; font-weight: 800; letter-spacing: 4px;
+      direction: ltr; display: inline-block; margin-bottom: 16px;
+      background: rgba(255,255,255,0.1); padding: 8px 20px;
+      border-radius: 10px;
+    }
+    
+    .card-number-card .note {
+      font-size: 11px; opacity: 0.7; margin-bottom: 16px;
+    }
+    
+    .copy-card-btn {
+      padding: 10px 24px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.1); color: #fff;
+      cursor: pointer; font-size: 13px; font-weight: 600;
+      font-family: inherit; transition: all 0.3s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .copy-card-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
+    .copy-card-btn.copied { background: #10b981; border-color: #10b981; }
+    
+    .section-title {
+      font-size: 14px; font-weight: 700; color: var(--dark);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--bg3); transition: background 0.3s; }
+    
+    .banks-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    
+    .bank-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 14px 18px; display: flex;
+      align-items: center; gap: 14px; text-decoration: none; color: var(--text);
+      box-shadow: var(--shadow); transition: all 0.3s ease; cursor: pointer;
+    }
+    .bank-card:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
+    
+    .bank-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--bg2); display: flex; align-items: center;
+      justify-content: center; font-size: 20px; flex-shrink: 0;
+      color: var(--primary);
+    }
+    
+    .bank-info { flex: 1; min-width: 0; }
+    .bank-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+    .bank-desc { font-size: 10px; color: var(--text-light); }
+    .bank-arrow { color: var(--text-light); font-size: 14px; }
+    
+    .footer {
+      text-align: center; padding: 20px; background: var(--footer-bg);
+      border-top: 1px solid var(--bg3); margin-top: auto; transition: all 0.3s ease;
+    }
+    .footer-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--dark); }
+    .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
+    
+    @media (max-width: 500px) {
+      .card-number { font-size: 24px; letter-spacing: 2px; padding: 6px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo">
+          <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
+        </div>
+        <div>
+          <div class="header-title">شهدای گمنام شورابیل</div>
+          <div class="header-subtitle">سایت رسمی اطلاع رسانی و گزارش مراسمات</div>
+        </div>
+      </div>
+      <div class="header-btns">
+        <a href="../dashboard/" class="back-btn" title="بازگشت"><i class="fa-solid fa-arrow-right"></i></a>
+        <button class="theme-toggle" id="themeToggle" title="تغییر تم"><i class="fa-solid fa-moon"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-container">
+    
+    <div class="page-title"><i class="fa-solid fa-hand-holding-heart"></i> کمک‌های نقدی</div>
+    
+    <div class="card-number-card">
+      <div class="label"><i class="fa-solid fa-credit-card"></i> شماره کارت جهت نذورات</div>
+      <div class="card-number">5892-1070-4651-8703</div>
+      <div class="note">بانک سپه - به نام هیأت شهدای گمنام شورابیل</div>
+      <button class="copy-card-btn" onclick="copyCard('5892107046518703', this)">
+        <i class="fa-solid fa-copy"></i> کپی شماره کارت
+      </button>
+    </div>
+    
+    <div class="section-title"><i class="fa-solid fa-building-columns"></i> درگاه‌های کارت به کارت</div>
+    
+    <div class="banks-list">
+      
+      <a href="https://www.bki.ir/ctc" target="_blank" class="bank-card">
+        <div class="bank-icon"><i class="fa-solid fa-university"></i></div>
+        <div class="bank-info">
+          <div class="bank-name">بانک سپه</div>
+          <div class="bank-desc">درگاه رسمی کارت به کارت بانک سپه</div>
+        </div>
+        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
+      </a>
+      
+      <a href="https://www.cbi.ir/ctc" target="_blank" class="bank-card">
+        <div class="bank-icon"><i class="fa-solid fa-landmark"></i></div>
+        <div class="bank-info">
+          <div class="bank-name">بانک مرکزی</div>
+          <div class="bank-desc">سامانه کارت به کارت بانک مرکزی</div>
+        </div>
+        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
+      </a>
+      
+      <a href="https://pay.ir" target="_blank" class="bank-card">
+        <div class="bank-icon"><i class="fa-solid fa-globe"></i></div>
+        <div class="bank-info">
+          <div class="bank-name">Pay.ir</div>
+          <div class="bank-desc">درگاه پرداخت اینترنتی</div>
+        </div>
+        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
+      </a>
+      
+      <a href="https://idpay.ir" target="_blank" class="bank-card">
+        <div class="bank-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="bank-info">
+          <div class="bank-name">IDPay</div>
+          <div class="bank-desc">پرداخت یار کمیسون صفر</div>
+        </div>
+        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
+      </a>
+      
+      <a href="https://zarinpal.com" target="_blank" class="bank-card">
+        <div class="bank-icon"><i class="fa-solid fa-gem"></i></div>
+        <div class="bank-info">
+          <div class="bank-name">زرین‌پال</div>
+          <div class="bank-desc">درگاه پرداخت امن زرین‌پال</div>
+        </div>
+        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
+      </a>
+      
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="../Contact/"><i class="fa-solid fa-phone"></i> ارتباط با ما</a>
+      <a href="../Address/"><i class="fa-solid fa-location-dot"></i> نشانی ما</a>
+    </div>
+    <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const icon = themeToggle.querySelector('i');
+    
+    const savedTheme = localStorage.getItem('heyat-theme');
+    if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); icon.classList.replace('fa-moon', 'fa-sun'); }
+    
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      icon.className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+      localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
+    });
+    
+    (async function() {
+      try {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
+        const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
+        const j = await r.json();
+        if (j.code === 200 && j.data.hijri.month.number === 1) document.documentElement.setAttribute('data-muharram', 'true');
+      } catch(e) {}
+    })();
+    
+    function copyCard(number, btn) {
+      navigator.clipboard.writeText(number).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> کپی شد';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
