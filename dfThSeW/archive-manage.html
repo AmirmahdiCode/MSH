@@ -20,7 +20,6 @@
       --info: #3b82f6; --info-light: #eff6ff;
       --purple: #8b5cf6; --orange: #f97316;
     }
-
     
     [data-theme="dark"] {
       --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
@@ -397,7 +396,6 @@
       setTagValues('audiosWrapper', [], 'audio');
       
       const select = $('archiveEventSelect');
-      select.disabled = false;
       select.innerHTML = '<option value="">-- انتخاب مراسم --</option>';
       
       allArchives.forEach(a => {
@@ -433,7 +431,6 @@
       
       const select = $('archiveEventSelect');
       select.innerHTML = `<option value="${archive.eventId}" selected>${archive.eventTitle} (فعلی)</option>`;
-      select.disabled = true;
       
       $('eventInfo').style.display = 'block';
       $('eventInfo').innerHTML = `<i class="fa-solid fa-circle-info"></i> تاریخ: ${new Date(archive.eventDate).toLocaleDateString('fa-IR')}`;
@@ -443,7 +440,6 @@
     
     function closeArchiveModal() {
       $('archiveModal').classList.remove('active');
-      $('archiveEventSelect').disabled = false;
     }
     
     $('addArchiveBtn').onclick = openAddModal;
@@ -484,7 +480,6 @@
       
       $('submitArchive').disabled = false;
       $('submitArchive').textContent = 'ذخیره';
-      $('archiveEventSelect').disabled = false;
     };
     
     function openDeleteModal(eventId, eventTitle) {
