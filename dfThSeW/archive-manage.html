@@ -438,9 +438,7 @@
       $('archiveModal').classList.add('active');
     }
     
-    function closeArchiveModal() {
-      $('archiveModal').classList.remove('active');
-    }
+    function closeArchiveModal() { $('archiveModal').classList.remove('active'); }
     
     $('addArchiveBtn').onclick = openAddModal;
     $('archiveModal').onclick = (e) => { if (e.target === $('archiveModal')) closeArchiveModal(); };
@@ -458,7 +456,8 @@
       
       try {
         const ip = await getClientIP();
-        const isUpdate = !!id;
+        const existingArchive = allArchives.find(a => a.eventId === eventId);
+        const isUpdate = existingArchive && existingArchive.hasArchive;
         
         const res = await fetch(API_URL + '?action=' + (isUpdate ? 'updateArchive' : 'addArchive'), {
           method: 'POST',
