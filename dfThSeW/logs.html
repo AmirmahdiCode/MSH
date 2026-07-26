@@ -163,7 +163,7 @@
   </section>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxieKNrkN-g2-WsVCOvIrRjNHcBM_6rh-LdY-UQRrmXXLnFjfqqndLTSeZh-R0ZqmjT/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyJlSVIO4r7z2scxaMINEykuKDEE37yDOqD_fV18tGk0qCJhK6Ip2t0Tx8HrxyGAL78/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -189,7 +189,6 @@
     }
     
     const session = checkSession(); if (!session) throw new Error();
-    const admin = session.admin;
     
     (function() {
       const t = localStorage.getItem('heyat-theme');
@@ -267,10 +266,10 @@
             `;
           }).join('');
         } else {
-          list.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-light);"><i class="fa-solid fa-clock-rotate-left" style="font-size: 44px; margin-bottom: 10px; display: block; opacity: 0.5;"></i><p style="font-size: 13px;">گزارشی ثبت نشده است</p></div>`;
+          list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-light);"><i class="fa-solid fa-clock-rotate-left" style="font-size:44px;margin-bottom:10px;display:block;opacity:0.5;"></i><p style="font-size:13px;">گزارشی ثبت نشده است</p></div>`;
         }
       } catch(e) {
-        list.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size: 44px; margin-bottom: 10px; display: block;"></i><p style="font-size: 13px;">خطا در دریافت گزارش‌ها</p><button onclick="loadLogs()" style="margin-top: 8px; padding: 6px 14px; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: inherit;">تلاش مجدد</button></div>`;
+        list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:44px;margin-bottom:10px;display:block;"></i><p style="font-size:13px;">خطا در دریافت گزارش‌ها</p><button onclick="loadLogs()" style="margin-top:8px;padding:6px 14px;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;">تلاش مجدد</button></div>`;
       }
     }
     
