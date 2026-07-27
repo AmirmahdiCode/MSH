@@ -202,10 +202,9 @@
       50% { transform: translateY(-25px) scale(1.4); opacity: 0.2; }
     }
     
-    /* بخش احادیث */
     .hadith-wrapper {
       flex: 1; min-width: 0;
-      display: flex; align-items: flex-start;
+      margin-top: 0;
     }
     
     .hadith-container {
@@ -216,7 +215,7 @@
       position: absolute; bottom: 0;
       max-width: 100%; width: 100%;
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 14px 18px;
+      border-radius: 10px; padding: 10px 14px;
       box-shadow: var(--shadow); 
       transition: bottom 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
                   opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
@@ -238,20 +237,20 @@
     }
     
     .hadith-comment .hadith-text {
-      font-size: 13px; font-weight: 500; color: var(--dark);
-      line-height: 1.8;
+      font-size: 12px; font-weight: 500; color: var(--dark);
+      line-height: 1.7;
       transition: color 0.3s;
-      display: flex; align-items: center; gap: 8px;
+      display: flex; align-items: center; gap: 6px;
     }
     
     .hadith-comment .hadith-text i {
-      color: var(--primary); font-size: 11px; flex-shrink: 0;
+      color: var(--primary); font-size: 10px; flex-shrink: 0;
     }
     
     .hadith-comment .hadith-source {
-      font-size: 10px; color: var(--primary); font-weight: 700;
-      transition: color 0.3s; margin-top: 6px;
-      display: flex; align-items: center; gap: 6px;
+      font-size: 9px; color: var(--primary); font-weight: 700;
+      transition: color 0.3s; margin-top: 4px;
+      display: flex; align-items: center; gap: 4px;
     }
     
     .footer {
@@ -265,17 +264,14 @@
     
     @media (max-width: 700px) {
       .main-container {
-        flex-direction: column; align-items: center; gap: 4px;
+        flex-direction: column; align-items: center; gap: 0;
         max-width: 500px;
       }
       .card-wrapper {
-        display: flex; justify-content: center;
+        display: flex; justify-content: center; margin-bottom: -2px;
       }
       .hadith-wrapper {
-        width: 100%;
-      }
-      .hadith-container {
-        padding-top: 4px;
+        width: 100%; margin-top: -8px;
       }
     }
     
@@ -411,44 +407,44 @@
     }
     
     const hadiths = [
-      { text: 'انفاق در راه خدا، قرض دادن به خداست.', source: 'قرآن کریم - حدید ۱۱' },
-      { text: 'هرگز به نیکی کامل نمی‌رسید مگر از آنچه دوست دارید انفاق کنید.', source: 'قرآن کریم - آل‌عمران ۹۲' },
-      { text: 'مَثَل منفقان، دانه‌ای است که هفت خوشه برویاند.', source: 'قرآن کریم - بقره ۲۶۱' },
-      { text: 'آنچه در راه خدا انفاق کنید، خداوند عوض آن را می‌دهد.', source: 'قرآن کریم - سبأ ۳۹' },
-      { text: 'خدا انفاق‌کنندگان را دوست دارد.', source: 'قرآن کریم - بقره ۱۹۵' },
-      { text: 'انفاق در راه خدا، تجارتی پرسود است.', source: 'قرآن کریم - فاطر ۲۹' },
-      { text: 'آنچه انفاق می‌کنید، نزد خدا می‌ماند.', source: 'قرآن کریم - بقره ۲۷۲' },
-      { text: 'هر قدمی برای عزاداری سیدالشهدا، عبادت است.', source: 'امام صادق (ع)' },
+      { text: 'انفاق در راه خدا، قرض دادن به خداست.', source: 'قرآن کریم' },
+      { text: 'خدا انفاق‌کنندگان را دوست دارد.', source: 'قرآن کریم' },
+      { text: 'هرگز به نیکی نمی‌رسید مگر انفاق کنید.', source: 'قرآن کریم' },
+      { text: 'انفاق، تجارتی پرسود است.', source: 'قرآن کریم' },
+      { text: 'آنچه انفاق کنید، نزد خدا می‌ماند.', source: 'قرآن کریم' },
+      { text: 'هر قدم برای عزای حسین، عبادت است.', source: 'امام صادق (ع)' },
       { text: 'محبت به امام حسین، اجر بی‌حساب دارد.', source: 'پیامبر اکرم (ص)' },
-      { text: 'هر که در عزای حسین بگرید، بهشت بر او واجب می‌شود.', source: 'امام صادق (ع)' },
-      { text: 'خیراتی که برای امام حسین می‌دهید، ذخیره قیامت است.', source: 'امام باقر (ع)' },
-      { text: 'کمک به مراسم اهل بیت، یاری دین خداست.', source: 'امام علی (ع)' },
+      { text: 'هر که در عزای حسین بگرید، بهشت واجب شود.', source: 'امام صادق (ع)' },
+      { text: 'خیرات برای امام حسین، ذخیره قیامت است.', source: 'امام باقر (ع)' },
+      { text: 'کمک به مراسم اهل بیت، یاری دین است.', source: 'امام علی (ع)' },
       { text: 'انفاق برای عزای حسین، اجر جهاد دارد.', source: 'امام رضا (ع)' },
-      { text: 'هر لقمه‌ای که در راه امام حسین اطعام شود، نور است.', source: 'امام صادق (ع)' },
+      { text: 'هر لقمه در راه حسین، نور است.', source: 'امام صادق (ع)' },
       { text: 'برپایی مجلس عزا، احیای امر ماست.', source: 'امام صادق (ع)' },
-      { text: 'اشک بر حسین، کفاره گناهان کبیره است.', source: 'امام رضا (ع)' },
-      { text: 'انفاق در راه خدا، بلا را دفع می‌کند.', source: 'امام علی (ع)' },
-      { text: 'هر که برای اهل بیت هزینه کند، خدا جبران می‌کند.', source: 'امام جواد (ع)' },
-      { text: 'خدمت به دستگاه امام حسین، عزت دنیا و آخرت است.', source: 'علامه مجلسی' },
+      { text: 'اشک بر حسین، کفاره گناهان است.', source: 'امام رضا (ع)' },
+      { text: 'هر که برای اهل بیت هزینه کند، خدا جبران کند.', source: 'امام جواد (ع)' },
+      { text: 'خدمت به دستگاه حسین، عزت دو جهان است.', source: 'علامه مجلسی' },
       { text: 'بخشش در راه خدا، کلید رزق بی‌پایان است.', source: 'امام علی (ع)' },
       { text: 'سفره امام حسین، سفره بهشت است.', source: 'شیخ عباس قمی' },
-      { text: 'هر چه برای حسین بدهی، هزاران برابرش برمی‌گردد.', source: 'امام صادق (ع)' },
-      { text: 'نذری برای اهل بیت، نذر برای خداست.', source: 'امام باقر (ع)' },
-      { text: 'کمک به هیأت عزاداری، تعظیم شعائر الهی است.', source: 'قرآن کریم - حج ۳۲' },
-      { text: 'انفاق پنهانی، خشم خدا را فرو می‌نشاند.', source: 'پیامبر اکرم (ص)' },
+      { text: 'هر چه برای حسین دهی، هزار برابر برگردد.', source: 'امام صادق (ع)' },
+      { text: 'نذری اهل بیت، نذر خداست.', source: 'امام باقر (ع)' },
+      { text: 'کمک به هیأت، تعظیم شعائر الهی است.', source: 'قرآن کریم' },
       { text: 'دست دهنده در راه خدا، دست خداست.', source: 'امام علی (ع)' },
       { text: 'برگزاری مراسم حسینی، زنده نگه داشتن اسلام است.', source: 'امام خمینی (ره)' },
-      { text: 'هر اشکی برای حسین، دریایی از رحمت می‌آورد.', source: 'امام صادق (ع)' },
-      { text: 'مال، امانت خداست؛ در راه حسین خرج کن.', source: 'شهید مطهری' },
+      { text: 'هر اشک برای حسین، دریای رحمت آورد.', source: 'امام صادق (ع)' },
       { text: 'اطعام در عزای حسین، اطعام ملائکه است.', source: 'امام صادق (ع)' },
       { text: 'یاری دین با مال، جهاد مالی است.', source: 'امام علی (ع)' },
-      { text: 'هر قدم در راه امام حسین، هزار حسنه دارد.', source: 'امام باقر (ع)' },
+      { text: 'هر قدم در راه حسین، هزار حسنه دارد.', source: 'امام باقر (ع)' },
+      { text: 'انفاق پنهانی، خشم خدا را فرو نشاند.', source: 'پیامبر اکرم (ص)' },
+      { text: 'کمک به عزاداری، پاداش شهید دارد.', source: 'امام صادق (ع)' },
+      { text: 'مال، امانت خداست؛ در راه حسین خرج کن.', source: 'شهید مطهری' },
+      { text: 'هر که مجلس حسینی برپا کند، خدا رحمتش کند.', source: 'امام صادق (ع)' },
+      { text: 'انفاق، بلا را دفع می‌کند.', source: 'امام علی (ع)' },
     ];
     
     let currentHadith = 0;
     let visibleComments = [];
     const MAX_VISIBLE = 3;
-    const SPACING = 72;
+    const SPACING = 56;
     
     function createHadithComment() {
       const container = document.getElementById('hadithContainer');
@@ -465,12 +461,12 @@
       el.className = 'hadith-comment';
       el.innerHTML = `
         <div class="hadith-text"><i class="fa-solid fa-quote-right"></i> ${hadith.text}</div>
-        <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:4px;"></i> ${hadith.source}</div>
+        <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:3px;"></i> ${hadith.source}</div>
       `;
       
-      el.style.bottom = '-100px';
+      el.style.bottom = '-80px';
       el.style.opacity = '0';
-      el.style.transform = 'translateY(80px) scale(0.9)';
+      el.style.transform = 'translateY(60px) scale(0.9)';
       
       container.appendChild(el);
       visibleComments.push(el);
@@ -493,7 +489,7 @@
     function updateAllPositions() {
       const total = visibleComments.length;
       const isWide = window.innerWidth > 700;
-      const spacing = isWide ? 80 : SPACING;
+      const spacing = isWide ? 62 : SPACING;
       
       for (let i = 0; i < total; i++) {
         const el = visibleComments[i];
