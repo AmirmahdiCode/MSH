@@ -264,7 +264,7 @@
       min-width: 220px; max-width: 220px; background: linear-gradient(135deg, #ecfdf5, #d1fae5);
       border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);
       transition: all 0.3s ease; cursor: pointer; border: 1px solid var(--primary-light);
-      flex-shrink: 0; position: relative;
+      flex-shrink: 0; position: relative; display: flex; flex-direction: column;
     }
     [data-theme="dark"] .donation-card { background: linear-gradient(135deg, #1a2e2b, #164e4a); }
     [data-muharram="true"] .donation-card { background: linear-gradient(135deg, #fef2f2, #fecaca); }
@@ -288,9 +288,9 @@
     }
     
     .donation-card .card-content {
-      position: relative; z-index: 1; padding: 16px 12px;
+      position: relative; z-index: 1; padding: 16px 12px 0 12px;
       display: flex; flex-direction: column; align-items: center;
-      text-align: center; height: 100%;
+      text-align: center; flex: 1;
     }
     
     .donation-card .donation-icon-circle {
@@ -311,17 +311,16 @@
       transition: color 0.3s;
     }
 
-    .donation-logo-img {
-      width: 100%;
-      max-height: 80px;
-      object-fit: contain;
-      margin-bottom: 10px;
-      filter: var(--logo-filter);
-    }
-    
     .donation-card .donation-tag {
       font-size: 9px; background: var(--primary); color: #fff;
       padding: 3px 10px; border-radius: 12px; font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .donation-logo-img {
+      width: 100%;
+      object-fit: contain;
+      margin-top: auto;
     }
     
     .gallery-section { margin-bottom: 24px; }
@@ -527,7 +526,7 @@
     
     function buildCalendar() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفن'];
-      const dayNames = [' ',' ',' ',' ',' ',' ',' '];
+      const dayNames = ['','','','','','',''];
       const today = gregorianToPersian(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
       
       let html = '<div class="calendar-section"><div class="calendar-header">';
@@ -651,8 +650,8 @@
           <div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div>
           <div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div>
           <div class="donation-subtitle">با کمک های خود ما را در برگزاری مراسمات یاری کنید</div>
-          <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" class="donation-logo-img" alt="شهدای گمنام">
           <span class="donation-tag">رسمی</span>
+          <img src="https://cdn.imgurl.ir/uploads/l811037_InShot_20260727_155607399.png" class="donation-logo-img" alt="شهدای گمنام">
         </div>
       </div>`;
     }
