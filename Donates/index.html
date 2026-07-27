@@ -92,51 +92,97 @@
     
     .page-title {
       font-size: 18px; font-weight: 700; color: var(--dark);
-      margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+      margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
       transition: color 0.3s;
     }
     
-    .card-number-card {
+    .card-wrapper {
+      display: flex; justify-content: center; margin-bottom: 60px;
+    }
+    
+    .bank-card {
       position: relative;
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      border-radius: 20px; padding: 32px 24px 28px; margin-bottom: 24px;
-      color: #fff; text-align: center; overflow: hidden;
-      box-shadow: 0 12px 40px rgba(var(--primary-rgb), 0.35);
+      width: 340px; height: 200px;
+      background: linear-gradient(145deg, #1a3a3a 0%, #0d2525 30%, var(--primary-dark) 60%, var(--primary) 100%);
+      border-radius: 18px; padding: 0; color: #e0e0e0;
+      box-shadow: 0 16px 48px rgba(var(--primary-rgb), 0.4), 0 4px 12px rgba(0,0,0,0.3);
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
     
-    .card-number-card .bubbles {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; overflow: hidden; z-index: 0;
+    [data-muharram="true"] .bank-card {
+      background: linear-gradient(145deg, #3b1a1a 0%, #2d1010 30%, var(--primary-dark) 60%, var(--primary) 100%);
     }
     
-    .card-number-card .bubble {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 50%;
-      animation: floatBubble 5s ease-in-out infinite;
+    .bank-card .card-chip {
+      position: absolute; top: 28px; left: 28px;
+      width: 44px; height: 34px;
+      background: linear-gradient(135deg, #c9a84c, #e4c76b);
+      border-radius: 6px;
+      border: 1px solid #a08030;
     }
     
-    @keyframes floatBubble {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
-      50% { transform: translateY(-25px) scale(1.4); opacity: 0.35; }
+    .bank-card .card-chip::after {
+      content: ''; position: absolute; top: 8px; left: 8px;
+      width: 28px; height: 18px; border-radius: 3px;
+      background: linear-gradient(180deg, #b8942e, #d4b44a);
     }
     
-    .card-number-card .card-content {
-      position: relative; z-index: 1;
+    .bank-card .card-contactless {
+      position: absolute; top: 32px; left: 84px;
+      font-size: 20px; color: rgba(255,255,255,0.6);
     }
     
-    .copy-icon-btn {
-      position: absolute; top: 16px; right: 16px;
-      width: 38px; height: 38px; border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.1);
-      color: #fff; cursor: pointer; font-size: 15px;
+    .bank-card .card-number {
+      position: absolute; top: 90px; left: 28px; right: 28px;
+      font-size: 19px; font-weight: 700; letter-spacing: 6px;
+      font-variant-numeric: tabular-nums; direction: ltr;
+      text-align: left; color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+    
+    .bank-card .card-info-row {
+      position: absolute; bottom: 38px; left: 28px; right: 28px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    
+    .bank-card .card-owner-label {
+      font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.55); margin-bottom: 3px;
+    }
+    
+    .bank-card .card-owner {
+      font-size: 14px; font-weight: 600; color: #fff;
+      letter-spacing: 1px;
+    }
+    
+    .bank-card .card-bank {
+      text-align: right;
+    }
+    
+    .bank-card .card-bank-name {
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7);
+      letter-spacing: 1px;
+    }
+    
+    .bank-card .card-bank-logo {
+      font-size: 10px; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.5px;
+    }
+    
+    .bank-card .copy-icon-btn {
+      position: absolute; top: 18px; right: 18px;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.08);
+      color: #fff; cursor: pointer; font-size: 14px;
       display: flex; align-items: center; justify-content: center;
       transition: all 0.3s ease; z-index: 2;
+      backdrop-filter: blur(4px);
     }
     .copy-icon-btn:hover {
-      background: rgba(255,255,255,0.2);
-      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.5);
       transform: scale(1.08);
     }
     .copy-icon-btn.copied {
@@ -150,39 +196,32 @@
       100% { transform: scale(1); }
     }
     
-    .card-number-card .card-icon {
-      width: 60px; height: 60px; margin: 0 auto 16px;
-      background: rgba(255,255,255,0.15); border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px;
+    .bank-card .bubbles {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; overflow: hidden; z-index: 0;
     }
     
-    .card-number-card .label {
-      font-size: 13px; font-weight: 600; opacity: 0.9; margin-bottom: 12px;
-      letter-spacing: -0.3px;
+    .bank-card .bubble {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 50%;
+      animation: floatBubble 5s ease-in-out infinite;
     }
     
-    .card-number {
-      font-size: 20px; font-weight: 700; letter-spacing: 5px;
-      direction: ltr; display: inline-block; margin-bottom: 12px;
-      background: rgba(255,255,255,0.1); padding: 10px 22px;
-      border-radius: 12px; font-variant-numeric: tabular-nums;
+    @keyframes floatBubble {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.08; }
+      50% { transform: translateY(-25px) scale(1.4); opacity: 0.2; }
     }
     
-    .card-number-card .owner {
-      font-size: 13px; font-weight: 600; margin-bottom: 4px;
-      opacity: 0.95;
+    /* بخش احادیث */
+    .hadith-section-title {
+      font-size: 14px; font-weight: 700; color: var(--dark);
+      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s;
     }
     
-    .card-number-card .bank-name-badge {
-      font-size: 11px; opacity: 0.75;
-      background: rgba(255,255,255,0.1); padding: 4px 14px;
-      border-radius: 20px; display: inline-block; margin-top: 6px;
-    }
-    
-    /* احادیث شناور */
     .hadith-container {
-      position: relative; min-height: 180px; margin-bottom: 24px;
+      position: relative; min-height: 240px; margin-bottom: 24px;
       display: flex; align-items: flex-end; justify-content: center;
     }
     
@@ -190,29 +229,35 @@
       position: absolute; bottom: 0;
       max-width: 100%; width: 100%;
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 16px 18px;
-      box-shadow: var(--shadow); transition: all 0.5s ease;
-      opacity: 0; transform: translateY(30px);
+      border-radius: 14px; padding: 18px 20px;
+      box-shadow: var(--shadow); 
+      transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+      opacity: 0; transform: translateY(40px) scale(0.95);
       pointer-events: none;
     }
     
     .hadith-comment.visible {
-      opacity: 1; transform: translateY(0);
+      opacity: 1; transform: translateY(0) scale(1);
     }
     
     .hadith-comment.fading {
-      opacity: 0; transform: translateY(-20px);
+      opacity: 0; transform: translateY(-30px) scale(0.9);
+      transition: all 0.6s ease-in;
     }
     
     .hadith-comment .hadith-text {
-      font-size: 13px; font-weight: 500; color: var(--dark);
-      line-height: 1.8; margin-bottom: 8px;
+      font-size: 14px; font-weight: 500; color: var(--dark);
+      line-height: 2; margin-bottom: 10px;
       transition: color 0.3s;
     }
     
+    .hadith-comment .hadith-text i {
+      color: var(--primary); margin: 0 4px; font-size: 12px;
+    }
+    
     .hadith-comment .hadith-source {
-      font-size: 10px; color: var(--primary); font-weight: 700;
-      transition: color 0.3s;
+      font-size: 11px; color: var(--primary); font-weight: 700;
+      transition: color 0.3s; display: flex; align-items: center; gap: 6px;
     }
     
     .footer {
@@ -224,9 +269,13 @@
     .footer-links a:hover { color: var(--dark); }
     .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
     
-    @media (max-width: 500px) {
-      .card-number { font-size: 17px; letter-spacing: 3px; padding: 8px 16px; }
-      .hadith-container { min-height: 200px; }
+    @media (max-width: 400px) {
+      .bank-card { width: 290px; height: 175px; }
+      .bank-card .card-number { font-size: 15px; letter-spacing: 4px; top: 80px; }
+      .bank-card .card-chip { top: 22px; left: 20px; width: 36px; height: 28px; }
+      .bank-card .card-contactless { top: 26px; left: 66px; font-size: 16px; }
+      .bank-card .card-info-row { bottom: 30px; left: 20px; right: 20px; }
+      .bank-card .copy-icon-btn { top: 14px; right: 14px; width: 32px; height: 32px; font-size: 12px; }
     }
   </style>
 </head>
@@ -254,19 +303,33 @@
     
     <div class="page-title"><i class="fa-solid fa-hand-holding-heart"></i> کمک‌های نقدی</div>
     
-    <div class="card-number-card" id="cardBox">
-      <div class="bubbles" id="cardBubbles"></div>
-      <button class="copy-icon-btn" onclick="copyCard('5892107046518703', this)" title="کپی شماره کارت">
-        <i class="fa-solid fa-copy"></i>
-      </button>
-      <div class="card-content">
-        <div class="card-icon"><i class="fa-solid fa-credit-card"></i></div>
-        <div class="label">شماره کارت نذورات</div>
-        <div class="card-number">5892 — 1070 — 4651 — 8703</div>
-        <div class="owner">هیأت شهدای گمنام شورابیل</div>
-        <div class="bank-name-badge"><i class="fa-solid fa-building-columns"></i> بانک سپه</div>
+    <div class="card-wrapper">
+      <div class="bank-card" id="cardBox">
+        <div class="bubbles" id="cardBubbles"></div>
+        
+        <button class="copy-icon-btn" onclick="copyCard('5892107046518703', this)" title="کپی شماره کارت">
+          <i class="fa-solid fa-copy"></i>
+        </button>
+        
+        <div class="card-chip"></div>
+        <div class="card-contactless"><i class="fa-solid fa-wifi"></i></div>
+        
+        <div class="card-number">5892 1070 4651 8703</div>
+        
+        <div class="card-info-row">
+          <div class="card-owner-col">
+            <div class="card-owner-label">هیأت</div>
+            <div class="card-owner">شهدای گمنام شورابیل</div>
+          </div>
+          <div class="card-bank">
+            <div class="card-bank-name">SEPAH BANK</div>
+            <div class="card-bank-logo">بانک سپه</div>
+          </div>
+        </div>
       </div>
     </div>
+    
+    <div class="hadith-section-title"><i class="fa-solid fa-book-quran"></i> آیات و روایات</div>
     
     <div class="hadith-container" id="hadithContainer"></div>
 
@@ -372,23 +435,20 @@
       const el = document.createElement('div');
       el.className = 'hadith-comment';
       el.innerHTML = `
-        <div class="hadith-text">«${hadith.text}»</div>
-        <div class="hadith-source">📖 ${hadith.source}</div>
+        <div class="hadith-text"><i class="fa-solid fa-quote-right"></i> ${hadith.text}</div>
+        <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:5px;"></i> ${hadith.source}</div>
       `;
       el.style.bottom = '0px';
       
       container.appendChild(el);
       visibleComments.push({ el, age: 0 });
       
-      // انیمیشن ورود
       requestAnimationFrame(() => {
         el.classList.add('visible');
       });
       
-      // جابجایی کامنت‌های قبلی به بالا
       updatePositions();
       
-      // حذف کامنت‌های قدیمی
       if (visibleComments.length > MAX_VISIBLE) {
         const oldest = visibleComments.shift();
         oldest.el.classList.add('fading');
@@ -397,20 +457,19 @@
     }
     
     function updatePositions() {
-      const spacing = 72; // فاصله عمودی بین کامنت‌ها
+      const spacing = 80;
       const total = visibleComments.length;
       
       for (let i = 0; i < total; i++) {
         const offset = (total - 1 - i) * spacing;
         visibleComments[i].el.style.bottom = offset + 'px';
         visibleComments[i].el.style.zIndex = i;
-        visibleComments[i].el.style.opacity = 1 - (total - 1 - i) * 0.2;
+        visibleComments[i].el.style.opacity = 1 - (total - 1 - i) * 0.15;
       }
     }
     
-    // هر ۵ ثانیه یک حدیث جدید
     setInterval(createHadithComment, 5000);
-    createHadithComment(); // اولین حدیث بلافاصله
+    createHadithComment();
     
   </script>
 
