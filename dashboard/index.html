@@ -341,14 +341,13 @@
     }
 
     .clouds-row {
-      position: relative; width: 100%; height: 32px;
+      position: relative; width: 100%; height: 48px;
       margin-bottom: 4px;
     }
     
     .cloud-float {
       position: absolute; top: 50%; transform: translateY(-50%);
       animation: cloudDrift 6s ease-in-out infinite;
-      opacity: 0.6;
     }
     
     @keyframes cloudDrift {
@@ -700,6 +699,18 @@
         : 'https://cdn.imgurl.ir/uploads/l811037_InShot_20260727_155607399.png';
     }
     
+    function getCloudColor() {
+      return isMuharram
+        ? 'rgba(220, 38, 38, 0.5)'
+        : 'rgba(13, 148, 136, 0.5)';
+    }
+    
+    function getCloudColorLight() {
+      return isMuharram
+        ? 'rgba(220, 38, 38, 0.3)'
+        : 'rgba(13, 148, 136, 0.3)';
+    }
+    
     function buildDonationCard() {
       let bubblesHTML = '';
       for (let i = 0; i < 8; i++) {
@@ -711,6 +722,8 @@
       }
       
       const logoSrc = getDonationLogo();
+      const cloudColor = getCloudColor();
+      const cloudColorLight = getCloudColorLight();
       
       const cloud1Left = Math.random() * 40 + 10;
       const cloud2Left = Math.random() * 40 + 40;
@@ -725,8 +738,8 @@
           <div class="donation-subtitle">با کمک های خود ما را در برگزاری مراسمات یاری کنید</div>
           <span class="donation-tag">رسمی</span>
           <div class="clouds-row">
-            <i class="fa-solid fa-cloud cloud-float" style="font-size:20px; color:rgba(255,255,255,0.5); animation-delay:${cloud1Delay}s; left:${cloud1Left}%;"></i>
-            <i class="fa-solid fa-cloud cloud-float" style="font-size:16px; color:rgba(255,255,255,0.35); animation-delay:${cloud2Delay}s; left:${cloud2Left}%;"></i>
+            <i class="fa-solid fa-cloud cloud-float" style="font-size:40px; color:${cloudColor}; animation-delay:${cloud1Delay}s; left:${cloud1Left}%;"></i>
+            <i class="fa-solid fa-cloud cloud-float" style="font-size:32px; color:${cloudColorLight}; animation-delay:${cloud2Delay}s; left:${cloud2Left}%;"></i>
           </div>
           <img src="${logoSrc}" class="donation-logo-img" alt="شهدای گمنام">
         </div>
