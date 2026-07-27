@@ -450,6 +450,8 @@
     const $ = (id) => document.getElementById(id);
     const themeToggle = $('themeToggle'), icon = themeToggle.querySelector('i');
     
+    let isMuharram = false;
+    
     const savedTheme = localStorage.getItem('heyat-theme');
     if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); icon.classList.replace('fa-moon', 'fa-sun'); }
     
@@ -466,7 +468,10 @@
         const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
         const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
         const j = await r.json();
-        if (j.code === 200 && j.data.hijri.month.number === 1) document.documentElement.setAttribute('data-muharram', 'true');
+        if (j.code === 200 && j.data.hijri.month.number === 1) {
+          document.documentElement.setAttribute('data-muharram', 'true');
+          isMuharram = true;
+        }
       } catch(e) {}
     })();
     
@@ -666,6 +671,12 @@
       setTimeout(add, delay);
     }
     
+    function getDonationLogo() {
+      return isMuharram
+        ? 'https://cdn.imgurl.ir/uploads/o920051_InShot_20260727_221307712.png'
+        : 'https://cdn.imgurl.ir/uploads/l811037_InShot_20260727_155607399.png';
+    }
+    
     function buildDonationCard() {
       let bubblesHTML = '';
       for (let i = 0; i < 8; i++) {
@@ -676,6 +687,8 @@
         bubblesHTML += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*60}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
       }
       
+      const logoSrc = getDonationLogo();
+      
       return `<div class="donation-card" onclick="window.location.href='../Donates/';">
         <div class="bubbles">${bubblesHTML}</div>
         <div class="card-content">
@@ -683,7 +696,7 @@
           <div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div>
           <div class="donation-subtitle">با کمک های خود ما را در برگزاری مراسمات یاری کنید</div>
           <span class="donation-tag">رسمی</span>
-          <img src="https://cdn.imgurl.ir/uploads/l811037_InShot_20260727_155607399.png" class="donation-logo-img" alt="شهدای گمنام">
+          <img src="${logoSrc}" class="donation-logo-img" alt="شهدای گمنام">
         </div>
       </div>`;
     }
