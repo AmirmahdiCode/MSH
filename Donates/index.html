@@ -205,11 +205,12 @@
     /* بخش احادیث */
     .hadith-wrapper {
       flex: 1; min-width: 0;
+      display: flex; align-items: flex-start;
     }
     
     .hadith-container {
       position: relative; width: 100%;
-      display: flex; align-items: flex-end; justify-content: center;
+      padding-top: 8px;
     }
     
     .hadith-comment {
@@ -453,7 +454,7 @@
       if (!container) return;
       
       const isWide = window.innerWidth > 700;
-      const height = isWide ? 200 : (MAX_VISIBLE * SPACING + 20);
+      const height = isWide ? 200 : (MAX_VISIBLE * SPACING);
       container.style.minHeight = height + 'px';
       
       const hadith = hadiths[currentHadith % hadiths.length];
@@ -520,7 +521,7 @@
       if (container) container.innerHTML = '';
       visibleComments = [];
     });
-  
+    
     let resizeTimeout;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
