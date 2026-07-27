@@ -14,6 +14,7 @@
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
       --card-border: #e2e8f0; --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
       --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
     }
     
@@ -22,7 +23,10 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --logo-filter: brightness(0) invert(1);
+      --card-border: #334155; --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+      --header-bg: #1e293b; --footer-bg: #1e293b;
+      --logo-filter: brightness(0) invert(1);
     }
     
     [data-muharram="true"] {
@@ -64,95 +68,74 @@
     }
     
     .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
-    .header-title { font-size: 20px; font-weight: 700; color: var(--dark); }
-    .header-subtitle { font-size: 10px; color: var(--text-light); }
+    .header-title { font-size: 20px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
+    .header-subtitle { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
     .header-btns { display: flex; align-items: center; gap: 8px; }
     
-    .back-btn, .theme-toggle {
+    .back-btn {
       background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
       cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; transition: all 0.3s ease; text-decoration: none;
+      width: 40px; height: 40px; text-decoration: none; transition: all 0.3s ease;
     }
-    .back-btn:hover, .theme-toggle:hover { background: var(--primary); color: #fff; }
-    .theme-toggle:hover { transform: rotate(15deg); }
+    .back-btn:hover { background: var(--primary); color: #fff; }
     
-    .main-container { flex: 1; max-width: 520px; width: 100%; margin: 24px auto; padding: 0 16px; }
-    
-    .page-header {
-      text-align: center; margin-bottom: 32px;
+    .theme-toggle {
+      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
+      cursor: pointer; font-size: 18px; color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; transition: all 0.3s ease;
     }
+    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
     
-    .page-icon {
-      width: 64px; height: 64px; margin: 0 auto 16px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 26px; color: #fff;
-      box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.3);
-      animation: float 3s ease-in-out infinite;
-    }
+    .main-container { flex: 1; max-width: 600px; width: 100%; margin: 20px auto; padding: 0 12px; }
     
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    
-    .page-title {
-      font-size: 20px; font-weight: 800; color: var(--dark);
-      margin-bottom: 6px;
-    }
-    
-    .page-subtitle {
-      font-size: 12px; color: var(--text-light);
-    }
+    .page-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
     
     .section-label {
-      font-size: 11px; font-weight: 700; color: var(--text-light);
-      text-transform: uppercase; letter-spacing: 1px;
-      margin-bottom: 10px; margin-top: 24px;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; color: var(--text-light);
+      margin-bottom: 10px; margin-top: 20px;
+      display: flex; align-items: center; gap: 6px;
     }
     
-    .section-label i { font-size: 13px; color: var(--primary); }
-    
     .social-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
     }
     
     .social-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 16px; text-decoration: none;
+      border-radius: 12px; padding: 14px 12px; text-decoration: none;
       display: flex; flex-direction: column; align-items: center;
-      gap: 10px; transition: all 0.3s ease; cursor: pointer;
+      gap: 8px; transition: all 0.3s ease; cursor: pointer;
       box-shadow: var(--shadow); text-align: center;
       position: relative; overflow: hidden;
     }
     
-    .social-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 28px rgba(var(--primary-rgb), 0.12);
-      border-color: var(--primary-light);
+    .social-card::before {
+      content: ''; position: absolute; top: 0; right: 0; width: 3px; height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+      border-radius: 0 12px 12px 0;
     }
+    
+    .social-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
     
     .social-card .social-icon {
-      width: 48px; height: 48px; border-radius: 14px;
+      width: 40px; height: 40px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px; position: relative;
+      font-size: 18px; position: relative; flex-shrink: 0;
     }
     
-    .social-card .social-icon img { width: 24px; height: 24px; object-fit: contain; }
+    .social-card .social-icon img { width: 20px; height: 20px; object-fit: contain; }
+    .social-icon.eitaa img { width: 24px; height: 24px; }
+    .social-icon.rubika img { width: 22px; height: 22px; }
     
-    .social-icon.instagram { background: linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7); color: #fff; }
+    .social-icon.instagram { background: linear-gradient(135deg, rgba(249,206,52,0.15), rgba(238,42,123,0.15), rgba(98,40,215,0.15)); color: #e1306c; }
     .social-icon.eitaa { background: #fff7ed; }
-    .social-icon.eitaa img { width: 28px; height: 28px; }
-    .social-icon.telegram { background: #e8f5fe; color: #2AABEE; }
+    .social-icon.telegram { background: rgba(42,171,238,0.12); color: #2AABEE; }
     .social-icon.rubika { background: #fefce8; }
-    .social-icon.rubika img { width: 26px; height: 26px; }
     .social-icon.bale { background: #f0fdf4; }
-    .social-icon.bale img { width: 26px; height: 26px; }
     
     [data-theme="dark"] .social-icon.eitaa { background: #2a1f0a; }
-    [data-theme="dark"] .social-icon.telegram { background: #0a1a2a; }
     [data-theme="dark"] .social-icon.rubika { background: #1a1a0a; }
     [data-theme="dark"] .social-icon.bale { background: #0a1a0f; }
     
@@ -171,11 +154,7 @@
     
     .social-card .social-id {
       font-size: 10px; color: var(--text-light);
-      direction: ltr; display: inline-block;
-    }
-    
-    .divider-section {
-      height: 1px; background: var(--bg3); margin: 8px 0 16px;
+      direction: ltr;
     }
     
     .admin-list {
@@ -184,26 +163,32 @@
     
     .admin-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 14px 16px; text-decoration: none;
+      border-radius: 12px; padding: 12px 14px; text-decoration: none;
       display: flex; align-items: center; gap: 12px;
       transition: all 0.3s ease; box-shadow: var(--shadow);
-      cursor: pointer;
+      cursor: pointer; position: relative; overflow: hidden;
     }
     
-    .admin-card:hover {
-      transform: translateX(-3px);
-      border-color: var(--primary-light);
+    .admin-card::before {
+      content: ''; position: absolute; top: 0; right: 0; width: 3px; height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
     }
+    
+    .admin-card:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
     
     .admin-card .admin-icon {
-      width: 42px; height: 42px; border-radius: 12px;
+      width: 40px; height: 40px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       font-size: 18px; position: relative; flex-shrink: 0;
     }
     
+    .admin-card .admin-icon img { width: 20px; height: 20px; object-fit: contain; }
+    .admin-card .admin-icon.eitaa img { width: 24px; height: 24px; }
+    
     .admin-card .admin-info { flex: 1; min-width: 0; }
     .admin-card .admin-name {
       font-size: 13px; font-weight: 700; color: var(--dark);
+      margin-bottom: 2px;
     }
     .admin-card .admin-user {
       font-size: 10px; color: var(--text-light); direction: ltr; text-align: right;
@@ -213,51 +198,41 @@
     }
     
     .supporter-card {
-      background: linear-gradient(135deg, #fff5f5, #fff);
-      border: 2px dashed #f43f5e;
-      border-radius: 16px; padding: 20px; text-align: center;
-      margin-top: 24px; text-decoration: none; display: block;
-      transition: all 0.3s ease; position: relative; overflow: hidden;
+      background: var(--card-bg); border: 2px dashed #f43f5e;
+      border-radius: 12px; padding: 14px 16px; display: flex;
+      align-items: center; gap: 12px; text-decoration: none; color: var(--text);
+      box-shadow: var(--shadow); transition: all 0.3s ease;
+      cursor: pointer; margin-top: 24px;
     }
-    
-    [data-theme="dark"] .supporter-card {
-      background: linear-gradient(135deg, #2e1a1a, #1e293b);
-    }
-    
-    .supporter-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(244, 63, 94, 0.2);
-    }
+    .supporter-card:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); background: #fff5f5; }
+    [data-theme="dark"] .supporter-card:hover { background: #2e1a1a; }
     
     .supporter-card .supporter-avatar {
-      width: 56px; height: 56px; border-radius: 50%;
-      margin: 0 auto 12px; object-fit: cover;
-      border: 3px solid #f43f5e;
+      width: 44px; height: 44px; border-radius: 12px; object-fit: cover; flex-shrink: 0;
     }
     
+    .supporter-card .supporter-info { flex: 1; min-width: 0; }
     .supporter-card .supporter-name {
-      font-size: 15px; font-weight: 800; color: #f43f5e;
-      margin-bottom: 4px;
+      font-size: 13px; font-weight: 700; color: #f43f5e; margin-bottom: 2px;
+    }
+    .supporter-card .supporter-user {
+      font-size: 10px; color: var(--text-light); direction: ltr; text-align: right;
     }
     
-    .supporter-card .supporter-desc {
-      font-size: 11px; color: var(--text-light);
-    }
-    
-    .supporter-card .supporter-badge {
-      display: inline-block; margin-top: 8px;
-      font-size: 10px; background: #f43f5e; color: #fff;
-      padding: 4px 14px; border-radius: 20px;
-      font-weight: 700; letter-spacing: 0.5px;
+    .supporter-badge {
+      font-size: 9px; background: #f43f5e; color: #fff;
+      padding: 4px 10px; border-radius: 6px; white-space: nowrap;
+      flex-shrink: 0;
     }
     
     .footer {
       text-align: center; padding: 20px; background: var(--footer-bg);
-      border-top: 1px solid var(--bg3); margin-top: auto;
+      border-top: 1px solid var(--bg3); margin-top: auto; transition: all 0.3s ease;
     }
     .footer-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
-    .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; }
-    .footer-text { font-size: 10px; color: var(--text-light); }
+    .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--dark); }
+    .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
     
     @media (max-width: 400px) {
       .social-grid { grid-template-columns: 1fr; }
@@ -286,13 +261,9 @@
 
   <section class="main-container">
     
-    <div class="page-header">
-      <div class="page-icon"><i class="fa-solid fa-comments"></i></div>
-      <div class="page-title">ارتباط با ما</div>
-      <div class="page-subtitle">ما را در شبکه‌های اجتماعی دنبال کنید</div>
-    </div>
+    <div class="page-title"><i class="fa-solid fa-phone"></i> ارتباط با ما</div>
     
-    <div class="section-label"><i class="fa-solid fa-globe"></i> شبکه‌های اجتماعی هیأت</div>
+    <div class="section-label"><i class="fa-solid fa-globe"></i> شبکه‌های اجتماعی</div>
     
     <div class="social-grid">
       <a href="https://www.instagram.com/mehman_parvanehha" target="_blank" class="social-card">
@@ -332,13 +303,11 @@
       </a>
     </div>
     
-    <div class="divider-section"></div>
-    
-    <div class="section-label"><i class="fa-solid fa-user-shield"></i> ادمین‌های هیأت</div>
+    <div class="section-label"><i class="fa-solid fa-user-shield"></i> ادمین‌ها</div>
     
     <div class="admin-list">
       <a href="https://eitaa.com/ya_zahraaaaaaaaaaaaa" target="_blank" class="admin-card">
-        <div class="admin-icon eitaa"><img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا" style="width:24px;height:24px;"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
+        <div class="admin-icon eitaa" style="background:#fff7ed;"><img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
         <div class="admin-info">
           <div class="admin-name">ایتا - ادمین</div>
           <div class="admin-user">ya_zahraaaaaaaaaaaaa</div>
@@ -347,7 +316,7 @@
       </a>
       
       <a href="https://t.me/Ummolbanin8566" target="_blank" class="admin-card">
-        <div class="admin-icon telegram"><i class="fa-brands fa-telegram-plane"></i><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
+        <div class="admin-icon telegram" style="background:rgba(42,171,238,0.12);color:#2AABEE;"><i class="fa-brands fa-telegram-plane"></i><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
         <div class="admin-info">
           <div class="admin-name">تلگرام - ادمین</div>
           <div class="admin-user">Ummolbanin8566</div>
@@ -356,7 +325,7 @@
       </a>
       
       <a href="https://ble.ir/ommolbanin8566" target="_blank" class="admin-card">
-        <div class="admin-icon bale"><img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله" style="width:24px;height:24px;"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
+        <div class="admin-icon bale" style="background:#f0fdf4;"><img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله" style="width:20px;height:20px;"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
         <div class="admin-info">
           <div class="admin-name">بله - ادمین</div>
           <div class="admin-user">ommolbanin8566</div>
@@ -367,9 +336,11 @@
     
     <a href="https://eitaa.com/Amirmahdi_code" target="_blank" class="supporter-card">
       <img src="https://cdn.imgurl.ir/uploads/m87412_4b5310ee-fa5a-4d2e-a58c-a9337ddb4f92.png" class="supporter-avatar" alt="حمایت از سازنده">
-      <div class="supporter-name">حمایت از سازنده</div>
-      <div class="supporter-desc">@Amirmahdi_code</div>
-      <span class="supporter-badge"><i class="fa-solid fa-heart"></i> رسمی</span>
+      <div class="supporter-info">
+        <div class="supporter-name">حمایت از سازنده</div>
+        <div class="supporter-user">Amirmahdi_code</div>
+      </div>
+      <span class="supporter-badge">رسمی</span>
     </a>
 
   </section>
