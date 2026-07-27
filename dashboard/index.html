@@ -310,6 +310,27 @@
       font-size: 10px; color: var(--text-light); margin-bottom: 12px;
       transition: color 0.3s;
     }
+
+    .donation-logo-bottom {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 10px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.25);
+      overflow: hidden;
+      padding: 8px;
+    }
+
+    .donation-logo-bottom img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
     
     .donation-card .donation-tag {
       font-size: 9px; background: var(--primary); color: #fff;
@@ -519,7 +540,7 @@
     
     function buildCalendar() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفن'];
-      const dayNames = ['','','','','','',''];
+      const dayNames = ['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه'];
       const today = gregorianToPersian(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
       
       let html = '<div class="calendar-section"><div class="calendar-header">';
@@ -643,6 +664,9 @@
           <div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div>
           <div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div>
           <div class="donation-subtitle">با کمک های خود ما را در برگزاری مراسمات یاری کنید</div>
+          <div class="donation-logo-bottom">
+            <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="شهدای گمنام">
+          </div>
           <span class="donation-tag">رسمی</span>
         </div>
       </div>`;
