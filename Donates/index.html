@@ -88,10 +88,10 @@
     }
     .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
     
-    .main-container { flex: 1; max-width: 500px; width: 100%; margin: 24px auto; padding: 0 12px; }
+    .main-container { flex: 1; max-width: 500px; width: 100%; margin: 24px auto; padding: 0 12px; display: flex; flex-direction: column; }
     
     .card-wrapper {
-      display: flex; justify-content: center; margin-bottom: 40px;
+      display: flex; justify-content: center; margin-bottom: 24px; flex-shrink: 0;
     }
     
     .bank-card {
@@ -138,32 +138,22 @@
     }
     
     .bank-card .card-info-row {
-      position: absolute; bottom: 38px; left: 28px; right: 28px;
+      position: absolute; bottom: 28px; left: 28px; right: 28px;
       display: flex; justify-content: space-between; align-items: flex-end;
     }
     
-    .bank-card .card-owner-label {
-      font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px;
-      color: rgba(255,255,255,0.55); margin-bottom: 3px;
-    }
-    
     .bank-card .card-owner {
-      font-size: 13px; font-weight: 600; color: #fff;
-      letter-spacing: 0.5px; white-space: nowrap;
+      font-size: 14px; font-weight: 600; color: #fff;
+      letter-spacing: 1px; white-space: nowrap;
     }
     
     .bank-card .card-bank {
-      text-align: right; flex-shrink: 0; margin-right: 16px;
+      text-align: right; flex-shrink: 0;
     }
     
     .bank-card .card-bank-name {
-      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7);
-      letter-spacing: 1px;
-    }
-    
-    .bank-card .card-bank-logo {
-      font-size: 10px; color: rgba(255,255,255,0.5);
-      letter-spacing: 0.5px;
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.75);
+      letter-spacing: 1.5px;
     }
     
     .bank-card .copy-icon-btn {
@@ -210,9 +200,15 @@
     }
     
     /* بخش احادیث */
+    .hadith-wrapper {
+      flex: 1; display: flex; align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    
     .hadith-container {
-      position: relative; min-height: 360px;
+      position: relative; width: 100%;
       display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 0;
     }
     
     .hadith-comment {
@@ -259,7 +255,7 @@
     
     .footer {
       text-align: center; padding: 20px; background: var(--footer-bg);
-      border-top: 1px solid var(--bg3); margin-top: auto; transition: all 0.3s ease;
+      border-top: 1px solid var(--bg3); transition: all 0.3s ease;
     }
     .footer-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
     .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: color 0.3s; }
@@ -271,9 +267,10 @@
       .bank-card .card-number { font-size: 15px; letter-spacing: 2px; left: 20px; right: 20px; }
       .bank-card .card-chip { top: 22px; left: 20px; width: 36px; height: 28px; }
       .bank-card .card-contactless { top: 26px; left: 66px; font-size: 16px; }
-      .bank-card .card-info-row { bottom: 30px; left: 20px; right: 20px; }
+      .bank-card .card-info-row { bottom: 22px; left: 20px; right: 20px; }
       .bank-card .copy-icon-btn { top: 14px; right: 14px; width: 32px; height: 32px; font-size: 12px; }
-      .bank-card .card-owner { font-size: 11px; }
+      .bank-card .card-owner { font-size: 12px; }
+      .bank-card .card-bank-name { font-size: 11px; }
     }
   </style>
 </head>
@@ -313,19 +310,17 @@
         <div class="card-number">5892 1070 4651 8703</div>
         
         <div class="card-info-row">
-          <div class="card-owner-col">
-            <div class="card-owner-label">هیأت</div>
-            <div class="card-owner">شهدای گمنام شورابیل</div>
-          </div>
+          <div class="card-owner">شهدای گمنام شورابیل</div>
           <div class="card-bank">
             <div class="card-bank-name">SEPAH BANK</div>
-            <div class="card-bank-logo">بانک سپه</div>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="hadith-container" id="hadithContainer"></div>
+    <div class="hadith-wrapper">
+      <div class="hadith-container" id="hadithContainer"></div>
+    </div>
 
   </section>
 
@@ -397,7 +392,6 @@
       });
     }
     
-    // احادیث کوتاه
     const hadiths = [
       { text: 'بهترین مردم کسی است که برای مردم سودمندتر باشد.', source: 'پیامبر اکرم (ص)' },
       { text: 'هر کار نیکی صدقه است.', source: 'پیامبر اکرم (ص)' },
@@ -410,33 +404,40 @@
       { text: 'کمک به دیگران، کلید گشایش درهای رحمت است.', source: 'امام علی (ع)' },
       { text: 'هیچ مالی از صدقه کم نمی‌شود.', source: 'پیامبر اکرم (ص)' },
       { text: 'انفاق، مال را زیاد می‌کند نه کم.', source: 'امام صادق (ع)' },
-      { text: 'در مال خود، غیر از حق خودت هم هست.', source: 'قرآن کریم - ذاریات ۱۹' },
       { text: 'احسان و نیکوکاری، زکات نعمت‌هاست.', source: 'امام علی (ع)' },
       { text: 'بهترین شما کسی است که به دیگران نفع برساند.', source: 'پیامبر اکرم (ص)' },
       { text: 'خداوند با کسی است که به بندگانش کمک کند.', source: 'امام صادق (ع)' },
       { text: 'از نشانه‌های مؤمن، انفاق در تنگدستی است.', source: 'امام علی (ع)' },
       { text: 'صدقه، درهای رحمت را می‌گشاید.', source: 'پیامبر اکرم (ص)' },
-      { text: 'آنچه انفاق می‌کنید، نزد خدا می‌ماند.', source: 'قرآن کریم - بقره ۲۷۲' },
       { text: 'دست دهنده از دست گیرنده برتر است.', source: 'امام باقر (ع)' },
       { text: 'سخاوت، درختی از درختان بهشت است.', source: 'پیامبر اکرم (ص)' },
       { text: 'مال، امانت خداست؛ در راه خیر مصرف کن.', source: 'امام علی (ع)' },
       { text: 'با صدقه، عمرتان را طولانی کنید.', source: 'امام صادق (ع)' },
       { text: 'نیکوکاری، سپری در برابر بلاست.', source: 'پیامبر اکرم (ص)' },
       { text: 'هر که ببخشد، خدا بر او می‌بخشد.', source: 'امام علی (ع)' },
-      { text: 'انفاق در راه خدا، تجارتی پرسود است.', source: 'قرآن کریم - فاطر ۲۹' },
       { text: 'هیچ چیزی مثل صدقه، غم را نمی‌زداید.', source: 'امام صادق (ع)' },
       { text: 'کمک به برادر دینی، محبوب‌ترین عمل است.', source: 'امام باقر (ع)' },
       { text: 'صدقه، گناهان را خاموش می‌کند.', source: 'پیامبر اکرم (ص)' },
-      { text: 'مال حلال، بهترین یاور برای عمل صالح است.', source: 'امام علی (ع)' },
       { text: 'دهنده باش، نه نگهدارنده.', source: 'امام صادق (ع)' },
       { text: 'احسان، زینت توانگری است.', source: 'امام علی (ع)' },
       { text: 'خدا انفاق‌کنندگان را دوست دارد.', source: 'قرآن کریم - بقره ۱۹۵' },
+      { text: 'آنچه انفاق می‌کنید، نزد خدا می‌ماند.', source: 'قرآن کریم - بقره ۲۷۲' },
+      { text: 'انفاق در راه خدا، تجارتی پرسود است.', source: 'قرآن کریم - فاطر ۲۹' },
+      { text: 'مال حلال، بهترین یاور برای عمل صالح است.', source: 'امام علی (ع)' },
+      { text: 'در مال خود، غیر از حق خودت هم هست.', source: 'قرآن کریم - ذاریات ۱۹' },
     ];
     
     let currentHadith = 0;
     let visibleComments = [];
     const MAX_VISIBLE = 3;
     const SPACING = 72;
+    let containerHeight = MAX_VISIBLE * SPACING;
+    
+    function updateContainerHeight() {
+      const container = document.getElementById('hadithContainer');
+      if (container) container.style.minHeight = containerHeight + 'px';
+    }
+    updateContainerHeight();
     
     function createHadithComment() {
       const container = document.getElementById('hadithContainer');
