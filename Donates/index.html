@@ -88,72 +88,132 @@
     }
     .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
     
-    .main-container { flex: 1; max-width: 650px; width: 100%; margin: 24px auto; padding: 0 12px; }
+    .main-container { flex: 1; max-width: 500px; width: 100%; margin: 24px auto; padding: 0 12px; }
     
-    .page-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+    .page-title {
+      font-size: 18px; font-weight: 700; color: var(--dark);
+      margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s;
+    }
     
     .card-number-card {
+      position: relative;
       background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      border-radius: 18px; padding: 28px 24px; margin-bottom: 20px;
-      color: #fff; text-align: center;
-      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.3);
+      border-radius: 20px; padding: 32px 24px 28px; margin-bottom: 24px;
+      color: #fff; text-align: center; overflow: hidden;
+      box-shadow: 0 12px 40px rgba(var(--primary-rgb), 0.35);
+    }
+    
+    .card-number-card .bubbles {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; overflow: hidden; z-index: 0;
+    }
+    
+    .card-number-card .bubble {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      animation: floatBubble 5s ease-in-out infinite;
+    }
+    
+    @keyframes floatBubble {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+      50% { transform: translateY(-25px) scale(1.4); opacity: 0.35; }
+    }
+    
+    .card-number-card .card-content {
+      position: relative; z-index: 1;
+    }
+    
+    .copy-icon-btn {
+      position: absolute; top: 16px; right: 16px;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.1);
+      color: #fff; cursor: pointer; font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease; z-index: 2;
+    }
+    .copy-icon-btn:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.6);
+      transform: scale(1.08);
+    }
+    .copy-icon-btn.copied {
+      background: #10b981; border-color: #10b981;
+      animation: popIn 0.4s ease;
+    }
+    
+    @keyframes popIn {
+      0% { transform: scale(0.8); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    .card-number-card .card-icon {
+      width: 60px; height: 60px; margin: 0 auto 16px;
+      background: rgba(255,255,255,0.15); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
     }
     
     .card-number-card .label {
-      font-size: 12px; opacity: 0.8; margin-bottom: 8px;
+      font-size: 13px; font-weight: 600; opacity: 0.9; margin-bottom: 12px;
+      letter-spacing: -0.3px;
     }
     
     .card-number {
-      font-size: 32px; font-weight: 800; letter-spacing: 4px;
-      direction: ltr; display: inline-block; margin-bottom: 16px;
-      background: rgba(255,255,255,0.1); padding: 8px 20px;
-      border-radius: 10px;
+      font-size: 20px; font-weight: 700; letter-spacing: 5px;
+      direction: ltr; display: inline-block; margin-bottom: 12px;
+      background: rgba(255,255,255,0.1); padding: 10px 22px;
+      border-radius: 12px; font-variant-numeric: tabular-nums;
     }
     
-    .card-number-card .note {
-      font-size: 11px; opacity: 0.7; margin-bottom: 16px;
+    .card-number-card .owner {
+      font-size: 13px; font-weight: 600; margin-bottom: 4px;
+      opacity: 0.95;
     }
     
-    .copy-card-btn {
-      padding: 10px 24px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.1); color: #fff;
-      cursor: pointer; font-size: 13px; font-weight: 600;
-      font-family: inherit; transition: all 0.3s ease;
-      display: inline-flex; align-items: center; gap: 8px;
+    .card-number-card .bank-name-badge {
+      font-size: 11px; opacity: 0.75;
+      background: rgba(255,255,255,0.1); padding: 4px 14px;
+      border-radius: 20px; display: inline-block; margin-top: 6px;
     }
-    .copy-card-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
-    .copy-card-btn.copied { background: #10b981; border-color: #10b981; }
     
-    .section-title {
-      font-size: 14px; font-weight: 700; color: var(--dark);
-      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    /* احادیث شناور */
+    .hadith-container {
+      position: relative; min-height: 180px; margin-bottom: 24px;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    
+    .hadith-comment {
+      position: absolute; bottom: 0;
+      max-width: 100%; width: 100%;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 16px 18px;
+      box-shadow: var(--shadow); transition: all 0.5s ease;
+      opacity: 0; transform: translateY(30px);
+      pointer-events: none;
+    }
+    
+    .hadith-comment.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    
+    .hadith-comment.fading {
+      opacity: 0; transform: translateY(-20px);
+    }
+    
+    .hadith-comment .hadith-text {
+      font-size: 13px; font-weight: 500; color: var(--dark);
+      line-height: 1.8; margin-bottom: 8px;
       transition: color 0.3s;
     }
-    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--bg3); transition: background 0.3s; }
     
-    .banks-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-    
-    .bank-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 14px 18px; display: flex;
-      align-items: center; gap: 14px; text-decoration: none; color: var(--text);
-      box-shadow: var(--shadow); transition: all 0.3s ease; cursor: pointer;
+    .hadith-comment .hadith-source {
+      font-size: 10px; color: var(--primary); font-weight: 700;
+      transition: color 0.3s;
     }
-    .bank-card:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
-    
-    .bank-icon {
-      width: 44px; height: 44px; border-radius: 10px;
-      background: var(--bg2); display: flex; align-items: center;
-      justify-content: center; font-size: 20px; flex-shrink: 0;
-      overflow: hidden;
-    }
-    
-    .bank-icon img { width: 100%; height: 100%; object-fit: cover; }
-    
-    .bank-info { flex: 1; min-width: 0; }
-    .bank-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
-    .bank-desc { font-size: 10px; color: var(--text-light); }
-    .bank-arrow { color: var(--text-light); font-size: 14px; }
     
     .footer {
       text-align: center; padding: 20px; background: var(--footer-bg);
@@ -165,7 +225,8 @@
     .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
     
     @media (max-width: 500px) {
-      .card-number { font-size: 24px; letter-spacing: 2px; padding: 6px 14px; }
+      .card-number { font-size: 17px; letter-spacing: 3px; padding: 8px 16px; }
+      .hadith-container { min-height: 200px; }
     }
   </style>
 </head>
@@ -193,47 +254,21 @@
     
     <div class="page-title"><i class="fa-solid fa-hand-holding-heart"></i> کمک‌های نقدی</div>
     
-    <div class="card-number-card">
-      <div class="label"><i class="fa-solid fa-credit-card"></i> شماره کارت جهت نذورات</div>
-      <div class="card-number">5892-1070-4651-8703</div>
-      <div class="note">بانک سپه - به نام هیأت شهدای گمنام شورابیل</div>
-      <button class="copy-card-btn" onclick="copyCard('5892107046518703', this)">
-        <i class="fa-solid fa-copy"></i> کپی شماره کارت
+    <div class="card-number-card" id="cardBox">
+      <div class="bubbles" id="cardBubbles"></div>
+      <button class="copy-icon-btn" onclick="copyCard('5892107046518703', this)" title="کپی شماره کارت">
+        <i class="fa-solid fa-copy"></i>
       </button>
+      <div class="card-content">
+        <div class="card-icon"><i class="fa-solid fa-credit-card"></i></div>
+        <div class="label">شماره کارت نذورات</div>
+        <div class="card-number">5892 — 1070 — 4651 — 8703</div>
+        <div class="owner">هیأت شهدای گمنام شورابیل</div>
+        <div class="bank-name-badge"><i class="fa-solid fa-building-columns"></i> بانک سپه</div>
+      </div>
     </div>
     
-    <div class="section-title"><i class="fa-solid fa-building-columns"></i> درگاه‌های کارت به کارت</div>
-    
-    <div class="banks-list">
-      
-      <a href="https://top.ir/card-to-card" target="_blank" class="bank-card">
-        <div class="bank-icon"><img src="https://cdn.imgurl.ir/uploads/i72515_InShot_20260726_195639719.png" alt="تاپ"></div>
-        <div class="bank-info">
-          <div class="bank-name">تاپ</div>
-          <div class="bank-desc">کارت به کارت با تاپ</div>
-        </div>
-        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
-      </a>
-      
-      <a href="https://app.733.ir/" target="_blank" class="bank-card">
-        <div class="bank-icon"><img src="https://cdn.imgurl.ir/uploads/y095099_InShot_20260726_195704125.png" alt="آپ"></div>
-        <div class="bank-info">
-          <div class="bank-name">آپ</div>
-          <div class="bank-desc">کارت به کارت با آپ</div>
-        </div>
-        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
-      </a>
-      
-      <a href="https://780.ir/finance/card-to-card" target="_blank" class="bank-card">
-        <div class="bank-icon"><img src="https://cdn.imgurl.ir/uploads/o514779_InShot_20260726_195750839.png" alt="هف‌هشتاد"></div>
-        <div class="bank-info">
-          <div class="bank-name">هف‌هشتاد</div>
-          <div class="bank-desc">کارت به کارت با ۷۸۰</div>
-        </div>
-        <div class="bank-arrow"><i class="fa-solid fa-chevron-left"></i></div>
-      </a>
-      
-    </div>
+    <div class="hadith-container" id="hadithContainer"></div>
 
   </section>
 
@@ -257,6 +292,7 @@
       document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
       icon.className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
       localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
+      refreshBubbles();
     });
     
     (async function() {
@@ -265,18 +301,117 @@
         const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
         const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
         const j = await r.json();
-        if (j.code === 200 && j.data.hijri.month.number === 1) document.documentElement.setAttribute('data-muharram', 'true');
+        if (j.code === 200 && j.data.hijri.month.number === 1) {
+          document.documentElement.setAttribute('data-muharram', 'true');
+        }
       } catch(e) {}
+      refreshBubbles();
     })();
+    
+    function generateBubbles() {
+      let html = '';
+      for (let i = 0; i < 14; i++) {
+        const size = Math.random() * 30 + 10;
+        const left = Math.random() * 90;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 5 + 4;
+        html += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*80}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
+      }
+      return html;
+    }
+    
+    function refreshBubbles() {
+      const box = document.getElementById('cardBubbles');
+      if (box) box.innerHTML = generateBubbles();
+    }
+    
+    refreshBubbles();
     
     function copyCard(number, btn) {
       navigator.clipboard.writeText(number).then(() => {
-        const orig = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> کپی شد';
+        const iconEl = btn.querySelector('i');
+        const origClass = iconEl.className;
+        iconEl.className = 'fa-solid fa-check';
         btn.classList.add('copied');
-        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+        setTimeout(() => { 
+          iconEl.className = origClass; 
+          btn.classList.remove('copied'); 
+        }, 2000);
       });
     }
+    
+    // احادیث
+    const hadiths = [
+      { text: 'بهترین مردم کسی است که برای مردم سودمندتر باشد.', source: 'پیامبر اکرم (ص)' },
+      { text: 'هر کار نیکی صدقه است.', source: 'پیامبر اکرم (ص)' },
+      { text: 'دست بالا (دهنده) بهتر از دست پایین (گیرنده) است.', source: 'پیامبر اکرم (ص)' },
+      { text: 'مَثَل کسانی که اموال خود را در راه خدا انفاق می‌کنند، همانند دانه‌ای است که هفت خوشه برویاند.', source: 'قرآن کریم - بقره ۲۶۱' },
+      { text: 'هرگز به نیکی کامل نمی‌رسید مگر اینکه از آنچه دوست دارید انفاق کنید.', source: 'قرآن کریم - آل‌عمران ۹۲' },
+      { text: 'خدا پاداش نیکوکاران را ضایع نمی‌کند.', source: 'قرآن کریم - توبه ۱۲۰' },
+      { text: 'صدقه، بلا را دفع می‌کند.', source: 'امام علی (ع)' },
+      { text: 'کسی که به فکر کمک به دیگران باشد، خدا در فکر کمک به اوست.', source: 'امام صادق (ع)' },
+      { text: 'انفاق در راه خدا، قرض دادن به خداست.', source: 'قرآن کریم - حدید ۱۱' },
+      { text: 'آنچه در راه خدا انفاق کنید، خداوند عوض آن را می‌دهد.', source: 'قرآن کریم - سبأ ۳۹' },
+      { text: 'نیکی کردن، انسان را از مرگ بد حفظ می‌کند.', source: 'امام صادق (ع)' },
+      { text: 'مال، امانت خدا نزد توست؛ در راه خیر مصرف کن.', source: 'امام علی (ع)' },
+      { text: 'صدقه پنهانی، خشم پروردگار را فرو می‌نشاند.', source: 'پیامبر اکرم (ص)' },
+      { text: 'بهترین انفاق، انفاق به نزدیکان نیازمند است.', source: 'امام باقر (ع)' },
+    ];
+    
+    let currentHadith = 0;
+    let visibleComments = [];
+    const MAX_VISIBLE = 3;
+    
+    function createHadithComment() {
+      const container = document.getElementById('hadithContainer');
+      if (!container) return;
+      
+      const hadith = hadiths[currentHadith % hadiths.length];
+      currentHadith++;
+      
+      const el = document.createElement('div');
+      el.className = 'hadith-comment';
+      el.innerHTML = `
+        <div class="hadith-text">«${hadith.text}»</div>
+        <div class="hadith-source">📖 ${hadith.source}</div>
+      `;
+      el.style.bottom = '0px';
+      
+      container.appendChild(el);
+      visibleComments.push({ el, age: 0 });
+      
+      // انیمیشن ورود
+      requestAnimationFrame(() => {
+        el.classList.add('visible');
+      });
+      
+      // جابجایی کامنت‌های قبلی به بالا
+      updatePositions();
+      
+      // حذف کامنت‌های قدیمی
+      if (visibleComments.length > MAX_VISIBLE) {
+        const oldest = visibleComments.shift();
+        oldest.el.classList.add('fading');
+        oldest.el.addEventListener('transitionend', () => oldest.el.remove());
+      }
+    }
+    
+    function updatePositions() {
+      const spacing = 72; // فاصله عمودی بین کامنت‌ها
+      const total = visibleComments.length;
+      
+      for (let i = 0; i < total; i++) {
+        const offset = (total - 1 - i) * spacing;
+        visibleComments[i].el.style.bottom = offset + 'px';
+        visibleComments[i].el.style.zIndex = i;
+        visibleComments[i].el.style.opacity = 1 - (total - 1 - i) * 0.2;
+      }
+    }
+    
+    // هر ۵ ثانیه یک حدیث جدید
+    setInterval(createHadithComment, 5000);
+    createHadithComment(); // اولین حدیث بلافاصله
+    
   </script>
 
 </body>
