@@ -211,7 +211,7 @@
     
     /* بخش احادیث */
     .hadith-container {
-      position: relative; min-height: 300px;
+      position: relative; min-height: 360px;
       display: flex; align-items: flex-end; justify-content: center;
     }
     
@@ -219,35 +219,42 @@
       position: absolute; bottom: 0;
       max-width: 100%; width: 100%;
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 18px 20px;
+      border-radius: 12px; padding: 14px 18px;
       box-shadow: var(--shadow); 
-      transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-      opacity: 0; transform: translateY(40px) scale(0.95);
+      transition: bottom 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
+                  opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
+                  transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+      transform: translateY(80px) scale(0.9);
+      opacity: 0;
       pointer-events: none;
     }
     
-    .hadith-comment.visible {
-      opacity: 1; transform: translateY(0) scale(1);
+    .hadith-comment.settled {
+      transform: translateY(0) scale(1);
+      opacity: 1;
     }
     
     .hadith-comment.fading {
-      opacity: 0; transform: translateY(-30px) scale(0.9);
-      transition: all 0.6s ease-in;
+      transform: translateY(-30px) scale(0.9);
+      opacity: 0;
+      transition: all 0.5s ease-in;
     }
     
     .hadith-comment .hadith-text {
-      font-size: 14px; font-weight: 500; color: var(--dark);
-      line-height: 2; margin-bottom: 10px;
+      font-size: 13px; font-weight: 500; color: var(--dark);
+      line-height: 1.8;
       transition: color 0.3s;
+      display: flex; align-items: center; gap: 8px;
     }
     
     .hadith-comment .hadith-text i {
-      color: var(--primary); margin: 0 4px; font-size: 12px;
+      color: var(--primary); font-size: 11px; flex-shrink: 0;
     }
     
     .hadith-comment .hadith-source {
-      font-size: 11px; color: var(--primary); font-weight: 700;
-      transition: color 0.3s; display: flex; align-items: center; gap: 6px;
+      font-size: 10px; color: var(--primary); font-weight: 700;
+      transition: color 0.3s; margin-top: 6px;
+      display: flex; align-items: center; gap: 6px;
     }
     
     .footer {
@@ -390,27 +397,46 @@
       });
     }
     
-    // احادیث
+    // احادیث کوتاه
     const hadiths = [
       { text: 'بهترین مردم کسی است که برای مردم سودمندتر باشد.', source: 'پیامبر اکرم (ص)' },
       { text: 'هر کار نیکی صدقه است.', source: 'پیامبر اکرم (ص)' },
-      { text: 'دست بالا (دهنده) بهتر از دست پایین (گیرنده) است.', source: 'پیامبر اکرم (ص)' },
-      { text: 'مَثَل کسانی که اموال خود را در راه خدا انفاق می‌کنند، همانند دانه‌ای است که هفت خوشه برویاند.', source: 'قرآن کریم - بقره ۲۶۱' },
-      { text: 'هرگز به نیکی کامل نمی‌رسید مگر اینکه از آنچه دوست دارید انفاق کنید.', source: 'قرآن کریم - آل‌عمران ۹۲' },
-      { text: 'خدا پاداش نیکوکاران را ضایع نمی‌کند.', source: 'قرآن کریم - توبه ۱۲۰' },
+      { text: 'دست بالا بهتر از دست پایین است.', source: 'پیامبر اکرم (ص)' },
       { text: 'صدقه، بلا را دفع می‌کند.', source: 'امام علی (ع)' },
-      { text: 'کسی که به فکر کمک به دیگران باشد، خدا در فکر کمک به اوست.', source: 'امام صادق (ع)' },
-      { text: 'انفاق در راه خدا، قرض دادن به خداست.', source: 'قرآن کریم - حدید ۱۱' },
-      { text: 'آنچه در راه خدا انفاق کنید، خداوند عوض آن را می‌دهد.', source: 'قرآن کریم - سبأ ۳۹' },
       { text: 'نیکی کردن، انسان را از مرگ بد حفظ می‌کند.', source: 'امام صادق (ع)' },
-      { text: 'مال، امانت خدا نزد توست؛ در راه خیر مصرف کن.', source: 'امام علی (ع)' },
+      { text: 'خدا پاداش نیکوکاران را ضایع نمی‌کند.', source: 'قرآن کریم - توبه ۱۲۰' },
       { text: 'صدقه پنهانی، خشم پروردگار را فرو می‌نشاند.', source: 'پیامبر اکرم (ص)' },
       { text: 'بهترین انفاق، انفاق به نزدیکان نیازمند است.', source: 'امام باقر (ع)' },
+      { text: 'کمک به دیگران، کلید گشایش درهای رحمت است.', source: 'امام علی (ع)' },
+      { text: 'هیچ مالی از صدقه کم نمی‌شود.', source: 'پیامبر اکرم (ص)' },
+      { text: 'انفاق، مال را زیاد می‌کند نه کم.', source: 'امام صادق (ع)' },
+      { text: 'در مال خود، غیر از حق خودت هم هست.', source: 'قرآن کریم - ذاریات ۱۹' },
+      { text: 'احسان و نیکوکاری، زکات نعمت‌هاست.', source: 'امام علی (ع)' },
+      { text: 'بهترین شما کسی است که به دیگران نفع برساند.', source: 'پیامبر اکرم (ص)' },
+      { text: 'خداوند با کسی است که به بندگانش کمک کند.', source: 'امام صادق (ع)' },
+      { text: 'از نشانه‌های مؤمن، انفاق در تنگدستی است.', source: 'امام علی (ع)' },
+      { text: 'صدقه، درهای رحمت را می‌گشاید.', source: 'پیامبر اکرم (ص)' },
+      { text: 'آنچه انفاق می‌کنید، نزد خدا می‌ماند.', source: 'قرآن کریم - بقره ۲۷۲' },
+      { text: 'دست دهنده از دست گیرنده برتر است.', source: 'امام باقر (ع)' },
+      { text: 'سخاوت، درختی از درختان بهشت است.', source: 'پیامبر اکرم (ص)' },
+      { text: 'مال، امانت خداست؛ در راه خیر مصرف کن.', source: 'امام علی (ع)' },
+      { text: 'با صدقه، عمرتان را طولانی کنید.', source: 'امام صادق (ع)' },
+      { text: 'نیکوکاری، سپری در برابر بلاست.', source: 'پیامبر اکرم (ص)' },
+      { text: 'هر که ببخشد، خدا بر او می‌بخشد.', source: 'امام علی (ع)' },
+      { text: 'انفاق در راه خدا، تجارتی پرسود است.', source: 'قرآن کریم - فاطر ۲۹' },
+      { text: 'هیچ چیزی مثل صدقه، غم را نمی‌زداید.', source: 'امام صادق (ع)' },
+      { text: 'کمک به برادر دینی، محبوب‌ترین عمل است.', source: 'امام باقر (ع)' },
+      { text: 'صدقه، گناهان را خاموش می‌کند.', source: 'پیامبر اکرم (ص)' },
+      { text: 'مال حلال، بهترین یاور برای عمل صالح است.', source: 'امام علی (ع)' },
+      { text: 'دهنده باش، نه نگهدارنده.', source: 'امام صادق (ع)' },
+      { text: 'احسان، زینت توانگری است.', source: 'امام علی (ع)' },
+      { text: 'خدا انفاق‌کنندگان را دوست دارد.', source: 'قرآن کریم - بقره ۱۹۵' },
     ];
     
     let currentHadith = 0;
     let visibleComments = [];
     const MAX_VISIBLE = 3;
+    const SPACING = 72;
     
     function createHadithComment() {
       const container = document.getElementById('hadithContainer');
@@ -423,37 +449,61 @@
       el.className = 'hadith-comment';
       el.innerHTML = `
         <div class="hadith-text"><i class="fa-solid fa-quote-right"></i> ${hadith.text}</div>
-        <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:5px;"></i> ${hadith.source}</div>
+        <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:4px;"></i> ${hadith.source}</div>
       `;
-      el.style.bottom = '0px';
+      
+      el.style.bottom = '-100px';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(80px) scale(0.9)';
       
       container.appendChild(el);
-      visibleComments.push({ el, age: 0 });
-      
-      requestAnimationFrame(() => {
-        el.classList.add('visible');
-      });
-      
-      updatePositions();
+      visibleComments.push(el);
       
       if (visibleComments.length > MAX_VISIBLE) {
         const oldest = visibleComments.shift();
-        oldest.el.classList.add('fading');
-        oldest.el.addEventListener('transitionend', () => oldest.el.remove());
+        oldest.classList.add('fading');
+        setTimeout(() => {
+          if (oldest.parentNode) oldest.remove();
+        }, 500);
       }
+      
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          updateAllPositions();
+        });
+      });
     }
     
-    function updatePositions() {
-      const spacing = 88;
+    function updateAllPositions() {
       const total = visibleComments.length;
       
       for (let i = 0; i < total; i++) {
-        const offset = (total - 1 - i) * spacing;
-        visibleComments[i].el.style.bottom = offset + 'px';
-        visibleComments[i].el.style.zIndex = i;
-        visibleComments[i].el.style.opacity = 1 - (total - 1 - i) * 0.15;
+        const el = visibleComments[i];
+        if (!el || !el.parentNode) continue;
+        
+        const position = total - 1 - i;
+        const offset = position * SPACING;
+        
+        el.style.bottom = offset + 'px';
+        el.style.zIndex = i;
+        el.style.opacity = 1 - (position) * 0.15;
+        
+        if (i === total - 1) {
+          el.classList.remove('settled');
+          requestAnimationFrame(() => {
+            el.classList.add('settled');
+          });
+        } else {
+          el.classList.add('settled');
+        }
       }
     }
+    
+    window.addEventListener('pagehide', () => {
+      const container = document.getElementById('hadithContainer');
+      if (container) container.innerHTML = '';
+      visibleComments = [];
+    });
     
     setInterval(createHadithComment, 5000);
     createHadithComment();
