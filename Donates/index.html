@@ -102,7 +102,7 @@
     
     .bank-card {
       position: relative;
-      width: 340px; height: 200px;
+      width: 360px; height: 210px;
       background: linear-gradient(145deg, #1a3a3a 0%, #0d2525 30%, var(--primary-dark) 60%, var(--primary) 100%);
       border-radius: 18px; padding: 0; color: #e0e0e0;
       box-shadow: 0 16px 48px rgba(var(--primary-rgb), 0.4), 0 4px 12px rgba(0,0,0,0.3);
@@ -134,11 +134,15 @@
     }
     
     .bank-card .card-number {
-      position: absolute; top: 90px; left: 28px; right: 28px;
-      font-size: 19px; font-weight: 700; letter-spacing: 6px;
+      position: absolute; top: 50%; left: 28px; right: 28px;
+      transform: translateY(-60%);
+      font-size: 18px; font-weight: 700; letter-spacing: 3px;
       font-variant-numeric: tabular-nums; direction: ltr;
       text-align: left; color: #fff;
       text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .bank-card .card-info-row {
@@ -152,12 +156,12 @@
     }
     
     .bank-card .card-owner {
-      font-size: 14px; font-weight: 600; color: #fff;
-      letter-spacing: 1px;
+      font-size: 13px; font-weight: 600; color: #fff;
+      letter-spacing: 0.5px; white-space: nowrap;
     }
     
     .bank-card .card-bank {
-      text-align: right;
+      text-align: right; flex-shrink: 0; margin-right: 16px;
     }
     
     .bank-card .card-bank-name {
@@ -218,10 +222,16 @@
       font-size: 14px; font-weight: 700; color: var(--dark);
       margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
       transition: color 0.3s;
+      position: relative; z-index: 10;
+    }
+    
+    .hadith-wrapper {
+      position: relative; min-height: 340px; margin-bottom: 24px;
     }
     
     .hadith-container {
-      position: relative; min-height: 240px; margin-bottom: 24px;
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 340px;
       display: flex; align-items: flex-end; justify-content: center;
     }
     
@@ -270,12 +280,13 @@
     .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
     
     @media (max-width: 400px) {
-      .bank-card { width: 290px; height: 175px; }
-      .bank-card .card-number { font-size: 15px; letter-spacing: 4px; top: 80px; }
+      .bank-card { width: 300px; height: 180px; }
+      .bank-card .card-number { font-size: 15px; letter-spacing: 2px; left: 20px; right: 20px; }
       .bank-card .card-chip { top: 22px; left: 20px; width: 36px; height: 28px; }
       .bank-card .card-contactless { top: 26px; left: 66px; font-size: 16px; }
       .bank-card .card-info-row { bottom: 30px; left: 20px; right: 20px; }
       .bank-card .copy-icon-btn { top: 14px; right: 14px; width: 32px; height: 32px; font-size: 12px; }
+      .bank-card .card-owner { font-size: 11px; }
     }
   </style>
 </head>
@@ -331,7 +342,9 @@
     
     <div class="hadith-section-title"><i class="fa-solid fa-book-quran"></i> آیات و روایات</div>
     
-    <div class="hadith-container" id="hadithContainer"></div>
+    <div class="hadith-wrapper">
+      <div class="hadith-container" id="hadithContainer"></div>
+    </div>
 
   </section>
 
@@ -457,7 +470,7 @@
     }
     
     function updatePositions() {
-      const spacing = 80;
+      const spacing = 88;
       const total = visibleComments.length;
       
       for (let i = 0; i < total; i++) {
