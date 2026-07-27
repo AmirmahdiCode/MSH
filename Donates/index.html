@@ -90,14 +90,8 @@
     
     .main-container { flex: 1; max-width: 500px; width: 100%; margin: 24px auto; padding: 0 12px; }
     
-    .page-title {
-      font-size: 18px; font-weight: 700; color: var(--dark);
-      margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
-      transition: color 0.3s;
-    }
-    
     .card-wrapper {
-      display: flex; justify-content: center; margin-bottom: 60px;
+      display: flex; justify-content: center; margin-bottom: 40px;
     }
     
     .bank-card {
@@ -141,8 +135,6 @@
       text-align: left; color: #fff;
       text-shadow: 0 1px 4px rgba(0,0,0,0.4);
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     
     .bank-card .card-info-row {
@@ -218,20 +210,8 @@
     }
     
     /* بخش احادیث */
-    .hadith-section-title {
-      font-size: 14px; font-weight: 700; color: var(--dark);
-      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
-      transition: color 0.3s;
-      position: relative; z-index: 10;
-    }
-    
-    .hadith-wrapper {
-      position: relative; min-height: 340px; margin-bottom: 24px;
-    }
-    
     .hadith-container {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 340px;
+      position: relative; min-height: 300px;
       display: flex; align-items: flex-end; justify-content: center;
     }
     
@@ -312,8 +292,6 @@
 
   <section class="main-container">
     
-    <div class="page-title"><i class="fa-solid fa-hand-holding-heart"></i> کمک‌های نقدی</div>
-    
     <div class="card-wrapper">
       <div class="bank-card" id="cardBox">
         <div class="bubbles" id="cardBubbles"></div>
@@ -340,11 +318,7 @@
       </div>
     </div>
     
-    <div class="hadith-section-title"><i class="fa-solid fa-book-quran"></i> آیات و روایات</div>
-    
-    <div class="hadith-wrapper">
-      <div class="hadith-container" id="hadithContainer"></div>
-    </div>
+    <div class="hadith-container" id="hadithContainer"></div>
 
   </section>
 
