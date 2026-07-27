@@ -204,37 +204,38 @@
     
     .hadith-wrapper {
       flex: 1; min-width: 0;
-      margin-top: 0;
-      padding-top: 0;
       align-self: flex-start;
     }
     
     .hadith-container {
       position: relative; width: 100%;
+      height: 200px;
+      display: flex; flex-direction: column; justify-content: flex-end;
     }
     
     .hadith-comment {
-      position: absolute; top: 0;
+      position: relative;
       max-width: 100%; width: 100%;
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 10px; padding: 10px 14px;
       box-shadow: var(--shadow); 
-      transition: top 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
-                  opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
-                  transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-      transform: translateY(-40px) scale(0.9);
+      transition: all 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2);
       opacity: 0;
       pointer-events: none;
+      margin-top: 8px;
+      flex-shrink: 0;
     }
     
     .hadith-comment.settled {
-      transform: translateY(0) scale(1);
       opacity: 1;
     }
     
     .hadith-comment.fading {
-      transform: translateY(-30px) scale(0.9);
       opacity: 0;
+      max-height: 0;
+      padding: 0 14px;
+      margin-top: 0;
+      border-width: 0;
       transition: all 0.5s ease-in;
     }
     
@@ -270,10 +271,14 @@
         max-width: 500px;
       }
       .card-wrapper {
-        display: flex; justify-content: center; margin-bottom: -2px;
+        display: flex; justify-content: center; margin-bottom: 4px;
       }
       .hadith-wrapper {
-        width: 100%; margin-top: -8px; padding-top: 0;
+        width: 100%;
+      }
+      .hadith-container {
+        height: auto;
+        min-height: 180px;
       }
     }
     
@@ -444,17 +449,11 @@
     ];
     
     let currentHadith = 0;
-    let visibleComments = [];
     const MAX_VISIBLE = 3;
-    const SPACING = 62;
     
     function createHadithComment() {
       const container = document.getElementById('hadithContainer');
       if (!container) return;
-      
-      const isWide = window.innerWidth > 700;
-      const height = isWide ? 200 : (MAX_VISIBLE * SPACING);
-      container.style.minHeight = height + 'px';
       
       const hadith = hadiths[currentHadith % hadiths.length];
       currentHadith++;
@@ -466,66 +465,29 @@
         <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:3px;"></i> ${hadith.source}</div>
       `;
       
-      // شروع از بالا با opacity صفر
-      el.style.top = '0px';
       el.style.opacity = '0';
-      el.style.transform = 'translateY(-40px) scale(0.9)';
       
       container.appendChild(el);
-      visibleComments.push(el);
       
-      if (visibleComments.length > MAX_VISIBLE) {
-        const oldest = visibleComments.shift();
+      // حذف قدیمی‌ترین
+      const comments = container.querySelectorAll('.hadith-comment');
+      if (comments.length > MAX_VISIBLE) {
+        const oldest = comments[0];
         oldest.classList.add('fading');
         setTimeout(() => {
           if (oldest.parentNode) oldest.remove();
         }, 500);
       }
       
+      // انیمیشن ورود
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          updateAllPositions();
-        });
+        el.classList.add('settled');
       });
-    }
-    
-    function updateAllPositions() {
-      const total = visibleComments.length;
-      const isWide = window.innerWidth > 700;
-      const spacing = isWide ? 66 : SPACING;
-      
-      for (let i = 0; i < total; i++) {
-        const el = visibleComments[i];
-        if (!el || !el.parentNode) continue;
-        
-        // قدیمی‌ترین (اولین) در بالا، جدیدترین در پایین
-        const offset = i * spacing;
-        
-        el.style.top = offset + 'px';
-        el.style.zIndex = i;
-        el.style.opacity = 1 - (total - 1 - i) * 0.15;
-        
-        if (i === total - 1) {
-          el.classList.remove('settled');
-          requestAnimationFrame(() => {
-            el.classList.add('settled');
-          });
-        } else {
-          el.classList.add('settled');
-        }
-      }
     }
     
     window.addEventListener('pagehide', () => {
       const container = document.getElementById('hadithContainer');
       if (container) container.innerHTML = '';
-      visibleComments = [];
-    });
-    
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(updateAllPositions, 200);
     });
     
     setInterval(createHadithComment, 5000);
