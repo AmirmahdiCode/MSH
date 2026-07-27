@@ -103,13 +103,13 @@
     .calendar-section {
       background: var(--card-bg);
       border-radius: 16px;
-      padding: 18px;
+      padding: 14px;
       margin-bottom: 24px;
       box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.3), 0 0 20px rgba(var(--primary-rgb), 0.1);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      max-width: 420px;
+      max-width: 340px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -133,37 +133,37 @@
     
     .calendar-header {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 14px; position: relative; z-index: 1;
+      margin-bottom: 10px; position: relative; z-index: 1;
     }
     
     .calendar-nav {
-      width: 36px; height: 36px; border-radius: 8px;
+      width: 30px; height: 30px; border-radius: 8px;
       border: 1px solid var(--card-border); background: var(--bg2);
-      cursor: pointer; font-size: 16px; color: var(--text);
+      cursor: pointer; font-size: 14px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
       transition: all 0.3s ease;
     }
     .calendar-nav:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
     
     .calendar-month-title {
-      font-size: 16px; font-weight: 700; color: var(--dark);
+      font-size: 14px; font-weight: 700; color: var(--dark);
       transition: color 0.3s; user-select: none;
     }
     
     .calendar-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
       position: relative; z-index: 1;
     }
     
     .calendar-day-name {
-      text-align: center; font-size: 10px; font-weight: 600;
-      color: var(--text-light); padding: 6px 0;
+      text-align: center; font-size: 9px; font-weight: 600;
+      color: var(--text-light); padding: 4px 0;
     }
     
     .calendar-day {
-      text-align: center; padding: 8px 2px; border-radius: 8px;
-      font-size: 12px; cursor: pointer; transition: all 0.2s ease;
-      position: relative; color: var(--text); min-height: 48px;
+      text-align: center; padding: 6px 1px; border-radius: 6px;
+      font-size: 11px; cursor: pointer; transition: all 0.2s ease;
+      position: relative; color: var(--text); min-height: 38px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       z-index: 1;
     }
@@ -174,36 +174,36 @@
     .calendar-day.empty:hover { background: transparent; }
     
     .calendar-day .dots {
-      display: flex; gap: 3px; justify-content: center; margin-top: 3px;
+      display: flex; gap: 3px; justify-content: center; margin-top: 2px;
     }
     
     .calendar-day .dot {
-      width: 5px; height: 5px; border-radius: 50%;
+      width: 4px; height: 4px; border-radius: 50%;
     }
     
     .calendar-day .dot.event { background: var(--event-dot); }
     .calendar-day .dot.notice { background: var(--notice-dot); }
     
     .calendar-day-info {
-      margin-top: 12px; padding: 12px; background: var(--bg2);
-      border-radius: 10px; display: none; font-size: 12px;
+      margin-top: 10px; padding: 10px; background: var(--bg2);
+      border-radius: 10px; display: none; font-size: 11px;
       position: relative; z-index: 1;
     }
     
     .calendar-day-info.show { display: block; }
     
     .calendar-day-info .info-title {
-      font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 8px;
+      font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px;
     }
     
     .calendar-day-info .info-item {
       display: flex; align-items: center; gap: 6px;
-      padding: 4px 0; font-size: 11px; cursor: pointer;
+      padding: 3px 0; font-size: 10px; cursor: pointer;
       color: var(--text); transition: color 0.2s;
     }
     .calendar-day-info .info-item:hover { color: var(--primary); }
-    .calendar-day-info .info-item i { font-size: 10px; width: 14px; text-align: center; }
-    .calendar-day-info .no-info { color: var(--text-light); font-size: 11px; }
+    .calendar-day-info .info-item i { font-size: 9px; width: 12px; text-align: center; }
+    .calendar-day-info .no-info { color: var(--text-light); font-size: 10px; }
     
     .announcements-section { margin-bottom: 24px; }
     
@@ -340,6 +340,24 @@
       margin-bottom: 8px;
     }
 
+    .clouds-row {
+      position: relative; width: 100%; height: 32px;
+      margin-bottom: 4px;
+    }
+    
+    .cloud-float {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      animation: cloudDrift 6s ease-in-out infinite;
+      opacity: 0.6;
+    }
+    
+    @keyframes cloudDrift {
+      0%, 100% { transform: translateY(-50%) translateX(0); }
+      25% { transform: translateY(-60%) translateX(8px); }
+      50% { transform: translateY(-50%) translateX(16px); }
+      75% { transform: translateY(-40%) translateX(8px); }
+    }
+
     .donation-logo-img {
       width: 100%;
       object-fit: contain;
@@ -398,7 +416,12 @@
       .announcement-title { font-size: 13px; }
       .announcement-text { font-size: 10px; -webkit-line-clamp: 2; }
     }
-    @media (max-width: 380px) {
+    @media (max-width: 400px) {
+      .calendar-section { max-width: 300px; padding: 10px; }
+      .calendar-day { padding: 4px 0; font-size: 10px; min-height: 32px; }
+      .calendar-day-name { font-size: 8px; }
+      .calendar-nav { width: 26px; height: 26px; font-size: 12px; }
+      .calendar-month-title { font-size: 13px; }
       .gallery-grid { gap: 6px; }
       .announcement-item { padding: 10px; gap: 10px; }
       .announcement-image { width: 65px; }
@@ -553,7 +576,7 @@
     let currentMonth = 5; let currentYear = 1405;
     
     function buildCalendar() {
-      const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفن'];
+      const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
       const dayNames = ['','','','','','',''];
       const today = gregorianToPersian(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
       
@@ -689,6 +712,11 @@
       
       const logoSrc = getDonationLogo();
       
+      const cloud1Left = Math.random() * 40 + 10;
+      const cloud2Left = Math.random() * 40 + 40;
+      const cloud1Delay = Math.random() * 2;
+      const cloud2Delay = Math.random() * 2 + 1;
+      
       return `<div class="donation-card" onclick="window.location.href='../Donates/';">
         <div class="bubbles">${bubblesHTML}</div>
         <div class="card-content">
@@ -696,6 +724,10 @@
           <div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div>
           <div class="donation-subtitle">با کمک های خود ما را در برگزاری مراسمات یاری کنید</div>
           <span class="donation-tag">رسمی</span>
+          <div class="clouds-row">
+            <i class="fa-solid fa-cloud cloud-float" style="font-size:20px; color:rgba(255,255,255,0.5); animation-delay:${cloud1Delay}s; left:${cloud1Left}%;"></i>
+            <i class="fa-solid fa-cloud cloud-float" style="font-size:16px; color:rgba(255,255,255,0.35); animation-delay:${cloud2Delay}s; left:${cloud2Left}%;"></i>
+          </div>
           <img src="${logoSrc}" class="donation-logo-img" alt="شهدای گمنام">
         </div>
       </div>`;
