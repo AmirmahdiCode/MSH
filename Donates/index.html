@@ -214,15 +214,15 @@
     }
     
     .hadith-comment {
-      position: absolute; bottom: 0;
+      position: absolute; top: 0;
       max-width: 100%; width: 100%;
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 10px; padding: 10px 14px;
       box-shadow: var(--shadow); 
-      transition: bottom 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
+      transition: top 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
                   opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2),
                   transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-      transform: translateY(80px) scale(0.9);
+      transform: translateY(-40px) scale(0.9);
       opacity: 0;
       pointer-events: none;
     }
@@ -446,7 +446,7 @@
     let currentHadith = 0;
     let visibleComments = [];
     const MAX_VISIBLE = 3;
-    const SPACING = 56;
+    const SPACING = 62;
     
     function createHadithComment() {
       const container = document.getElementById('hadithContainer');
@@ -466,9 +466,10 @@
         <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:3px;"></i> ${hadith.source}</div>
       `;
       
-      el.style.bottom = '-80px';
+      // شروع از بالا با opacity صفر
+      el.style.top = '0px';
       el.style.opacity = '0';
-      el.style.transform = 'translateY(60px) scale(0.9)';
+      el.style.transform = 'translateY(-40px) scale(0.9)';
       
       container.appendChild(el);
       visibleComments.push(el);
@@ -491,18 +492,18 @@
     function updateAllPositions() {
       const total = visibleComments.length;
       const isWide = window.innerWidth > 700;
-      const spacing = isWide ? 62 : SPACING;
+      const spacing = isWide ? 66 : SPACING;
       
       for (let i = 0; i < total; i++) {
         const el = visibleComments[i];
         if (!el || !el.parentNode) continue;
         
-        const position = total - 1 - i;
-        const offset = position * spacing;
+        // قدیمی‌ترین (اولین) در بالا، جدیدترین در پایین
+        const offset = i * spacing;
         
-        el.style.bottom = offset + 'px';
+        el.style.top = offset + 'px';
         el.style.zIndex = i;
-        el.style.opacity = 1 - (position) * 0.15;
+        el.style.opacity = 1 - (total - 1 - i) * 0.15;
         
         if (i === total - 1) {
           el.classList.remove('settled');
