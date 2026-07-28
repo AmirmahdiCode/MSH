@@ -2,28 +2,7 @@ const NOTIF_API = 'https://script.google.com/macros/s/AKfycbz0wWRJtCYo-7lyr0zXJm
 const NOTIF_KEY = 'heyat_last_notif_id';
 
 if ('serviceWorker' in navigator) {
-  const swCode = `
-    self.addEventListener('notificationclick', (event) => {
-      event.notification.close();
-      event.waitUntil(
-        clients.matchAll({ type: 'window' }).then(clientsList => {
-          for (const client of clientsList) {
-            if (client.url.includes('/Notices/') && 'focus' in client) {
-              return client.focus();
-            }
-          }
-          if (clients.openWindow) {
-            return clients.openWindow('/Notices/');
-          }
-        })
-      );
-    });
-  `;
-  
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  
-  navigator.serviceWorker.register(swUrl).then(() => {
+  navigator.serviceWorker.register('../sw.js').then(() => {
     setTimeout(requestPermission, 1500);
   }).catch(() => {});
 }
@@ -36,7 +15,7 @@ async function checkNewNotifications() {
     if (!data.success || !data.data.length) return;
     
     const lastId = localStorage.getItem(NOTIF_KEY);
-    const latest = data.data[0];
+    const latest = data.data[data.data.length - 1]; // آخرین اطلاعیه
     
     if (latest.id !== lastId) {
       if (Notification.permission === 'granted') {
@@ -47,9 +26,7 @@ async function checkNewNotifications() {
           requireInteraction: true
         });
         
-        if (latest.id) {
-          localStorage.setItem(NOTIF_KEY, latest.id);
-        }
+        localStorage.setItem(NOTIF_KEY, latest.id);
       }
     }
   } catch(e) {}
