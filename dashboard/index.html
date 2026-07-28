@@ -100,7 +100,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    /* تایمر */
     .countdown-bar {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 10px; padding: 8px 14px; margin-bottom: 16px;
@@ -115,9 +114,7 @@
       transform: translateY(-1px);
     }
     
-    .countdown-bar .countdown-right {
-      display: flex; align-items: center; gap: 8px;
-    }
+    .countdown-bar .countdown-right { display: flex; align-items: center; gap: 8px; }
     
     .countdown-bar .countdown-icon {
       font-size: 14px; color: var(--primary);
@@ -129,13 +126,8 @@
       50% { transform: scale(1.15); opacity: 0.7; }
     }
     
-    .countdown-bar .countdown-text {
-      font-size: 10px; font-weight: 500; color: var(--dark);
-    }
-    
-    .countdown-bar .countdown-left {
-      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-    }
+    .countdown-bar .countdown-text { font-size: 10px; font-weight: 500; color: var(--dark); }
+    .countdown-bar .countdown-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     
     .countdown-bar .countdown-time {
       background: var(--primary); color: #fff;
@@ -143,18 +135,12 @@
       font-size: 9px; font-weight: 700; white-space: nowrap;
     }
     
-    .countdown-bar .countdown-arrow {
-      color: var(--primary); font-size: 12px;
-      transition: transform 0.3s ease;
-    }
-    
+    .countdown-bar .countdown-arrow { color: var(--primary); font-size: 12px; transition: transform 0.3s ease; }
     .countdown-bar:hover .countdown-arrow { transform: translateX(-2px); }
-    
     .countdown-bar.no-event { cursor: default; opacity: 0.6; }
     .countdown-bar.no-event .countdown-time { background: var(--text-light); }
     .countdown-bar.no-event:hover { transform: none; box-shadow: var(--shadow); }
     
-    /* Toast notification */
     .day-info-toast {
       position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
       background: var(--card-bg); border: 1px solid var(--primary-light);
@@ -165,9 +151,7 @@
       pointer-events: auto;
     }
     
-    .day-info-toast.fading {
-      animation: toastOut 0.3s ease-in forwards;
-    }
+    .day-info-toast.fading { animation: toastOut 0.3s ease-in forwards; }
     
     @keyframes toastIn {
       from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
@@ -399,15 +383,8 @@
     
     .donation-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
     
-    .donation-card .bubbles {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; overflow: hidden;
-    }
-    
-    .donation-card .bubble {
-      position: absolute; background: rgba(var(--primary-rgb), 0.1);
-      border-radius: 50%; animation: floatBubble 4s ease-in-out infinite;
-    }
+    .donation-card .bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
+    .donation-card .bubble { position: absolute; background: rgba(var(--primary-rgb), 0.1); border-radius: 50%; animation: floatBubble 4s ease-in-out infinite; }
     
     .donation-card .card-content {
       position: relative; z-index: 1; padding: 16px 12px 0 12px;
@@ -607,7 +584,6 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     
     function persianDate(year, month, day) { this.year = year; this.month = month; this.day = day; }
-    
     persianDate.prototype.toLocaleDateString = function() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
       return `${this.day} ${months[this.month-1]} ${this.year}`;
@@ -847,9 +823,12 @@
     function refreshCalendar() { const calSection = document.querySelector('.calendar-section'); if (calSection) calSection.outerHTML = buildCalendar(); }
     
     function showDayInfo(dateStr, el) {
-      // حذف کامل toast قبلی
       const existing = document.querySelector('.day-info-toast');
       if (existing) {
+        if (el && existing.dataset.date === dateStr) {
+          closeDayToast();
+          return;
+        }
         existing.remove();
         document.removeEventListener('click', closeDayToastOnClick);
       }
@@ -876,42 +855,29 @@
       const toast = document.createElement('div');
       toast.className = 'day-info-toast';
       toast.innerHTML = html;
+      toast.dataset.date = dateStr;
       document.body.appendChild(toast);
       
-      // کلیک بیرون بسته بشه
-      setTimeout(() => {
-        document.addEventListener('click', closeDayToastOnClick);
-      }, 50);
+      setTimeout(() => { document.addEventListener('click', closeDayToastOnClick); }, 50);
       
-      // محو شدن خودکار بعد ۵ ثانیه
       toastTimeout = setTimeout(() => {
         if (toast.parentNode) {
           toast.classList.add('fading');
-          setTimeout(() => { 
-            if (toast.parentNode) toast.remove(); 
-            document.removeEventListener('click', closeDayToastOnClick);
-          }, 300);
+          setTimeout(() => { if (toast.parentNode) toast.remove(); document.removeEventListener('click', closeDayToastOnClick); }, 300);
         }
       }, 5000);
     }
     
     function closeDayToast() {
       const toast = document.querySelector('.day-info-toast');
-      if (toast) { 
-        toast.classList.add('fading');
-        setTimeout(() => { 
-          if (toast.parentNode) toast.remove(); 
-        }, 300);
-      }
+      if (toast) { toast.classList.add('fading'); setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300); }
       document.removeEventListener('click', closeDayToastOnClick);
       clearTimeout(toastTimeout);
     }
     
     function closeDayToastOnClick(e) {
       const toast = document.querySelector('.day-info-toast');
-      if (toast && !toast.contains(e.target)) { 
-        closeDayToast(); 
-      }
+      if (toast && !toast.contains(e.target)) { closeDayToast(); }
     }
     
     function renderGalleryCard(item) {
@@ -958,6 +924,14 @@
         const annData = await annRes.json(), evtData = await evtRes.json();
         if (annData.success) allAnnouncements = annData.data.map(a => ({ ...a, datePersian: a.date ? toPersianDate(a.date) : null }));
         if (evtData.success) allEvents = evtData.data.map(e => ({ ...e, datePersian: e.date ? toPersianDate(e.date) : null }));
+        
+        // نمایش خودکار toast برای امروز
+        const today = new Date();
+        const todayPersian = gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        const todayStr = `${todayPersian.year}-${String(todayPersian.month).padStart(2,'0')}-${String(todayPersian.day).padStart(2,'0')}`;
+        const todayEvents = allEvents.filter(e => e.datePersian === todayStr);
+        const todayNotices = allAnnouncements.filter(a => a.datePersian === todayStr);
+        
         let annHTML = '', evtHTML = '', galHTML = '';
         
         if (annData.success && annData.data.length > 0) {
@@ -968,13 +942,13 @@
         }
         
         if (evtData.success && evtData.data.length > 0) {
-          const today = new Date(); today.setHours(0,0,0,0);
-          const upcoming = evtData.data.filter(e => new Date(e.date) >= today);
-          const past = evtData.data.filter(e => new Date(e.date) < today);
+          const todayDate = new Date(); todayDate.setHours(0,0,0,0);
+          const upcoming = evtData.data.filter(e => new Date(e.date) >= todayDate);
+          const past = evtData.data.filter(e => new Date(e.date) < todayDate);
           upcoming.sort((a,b) => new Date(a.date) - new Date(b.date)); past.sort((a,b) => new Date(b.date) - new Date(a.date));
           let eventsHTML = '';
-          upcoming.forEach(event => { const d = new Date(event.date); const isToday = d.toDateString() === today.toDateString(); eventsHTML += `<div class="event-card ${isToday?'today':''}" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description||''}" data-tag="${event.tag||''}" data-location="${event.location||''}" data-date="${d.toLocaleDateString('fa-IR')}">${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}<div class="event-info"><div class="event-title">${event.title}</div><div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div><div class="event-tags">${isToday?'<span class="today-tag"><i class="fa-solid fa-calendar-check"></i> امروز</span>':''}<span class="event-tag">${event.tag||'مراسم'}</span></div></div></div>`; if (isToday) eventsHTML += buildDonationCard(); });
-          if (!upcoming.some(e => new Date(e.date).toDateString() === today.toDateString())) { eventsHTML = buildDonationCard() + eventsHTML; }
+          upcoming.forEach(event => { const d = new Date(event.date); const isToday = d.toDateString() === todayDate.toDateString(); eventsHTML += `<div class="event-card ${isToday?'today':''}" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description||''}" data-tag="${event.tag||''}" data-location="${event.location||''}" data-date="${d.toLocaleDateString('fa-IR')}">${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}<div class="event-info"><div class="event-title">${event.title}</div><div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div><div class="event-tags">${isToday?'<span class="today-tag"><i class="fa-solid fa-calendar-check"></i> امروز</span>':''}<span class="event-tag">${event.tag||'مراسم'}</span></div></div></div>`; if (isToday) eventsHTML += buildDonationCard(); });
+          if (!upcoming.some(e => new Date(e.date).toDateString() === todayDate.toDateString())) { eventsHTML = buildDonationCard() + eventsHTML; }
           past.forEach(event => { const d = new Date(event.date); eventsHTML += `<div class="event-card past" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description||''}" data-tag="${event.tag||''}" data-location="${event.location||''}" data-date="${d.toLocaleDateString('fa-IR')}">${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}<div class="event-info"><div class="event-title">${event.title}</div><div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div><div class="event-tags"><span class="event-tag">${event.tag||'مراسم'}</span></div></div></div>`; });
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><input type="text" class="search-box" id="eventSearch" placeholder="جستجو در مراسمات..."><div class="events-track" id="eventsTrack">${eventsHTML}</div></div>`;
           
@@ -983,11 +957,23 @@
           
           if (archiveItems.length > 0) { const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15); galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`; container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML; if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid')); }
           else { galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`; container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML; }
+          
+          // نمایش toast خودکار
+          if (todayEvents.length > 0 || todayNotices.length > 0) {
+            setTimeout(() => showDayInfo(todayStr), 1500);
+          }
+          
           setTimeout(loadPrayerTimes, 500);
         } else {
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><div class="events-track">${buildDonationCard()}<div class="event-card"><div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div><div class="event-info" style="text-align:center;"><div class="event-title">مراسمی ثبت نشده است</div></div></div></div></div>`;
           galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
           container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+          
+          // نمایش toast خودکار
+          if (todayEvents.length > 0 || todayNotices.length > 0) {
+            setTimeout(() => showDayInfo(todayStr), 1500);
+          }
+          
           setTimeout(loadPrayerTimes, 500);
         }
         
