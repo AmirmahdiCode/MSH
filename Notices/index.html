@@ -14,7 +14,10 @@
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
       --card-border: #e2e8f0; --shadow: 0 2px 12px rgba(0,0,0,0.04);
-      --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
+      --header-bg: #ffffff; --footer-bg: #ffffff;
+      --overlay: rgba(13, 148, 136, 0.05);
+      --logo-filter: none; --modal-bg: rgba(0,0,0,0.9);
     }
     
     [data-theme="dark"] {
@@ -23,18 +26,20 @@
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
       --card-border: #334155; --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
       --header-bg: #1e293b; --footer-bg: #1e293b;
+      --overlay: rgba(20, 184, 166, 0.08);
       --logo-filter: brightness(0) invert(1);
     }
     
     [data-muharram="true"] {
       --primary: #dc2626; --primary-dark: #b91c1c; --primary-light: #fca5a5;
-      --primary-rgb: 220, 38, 38;
+      --primary-rgb: 220, 38, 38; --overlay: rgba(220, 38, 38, 0.05);
     }
     
     [data-theme="dark"][data-muharram="true"] {
       --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fca5a5;
-      --primary-rgb: 239, 68, 68;
+      --primary-rgb: 239, 68, 68; --overlay: rgba(239, 68, 68, 0.08);
     }
     
     body {
@@ -70,26 +75,18 @@
     .header-subtitle { font-size: 8px; color: var(--text-light); transition: color 0.3s; }
     .header-btns { display: flex; align-items: center; gap: 8px; }
     
-    .back-btn {
+    .back-btn, .theme-toggle {
       background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
       cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; text-decoration: none; transition: all 0.3s ease;
+      width: 40px; height: 40px; transition: all 0.3s ease; text-decoration: none;
     }
-    .back-btn:hover { background: var(--primary); color: #fff; }
-    
-    .theme-toggle {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
-      cursor: pointer; font-size: 18px; color: var(--text);
-      display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; transition: all 0.3s ease;
-    }
-    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
+    .back-btn:hover, .theme-toggle:hover { background: var(--primary); color: #fff; }
+    .theme-toggle:hover { transform: rotate(15deg); }
     
     .main-container { flex: 1; max-width: 800px; width: 100%; margin: 24px auto; padding: 0 12px; }
     
     .loader-wrapper { display: flex; align-items: center; justify-content: center; min-height: 50vh; }
-    
     .loader {
       width: 48px; height: 48px; border: 4px solid var(--bg3);
       border-top-color: var(--primary); border-radius: 50%;
@@ -97,68 +94,93 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    .announcement-detail {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 16px; overflow: hidden; box-shadow: var(--shadow);
+    .notice-hero {
+      display: flex; justify-content: center; margin-bottom: 24px;
     }
     
-    .announcement-detail-image-wrapper {
-      display: flex; justify-content: center; padding: 24px 24px 0 24px;
-    }
-    
-    .announcement-detail-image {
+    .notice-hero-image {
       width: 100%; max-width: 350px; aspect-ratio: 2/3;
-      object-fit: cover; border-radius: 12px; background: var(--bg2); display: block;
+      object-fit: cover; display: block;
+      background: var(--bg2); border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
     }
     
-    .announcement-detail-body { padding: 24px; }
-    
-    .announcement-detail-title {
-      font-size: 20px; font-weight: 700; color: var(--dark);
-      margin-bottom: 16px; line-height: 1.6; transition: color 0.3s;
+    .notice-hero-placeholder {
+      width: 100%; max-width: 350px; aspect-ratio: 2/3;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px; color: rgba(255,255,255,0.3);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
     }
     
-    .announcement-detail-content {
-      font-size: 14px; color: var(--text); line-height: 2;
-      margin-bottom: 20px; transition: color 0.3s; white-space: pre-line;
+    .notice-info-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 24px; margin-bottom: 24px;
+      box-shadow: var(--shadow);
     }
     
-    .announcement-detail-footer {
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      padding-top: 16px; border-top: 1px solid var(--bg3);
+    .notice-info-card .notice-title {
+      font-size: 22px; font-weight: 800; color: var(--dark);
+      margin-bottom: 16px; line-height: 1.5;
     }
     
-    .announcement-detail-date {
-      font-size: 12px; color: var(--text-light);
-      display: flex; align-items: center; gap: 6px;
+    .notice-meta {
+      display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 20px;
+      position: relative; padding: 0;
     }
     
-    .announcement-detail-tag {
-      font-size: 11px; background: rgba(var(--primary-rgb), 0.08);
-      color: var(--primary-dark); padding: 5px 12px; border-radius: 8px; font-weight: 600;
+    .notice-meta-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 14px; background: var(--bg2);
+      border-radius: 20px; font-size: 11px; color: var(--text);
+      margin-left: 6px; margin-bottom: 6px;
     }
+    
+    .notice-meta-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--primary); flex-shrink: 0;
+    }
+    
+    .notice-tag-badge {
+      display: inline-flex; align-items: center;
+      font-size: 10px; background: rgba(var(--primary-rgb), 0.1);
+      color: var(--primary-dark); padding: 6px 12px;
+      border-radius: 20px; font-weight: 700;
+      margin-left: 6px; margin-bottom: 6px;
+    }
+    
+    .notice-content-box {
+      background: var(--bg2); border-radius: 14px;
+      padding: 20px; font-size: 14px; line-height: 2;
+      color: var(--text); white-space: pre-line;
+      border-right: 4px solid var(--primary);
+    }
+    
+    .share-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px; background: var(--primary); color: #fff;
+      border-radius: 12px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; font-family: inherit;
+      transition: all 0.3s ease; margin-top: 12px;
+    }
+    .share-btn:hover { background: var(--primary-dark); }
+    .share-btn.copied { background: #10b981; }
     
     .footer {
       text-align: center; padding: 20px; background: var(--footer-bg);
-      border-top: 1px solid var(--bg3); margin-top: auto; transition: all 0.3s ease;
+      border-top: 1px solid var(--bg3); margin-top: auto;
     }
     .footer-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
-    .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: color 0.3s; }
-    .footer-links a:hover { color: var(--dark); }
-    .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
+    .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; }
+    .footer-text { font-size: 10px; color: var(--text-light); }
     
     @media (max-width: 650px) {
-      .announcement-detail-image-wrapper { padding: 16px 16px 0 16px; }
-      .announcement-detail-image { max-width: 280px; }
-      .announcement-detail-body { padding: 18px; }
-      .announcement-detail-title { font-size: 17px; }
-      .announcement-detail-content { font-size: 13px; }
       .header-title { font-size: 14px; }
       .header-subtitle { font-size: 7px; }
-    }
-    
-    @media (max-width: 380px) {
-      .announcement-detail-image { max-width: 240px; }
+      .notice-info-card { padding: 18px; }
+      .notice-info-card .notice-title { font-size: 18px; }
+      .notice-hero-image, .notice-hero-placeholder { max-width: 280px; }
     }
   </style>
 </head>
@@ -196,7 +218,13 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbz0wWRJtCYo-7lyr0zXJm_NyvjA9a7ScXOUDOKJfXMGTatGc3Cze0CBXwoen-VrLqK5/exec';
-    const ANNOUNCEMENT_ID = localStorage.getItem('selectedAnnouncementId');
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const NOTICE_ID = urlParams.get('id') || localStorage.getItem('selectedAnnouncementId');
+    
+    if (urlParams.get('id')) {
+      localStorage.setItem('selectedAnnouncementId', urlParams.get('id'));
+    }
     
     const $ = (id) => document.getElementById(id);
     const themeToggle = $('themeToggle'), icon = themeToggle.querySelector('i');
@@ -221,10 +249,21 @@
       } catch(e) {}
     })();
     
-    async function loadAnnouncement() {
+    function shareNotice() {
+      const url = window.location.origin + window.location.pathname + '?id=' + NOTICE_ID;
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.querySelector('.share-btn');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> لینک کپی شد';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+    
+    async function loadNoticeData() {
       const container = $('mainContent');
       
-      if (!ANNOUNCEMENT_ID) {
+      if (!NOTICE_ID) {
         container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه‌ای انتخاب نشده است</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
         return;
       }
@@ -234,15 +273,36 @@
         const data = await res.json();
         
         if (data.success && data.data.length > 0) {
-          const announcement = data.data.find(item => item.id === ANNOUNCEMENT_ID);
+          const notice = data.data.find(item => item.id === NOTICE_ID);
           
-          if (announcement) {
-            const annDate = announcement.date ? new Date(announcement.date) : null;
-            const dateStr = annDate ? annDate.toLocaleDateString('fa-IR') : '';
+          if (notice) {
+            const noticeDate = notice.date ? new Date(notice.date) : null;
+            const dateStr = noticeDate ? noticeDate.toLocaleDateString('fa-IR') : '';
             
-            const imageSection = announcement.image ? `<div class="announcement-detail-image-wrapper"><img src="${announcement.image}" class="announcement-detail-image" alt="${announcement.title}"></div>` : '';
+            let html = '';
             
-            container.innerHTML = `<div class="announcement-detail">${imageSection}<div class="announcement-detail-body"><h1 class="announcement-detail-title">${announcement.title}</h1>${announcement.content ? `<div class="announcement-detail-content">${announcement.content}</div>` : ''}<div class="announcement-detail-footer">${dateStr ? `<span class="announcement-detail-date"><i class="fa-solid fa-clock"></i> ${dateStr}</span>` : ''}${announcement.tag ? `<span class="announcement-detail-tag">${announcement.tag}</span>` : ''}</div></div></div>`;
+            if (notice.image) {
+              html += `<div class="notice-hero"><img src="${notice.image}" class="notice-hero-image" alt="${notice.title}"></div>`;
+            } else {
+              html += `<div class="notice-hero"><div class="notice-hero-placeholder"><i class="fa-solid fa-bullhorn"></i></div></div>`;
+            }
+            
+            html += `<div class="notice-info-card">`;
+            html += `<h1 class="notice-title">${notice.title}</h1>`;
+            
+            html += `<div class="notice-meta">`;
+            if (dateStr) html += `<div class="notice-meta-item"><div class="notice-meta-dot"></div> ${dateStr}</div>`;
+            if (notice.tag) html += `<span class="notice-tag-badge">${notice.tag}</span>`;
+            html += `</div>`;
+            
+            if (notice.content) {
+              html += `<div class="notice-content-box">${notice.content}</div>`;
+            }
+            
+            html += `<button class="share-btn" onclick="shareNotice()"><i class="fa-solid fa-share-nodes"></i> اشتراک‌گذاری</button>`;
+            html += `</div>`;
+            
+            container.innerHTML = html;
           } else {
             container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه پیدا نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
           }
@@ -250,11 +310,11 @@
           container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه‌ای یافت نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
         }
       } catch(e) {
-        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAnnouncement()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`;
+        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadNoticeData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`;
       }
     }
     
-    loadAnnouncement();
+    loadNoticeData();
   </script>
 
   <script src="../music.js"></script>
