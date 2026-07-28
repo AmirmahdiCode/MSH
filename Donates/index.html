@@ -14,7 +14,6 @@
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
       --card-border: #e2e8f0; --shadow: 0 2px 12px rgba(0,0,0,0.04);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
       --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
     }
     
@@ -23,10 +22,7 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --shadow: 0 2px 12px rgba(0,0,0,0.3);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
-      --header-bg: #1e293b; --footer-bg: #1e293b;
-      --logo-filter: brightness(0) invert(1);
+      --card-border: #334155; --logo-filter: brightness(0) invert(1);
     }
     
     [data-muharram="true"] {
@@ -348,11 +344,19 @@
   </footer>
 
   <script>
+    // هماهنگ‌سازی اولیه تم
+    (function() {
+      const saved = localStorage.getItem('heyat-theme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+    
     const themeToggle = document.getElementById('themeToggle');
     const icon = themeToggle.querySelector('i');
     
     const savedTheme = localStorage.getItem('heyat-theme');
-    if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); icon.classList.replace('fa-moon', 'fa-sun'); }
+    if (savedTheme === 'dark') { icon.classList.replace('fa-moon', 'fa-sun'); }
     
     themeToggle.addEventListener('click', () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
