@@ -100,38 +100,95 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     
+    /* تایمر شمارش معکوس */
+    .countdown-bar {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 14px 18px; margin-bottom: 20px;
+      box-shadow: var(--shadow); text-align: center; cursor: pointer;
+      transition: all 0.3s ease; display: flex; align-items: center;
+      justify-content: center; gap: 12px; flex-wrap: wrap;
+      border-right: 4px solid var(--primary);
+      max-width: 580px; margin-left: auto; margin-right: auto;
+    }
+    
+    .countdown-bar:hover {
+      box-shadow: var(--shadow-hover); border-color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    
+    .countdown-bar .countdown-icon {
+      font-size: 22px; color: var(--primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.7; }
+    }
+    
+    .countdown-bar .countdown-text {
+      font-size: 13px; font-weight: 600; color: var(--dark);
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .countdown-bar .countdown-time {
+      background: var(--primary); color: #fff;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 13px; font-weight: 700; letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    
+    .countdown-bar .countdown-arrow {
+      color: var(--primary); font-size: 14px;
+      transition: transform 0.3s ease;
+    }
+    
+    .countdown-bar:hover .countdown-arrow { transform: translateX(-3px); }
+    
+    .countdown-bar.no-event {
+      border-right-color: var(--text-light); cursor: default;
+      opacity: 0.7;
+    }
+    
+    .countdown-bar.no-event .countdown-time {
+      background: var(--text-light);
+    }
+    
+    .countdown-bar.no-event:hover { transform: none; box-shadow: var(--shadow); }
+    
     .top-row {
-      display: flex; gap: 24px; margin-bottom: 24px;
+      display: flex; gap: 16px; margin-bottom: 24px;
       justify-content: center; flex-wrap: wrap;
     }
     
     .calendar-section, .prayer-section {
       background: var(--card-bg);
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.3), 0 0 20px rgba(var(--primary-rgb), 0.1);
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.3), 0 0 16px rgba(var(--primary-rgb), 0.08);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      width: 340px;
+      width: 260px;
       flex-shrink: 0;
     }
     
     .prayer-title {
-      font-size: 14px; font-weight: 700; color: var(--dark);
-      margin-bottom: 12px; text-align: center;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 12px; font-weight: 700; color: var(--dark);
+      margin-bottom: 8px; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
       position: relative; z-index: 1;
     }
     
     .prayer-list {
-      display: flex; flex-direction: column; gap: 6px;
+      display: flex; flex-direction: column; gap: 4px;
       position: relative; z-index: 1;
     }
     
     .prayer-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 12px; border-radius: 8px;
+      padding: 6px 10px; border-radius: 6px;
       background: var(--bg2); transition: all 0.3s ease;
     }
     
@@ -140,24 +197,19 @@
     .prayer-item.next .prayer-time { color: #fff; }
     
     .prayer-name {
-      font-size: 12px; font-weight: 600; color: var(--dark);
-      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 600; color: var(--dark);
+      display: flex; align-items: center; gap: 4px;
       transition: color 0.3s;
     }
     
     .prayer-time {
-      font-size: 12px; font-weight: 700; color: var(--primary);
+      font-size: 10px; font-weight: 700; color: var(--primary);
       direction: ltr; transition: color 0.3s;
     }
     
     .prayer-date {
-      text-align: center; font-size: 10px; color: var(--text-light);
-      margin-bottom: 10px; position: relative; z-index: 1;
-    }
-    
-    .prayer-location {
-      text-align: center; font-size: 10px; color: var(--text-light);
-      margin-top: 10px; position: relative; z-index: 1;
+      text-align: center; font-size: 9px; color: var(--text-light);
+      margin-bottom: 8px; position: relative; z-index: 1;
     }
     
     .calendar-section .bubbles,
@@ -181,37 +233,37 @@
     
     .calendar-header {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 10px; position: relative; z-index: 1;
+      margin-bottom: 8px; position: relative; z-index: 1;
     }
     
     .calendar-nav {
-      width: 30px; height: 30px; border-radius: 8px;
+      width: 26px; height: 26px; border-radius: 6px;
       border: 1px solid var(--card-border); background: var(--bg2);
-      cursor: pointer; font-size: 14px; color: var(--text);
+      cursor: pointer; font-size: 12px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
       transition: all 0.3s ease;
     }
     .calendar-nav:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
     
     .calendar-month-title {
-      font-size: 14px; font-weight: 700; color: var(--dark);
+      font-size: 12px; font-weight: 700; color: var(--dark);
       transition: color 0.3s; user-select: none;
     }
     
     .calendar-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
       position: relative; z-index: 1;
     }
     
     .calendar-day-name {
-      text-align: center; font-size: 9px; font-weight: 600;
-      color: var(--text-light); padding: 4px 0;
+      text-align: center; font-size: 8px; font-weight: 600;
+      color: var(--text-light); padding: 3px 0;
     }
     
     .calendar-day {
-      text-align: center; padding: 6px 1px; border-radius: 6px;
-      font-size: 11px; cursor: pointer; transition: all 0.2s ease;
-      position: relative; color: var(--text); min-height: 38px;
+      text-align: center; padding: 4px 1px; border-radius: 5px;
+      font-size: 10px; cursor: pointer; transition: all 0.2s ease;
+      position: relative; color: var(--text); min-height: 30px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       z-index: 1;
     }
@@ -222,36 +274,36 @@
     .calendar-day.empty:hover { background: transparent; }
     
     .calendar-day .dots {
-      display: flex; gap: 3px; justify-content: center; margin-top: 2px;
+      display: flex; gap: 2px; justify-content: center; margin-top: 1px;
     }
     
     .calendar-day .dot {
-      width: 4px; height: 4px; border-radius: 50%;
+      width: 3px; height: 3px; border-radius: 50%;
     }
     
     .calendar-day .dot.event { background: var(--event-dot); }
     .calendar-day .dot.notice { background: var(--notice-dot); }
     
     .calendar-day-info {
-      margin-top: 10px; padding: 10px; background: var(--bg2);
-      border-radius: 10px; display: none; font-size: 11px;
+      margin-top: 8px; padding: 8px; background: var(--bg2);
+      border-radius: 8px; display: none; font-size: 10px;
       position: relative; z-index: 1;
     }
     
     .calendar-day-info.show { display: block; }
     
     .calendar-day-info .info-title {
-      font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px;
+      font-size: 11px; font-weight: 700; color: var(--dark); margin-bottom: 4px;
     }
     
     .calendar-day-info .info-item {
-      display: flex; align-items: center; gap: 6px;
-      padding: 3px 0; font-size: 10px; cursor: pointer;
+      display: flex; align-items: center; gap: 4px;
+      padding: 2px 0; font-size: 9px; cursor: pointer;
       color: var(--text); transition: color 0.2s;
     }
     .calendar-day-info .info-item:hover { color: var(--primary); }
-    .calendar-day-info .info-item i { font-size: 9px; width: 12px; text-align: center; }
-    .calendar-day-info .no-info { color: var(--text-light); font-size: 10px; }
+    .calendar-day-info .info-item i { font-size: 8px; width: 10px; text-align: center; }
+    .calendar-day-info .no-info { color: var(--text-light); font-size: 9px; }
     
     .announcements-section { margin-bottom: 24px; }
     
@@ -334,7 +386,6 @@
     .event-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
     .event-tag { font-size: 9px; color: var(--primary-dark); background: var(--overlay); padding: 3px 10px; border-radius: 12px; font-weight: 600; display: inline-block; }
     .today-tag { font-size: 9px; background: var(--primary); color: #fff; padding: 3px 10px; border-radius: 10px; font-weight: 700; animation: pulse 1.5s ease-in-out infinite; display: inline-block; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     
     .donation-card {
       min-width: 220px; max-width: 220px; background: linear-gradient(135deg, #ecfdf5, #d1fae5);
@@ -455,9 +506,31 @@
     .footer-links a:hover { color: var(--dark); }
     .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
     
-    @media (max-width: 750px) {
-      .top-row { flex-direction: column; align-items: center; gap: 16px; }
-      .calendar-section, .prayer-section { width: 340px; }
+    @media (max-width: 550px) {
+      .top-row { gap: 8px; }
+      .calendar-section, .prayer-section { width: calc(50% - 6px); padding: 8px; }
+      .calendar-day { padding: 3px 0; font-size: 9px; min-height: 26px; }
+      .calendar-day-name { font-size: 7px; }
+      .prayer-name { font-size: 9px; }
+      .prayer-time { font-size: 9px; }
+      .prayer-title { font-size: 11px; }
+      .prayer-date { font-size: 8px; }
+      .prayer-item { padding: 5px 8px; }
+      .countdown-bar { max-width: 100%; font-size: 12px; }
+    }
+    
+    @media (max-width: 400px) {
+      .calendar-section, .prayer-section { width: calc(50% - 4px); padding: 6px; }
+      .calendar-day { padding: 2px 0; font-size: 8px; min-height: 24px; }
+      .calendar-nav { width: 22px; height: 22px; font-size: 10px; }
+      .calendar-month-title { font-size: 11px; }
+      .prayer-title { font-size: 10px; }
+      .prayer-item { padding: 4px 6px; }
+      .prayer-name, .prayer-time { font-size: 8px; }
+      .prayer-date { font-size: 7px; }
+      .countdown-bar { padding: 10px 12px; }
+      .countdown-bar .countdown-text { font-size: 11px; }
+      .countdown-bar .countdown-time { font-size: 11px; padding: 3px 10px; }
     }
     
     @media (max-width: 900px) and (min-width: 651px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -467,16 +540,6 @@
       .announcement-image { width: 75px; }
       .announcement-title { font-size: 13px; }
       .announcement-text { font-size: 10px; -webkit-line-clamp: 2; }
-    }
-    @media (max-width: 400px) {
-      .calendar-section, .prayer-section { width: 300px; padding: 10px; }
-      .calendar-day { padding: 4px 0; font-size: 10px; min-height: 32px; }
-      .calendar-day-name { font-size: 8px; }
-      .calendar-nav { width: 26px; height: 26px; font-size: 12px; }
-      .calendar-month-title { font-size: 13px; }
-      .gallery-grid { gap: 6px; }
-      .announcement-item { padding: 10px; gap: 10px; }
-      .announcement-image { width: 65px; }
     }
   </style>
 </head>
@@ -627,21 +690,59 @@
     let allAnnouncements = [];
     let currentMonth = 5; let currentYear = 1405;
     
+    // تایمر شمارش معکوس
+    function buildCountdownBar() {
+      const upcoming = allEvents.filter(e => new Date(e.date) >= new Date());
+      upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      if (upcoming.length === 0) {
+        return `<div class="countdown-bar no-event">
+          <i class="fa-solid fa-calendar-xmark countdown-icon"></i>
+          <span class="countdown-text">مراسمی برای روزهای آینده ثبت نشده است</span>
+        </div>`;
+      }
+      
+      const nextEvent = upcoming[0];
+      const eventDate = new Date(nextEvent.date);
+      const now = new Date();
+      const diff = eventDate - now;
+      
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      
+      let timeText = '';
+      if (days > 0) timeText = `${days} روز`;
+      if (hours > 0) timeText += ` ${hours} ساعت`;
+      if (days === 0) timeText += ` ${minutes} دقیقه`;
+      if (days === 0 && hours === 0) timeText = `${minutes} دقیقه`;
+      
+      const eventId = nextEvent.id;
+      
+      return `<div class="countdown-bar" onclick="openEvent('${eventId}')">
+        <i class="fa-solid fa-hourglass-half countdown-icon"></i>
+        <span class="countdown-text">
+          ${nextEvent.title}
+          <span class="countdown-time">${timeText} مانده</span>
+          <i class="fa-solid fa-chevron-left countdown-arrow"></i>
+        </span>
+      </div>`;
+    }
+    
     // اوقات شرعی
     function buildPrayerWidget() {
       return `<div class="prayer-section">
         <div class="bubbles" id="prayerBubbles"></div>
-        <div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی اردبیل</div>
+        <div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی</div>
         <div class="prayer-date" id="prayerDate">در حال دریافت...</div>
         <div class="prayer-list" id="prayerList">
-          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> اذان صبح</span><span class="prayer-time">--:--</span></div>
-          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع آفتاب</span><span class="prayer-time">--:--</span></div>
-          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> اذان ظهر</span><span class="prayer-time">--:--</span></div>
-          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> اذان عصر</span><span class="prayer-time">--:--</span></div>
-          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> اذان مغرب</span><span class="prayer-time">--:--</span></div>
-          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> اذان عشاء</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> صبح</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> ظهر</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> عصر</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> مغرب</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> عشاء</span><span class="prayer-time">--:--</span></div>
         </div>
-        <div class="prayer-location"><i class="fa-solid fa-location-dot"></i> اردبیل، ایران</div>
       </div>`;
     }
     
@@ -659,11 +760,9 @@
           const timings = data.data.timings;
           const date = data.data.date;
           
-          // تاریخ
           const pDate = document.getElementById('prayerDate');
           if (pDate) pDate.textContent = `${date.hijri.weekday.ar} - ${date.hijri.day} ${date.hijri.month.ar} ${date.hijri.year}`;
           
-          // زمان‌ها
           const times = [
             { selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },
             { selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },
@@ -678,10 +777,7 @@
             if (el) el.textContent = t.value.split(' ')[0];
           });
           
-          // هایلایت نماز بعدی
           highlightNextPrayer(timings);
-          
-          // حباب‌ها
           generatePrayerBubbles();
         }
       } catch(e) {
@@ -694,12 +790,12 @@
       const currentTime = now.getHours() * 60 + now.getMinutes();
       
       const prayers = [
-        { name: 'Fajr', time: timings.Fajr },
-        { name: 'Sunrise', time: timings.Sunrise },
-        { name: 'Dhuhr', time: timings.Dhuhr },
-        { name: 'Asr', time: timings.Asr },
-        { name: 'Maghrib', time: timings.Maghrib },
-        { name: 'Isha', time: timings.Isha }
+        { time: timings.Fajr },
+        { time: timings.Sunrise },
+        { time: timings.Dhuhr },
+        { time: timings.Asr },
+        { time: timings.Maghrib },
+        { time: timings.Isha }
       ];
       
       const items = document.querySelectorAll('.prayer-item');
@@ -720,8 +816,8 @@
       const box = document.getElementById('prayerBubbles');
       if (!box) return;
       let html = '';
-      for (let i = 0; i < 10; i++) {
-        const size = Math.random() * 25 + 8;
+      for (let i = 0; i < 8; i++) {
+        const size = Math.random() * 20 + 6;
         const left = Math.random() * 85;
         const delay = Math.random() * 4;
         const duration = Math.random() * 4 + 3;
@@ -737,8 +833,8 @@
       const today = gregorianToPersian(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
       
       let bubblesHTML = '';
-      for (let i = 0; i < 12; i++) {
-        const size = Math.random() * 25 + 8;
+      for (let i = 0; i < 8; i++) {
+        const size = Math.random() * 20 + 6;
         const left = Math.random() * 85;
         const delay = Math.random() * 4;
         const duration = Math.random() * 4 + 3;
@@ -971,18 +1067,18 @@
           if (archiveItems.length > 0) {
             const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15);
             galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`;
-            container.innerHTML = `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
             if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid'));
             setTimeout(loadPrayerTimes, 500);
           } else {
             galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
-            container.innerHTML = `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
             setTimeout(loadPrayerTimes, 500);
           }
         } else {
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><div class="events-track">${buildDonationCard()}<div class="event-card"><div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div><div class="event-info" style="text-align:center;"><div class="event-title">مراسمی ثبت نشده است</div></div></div></div></div>`;
           galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
-          container.innerHTML = `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+          container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
           setTimeout(loadPrayerTimes, 500);
         }
         
