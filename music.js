@@ -1,4 +1,3 @@
-// Music Player - Shared across all pages
 const MUSIC_API = 'https://script.google.com/macros/s/AKfycbyW1IvZYTXVsD9-D_j2O9J_jU0qdUPcVcvQrjpqyQinXRF31VvWDkOhHiwrPME1Hs6G/exec';
 const MUSIC_KEY = 'heyat_music_state';
 
@@ -29,9 +28,7 @@ class MusicPlayer {
       if (data.success && data.data.length > 0) {
         this.playlist = data.data.map(item => item.src);
       }
-    } catch(e) {
-      console.log('خطا در دریافت لیست مداحی');
-    }
+    } catch(e) {}
   }
   
   loadState() {
@@ -55,7 +52,7 @@ class MusicPlayer {
     if (!this.state.src) return;
     
     this.audio = new Audio(this.state.src);
-    this.audio.volume = 0.5;
+    this.audio.volume = 0.05;
     this.audio.currentTime = this.state.time || 0;
     
     this.audio.play().catch(() => {
@@ -77,7 +74,7 @@ class MusicPlayer {
     }
     
     this.audio = new Audio(src);
-    this.audio.volume = 0.5;
+    this.audio.volume = 0.05;
     this.state.src = src;
     this.state.playing = true;
     
@@ -110,7 +107,6 @@ class MusicPlayer {
   
   toggle() {
     if (this.playlist.length === 0) {
-      // لود مجدد لیست
       this.loadPlaylist().then(() => {
         if (this.playlist.length > 0) this.playRandom();
       });
