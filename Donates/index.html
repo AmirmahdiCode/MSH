@@ -65,8 +65,8 @@
     }
     
     .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
-    .header-title { font-size: 20px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
-    .header-subtitle { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
+    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
+    .header-subtitle { font-size: 8px; color: var(--text-light); transition: color 0.3s; }
     .header-btns { display: flex; align-items: center; gap: 8px; }
     
     .back-btn {
@@ -261,16 +261,11 @@
         flex-direction: column; align-items: center; gap: 4px;
         max-width: 500px;
       }
-      .card-wrapper {
-        display: flex; justify-content: center;
-      }
-      .hadith-wrapper {
-        width: 100%;
-      }
-      .hadith-container {
-        height: auto;
-        min-height: 180px;
-      }
+      .card-wrapper { display: flex; justify-content: center; }
+      .hadith-wrapper { width: 100%; }
+      .hadith-container { height: auto; min-height: 180px; }
+      .header-title { font-size: 14px; }
+      .header-subtitle { font-size: 7px; }
     }
     
     @media (max-width: 400px) {
@@ -345,7 +340,6 @@
   </footer>
 
   <script>
-    // هماهنگ‌سازی اولیه تم
     (function() {
       const saved = localStorage.getItem('heyat-theme');
       if (saved === 'dark') {
@@ -452,9 +446,7 @@
     const CARD_HEIGHT = 200;
     const COMMENT_GAP = 8;
     
-    function getCommentHeight() {
-      return 62;
-    }
+    function getCommentHeight() { return 62; }
     
     function createHadithComment() {
       const container = document.getElementById('hadithContainer');
@@ -465,10 +457,7 @@
       
       const el = document.createElement('div');
       el.className = 'hadith-comment';
-      el.innerHTML = `
-        <div class="hadith-text"><i class="fa-solid fa-quote-right"></i> ${hadith.text}</div>
-        <div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:3px;"></i> ${hadith.source}</div>
-      `;
+      el.innerHTML = `<div class="hadith-text"><i class="fa-solid fa-quote-right"></i> ${hadith.text}</div><div class="hadith-source"><i class="fa-solid fa-circle" style="font-size:3px;"></i> ${hadith.source}</div>`;
       
       container.appendChild(el);
       
@@ -479,8 +468,7 @@
       comments.forEach((c, i) => {
         c.classList.add('moving');
         const positionFromBottom = (comments.length - 1 - i);
-        const bottom = positionFromBottom * (getCommentHeight() + COMMENT_GAP);
-        c.style.bottom = bottom + 'px';
+        c.style.bottom = positionFromBottom * (getCommentHeight() + COMMENT_GAP) + 'px';
         c.style.zIndex = i;
         c.style.opacity = positionFromBottom < MAX_VISIBLE ? (1 - positionFromBottom * 0.2) : '0';
         c.classList.add('visible');
@@ -493,19 +481,15 @@
         setTimeout(() => {
           if (oldest.parentNode) oldest.remove();
           const remaining = container.querySelectorAll('.hadith-comment');
-          const newHeight = remaining.length * (getCommentHeight() + COMMENT_GAP);
-          container.style.height = Math.max(CARD_HEIGHT, newHeight) + 'px';
+          container.style.height = Math.max(CARD_HEIGHT, remaining.length * (getCommentHeight() + COMMENT_GAP)) + 'px';
           remaining.forEach((c, i) => {
-            const posFromBottom = remaining.length - 1 - i;
-            c.style.bottom = posFromBottom * (getCommentHeight() + COMMENT_GAP) + 'px';
+            c.style.bottom = (remaining.length - 1 - i) * (getCommentHeight() + COMMENT_GAP) + 'px';
             c.style.zIndex = i;
           });
         }, 500);
       }
       
-      setTimeout(() => {
-        comments.forEach(c => c.classList.remove('moving'));
-      }, 600);
+      setTimeout(() => { comments.forEach(c => c.classList.remove('moving')); }, 600);
     }
     
     window.addEventListener('pagehide', () => {
@@ -515,7 +499,6 @@
     
     setInterval(createHadithComment, 5000);
     createHadithComment();
-    
   </script>
 
   <script src="../music.js"></script>
