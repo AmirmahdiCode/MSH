@@ -95,21 +95,23 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     
     .event-hero {
-      margin-bottom: 24px; border-radius: 20px; overflow: hidden;
-      box-shadow: 0 12px 40px rgba(var(--primary-rgb), 0.2);
-      border: 1px solid var(--card-border);
+      display: flex; justify-content: center; margin-bottom: 24px;
     }
     
     .event-hero-image {
-      width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
-      background: var(--bg2);
+      width: 100%; max-width: 350px; aspect-ratio: 2/3;
+      object-fit: cover; display: block;
+      background: var(--bg2); border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
     }
     
     .event-hero-placeholder {
-      width: 100%; aspect-ratio: 16/9;
+      width: 100%; max-width: 350px; aspect-ratio: 2/3;
       background: linear-gradient(135deg, var(--primary-dark), var(--primary));
       display: flex; align-items: center; justify-content: center;
-      font-size: 72px; color: rgba(255,255,255,0.3);
+      font-size: 64px; color: rgba(255,255,255,0.3);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
     }
     
     .event-info-card {
@@ -262,6 +264,7 @@
       .header-subtitle { font-size: 7px; }
       .event-info-card { padding: 18px; }
       .event-info-card .event-title { font-size: 18px; }
+      .event-hero-image, .event-hero-placeholder { max-width: 280px; }
     }
   </style>
 </head>
@@ -365,8 +368,8 @@
       const parts = url.split('/'); return decodeURIComponent(parts[parts.length - 1].split('?')[0]) || 'فایل صوتی';
     }
     
-    function shareEvent(title) {
-      const url = window.location.href;
+    function shareEvent() {
+      const url = window.location.origin + window.location.pathname + '?id=' + EVENT_ID;
       navigator.clipboard.writeText(url).then(() => {
         const btn = document.querySelector('.share-btn');
         const orig = btn.innerHTML;
@@ -433,14 +436,12 @@
         
         let html = '';
         
-        // عکس مستطیل تمام‌عرض
         if (event.image) {
           html += `<div class="event-hero"><img src="${event.image}" class="event-hero-image" alt="${event.title}"></div>`;
         } else {
           html += `<div class="event-hero"><div class="event-hero-placeholder"><i class="fa-solid fa-mosque"></i></div></div>`;
         }
         
-        // کارت اطلاعات
         html += `<div class="event-info-card">`;
         html += `<h1 class="event-title">${event.title}</h1>`;
         
@@ -454,7 +455,7 @@
           html += `<div class="event-description-box">${event.description}</div>`;
         }
         
-        html += `<button class="share-btn" onclick="shareEvent('${event.title.replace(/'/g, "\\'")}')"><i class="fa-solid fa-share-nodes"></i> اشتراک‌گذاری</button>`;
+        html += `<button class="share-btn" onclick="shareEvent()"><i class="fa-solid fa-share-nodes"></i> اشتراک‌گذاری</button>`;
         html += `</div>`;
         
         if (archive.images && archive.images.length > 0) {
