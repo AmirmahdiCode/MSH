@@ -72,29 +72,42 @@
     .header-subtitle { font-size: 8px; color: var(--text-light); transition: color 0.3s; }
     .header-btns { display: flex; align-items: center; gap: 8px; }
     
-    .back-btn {
+    .back-btn, .theme-toggle {
       background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
       cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; text-decoration: none; transition: all 0.3s ease;
+      width: 40px; height: 40px; transition: all 0.3s ease; text-decoration: none;
     }
-    .back-btn:hover { background: var(--primary); color: #fff; }
+    .back-btn:hover, .theme-toggle:hover { background: var(--primary); color: #fff; }
+    .theme-toggle:hover { transform: rotate(15deg); }
     
-    .theme-toggle {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
-      cursor: pointer; font-size: 18px; color: var(--text);
-      display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; transition: all 0.3s ease;
+    .main-container { flex: 1; max-width: 650px; width: 100%; margin: 24px auto; padding: 0 12px; }
+    
+    .page-header {
+      text-align: center; margin-bottom: 28px;
     }
-    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
     
-    .main-container { flex: 1; max-width: 600px; width: 100%; margin: 20px auto; padding: 0 12px; }
+    .page-icon {
+      width: 64px; height: 64px; margin: 0 auto 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 26px; color: #fff;
+      box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.3);
+    }
     
-    .page-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+    .page-title {
+      font-size: 20px; font-weight: 800; color: var(--dark);
+      margin-bottom: 4px;
+    }
+    
+    .page-subtitle {
+      font-size: 11px; color: var(--text-light);
+    }
     
     .section-label {
-      font-size: 12px; font-weight: 700; color: var(--text-light);
-      margin-bottom: 10px; margin-top: 20px;
+      font-size: 11px; font-weight: 700; color: var(--text-light);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 10px; margin-top: 24px;
       display: flex; align-items: center; gap: 6px;
     }
     
@@ -104,7 +117,7 @@
     
     .social-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 14px 12px; text-decoration: none;
+      border-radius: 14px; padding: 14px; text-decoration: none;
       display: flex; flex-direction: column; align-items: center;
       gap: 8px; transition: all 0.3s ease; cursor: pointer;
       box-shadow: var(--shadow); text-align: center;
@@ -114,20 +127,20 @@
     .social-card::before {
       content: ''; position: absolute; top: 0; right: 0; width: 3px; height: 100%;
       background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
-      border-radius: 0 12px 12px 0;
+      border-radius: 0 14px 14px 0;
     }
     
     .social-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
     
     .social-card .social-icon {
-      width: 40px; height: 40px; border-radius: 10px;
+      width: 42px; height: 42px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; position: relative; flex-shrink: 0;
+      font-size: 20px; position: relative; flex-shrink: 0;
     }
     
-    .social-card .social-icon img { width: 20px; height: 20px; object-fit: contain; }
-    .social-icon.eitaa img { width: 24px; height: 24px; }
-    .social-icon.rubika img { width: 22px; height: 22px; }
+    .social-card .social-icon img { width: 22px; height: 22px; object-fit: contain; }
+    .social-icon.eitaa img { width: 26px; height: 26px; }
+    .social-icon.rubika img { width: 24px; height: 24px; }
     
     .social-icon.instagram { background: linear-gradient(135deg, rgba(249,206,52,0.15), rgba(238,42,123,0.15), rgba(98,40,215,0.15)); color: #e1306c; }
     .social-icon.eitaa { background: #fff7ed; }
@@ -163,8 +176,8 @@
     
     .admin-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 12px 14px; text-decoration: none;
-      display: flex; align-items: center; gap: 12px;
+      border-radius: 14px; padding: 14px 16px; text-decoration: none;
+      display: flex; align-items: center; gap: 14px;
       transition: all 0.3s ease; box-shadow: var(--shadow);
       cursor: pointer; position: relative; overflow: hidden;
     }
@@ -177,18 +190,18 @@
     .admin-card:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
     
     .admin-card .admin-icon {
-      width: 40px; height: 40px; border-radius: 10px;
+      width: 42px; height: 42px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; position: relative; flex-shrink: 0;
+      font-size: 20px; position: relative; flex-shrink: 0;
     }
     
-    .admin-card .admin-icon img { width: 20px; height: 20px; object-fit: contain; }
-    .admin-card .admin-icon.eitaa img { width: 24px; height: 24px; }
+    .admin-card .admin-icon img { width: 22px; height: 22px; object-fit: contain; }
+    .admin-card .admin-icon.eitaa img { width: 26px; height: 26px; }
     
     .admin-card .admin-info { flex: 1; min-width: 0; }
     .admin-card .admin-name {
       font-size: 13px; font-weight: 700; color: var(--dark);
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
     .admin-card .admin-user {
       font-size: 10px; color: var(--text-light); direction: ltr; text-align: right;
@@ -199,8 +212,8 @@
     
     .supporter-card {
       background: var(--card-bg); border: 2px dashed #f43f5e;
-      border-radius: 12px; padding: 14px 16px; display: flex;
-      align-items: center; gap: 12px; text-decoration: none; color: var(--text);
+      border-radius: 14px; padding: 16px; display: flex;
+      align-items: center; gap: 14px; text-decoration: none; color: var(--text);
       box-shadow: var(--shadow); transition: all 0.3s ease;
       cursor: pointer; margin-top: 24px;
     }
@@ -208,12 +221,12 @@
     [data-theme="dark"] .supporter-card:hover { background: #2e1a1a; }
     
     .supporter-card .supporter-avatar {
-      width: 44px; height: 44px; border-radius: 12px; object-fit: cover; flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 14px; object-fit: cover; flex-shrink: 0;
     }
     
     .supporter-card .supporter-info { flex: 1; min-width: 0; }
     .supporter-card .supporter-name {
-      font-size: 13px; font-weight: 700; color: #f43f5e; margin-bottom: 2px;
+      font-size: 13px; font-weight: 700; color: #f43f5e; margin-bottom: 3px;
     }
     .supporter-card .supporter-user {
       font-size: 10px; color: var(--text-light); direction: ltr; text-align: right;
@@ -221,8 +234,8 @@
     
     .supporter-badge {
       font-size: 9px; background: #f43f5e; color: #fff;
-      padding: 4px 10px; border-radius: 6px; white-space: nowrap;
-      flex-shrink: 0;
+      padding: 5px 12px; border-radius: 8px; white-space: nowrap;
+      flex-shrink: 0; font-weight: 700;
     }
     
     .footer {
@@ -266,7 +279,11 @@
 
   <section class="main-container">
     
-    <div class="page-title"><i class="fa-solid fa-phone"></i> ارتباط با ما</div>
+    <div class="page-header">
+      <div class="page-icon"><i class="fa-solid fa-comments"></i></div>
+      <div class="page-title">ارتباط با ما</div>
+      <div class="page-subtitle">ما را در شبکه‌های اجتماعی دنبال کنید</div>
+    </div>
     
     <div class="section-label"><i class="fa-solid fa-globe"></i> شبکه‌های اجتماعی</div>
     
@@ -330,7 +347,7 @@
       </a>
       
       <a href="https://ble.ir/ommolbanin8566" target="_blank" class="admin-card">
-        <div class="admin-icon bale" style="background:#f0fdf4;"><img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله" style="width:20px;height:20px;"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
+        <div class="admin-icon bale" style="background:#f0fdf4;"><img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله" style="width:22px;height:22px;"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
         <div class="admin-info">
           <div class="admin-name">بله - ادمین شهدای گمنام شورابیل</div>
           <div class="admin-user">@ommolbanin8566</div>
