@@ -103,17 +103,20 @@
     /* تایمر */
     .countdown-bar {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 10px; padding: 8px 12px; margin-bottom: 16px;
+      border-radius: 10px; padding: 8px 14px; margin-bottom: 16px;
       box-shadow: var(--shadow); cursor: pointer;
       transition: all 0.3s ease; display: flex; align-items: center;
-      justify-content: center; gap: 6px;
-      border-right: 3px solid var(--primary);
+      justify-content: space-between;
       max-width: 560px; margin-left: auto; margin-right: auto;
     }
     
     .countdown-bar:hover {
       box-shadow: var(--shadow-hover); border-color: var(--primary-light);
       transform: translateY(-1px);
+    }
+    
+    .countdown-bar .countdown-right {
+      display: flex; align-items: center; gap: 8px;
     }
     
     .countdown-bar .countdown-icon {
@@ -128,27 +131,26 @@
     
     .countdown-bar .countdown-text {
       font-size: 10px; font-weight: 500; color: var(--dark);
-      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-      justify-content: center;
+    }
+    
+    .countdown-bar .countdown-left {
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
     }
     
     .countdown-bar .countdown-time {
       background: var(--primary); color: #fff;
       padding: 2px 8px; border-radius: 10px;
-      font-size: 9px; font-weight: 700;
-      white-space: nowrap;
+      font-size: 9px; font-weight: 700; white-space: nowrap;
     }
     
     .countdown-bar .countdown-arrow {
-      color: var(--primary); font-size: 10px;
+      color: var(--primary); font-size: 12px;
       transition: transform 0.3s ease;
     }
     
     .countdown-bar:hover .countdown-arrow { transform: translateX(-2px); }
     
-    .countdown-bar.no-event {
-      border-right-color: var(--text-light); cursor: default; opacity: 0.6;
-    }
+    .countdown-bar.no-event { cursor: default; opacity: 0.6; }
     .countdown-bar.no-event .countdown-time { background: var(--text-light); }
     .countdown-bar.no-event:hover { transform: none; box-shadow: var(--shadow); }
     
@@ -575,9 +577,7 @@
     $('imageModal').onclick = function(e) { if (e.target === this) closeModal(); };
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     
-    function persianDate(year, month, day) {
-      this.year = year; this.month = month; this.day = day;
-    }
+    function persianDate(year, month, day) { this.year = year; this.month = month; this.day = day; }
     
     persianDate.prototype.toLocaleDateString = function() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
@@ -586,14 +586,11 @@
     
     function gregorianToPersian(gy, gm, gd) {
       const g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
-      const jy = gy <= 1600 ? 0 : 979;
-      gy -= gy <= 1600 ? 621 : 1600;
+      const jy = gy <= 1600 ? 0 : 979; gy -= gy <= 1600 ? 621 : 1600;
       const gy2 = gm > 2 ? gy + 1 : gy;
       let days = 365 * gy + parseInt((gy2 + 3) / 4) - parseInt((gy2 + 99) / 100) + parseInt((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
-      let jy2 = jy + 33 * parseInt(days / 12053);
-      days %= 12053;
-      jy2 += 4 * parseInt(days / 1461);
-      days %= 1461;
+      let jy2 = jy + 33 * parseInt(days / 12053); days %= 12053;
+      jy2 += 4 * parseInt(days / 1461); days %= 1461;
       if (days > 365) { jy2 += parseInt((days - 1) / 365); days = (days - 1) % 365; }
       const jm = days < 186 ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
       const jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
@@ -601,24 +598,18 @@
     }
     
     function getDaysInMonth(year, month) {
-      if (month <= 6) return 31;
-      if (month <= 11) return 30;
+      if (month <= 6) return 31; if (month <= 11) return 30;
       return ((year - 1) % 4 === 3) ? 30 : 29;
     }
     
     function getDayOfWeek(year, month, day) {
       const g = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
       const j = [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9];
-      const jy = year - ((year >= 0) ? 0 : 1);
-      const gy = jy + 621;
-      const gm = month;
-      const gd = day;
+      const jy = year - ((year >= 0) ? 0 : 1); const gy = jy + 621; const gm = month; const gd = day;
       const gy2 = (gm > 2) ? gy + 1 : gy;
       let days = 355666 + (365 * gy) + parseInt((gy2 + 3) / 4) - parseInt((gy2 + 99) / 100) + parseInt((gy2 + 399) / 400) + gd + g[gm - 1];
-      let jy2 = -1595 + (33 * parseInt(days / 12053));
-      days %= 12053;
-      jy2 += 4 * parseInt(days / 1461);
-      days %= 1461;
+      let jy2 = -1595 + (33 * parseInt(days / 12053)); days %= 12053;
+      jy2 += 4 * parseInt(days / 1461); days %= 1461;
       if (days > 365) { jy2 += parseInt((days - 1) / 365); days = (days - 1) % 365; }
       const jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
       const jd = 1 + ((days < 186) ? days % 31 : (days - 186) % 30);
@@ -641,15 +632,16 @@
     let allAnnouncements = [];
     let currentMonth = 5; let currentYear = 1405;
     
-    // تایمر شمارش معکوس
     function buildCountdownBar() {
       const upcoming = allEvents.filter(e => new Date(e.date) >= new Date(new Date().setHours(0,0,0,0)));
       upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
       
       if (upcoming.length === 0) {
         return `<div class="countdown-bar no-event">
-          <i class="fa-solid fa-calendar-xmark countdown-icon"></i>
-          <span class="countdown-text">مراسمی برای روزهای آینده ثبت نشده</span>
+          <div class="countdown-right">
+            <i class="fa-solid fa-calendar-xmark countdown-icon"></i>
+            <span class="countdown-text">مراسمی برای روزهای آینده ثبت نشده</span>
+          </div>
         </div>`;
       }
       
@@ -662,18 +654,18 @@
         const [hours, minutes] = maghribTime.split(':').map(Number);
         const eventStartTime = new Date(eventDate);
         eventStartTime.setHours(hours - 2, minutes, 0, 0);
-        
-        const endTime = new Date(eventDate);
-        endTime.setHours(23, 59, 59, 999);
+        const endTime = new Date(eventDate); endTime.setHours(23, 59, 59, 999);
         
         if (now >= eventStartTime && now <= endTime) {
           return `<div class="countdown-bar" onclick="openEvent('${nextEvent.id}')">
-            <i class="fa-solid fa-mosque countdown-icon" style="color:#10b981;"></i>
-            <span class="countdown-text">
-              <span style="font-weight:600;">${nextEvent.title}</span>
+            <div class="countdown-right">
+              <i class="fa-solid fa-circle" style="font-size:8px;color:#10b981;animation:pulse 1.5s ease-in-out infinite;"></i>
+              <span class="countdown-text" style="font-weight:600;">${nextEvent.title}</span>
+            </div>
+            <div class="countdown-left">
               <span class="countdown-time" style="background:#10b981;">در حال برگزاری</span>
               <i class="fa-solid fa-chevron-left countdown-arrow"></i>
-            </span>
+            </div>
           </div>`;
         }
         
@@ -689,19 +681,23 @@
           timeText += `${mins} دقیقه`;
           
           return `<div class="countdown-bar" onclick="openEvent('${nextEvent.id}')">
-            <i class="fa-solid fa-hourglass-half countdown-icon"></i>
-            <span class="countdown-text">
-              <span style="font-weight:600;">${nextEvent.title}</span>
+            <div class="countdown-right">
+              <i class="fa-solid fa-hourglass-half countdown-icon"></i>
+              <span class="countdown-text" style="font-weight:600;">${nextEvent.title}</span>
+            </div>
+            <div class="countdown-left">
               <span class="countdown-time">${timeText} مانده</span>
               <i class="fa-solid fa-chevron-left countdown-arrow"></i>
-            </span>
+            </div>
           </div>`;
         }
       }
       
       return `<div class="countdown-bar no-event">
-        <i class="fa-solid fa-hourglass-half countdown-icon"></i>
-        <span class="countdown-text">در حال دریافت...</span>
+        <div class="countdown-right">
+          <i class="fa-solid fa-hourglass-half countdown-icon"></i>
+          <span class="countdown-text">در حال دریافت...</span>
+        </div>
       </div>`;
     }
     
@@ -710,7 +706,6 @@
       if (bar) bar.outerHTML = buildCountdownBar();
     }
     
-    // اوقات شرعی
     function buildPrayerWidget() {
       return `<div class="prayer-section">
         <div class="bubbles" id="prayerBubbles"></div>
@@ -733,20 +728,15 @@
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
         const year = now.getFullYear();
-        
         const r = await fetch(`https://api.aladhan.com/v1/timingsByCity/${day}-${month}-${year}?city=Ardabil&country=Iran&method=7`);
         const data = await r.json();
-        
         if (data.code === 200) {
           const timings = data.data.timings;
           const date = data.data.date;
-          
           const maghribTime = timings.Maghrib.split(' ')[0];
           prayerTimesCache[now.toDateString()] = maghribTime;
-          
           const pDate = document.getElementById('prayerDate');
           if (pDate) pDate.textContent = `${date.hijri.weekday.ar} - ${date.hijri.day} ${date.hijri.month.ar} ${date.hijri.year}`;
-          
           const times = [
             { selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },
             { selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },
@@ -755,57 +745,33 @@
             { selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Maghrib },
             { selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Isha }
           ];
-          
           times.forEach(t => {
             const el = document.querySelector(t.selector);
             if (el) el.textContent = t.value.split(' ')[0];
           });
-          
           highlightNextPrayer(timings);
           generatePrayerBubbles();
           updateCountdown();
         }
-      } catch(e) {
-        console.log('خطا در دریافت اوقات شرعی');
-      }
+      } catch(e) { console.log('خطا در دریافت اوقات شرعی'); }
     }
     
     function highlightNextPrayer(timings) {
-      const now = new Date();
-      const currentTime = now.getHours() * 60 + now.getMinutes();
-      
-      const prayers = [
-        { time: timings.Fajr },
-        { time: timings.Sunrise },
-        { time: timings.Dhuhr },
-        { time: timings.Asr },
-        { time: timings.Maghrib },
-        { time: timings.Isha }
-      ];
-      
-      const items = document.querySelectorAll('.prayer-item');
-      items.forEach(item => item.classList.remove('next'));
-      
+      const now = new Date(); const currentTime = now.getHours() * 60 + now.getMinutes();
+      const prayers = [{ time: timings.Fajr },{ time: timings.Sunrise },{ time: timings.Dhuhr },{ time: timings.Asr },{ time: timings.Maghrib },{ time: timings.Isha }];
+      const items = document.querySelectorAll('.prayer-item'); items.forEach(item => item.classList.remove('next'));
       for (let i = 0; i < prayers.length; i++) {
-        const parts = prayers[i].time.split(':');
-        const prayerMinutes = parseInt(parts[0]) * 60 + parseInt(parts[1]);
-        
-        if (prayerMinutes > currentTime) {
-          if (items[i]) items[i].classList.add('next');
-          break;
-        }
+        const parts = prayers[i].time.split(':'); const prayerMinutes = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        if (prayerMinutes > currentTime) { if (items[i]) items[i].classList.add('next'); break; }
       }
     }
     
     function generatePrayerBubbles() {
-      const box = document.getElementById('prayerBubbles');
-      if (!box) return;
+      const box = document.getElementById('prayerBubbles'); if (!box) return;
       let html = '';
       for (let i = 0; i < 8; i++) {
-        const size = Math.random() * 20 + 6;
-        const left = Math.random() * 85;
-        const delay = Math.random() * 4;
-        const duration = Math.random() * 4 + 3;
+        const size = Math.random() * 20 + 6; const left = Math.random() * 85;
+        const delay = Math.random() * 4; const duration = Math.random() * 4 + 3;
         html += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*70}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
       }
       box.innerHTML = html;
@@ -815,88 +781,51 @@
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
       const dayNames = ['','','','','','',''];
       const today = gregorianToPersian(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
-      
       let bubblesHTML = '';
       for (let i = 0; i < 8; i++) {
-        const size = Math.random() * 20 + 6;
-        const left = Math.random() * 85;
-        const delay = Math.random() * 4;
-        const duration = Math.random() * 4 + 3;
+        const size = Math.random() * 20 + 6; const left = Math.random() * 85;
+        const delay = Math.random() * 4; const duration = Math.random() * 4 + 3;
         bubblesHTML += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*70}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
       }
-      
       let html = `<div class="calendar-section"><div class="bubbles">${bubblesHTML}</div><div class="calendar-header">`;
       html += `<button class="calendar-nav" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-right"></i></button>`;
       html += `<span class="calendar-month-title">${months[currentMonth - 1]} ${currentYear}</span>`;
       html += `<button class="calendar-nav" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-left"></i></button>`;
       html += '</div><div class="calendar-grid">';
-      
       dayNames.forEach(d => { html += `<div class="calendar-day-name">${d}</div>`; });
-      
       const firstDay = getDayOfWeek(currentYear, currentMonth, 1);
       const daysInMonth = getDaysInMonth(currentYear, currentMonth);
-      
-      for (let i = 0; i < firstDay; i++) {
-        html += '<div class="calendar-day empty"></div>';
-      }
-      
+      for (let i = 0; i < firstDay; i++) { html += '<div class="calendar-day empty"></div>'; }
       for (let d = 1; d <= daysInMonth; d++) {
         const isToday = (currentYear === today.year && currentMonth === today.month && d === today.day);
         const dateStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
         const hasEvent = allEvents.some(e => e.datePersian === dateStr);
         const hasNotice = allAnnouncements.some(a => a.datePersian === dateStr);
-        
         html += `<div class="calendar-day ${isToday ? 'today' : ''}" onclick="showDayInfo('${dateStr}', this)" data-date="${dateStr}">${d}`;
-        
         if (hasEvent || hasNotice) {
           html += '<div class="dots">';
           if (hasEvent) html += '<span class="dot event"></span>';
           if (hasNotice) html += '<span class="dot notice"></span>';
           html += '</div>';
         }
-        
         html += '</div>';
       }
-      
       html += '</div><div class="calendar-day-info" id="dayInfo"></div></div>';
-      
       return html;
     }
     
-    function changeMonth(dir) {
-      currentMonth += dir;
-      if (currentMonth > 12) { currentMonth = 1; currentYear++; }
-      if (currentMonth < 1) { currentMonth = 12; currentYear--; }
-      refreshCalendar();
-    }
-    
-    function refreshCalendar() {
-      const calSection = document.querySelector('.calendar-section');
-      if (calSection) calSection.outerHTML = buildCalendar();
-    }
+    function changeMonth(dir) { currentMonth += dir; if (currentMonth > 12) { currentMonth = 1; currentYear++; } if (currentMonth < 1) { currentMonth = 12; currentYear--; } refreshCalendar(); }
+    function refreshCalendar() { const calSection = document.querySelector('.calendar-section'); if (calSection) calSection.outerHTML = buildCalendar(); }
     
     function showDayInfo(dateStr, el) {
       const info = $('dayInfo');
-      if (info.style.display === 'block' && info.dataset.activeDate === dateStr) {
-        info.style.display = 'none'; info.dataset.activeDate = ''; return;
-      }
-      
+      if (info.style.display === 'block' && info.dataset.activeDate === dateStr) { info.style.display = 'none'; info.dataset.activeDate = ''; return; }
       const events = allEvents.filter(e => e.datePersian === dateStr);
       const notices = allAnnouncements.filter(a => a.datePersian === dateStr);
-      
       let html = `<div class="info-title">${formatPersianDate(dateStr)}</div>`;
-      if (events.length === 0 && notices.length === 0) {
-        html += '<div class="no-info">مراسم یا اطلاعیه‌ای برای این روز ثبت نشده است</div>';
-      }
-      
-      events.forEach(e => {
-        html += `<div class="info-item" onclick="openEvent('${e.id}')"><i class="fa-solid fa-calendar-check" style="color:var(--event-dot);"></i> ${e.title} (${e.location || 'نامشخص'})</div>`;
-      });
-      
-      notices.forEach(a => {
-        html += `<div class="info-item" onclick="openAnnouncement('${a.id}')"><i class="fa-solid fa-bullhorn" style="color:var(--notice-dot);"></i> ${a.title}</div>`;
-      });
-      
+      if (events.length === 0 && notices.length === 0) { html += '<div class="no-info">مراسم یا اطلاعیه‌ای برای این روز ثبت نشده است</div>'; }
+      events.forEach(e => { html += `<div class="info-item" onclick="openEvent('${e.id}')"><i class="fa-solid fa-calendar-check" style="color:var(--event-dot);"></i> ${e.title} (${e.location || 'نامشخص'})</div>`; });
+      notices.forEach(a => { html += `<div class="info-item" onclick="openAnnouncement('${a.id}')"><i class="fa-solid fa-bullhorn" style="color:var(--notice-dot);"></i> ${a.title}</div>`; });
       info.innerHTML = html; info.style.display = 'block'; info.dataset.activeDate = dateStr;
     }
     
@@ -909,47 +838,21 @@
     
     function lazyLoadGallery(items, start, batch, delay, grid) {
       let idx = start;
-      function add() {
-        const batchItems = items.slice(idx, idx + batch);
-        if (batchItems.length === 0) return;
-        batchItems.forEach(item => { grid.insertAdjacentHTML('beforeend', renderGalleryCard(item)); });
-        idx += batch;
-        if (idx < items.length) setTimeout(add, delay);
-      }
+      function add() { const batchItems = items.slice(idx, idx + batch); if (batchItems.length === 0) return; batchItems.forEach(item => { grid.insertAdjacentHTML('beforeend', renderGalleryCard(item)); }); idx += batch; if (idx < items.length) setTimeout(add, delay); }
       setTimeout(add, delay);
     }
     
-    function getDonationLogo() {
-      return isMuharram ? 'https://cdn.imgurl.ir/uploads/o920051_InShot_20260727_221307712.png' : 'https://cdn.imgurl.ir/uploads/l811037_InShot_20260727_155607399.png';
-    }
-    
-    function getCloudColor() {
-      return isMuharram ? 'rgba(220, 38, 38, 0.5)' : 'rgba(13, 148, 136, 0.5)';
-    }
-    
-    function getCloudColorLight() {
-      return isMuharram ? 'rgba(220, 38, 38, 0.3)' : 'rgba(13, 148, 136, 0.3)';
-    }
+    function getDonationLogo() { return isMuharram ? 'https://cdn.imgurl.ir/uploads/o920051_InShot_20260727_221307712.png' : 'https://cdn.imgurl.ir/uploads/l811037_InShot_20260727_155607399.png'; }
+    function getCloudColor() { return isMuharram ? 'rgba(220, 38, 38, 0.5)' : 'rgba(13, 148, 136, 0.5)'; }
+    function getCloudColorLight() { return isMuharram ? 'rgba(220, 38, 38, 0.3)' : 'rgba(13, 148, 136, 0.3)'; }
     
     function buildDonationCard() {
       let bubblesHTML = '';
-      for (let i = 0; i < 8; i++) {
-        const size = Math.random() * 20 + 10;
-        const left = Math.random() * 80;
-        const delay = Math.random() * 3;
-        const duration = Math.random() * 3 + 3;
-        bubblesHTML += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*60}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
-      }
-      
-      const logoSrc = getDonationLogo();
-      const cloudColor = getCloudColor();
-      const cloudColorLight = getCloudColorLight();
-      const cloud1Left = Math.random() * 40 + 10;
-      const cloud2Left = Math.random() * 40 + 40;
-      
+      for (let i = 0; i < 8; i++) { const size = Math.random() * 20 + 10; const left = Math.random() * 80; const delay = Math.random() * 3; const duration = Math.random() * 3 + 3; bubblesHTML += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*60}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`; }
+      const logoSrc = getDonationLogo(); const cloudColor = getCloudColor(); const cloudColorLight = getCloudColorLight();
+      const cloud1Left = Math.random() * 40 + 10; const cloud2Left = Math.random() * 40 + 40;
       return `<div class="donation-card" onclick="window.location.href='../Donates/';">
-        <div class="bubbles">${bubblesHTML}</div>
-        <div class="card-content">
+        <div class="bubbles">${bubblesHTML}</div><div class="card-content">
           <div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div>
           <div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div>
           <div class="donation-subtitle">با کمک های خود ما را در برگزاری مراسمات یاری کنید</div>
@@ -965,23 +868,16 @@
     
     async function loadAllData() {
       const container = $('mainContent');
-      
       try {
         const [annRes, evtRes] = await Promise.all([fetch(API_URL + '?action=getActiveAnnouncements'), fetch(API_URL + '?action=getEvents')]);
         const annData = await annRes.json(), evtData = await evtRes.json();
-        
         if (annData.success) allAnnouncements = annData.data.map(a => ({ ...a, datePersian: a.date ? toPersianDate(a.date) : null }));
         if (evtData.success) allEvents = evtData.data.map(e => ({ ...e, datePersian: e.date ? toPersianDate(e.date) : null }));
-        
         let annHTML = '', evtHTML = '', galHTML = '';
         
         if (annData.success && annData.data.length > 0) {
           const reversed = [...annData.data].reverse();
-          annHTML = `<div class="announcements-section"><div class="section-title"><i class="fa-solid fa-bullhorn"></i> اطلاعیه‌ها</div>${reversed.map(item => {
-            const d = item.date ? new Date(item.date) : null;
-            const imgHTML = item.image ? `<img src="${item.image}" class="announcement-image" alt="">` : `<div class="announcement-image placeholder"><i class="fa-solid fa-bullhorn"></i></div>`;
-            return `<div class="announcement-item" onclick="openAnnouncement('${item.id}')">${imgHTML}<div class="announcement-body"><div class="announcement-title">${item.title}</div>${item.content ? `<div class="announcement-text">${item.content}</div>` : ''}<div class="announcement-footer">${d ? `<span class="announcement-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span>` : ''}${item.tag ? `<span class="announcement-tag">${item.tag}</span>` : ''}</div></div></div>`;
-          }).join('')}</div>`;
+          annHTML = `<div class="announcements-section"><div class="section-title"><i class="fa-solid fa-bullhorn"></i> اطلاعیه‌ها</div>${reversed.map(item => { const d = item.date ? new Date(item.date) : null; const imgHTML = item.image ? `<img src="${item.image}" class="announcement-image" alt="">` : `<div class="announcement-image placeholder"><i class="fa-solid fa-bullhorn"></i></div>`; return `<div class="announcement-item" onclick="openAnnouncement('${item.id}')">${imgHTML}<div class="announcement-body"><div class="announcement-title">${item.title}</div>${item.content ? `<div class="announcement-text">${item.content}</div>` : ''}<div class="announcement-footer">${d ? `<span class="announcement-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span>` : ''}${item.tag ? `<span class="announcement-tag">${item.tag}</span>` : ''}</div></div></div>`; }).join('')}</div>`;
         } else {
           annHTML = `<div class="announcements-section"><div class="section-title"><i class="fa-solid fa-bullhorn"></i> اطلاعیه‌ها</div><div class="announcement-item"><div class="announcement-image placeholder"><i class="fa-solid fa-circle-info"></i></div><div class="announcement-body"><div class="announcement-title">اطلاعیه‌ای برای نمایش وجود ندارد</div></div></div></div>`;
         }
@@ -990,49 +886,18 @@
           const today = new Date(); today.setHours(0,0,0,0);
           const upcoming = evtData.data.filter(e => new Date(e.date) >= today);
           const past = evtData.data.filter(e => new Date(e.date) < today);
-          upcoming.sort((a,b) => new Date(a.date) - new Date(b.date));
-          past.sort((a,b) => new Date(b.date) - new Date(a.date));
-          
+          upcoming.sort((a,b) => new Date(a.date) - new Date(b.date)); past.sort((a,b) => new Date(b.date) - new Date(a.date));
           let eventsHTML = '';
-          upcoming.forEach(event => {
-            const d = new Date(event.date);
-            const isToday = d.toDateString() === today.toDateString();
-            eventsHTML += `<div class="event-card ${isToday?'today':''}" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description||''}" data-tag="${event.tag||''}" data-location="${event.location||''}" data-date="${d.toLocaleDateString('fa-IR')}">${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}<div class="event-info"><div class="event-title">${event.title}</div><div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div><div class="event-tags">${isToday?'<span class="today-tag"><i class="fa-solid fa-calendar-check"></i> امروز</span>':''}<span class="event-tag">${event.tag||'مراسم'}</span></div></div></div>`;
-            if (isToday) eventsHTML += buildDonationCard();
-          });
-          
-          if (!upcoming.some(e => new Date(e.date).toDateString() === today.toDateString())) {
-            eventsHTML = buildDonationCard() + eventsHTML;
-          }
-          
-          past.forEach(event => {
-            const d = new Date(event.date);
-            eventsHTML += `<div class="event-card past" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description||''}" data-tag="${event.tag||''}" data-location="${event.location||''}" data-date="${d.toLocaleDateString('fa-IR')}">${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}<div class="event-info"><div class="event-title">${event.title}</div><div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div><div class="event-tags"><span class="event-tag">${event.tag||'مراسم'}</span></div></div></div>`;
-          });
-          
+          upcoming.forEach(event => { const d = new Date(event.date); const isToday = d.toDateString() === today.toDateString(); eventsHTML += `<div class="event-card ${isToday?'today':''}" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description||''}" data-tag="${event.tag||''}" data-location="${event.location||''}" data-date="${d.toLocaleDateString('fa-IR')}">${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}<div class="event-info"><div class="event-title">${event.title}</div><div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div><div class="event-tags">${isToday?'<span class="today-tag"><i class="fa-solid fa-calendar-check"></i> امروز</span>':''}<span class="event-tag">${event.tag||'مراسم'}</span></div></div></div>`; if (isToday) eventsHTML += buildDonationCard(); });
+          if (!upcoming.some(e => new Date(e.date).toDateString() === today.toDateString())) { eventsHTML = buildDonationCard() + eventsHTML; }
+          past.forEach(event => { const d = new Date(event.date); eventsHTML += `<div class="event-card past" onclick="openEvent('${event.id}')" data-title="${event.title}" data-description="${event.description||''}" data-tag="${event.tag||''}" data-location="${event.location||''}" data-date="${d.toLocaleDateString('fa-IR')}">${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}<div class="event-info"><div class="event-title">${event.title}</div><div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div><div class="event-tags"><span class="event-tag">${event.tag||'مراسم'}</span></div></div></div>`; });
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><input type="text" class="search-box" id="eventSearch" placeholder="جستجو در مراسمات..."><div class="events-track" id="eventsTrack">${eventsHTML}</div></div>`;
           
           const archiveItems = [];
-          for (const event of evtData.data) {
-            try {
-              const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', { method: 'POST', body: JSON.stringify({ eventId: event.id }) });
-              const archiveData = await archiveRes.json();
-              if (archiveData.success && archiveData.data.images && archiveData.data.images.length > 0) {
-                archiveData.data.images.forEach(img => { archiveItems.push({ eventId: event.id, title: event.title, date: event.date, location: event.location, image: img }); });
-              }
-            } catch(e) {}
-          }
+          for (const event of evtData.data) { try { const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', { method: 'POST', body: JSON.stringify({ eventId: event.id }) }); const archiveData = await archiveRes.json(); if (archiveData.success && archiveData.data.images && archiveData.data.images.length > 0) { archiveData.data.images.forEach(img => { archiveItems.push({ eventId: event.id, title: event.title, date: event.date, location: event.location, image: img }); }); } } catch(e) {} }
           
-          if (archiveItems.length > 0) {
-            const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15);
-            galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`;
-            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
-            if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid'));
-          } else {
-            galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
-            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
-          }
-          
+          if (archiveItems.length > 0) { const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15); galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`; container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML; if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid')); }
+          else { galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`; container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML; }
           setTimeout(loadPrayerTimes, 500);
         } else {
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><div class="events-track">${buildDonationCard()}<div class="event-card"><div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div><div class="event-info" style="text-align:center;"><div class="event-title">مراسمی ثبت نشده است</div></div></div></div></div>`;
@@ -1041,27 +906,10 @@
           setTimeout(loadPrayerTimes, 500);
         }
         
-        document.getElementById('eventSearch')?.addEventListener('input', function() {
-          const q = this.value.toLowerCase().trim();
-          document.querySelectorAll('.event-card').forEach(c => {
-            const txt = (c.dataset.title+''+c.dataset.description+''+c.dataset.tag+''+c.dataset.location+''+c.dataset.date).toLowerCase();
-            c.style.display = (q==='' || txt.includes(q)) ? '' : 'none';
-          });
-        });
-        
-        document.getElementById('gallerySearch')?.addEventListener('input', function() {
-          const q = this.value.toLowerCase().trim();
-          document.querySelectorAll('.gallery-card').forEach(c => {
-            const txt = (c.dataset.title+''+c.dataset.date+''+c.dataset.location).toLowerCase();
-            c.style.display = (q==='' || txt.includes(q)) ? '' : 'none';
-          });
-        });
-        
+        const evtSearch = $('eventSearch'); if (evtSearch) evtSearch.oninput = function() { const q = this.value.toLowerCase().trim(); document.querySelectorAll('.event-card').forEach(c => { const txt = (c.dataset.title+''+c.dataset.description+''+c.dataset.tag+''+c.dataset.location+''+c.dataset.date).toLowerCase(); c.style.display = (q==='' || txt.includes(q)) ? '' : 'none'; }); };
+        const galSearch = $('gallerySearch'); if (galSearch) galSearch.oninput = function() { const q = this.value.toLowerCase().trim(); document.querySelectorAll('.gallery-card').forEach(c => { const txt = (c.dataset.title+''+c.dataset.date+''+c.dataset.location).toLowerCase(); c.style.display = (q==='' || txt.includes(q)) ? '' : 'none'; }); };
         setInterval(updateCountdown, 30000);
-        
-      } catch(e) {
-        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAllData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`;
-      }
+      } catch(e) { container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAllData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`; }
     }
     
     loadAllData();
