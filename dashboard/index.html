@@ -847,8 +847,12 @@
     function refreshCalendar() { const calSection = document.querySelector('.calendar-section'); if (calSection) calSection.outerHTML = buildCalendar(); }
     
     function showDayInfo(dateStr, el) {
+      // حذف کامل toast قبلی
       const existing = document.querySelector('.day-info-toast');
-      if (existing) existing.remove();
+      if (existing) {
+        existing.remove();
+        document.removeEventListener('click', closeDayToastOnClick);
+      }
       clearTimeout(toastTimeout);
       
       const events = allEvents.filter(e => e.datePersian === dateStr);
@@ -874,23 +878,40 @@
       toast.innerHTML = html;
       document.body.appendChild(toast);
       
-      setTimeout(() => { document.addEventListener('click', closeDayToastOnClick); }, 100);
+      // کلیک بیرون بسته بشه
+      setTimeout(() => {
+        document.addEventListener('click', closeDayToastOnClick);
+      }, 50);
       
+      // محو شدن خودکار بعد ۵ ثانیه
       toastTimeout = setTimeout(() => {
-        toast.classList.add('fading');
-        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300);
+        if (toast.parentNode) {
+          toast.classList.add('fading');
+          setTimeout(() => { 
+            if (toast.parentNode) toast.remove(); 
+            document.removeEventListener('click', closeDayToastOnClick);
+          }, 300);
+        }
       }, 5000);
     }
     
     function closeDayToast() {
       const toast = document.querySelector('.day-info-toast');
-      if (toast) { toast.classList.add('fading'); setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300); }
+      if (toast) { 
+        toast.classList.add('fading');
+        setTimeout(() => { 
+          if (toast.parentNode) toast.remove(); 
+        }, 300);
+      }
       document.removeEventListener('click', closeDayToastOnClick);
+      clearTimeout(toastTimeout);
     }
     
     function closeDayToastOnClick(e) {
       const toast = document.querySelector('.day-info-toast');
-      if (toast && !toast.contains(e.target)) { closeDayToast(); }
+      if (toast && !toast.contains(e.target)) { 
+        closeDayToast(); 
+      }
     }
     
     function renderGalleryCard(item) {
