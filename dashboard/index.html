@@ -154,6 +154,51 @@
     .countdown-bar.no-event .countdown-time { background: var(--text-light); }
     .countdown-bar.no-event:hover { transform: none; box-shadow: var(--shadow); }
     
+    /* Toast notification */
+    .day-info-toast {
+      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--card-bg); border: 1px solid var(--primary-light);
+      border-radius: 12px; padding: 12px 18px;
+      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
+      z-index: 9999; font-size: 11px; max-width: 340px; width: 90%;
+      animation: toastIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+      pointer-events: auto;
+    }
+    
+    .day-info-toast.fading {
+      animation: toastOut 0.3s ease-in forwards;
+    }
+    
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+    }
+    
+    .day-info-toast .toast-title {
+      font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    
+    .day-info-toast .toast-item {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 0; font-size: 10px; cursor: pointer;
+      color: var(--text); transition: color 0.2s;
+    }
+    
+    .day-info-toast .toast-item:hover { color: var(--primary); }
+    .day-info-toast .toast-item i { font-size: 9px; width: 14px; text-align: center; }
+    .day-info-toast .no-info { color: var(--text-light); font-size: 10px; }
+    .day-info-toast .toast-close {
+      position: absolute; top: 8px; left: 10px;
+      background: none; border: none; color: var(--text-light);
+      cursor: pointer; font-size: 14px; padding: 4px;
+    }
+    
     .top-row {
       display: flex; gap: 16px; margin-bottom: 24px;
       justify-content: center; flex-wrap: wrap;
@@ -259,23 +304,6 @@
     .calendar-day .dot { width: 3px; height: 3px; border-radius: 50%; }
     .calendar-day .dot.event { background: var(--event-dot); }
     .calendar-day .dot.notice { background: var(--notice-dot); }
-    
-    .calendar-day-info {
-      margin-top: 8px; padding: 8px; background: var(--bg2);
-      border-radius: 8px; display: none; font-size: 10px;
-      position: relative; z-index: 1;
-    }
-    .calendar-day-info.show { display: block; }
-    
-    .calendar-day-info .info-title { font-size: 11px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-    .calendar-day-info .info-item {
-      display: flex; align-items: center; gap: 4px;
-      padding: 2px 0; font-size: 9px; cursor: pointer;
-      color: var(--text); transition: color 0.2s;
-    }
-    .calendar-day-info .info-item:hover { color: var(--primary); }
-    .calendar-day-info .info-item i { font-size: 8px; width: 10px; text-align: center; }
-    .calendar-day-info .no-info { color: var(--text-light); font-size: 9px; }
     
     .announcements-section { margin-bottom: 24px; }
     
@@ -542,6 +570,7 @@
     
     let isMuharram = false;
     let prayerTimesCache = {};
+    let toastTimeout;
     
     const savedTheme = localStorage.getItem('heyat-theme');
     if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); icon.classList.replace('fa-moon', 'fa-sun'); }
@@ -810,7 +839,7 @@
         }
         html += '</div>';
       }
-      html += '</div><div class="calendar-day-info" id="dayInfo"></div></div>';
+      html += '</div></div>';
       return html;
     }
     
@@ -818,15 +847,50 @@
     function refreshCalendar() { const calSection = document.querySelector('.calendar-section'); if (calSection) calSection.outerHTML = buildCalendar(); }
     
     function showDayInfo(dateStr, el) {
-      const info = $('dayInfo');
-      if (info.style.display === 'block' && info.dataset.activeDate === dateStr) { info.style.display = 'none'; info.dataset.activeDate = ''; return; }
+      const existing = document.querySelector('.day-info-toast');
+      if (existing) existing.remove();
+      clearTimeout(toastTimeout);
+      
       const events = allEvents.filter(e => e.datePersian === dateStr);
       const notices = allAnnouncements.filter(a => a.datePersian === dateStr);
-      let html = `<div class="info-title">${formatPersianDate(dateStr)}</div>`;
-      if (events.length === 0 && notices.length === 0) { html += '<div class="no-info">مراسم یا اطلاعیه‌ای برای این روز ثبت نشده است</div>'; }
-      events.forEach(e => { html += `<div class="info-item" onclick="openEvent('${e.id}')"><i class="fa-solid fa-calendar-check" style="color:var(--event-dot);"></i> ${e.title} (${e.location || 'نامشخص'})</div>`; });
-      notices.forEach(a => { html += `<div class="info-item" onclick="openAnnouncement('${a.id}')"><i class="fa-solid fa-bullhorn" style="color:var(--notice-dot);"></i> ${a.title}</div>`; });
-      info.innerHTML = html; info.style.display = 'block'; info.dataset.activeDate = dateStr;
+      
+      let html = `<button class="toast-close" onclick="closeDayToast()"><i class="fa-solid fa-times"></i></button>`;
+      html += `<div class="toast-title"><i class="fa-solid fa-calendar-day" style="color:var(--primary);"></i> ${formatPersianDate(dateStr)}</div>`;
+      
+      if (events.length === 0 && notices.length === 0) {
+        html += '<div class="no-info">مراسم یا اطلاعیه‌ای برای این روز ثبت نشده است</div>';
+      }
+      
+      events.forEach(e => {
+        html += `<div class="toast-item" onclick="openEvent('${e.id}')"><i class="fa-solid fa-calendar-check" style="color:var(--event-dot);"></i> ${e.title} (${e.location || 'نامشخص'})</div>`;
+      });
+      
+      notices.forEach(a => {
+        html += `<div class="toast-item" onclick="openAnnouncement('${a.id}')"><i class="fa-solid fa-bullhorn" style="color:var(--notice-dot);"></i> ${a.title}</div>`;
+      });
+      
+      const toast = document.createElement('div');
+      toast.className = 'day-info-toast';
+      toast.innerHTML = html;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => { document.addEventListener('click', closeDayToastOnClick); }, 100);
+      
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('fading');
+        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300);
+      }, 5000);
+    }
+    
+    function closeDayToast() {
+      const toast = document.querySelector('.day-info-toast');
+      if (toast) { toast.classList.add('fading'); setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300); }
+      document.removeEventListener('click', closeDayToastOnClick);
+    }
+    
+    function closeDayToastOnClick(e) {
+      const toast = document.querySelector('.day-info-toast');
+      if (toast && !toast.contains(e.target)) { closeDayToast(); }
     }
     
     function renderGalleryCard(item) {
@@ -855,7 +919,7 @@
         <div class="bubbles">${bubblesHTML}</div><div class="card-content">
           <div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div>
           <div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div>
-          <div class="donation-subtitle">با کمک های خود ما را در برگزاری مراسمات یاری کنید</div>
+          <div class="donation-subtitle">با کمک های خود یاری‌گر برگزاری مراسمات باشید</div>
           <span class="donation-tag">رسمی</span>
           <div class="clouds-row">
             <i class="fa-solid fa-cloud cloud-float" style="font-size:40px; color:${cloudColor}; animation-delay:${Math.random()*2}s; left:${cloud1Left}%;"></i>
