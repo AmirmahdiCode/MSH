@@ -100,26 +100,74 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    .calendar-section {
+    .top-row {
+      display: flex; gap: 24px; margin-bottom: 24px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    
+    .calendar-section, .prayer-section {
       background: var(--card-bg);
       border-radius: 16px;
       padding: 14px;
-      margin-bottom: 24px;
       box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.3), 0 0 20px rgba(var(--primary-rgb), 0.1);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      max-width: 340px;
-      margin-left: auto;
-      margin-right: auto;
+      width: 340px;
+      flex-shrink: 0;
     }
     
-    .calendar-section .bubbles {
+    .prayer-title {
+      font-size: 14px; font-weight: 700; color: var(--dark);
+      margin-bottom: 12px; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      position: relative; z-index: 1;
+    }
+    
+    .prayer-list {
+      display: flex; flex-direction: column; gap: 6px;
+      position: relative; z-index: 1;
+    }
+    
+    .prayer-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 12px; border-radius: 8px;
+      background: var(--bg2); transition: all 0.3s ease;
+    }
+    
+    .prayer-item.next { background: var(--primary); color: #fff; }
+    .prayer-item.next .prayer-name { color: #fff; }
+    .prayer-item.next .prayer-time { color: #fff; }
+    
+    .prayer-name {
+      font-size: 12px; font-weight: 600; color: var(--dark);
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.3s;
+    }
+    
+    .prayer-time {
+      font-size: 12px; font-weight: 700; color: var(--primary);
+      direction: ltr; transition: color 0.3s;
+    }
+    
+    .prayer-date {
+      text-align: center; font-size: 10px; color: var(--text-light);
+      margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    
+    .prayer-location {
+      text-align: center; font-size: 10px; color: var(--text-light);
+      margin-top: 10px; position: relative; z-index: 1;
+    }
+    
+    .calendar-section .bubbles,
+    .prayer-section .bubbles {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none; overflow: hidden; z-index: 0;
     }
     
-    .calendar-section .bubble {
+    .calendar-section .bubble,
+    .prayer-section .bubble {
       position: absolute;
       background: rgba(var(--primary-rgb), 0.08);
       border-radius: 50%;
@@ -407,6 +455,11 @@
     .footer-links a:hover { color: var(--dark); }
     .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
     
+    @media (max-width: 750px) {
+      .top-row { flex-direction: column; align-items: center; gap: 16px; }
+      .calendar-section, .prayer-section { width: 340px; }
+    }
+    
     @media (max-width: 900px) and (min-width: 651px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 650px) {
       .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -416,7 +469,7 @@
       .announcement-text { font-size: 10px; -webkit-line-clamp: 2; }
     }
     @media (max-width: 400px) {
-      .calendar-section { max-width: 300px; padding: 10px; }
+      .calendar-section, .prayer-section { width: 300px; padding: 10px; }
       .calendar-day { padding: 4px 0; font-size: 10px; min-height: 32px; }
       .calendar-day-name { font-size: 8px; }
       .calendar-nav { width: 26px; height: 26px; font-size: 12px; }
@@ -574,6 +627,110 @@
     let allAnnouncements = [];
     let currentMonth = 5; let currentYear = 1405;
     
+    // اوقات شرعی
+    function buildPrayerWidget() {
+      return `<div class="prayer-section">
+        <div class="bubbles" id="prayerBubbles"></div>
+        <div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی اردبیل</div>
+        <div class="prayer-date" id="prayerDate">در حال دریافت...</div>
+        <div class="prayer-list" id="prayerList">
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> اذان صبح</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع آفتاب</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> اذان ظهر</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> اذان عصر</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> اذان مغرب</span><span class="prayer-time">--:--</span></div>
+          <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> اذان عشاء</span><span class="prayer-time">--:--</span></div>
+        </div>
+        <div class="prayer-location"><i class="fa-solid fa-location-dot"></i> اردبیل، ایران</div>
+      </div>`;
+    }
+    
+    async function loadPrayerTimes() {
+      try {
+        const now = new Date();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const year = now.getFullYear();
+        
+        const r = await fetch(`https://api.aladhan.com/v1/timingsByCity/${day}-${month}-${year}?city=Ardabil&country=Iran&method=7`);
+        const data = await r.json();
+        
+        if (data.code === 200) {
+          const timings = data.data.timings;
+          const date = data.data.date;
+          
+          // تاریخ
+          const pDate = document.getElementById('prayerDate');
+          if (pDate) pDate.textContent = `${date.hijri.weekday.ar} - ${date.hijri.day} ${date.hijri.month.ar} ${date.hijri.year}`;
+          
+          // زمان‌ها
+          const times = [
+            { selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },
+            { selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },
+            { selector: '.prayer-item:nth-child(3) .prayer-time', value: timings.Dhuhr },
+            { selector: '.prayer-item:nth-child(4) .prayer-time', value: timings.Asr },
+            { selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Maghrib },
+            { selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Isha }
+          ];
+          
+          times.forEach(t => {
+            const el = document.querySelector(t.selector);
+            if (el) el.textContent = t.value.split(' ')[0];
+          });
+          
+          // هایلایت نماز بعدی
+          highlightNextPrayer(timings);
+          
+          // حباب‌ها
+          generatePrayerBubbles();
+        }
+      } catch(e) {
+        console.log('خطا در دریافت اوقات شرعی');
+      }
+    }
+    
+    function highlightNextPrayer(timings) {
+      const now = new Date();
+      const currentTime = now.getHours() * 60 + now.getMinutes();
+      
+      const prayers = [
+        { name: 'Fajr', time: timings.Fajr },
+        { name: 'Sunrise', time: timings.Sunrise },
+        { name: 'Dhuhr', time: timings.Dhuhr },
+        { name: 'Asr', time: timings.Asr },
+        { name: 'Maghrib', time: timings.Maghrib },
+        { name: 'Isha', time: timings.Isha }
+      ];
+      
+      const items = document.querySelectorAll('.prayer-item');
+      items.forEach(item => item.classList.remove('next'));
+      
+      for (let i = 0; i < prayers.length; i++) {
+        const parts = prayers[i].time.split(':');
+        const prayerMinutes = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        
+        if (prayerMinutes > currentTime) {
+          if (items[i]) items[i].classList.add('next');
+          break;
+        }
+      }
+    }
+    
+    function generatePrayerBubbles() {
+      const box = document.getElementById('prayerBubbles');
+      if (!box) return;
+      let html = '';
+      for (let i = 0; i < 10; i++) {
+        const size = Math.random() * 25 + 8;
+        const left = Math.random() * 85;
+        const delay = Math.random() * 4;
+        const duration = Math.random() * 4 + 3;
+        html += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*70}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
+      }
+      box.innerHTML = html;
+    }
+    
+    // تقویم
     function buildCalendar() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
       const dayNames = ['','','','','','',''];
@@ -700,15 +857,11 @@
     }
     
     function getCloudColor() {
-      return isMuharram
-        ? 'rgba(220, 38, 38, 0.5)'
-        : 'rgba(13, 148, 136, 0.5)';
+      return isMuharram ? 'rgba(220, 38, 38, 0.5)' : 'rgba(13, 148, 136, 0.5)';
     }
     
     function getCloudColorLight() {
-      return isMuharram
-        ? 'rgba(220, 38, 38, 0.3)'
-        : 'rgba(13, 148, 136, 0.3)';
+      return isMuharram ? 'rgba(220, 38, 38, 0.3)' : 'rgba(13, 148, 136, 0.3)';
     }
     
     function buildDonationCard() {
@@ -818,16 +971,19 @@
           if (archiveItems.length > 0) {
             const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15);
             galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`;
-            container.innerHTML = buildCalendar() + annHTML + evtHTML + galHTML;
+            container.innerHTML = `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
             if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid'));
+            setTimeout(loadPrayerTimes, 500);
           } else {
             galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
-            container.innerHTML = buildCalendar() + annHTML + evtHTML + galHTML;
+            container.innerHTML = `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+            setTimeout(loadPrayerTimes, 500);
           }
         } else {
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><div class="events-track">${buildDonationCard()}<div class="event-card"><div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div><div class="event-info" style="text-align:center;"><div class="event-title">مراسمی ثبت نشده است</div></div></div></div></div>`;
           galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
-          container.innerHTML = buildCalendar() + annHTML + evtHTML + galHTML;
+          container.innerHTML = `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+          setTimeout(loadPrayerTimes, 500);
         }
         
         const evtSearch = $('eventSearch');
