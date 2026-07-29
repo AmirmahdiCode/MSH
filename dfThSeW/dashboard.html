@@ -97,49 +97,14 @@
       gap: 10px;
     }
     
-    .floating-toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-    
-    .floating-toast.error {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #dc2626;
-    }
-    
-    .floating-toast.warning {
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      color: #d97706;
-    }
-    
-    .floating-toast.success {
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      color: #059669;
-    }
-    
-    .floating-toast.info {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      color: #2563eb;
-    }
-    
-    .floating-toast i {
-      font-size: 18px;
-    }
-    
-    .floating-toast .toast-close {
-      margin-right: auto;
-      cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.2s;
-      font-size: 14px;
-    }
-    
-    .floating-toast .toast-close:hover {
-      opacity: 1;
-    }
+    .floating-toast.show { transform: translateX(-50%) translateY(0); }
+    .floating-toast.error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; }
+    .floating-toast.warning { background: #fffbeb; border: 1px solid #fde68a; color: #d97706; }
+    .floating-toast.success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; }
+    .floating-toast.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; }
+    .floating-toast i { font-size: 18px; }
+    .floating-toast .toast-close { margin-right: auto; cursor: pointer; opacity: 0.6; transition: opacity 0.2s; font-size: 14px; }
+    .floating-toast .toast-close:hover { opacity: 1; }
     
     .header {
       background: var(--header-bg);
@@ -158,11 +123,7 @@
       margin: 0 auto;
     }
     
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .header-right { display: flex; align-items: center; gap: 10px; }
     
     .header-logo {
       width: 42px;
@@ -177,31 +138,10 @@
       padding: 6px;
     }
     
-    .header-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      filter: var(--logo-filter);
-    }
-    
-    .header-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--dark);
-      transition: color 0.3s;
-    }
-    
-    .header-subtitle {
-      font-size: 10px;
-      color: var(--text-light);
-      transition: color 0.3s;
-    }
-    
-    .header-btns {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
+    .header-title { font-size: 18px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
+    .header-subtitle { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
+    .header-btns { display: flex; align-items: center; gap: 8px; }
     
     .theme-toggle {
       background: var(--bg2);
@@ -219,11 +159,7 @@
       height: 40px;
     }
     
-    .theme-toggle:hover {
-      background: var(--primary);
-      color: #fff;
-      transform: rotate(15deg);
-    }
+    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
     
     .logout-btn {
       background: var(--danger-light);
@@ -240,18 +176,9 @@
       font-family: inherit;
     }
     
-    .logout-btn:hover {
-      background: var(--danger);
-      color: #fff;
-      border-color: var(--danger);
-    }
+    .logout-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
     
-    .main-container {
-      max-width: 1100px;
-      width: 100%;
-      margin: 24px auto;
-      padding: 0 12px;
-    }
+    .main-container { max-width: 1100px; width: 100%; margin: 24px auto; padding: 0 12px; }
     
     .welcome-card {
       background: var(--card-bg);
@@ -278,17 +205,8 @@
       flex-shrink: 0;
     }
     
-    .welcome-info h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 2px;
-    }
-    
-    .welcome-info p {
-      font-size: 11px;
-      color: var(--text-light);
-    }
+    .welcome-info h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+    .welcome-info p { font-size: 11px; color: var(--text-light); }
     
     .welcome-role {
       margin-right: auto;
@@ -323,51 +241,20 @@
       gap: 10px;
     }
     
-    .menu-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-hover);
-      border-color: var(--primary-light);
-    }
-    
-    .menu-card i {
-      font-size: 32px;
-      color: var(--primary);
-    }
-    
-    .menu-card h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--dark);
-    }
-    
-    .menu-card p {
-      font-size: 10px;
-      color: var(--text-light);
-    }
+    .menu-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
+    .menu-card i { font-size: 32px; color: var(--primary); }
+    .menu-card h4 { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .menu-card p { font-size: 10px; color: var(--text-light); }
     
     @media (max-width: 650px) {
-      .menu-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-      }
-      .header-title {
-        font-size: 16px;
-      }
-      .welcome-card {
-        flex-wrap: wrap;
-      }
-      .welcome-role {
-        margin-right: 0;
-        width: 100%;
-        text-align: center;
-        margin-top: 8px;
-      }
+      .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .header-title { font-size: 16px; }
+      .welcome-card { flex-wrap: wrap; }
+      .welcome-role { margin-right: 0; width: 100%; text-align: center; margin-top: 8px; }
     }
     
     @media (max-width: 380px) {
-      .menu-grid {
-        grid-template-columns: 1fr;
-      }
+      .menu-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -431,17 +318,11 @@
       toastTimeout = setTimeout(() => { hideToast(); }, 5000);
     }
     
-    function hideToast() {
-      toast.classList.remove('show');
-      clearTimeout(toastTimeout);
-    }
+    function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimeout); }
     
     function checkSession() {
       const sessionData = localStorage.getItem('admin_session');
-      if (!sessionData) {
-        window.location.href = 'login.html';
-        return null;
-      }
+      if (!sessionData) { window.location.href = 'login.html'; return null; }
       
       try {
         const session = JSON.parse(sessionData);
@@ -476,7 +357,6 @@
     
     themeToggle.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
-      
       if (currentTheme === 'dark') {
         document.documentElement.removeAttribute('data-theme');
         themeIcon.classList.replace('fa-sun', 'fa-moon');
@@ -494,19 +374,12 @@
         const day = String(today.getDate()).padStart(2, '0');
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const year = today.getFullYear();
-        
         const res = await fetch(`https://api.aladhan.com/v1/gToH/${day}-${month}-${year}`);
         const data = await res.json();
-        
-        if (data.code === 200) {
-          const hijriMonth = data.data.hijri.month.number;
-          if (hijriMonth === 1) {
-            document.documentElement.setAttribute('data-muharram', 'true');
-          }
+        if (data.code === 200 && data.data.hijri.month.number === 1) {
+          document.documentElement.setAttribute('data-muharram', 'true');
         }
-      } catch (e) {
-        console.log('بررسی ماه محرم با خطا مواجه شد');
-      }
+      } catch (e) {}
     }
     
     document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -519,15 +392,17 @@
       const container = document.getElementById('mainContent');
       
       const roleLabels = {
-        'سازنده': 'سازنده',
-        'مالک': 'مالک',
-        'ادمین ویژه': 'ادمین ویژه',
-        'ادمین': 'ادمین'
+        'super_admin': 'سازنده',
+        'admin': 'ادمین',
+        'editor': 'ادمین'
       };
+      
+      const isSuperAdmin = admin.role === 'super_admin';
+      const isAdmin = admin.role === 'super_admin' || admin.role === 'admin';
       
       let menuHTML = '';
       
-      if (admin.role === 'سازنده' || admin.role === 'مالک') {
+      if (isSuperAdmin) {
         menuHTML = `
           <div class="menu-grid">
             <a href="admins.html" class="menu-card">
@@ -555,9 +430,14 @@
               <h4>مدیریت آرشیو</h4>
               <p>مدیریت آرشیو تصاویر، ویدیو و صوت</p>
             </a>
+            <a href="music-manage.html" class="menu-card">
+              <i class="fa-solid fa-music"></i>
+              <h4>مدیریت لیست پخش</h4>
+              <p>افزودن و حذف مداحی‌های سایت</p>
+            </a>
           </div>
         `;
-      } else if (admin.role === 'ادمین ویژه') {
+      } else if (isAdmin) {
         menuHTML = `
           <div class="menu-grid">
             <a href="events-manage.html" class="menu-card">
@@ -575,25 +455,10 @@
               <h4>مدیریت آرشیو</h4>
               <p>مدیریت آرشیو تصاویر، ویدیو و صوت</p>
             </a>
-          </div>
-        `;
-      } else if (admin.role === 'ادمین') {
-        menuHTML = `
-          <div class="menu-grid">
-            <a href="events-manage.html" class="menu-card">
-              <i class="fa-solid fa-calendar-check"></i>
-              <h4>افزودن مراسم</h4>
-              <p>افزودن مراسم جدید</p>
-            </a>
-            <a href="announcements-manage.html" class="menu-card">
-              <i class="fa-solid fa-bullhorn"></i>
-              <h4>افزودن اطلاعیه</h4>
-              <p>افزودن اطلاعیه جدید</p>
-            </a>
-            <a href="archive-manage.html" class="menu-card">
-              <i class="fa-solid fa-images"></i>
-              <h4>افزودن آرشیو</h4>
-              <p>افزودن آرشیو جدید</p>
+            <a href="music-manage.html" class="menu-card">
+              <i class="fa-solid fa-music"></i>
+              <h4>مدیریت لیست پخش</h4>
+              <p>افزودن و حذف مداحی‌های سایت</p>
             </a>
           </div>
         `;
