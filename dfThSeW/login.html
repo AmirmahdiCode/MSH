@@ -178,7 +178,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwo996DPAZ8l68pqcJdT5SKengW51fVygg3R-gQgHOjTcvirr1dy-WSMVKzjLWSWXjt/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwwVtBTWyDPuyRV7XHo3THXdFN4LMxYeNJpNLG02bG8lLhzj66hqpwZHz12Du-av_SV/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -197,11 +197,7 @@
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
     
     async function getClientIP() {
-      const services = [
-        'https://api.ipify.org?format=json',
-        'https://api64.ipify.org?format=json'
-      ];
-      
+      const services = ['https://api.ipify.org?format=json', 'https://api64.ipify.org?format=json'];
       for (const url of services) {
         try {
           const r = await fetch(url);
@@ -247,9 +243,8 @@
     
     $('togglePassword').onclick = () => {
       const pw = $('password');
-      const isPass = pw.type === 'password';
-      pw.type = isPass ? 'text' : 'password';
-      $('togglePassword').querySelector('i').className = isPass ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+      pw.type = pw.type === 'password' ? 'text' : 'password';
+      $('togglePassword').querySelector('i').className = pw.type === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
     };
     
     $('loginBtn').onclick = async () => {
@@ -263,7 +258,6 @@
       $('btnText').textContent = 'در حال دریافت IP...';
       
       const ip = await getClientIP();
-      
       $('btnText').textContent = 'در حال ورود...';
       
       try {
@@ -271,7 +265,6 @@
           method: 'POST',
           body: JSON.stringify({ username, password, ip })
         });
-        
         const data = await res.json();
         
         if (data.success) {
@@ -284,9 +277,9 @@
           return;
         }
         
-        showToast(data.message || 'نام کاربری یا رمز عبور اشتباه است', 'error');
+        showToast(data.message || 'خطا در ورود', 'error');
       } catch(e) {
-        showToast('خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید', 'error');
+        showToast('خطا در ارتباط با سرور', 'error');
       }
       
       $('loginBtn').disabled = false;
