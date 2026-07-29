@@ -176,7 +176,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwwVtBTWyDPuyRV7XHo3THXdFN4LMxYeNJpNLG02bG8lLhzj66hqpwZHz12Du-av_SV/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwEPPcrQK3n9341y1gYLWKxi0K_yej1zX2977qSk7JKHT-v3K1U0qaTl9uOPfmYrwQZ/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -207,6 +207,19 @@
         currentPlayingBtn = null;
       }
       $('stopAllBtn').style.display = 'none';
+    }
+    
+    async function hashIP(ip) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(ip);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    
+    async function getClientIP() {
+      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
+      catch(e) { return '0.0.0.0'; }
     }
     
     function checkSession() {
@@ -316,7 +329,9 @@
       
       $('submitAdd').disabled = true; $('submitAdd').textContent = 'در حال افزودن...';
       try {
-        const res = await fetch(API_URL + '?action=addMusic', { method: 'POST', body: JSON.stringify({ src, sessionToken }) });
+        const ip = await getClientIP();
+        const ipHash = await hashIP(ip);
+        const res = await fetch(API_URL + '?action=addMusic', { method: 'POST', body: JSON.stringify({ src, sessionToken, ip: ipHash }) });
         const data = await res.json();
         if (data.success) { showToast('مداحی اضافه شد', 'success'); closeAddModal(); loadMusic(); }
         else showToast(data.message || 'خطا', 'error');
@@ -332,7 +347,9 @@
       const row = parseInt($('deleteRow').value);
       $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
       try {
-        const res = await fetch(API_URL + '?action=deleteMusic', { method: 'POST', body: JSON.stringify({ row, sessionToken }) });
+        const ip = await getClientIP();
+        const ipHash = await hashIP(ip);
+        const res = await fetch(API_URL + '?action=deleteMusic', { method: 'POST', body: JSON.stringify({ row, sessionToken, ip: ipHash }) });
         const data = await res.json();
         if (data.success) { showToast('مداحی حذف شد', 'success'); closeDeleteModal(); loadMusic(); }
         else showToast(data.message || 'خطا', 'error');
