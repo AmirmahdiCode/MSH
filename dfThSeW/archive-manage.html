@@ -230,7 +230,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwwVtBTWyDPuyRV7XHo3THXdFN4LMxYeNJpNLG02bG8lLhzj66hqpwZHz12Du-av_SV/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwEPPcrQK3n9341y1gYLWKxi0K_yej1zX2977qSk7JKHT-v3K1U0qaTl9uOPfmYrwQZ/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -247,6 +247,19 @@
     }
     
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
+    
+    async function hashIP(ip) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(ip);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    
+    async function getClientIP() {
+      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
+      catch(e) { return '0.0.0.0'; }
+    }
     
     function checkSession() {
       const d = localStorage.getItem('admin_session');
@@ -321,7 +334,9 @@
         const reader = new FileReader();
         reader.onload = async function(e) {
           const base64 = e.target.result.split(',')[1];
-          const res = await fetch(API_URL + '?action=uploadImage', { method: 'POST', body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name, sessionToken }) });
+          const ip = await getClientIP();
+          const ipHash = await hashIP(ip);
+          const res = await fetch(API_URL + '?action=uploadImage', { method: 'POST', body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name, sessionToken, ip: ipHash }) });
           const data = await res.json();
           if (data.success) { addTag($('imagesWrapper'), data.url, 'image'); $('imageInput').value = data.url; }
           else showToast(data.message || 'خطا در آپلود', 'error');
@@ -450,12 +465,14 @@
       $('submitArchive').disabled = true; $('submitArchive').textContent = 'در حال ذخیره...';
       
       try {
+        const ip = await getClientIP();
+        const ipHash = await hashIP(ip);
         const existingArchive = allArchives.find(a => a.eventId === eventId);
         const isUpdate = existingArchive && existingArchive.hasArchive;
         
         const res = await fetch(API_URL + '?action=' + (isUpdate ? 'updateArchive' : 'addArchive'), {
           method: 'POST',
-          body: JSON.stringify({ eventId, images, videos, audios, sessionToken })
+          body: JSON.stringify({ eventId, images, videos, audios, sessionToken, ip: ipHash })
         });
         
         const data = await res.json();
@@ -489,9 +506,11 @@
       $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
       
       try {
+        const ip = await getClientIP();
+        const ipHash = await hashIP(ip);
         const res = await fetch(API_URL + '?action=deleteArchive', {
           method: 'POST',
-          body: JSON.stringify({ eventId, sessionToken })
+          body: JSON.stringify({ eventId, sessionToken, ip: ipHash })
         });
         
         const data = await res.json();
