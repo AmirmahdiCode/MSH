@@ -196,7 +196,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwwVtBTWyDPuyRV7XHo3THXdFN4LMxYeNJpNLG02bG8lLhzj66hqpwZHz12Du-av_SV/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwEPPcrQK3n9341y1gYLWKxi0K_yej1zX2977qSk7JKHT-v3K1U0qaTl9uOPfmYrwQZ/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -213,6 +213,19 @@
     }
     
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
+    
+    async function hashIP(ip) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(ip);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    
+    async function getClientIP() {
+      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
+      catch(e) { return '0.0.0.0'; }
+    }
     
     function checkSession() {
       const d = localStorage.getItem('admin_session');
@@ -256,7 +269,9 @@
         const reader = new FileReader();
         reader.onload = async function(e) {
           const base64 = e.target.result.split(',')[1];
-          const res = await fetch(API_URL + '?action=uploadImage', { method: 'POST', body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name, sessionToken }) });
+          const ip = await getClientIP();
+          const ipHash = await hashIP(ip);
+          const res = await fetch(API_URL + '?action=uploadImage', { method: 'POST', body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name, sessionToken, ip: ipHash }) });
           const data = await res.json();
           if (data.success) { $('eventImage').value = data.url; $('imagePreview').src = data.url; $('imagePreview').classList.add('show'); }
           else showToast(data.message || 'خطا در آپلود', 'error');
@@ -323,8 +338,10 @@
       
       $('submitEvent').disabled = true; $('submitEvent').textContent = 'در حال ذخیره...';
       try {
+        const ip = await getClientIP();
+        const ipHash = await hashIP(ip);
         const newId = id || ('EVT-' + Date.now());
-        const res = await fetch(API_URL + '?action=' + (id ? 'updateEvent' : 'addEvent'), { method: 'POST', body: JSON.stringify({ id: newId, title, image, description, tag, date, location, sessionToken }) });
+        const res = await fetch(API_URL + '?action=' + (id ? 'updateEvent' : 'addEvent'), { method: 'POST', body: JSON.stringify({ id: newId, title, image, description, tag, date, location, sessionToken, ip: ipHash }) });
         const data = await res.json();
         if (data.success) { closeEventModal(); loadEvents(); showToast(id ? 'مراسم ویرایش شد' : 'مراسم اضافه شد', 'success'); }
         else showToast(data.message || 'خطا', 'error');
@@ -340,7 +357,9 @@
       const eventId = $('deleteEventId').value;
       $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
       try {
-        const res = await fetch(API_URL + '?action=deleteEvent', { method: 'POST', body: JSON.stringify({ id: eventId, sessionToken }) });
+        const ip = await getClientIP();
+        const ipHash = await hashIP(ip);
+        const res = await fetch(API_URL + '?action=deleteEvent', { method: 'POST', body: JSON.stringify({ id: eventId, sessionToken, ip: ipHash }) });
         const data = await res.json();
         if (data.success) { closeDeleteModal(); loadEvents(); showToast('مراسم حذف شد', 'success'); }
         else showToast(data.message || 'خطا', 'error');
