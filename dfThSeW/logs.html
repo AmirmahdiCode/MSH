@@ -93,9 +93,9 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 17px; flex-shrink: 0;
     }
-    .log-icon.add { background: var(--success-light); color: var(--success); }
-    .log-icon.edit { background: var(--warning-light); color: var(--warning); }
-    .log-icon.delete { background: var(--danger-light); color: var(--danger); }
+    .log-icon.addEvent, .log-icon.addAnnouncement, .log-icon.addArchive, .log-icon.addAdmin, .log-icon.addDonation, .log-icon.addMusic { background: var(--success-light); color: var(--success); }
+    .log-icon.updateEvent, .log-icon.updateAnnouncement, .log-icon.updateArchive, .log-icon.changeRole { background: var(--warning-light); color: var(--warning); }
+    .log-icon.deleteEvent, .log-icon.deleteAnnouncement, .log-icon.deleteArchive, .log-icon.deleteAdmin, .log-icon.deleteMusic { background: var(--danger-light); color: var(--danger); }
     
     .log-admin-info { flex: 1; min-width: 0; }
     .log-admin-name { font-size: 14px; font-weight: 700; color: var(--dark); }
@@ -163,7 +163,7 @@
   </section>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyJlSVIO4r7z2scxaMINEykuKDEE37yDOqD_fV18tGk0qCJhK6Ip2t0Tx8HrxyGAL78/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwwVtBTWyDPuyRV7XHo3THXdFN4LMxYeNJpNLG02bG8lLhzj66hqpwZHz12Du-av_SV/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -184,11 +184,14 @@
     function checkSession() {
       const d = localStorage.getItem('admin_session');
       if (!d) { window.location.href = 'login.html'; return null; }
-      try { const s = JSON.parse(d); if (Date.now() - s.timestamp > 1800000) { localStorage.clear(); window.location.href = 'login.html'; return null; } return s; }
+      try { const s = JSON.parse(d); if (Date.now() - s.timestamp > 3600000) { localStorage.clear(); window.location.href = 'login.html'; return null; } return s; }
       catch(e) { localStorage.clear(); window.location.href = 'login.html'; return null; }
     }
     
     const session = checkSession(); if (!session) throw new Error();
+    const sessionToken = localStorage.getItem('session_token');
+    
+    if (session.admin.role !== 'super_admin') { window.location.href = 'dashboard.html'; }
     
     (function() {
       const t = localStorage.getItem('heyat-theme');
@@ -213,18 +216,37 @@
     
     $('logoutBtn').onclick = () => { localStorage.clear(); window.location.href = 'login.html'; };
     
-    const actionLabels = { add: 'افزودن', edit: 'ویرایش', delete: 'حذف' };
-    const actionIcons = { add: 'fa-plus-circle', edit: 'fa-pen-to-square', delete: 'fa-trash-can' };
-    const typeLabels = { event: 'مراسم', announcement: 'اطلاعیه', archive: 'آرشیو', admin: 'مدیر' };
-    const typeIcons = { event: 'fa-calendar-check', announcement: 'fa-bullhorn', archive: 'fa-images', admin: 'fa-user-gear' };
+    const actionTypeLabels = {
+      addEvent: 'افزودن مراسم', updateEvent: 'ویرایش مراسم', deleteEvent: 'حذف مراسم',
+      addAnnouncement: 'افزودن اطلاعیه', updateAnnouncement: 'ویرایش اطلاعیه', deleteAnnouncement: 'حذف اطلاعیه',
+      addArchive: 'افزودن آرشیو', updateArchive: 'ویرایش آرشیو', deleteArchive: 'حذف آرشیو',
+      addAdmin: 'افزودن مدیر', deleteAdmin: 'حذف مدیر', changeRole: 'تغییر مقام',
+      addDonation: 'ثبت کمک نقدی', addMusic: 'افزودن مداحی', deleteMusic: 'حذف مداحی'
+    };
+    
+    function getActionType(action) {
+      if (action.startsWith('add')) return 'add';
+      if (action.startsWith('update') || action === 'changeRole') return 'edit';
+      if (action.startsWith('delete')) return 'delete';
+      return '';
+    }
+    
+    function getItemType(action) {
+      if (action.includes('Event')) return 'event';
+      if (action.includes('Announcement')) return 'announcement';
+      if (action.includes('Archive')) return 'archive';
+      if (action.includes('Admin') || action === 'changeRole') return 'admin';
+      if (action.includes('Music')) return 'music';
+      return '';
+    }
     
     async function loadLogs() {
       const list = $('logsList');
       
       try {
         const [logsRes, adminsRes] = await Promise.all([
-          fetch(API_URL + '?action=getLogs', { method: 'POST', body: JSON.stringify({}) }),
-          fetch(API_URL + '?action=getAdmins', { method: 'POST', body: JSON.stringify({}) })
+          fetch(API_URL + '?action=getLogs', { method: 'POST', body: JSON.stringify({ sessionToken }) }),
+          fetch(API_URL + '?action=getAdmins', { method: 'POST', body: JSON.stringify({ sessionToken }) })
         ]);
         
         const logsData = await logsRes.json();
@@ -236,31 +258,37 @@
         }
         
         if (logsData.success && logsData.data.length > 0) {
-          logsData.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+          const sortedLogs = logsData.data.sort((a, b) => {
+            const dateA = new Date(a.date); const dateB = new Date(b.date);
+            return isNaN(dateA) || isNaN(dateB) ? 0 : dateB - dateA;
+          });
           
-          list.innerHTML = logsData.data.map(log => {
+          list.innerHTML = sortedLogs.map(log => {
             const adminInfo = adminMap[log.adminId] || { name: log.adminId, username: '', role: '' };
-            const actionLabel = actionLabels[log.action] || log.action;
-            const typeLabel = typeLabels[log.type] || log.type;
+            const actionLabel = actionTypeLabels[log.action] || log.action;
+            const actionType = getActionType(log.action);
+            const itemType = getItemType(log.action);
+            
+            const roleLabels = { super_admin: 'سازنده', admin: 'ادمین', editor: 'ادیتور' };
+            const roleDisplay = roleLabels[adminInfo.role] || adminInfo.role;
             
             return `
               <div class="log-card">
                 <div class="log-header">
-                  <div class="log-icon ${log.action}"><i class="fa-solid ${actionIcons[log.action] || 'fa-circle'}"></i></div>
+                  <div class="log-icon ${log.action}"><i class="fa-solid fa-circle"></i></div>
                   <div class="log-admin-info">
                     <div class="log-admin-name">${adminInfo.name}</div>
-                    <div class="log-admin-detail">@${adminInfo.username} — ${adminInfo.role}</div>
+                    <div class="log-admin-detail">@${adminInfo.username} — ${roleDisplay}</div>
                   </div>
                   <div class="log-badges">
-                    <span class="log-badge ${log.action}">${actionLabel}</span>
-                    <span class="log-badge ${log.type}">${typeLabel}</span>
+                    <span class="log-badge ${actionType}">${actionLabel}</span>
+                    ${itemType ? `<span class="log-badge ${itemType}">${itemType === 'event' ? 'مراسم' : itemType === 'announcement' ? 'اطلاعیه' : itemType === 'archive' ? 'آرشیو' : itemType === 'admin' ? 'مدیر' : 'مداحی'}</span>` : ''}
                   </div>
                 </div>
                 <div class="log-body">
-                  <div class="log-field"><i class="fa-solid fa-key"></i> کد آیتم: <strong>${log.itemId}</strong></div>
-                  <div class="log-field"><i class="fa-solid ${typeIcons[log.type] || 'fa-circle'}"></i> نوع: <strong>${typeLabel}</strong></div>
+                  <div class="log-field"><i class="fa-solid fa-key"></i> کد آیتم: <strong>${log.itemId || '-'}</strong></div>
                   <div class="log-field"><i class="fa-solid fa-clock"></i> تاریخ: <strong>${log.date}</strong></div>
-                  <div class="log-field"><i class="fa-solid fa-user"></i> مدیر: <strong>${adminInfo.name}</strong></div>
+                  <div class="log-field"><i class="fa-solid fa-user"></i> انجام‌دهنده: <strong>${adminInfo.name}</strong></div>
                 </div>
               </div>
             `;
