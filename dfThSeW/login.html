@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ورود مدیریت | شهدای گمنام شورابیل</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -198,16 +197,21 @@
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
     
     async function getClientIP() {
-      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
-      catch(e) { return '0.0.0.0'; }
-    }
-    
-    async function getFingerprint() {
-      try {
-        const fp = await FingerprintJS.load();
-        const result = await fp.get();
-        return result.visitorId;
-      } catch(e) { return ''; }
+      const services = [
+        'https://api.ipify.org?format=json',
+        'https://api64.ipify.org?format=json',
+        'https://ipapi.co/json/'
+      ];
+      
+      for (const url of services) {
+        try {
+          const r = await fetch(url);
+          const d = await r.json();
+          const ip = d.ip || d.ip_address || '';
+          if (ip && ip !== '0.0.0.0') return ip;
+        } catch(e) {}
+      }
+      return '0.0.0.0';
     }
     
     (function() {
@@ -258,28 +262,34 @@
       
       $('loginBtn').disabled = true;
       $('spinner').style.display = 'block';
+      $('btnText').textContent = 'در حال دریافت IP...';
+      
+      const ip = await getClientIP();
+      
       $('btnText').textContent = 'در حال ورود...';
       
-      const [ip, fingerprint] = await Promise.all([getClientIP(), getFingerprint()]);
-      
-      const res = await fetch(API_URL + '?action=login', {
-        method: 'POST',
-        body: JSON.stringify({ username, password, ip, fingerprint })
-      });
-      
-      const data = await res.json();
-      
-      if (data.success) {
-        localStorage.setItem('admin_session', JSON.stringify({
-          admin: { id: data.data.id, name: data.data.name, username: data.data.username, role: data.data.role },
-          timestamp: Date.now()
-        }));
-        localStorage.setItem('session_token', data.data.sessionToken);
-        window.location.href = 'dashboard.html';
-        return;
+      try {
+        const res = await fetch(API_URL + '?action=login', {
+          method: 'POST',
+          body: JSON.stringify({ username, password, ip, fingerprint: '' })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          localStorage.setItem('admin_session', JSON.stringify({
+            admin: { id: data.data.id, name: data.data.name, username: data.data.username, role: data.data.role },
+            timestamp: Date.now()
+          }));
+          localStorage.setItem('session_token', data.data.sessionToken);
+          window.location.href = 'dashboard.html';
+          return;
+        }
+        
+        showToast(data.message || 'نام کاربری یا رمز عبور اشتباه است', 'error');
+      } catch(e) {
+        showToast('خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید', 'error');
       }
-      
-      showToast(data.message || 'نام کاربری یا رمز عبور اشتباه است', 'error');
       
       $('loginBtn').disabled = false;
       $('spinner').style.display = 'none';
