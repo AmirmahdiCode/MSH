@@ -91,6 +91,8 @@
     .action-btn { width: 34px; height: 34px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; background: var(--bg2); color: var(--text); }
     .action-btn:hover { background: var(--primary); color: #fff; }
     .action-btn.delete:hover { background: var(--danger); color: #fff; }
+    .action-btn.playing { background: var(--success); color: #fff; }
+    .action-btn.stop-btn:hover { background: var(--warning); color: #fff; }
     
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.active { display: flex; }
@@ -105,6 +107,14 @@
     .btn-cancel { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--card-border); background: var(--bg); color: var(--text); cursor: pointer; font-size: 12px; font-family: inherit; }
     .btn-submit { padding: 8px 16px; border-radius: 8px; border: none; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; }
     .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .stop-all-btn {
+      background: var(--danger); color: #fff; border: none;
+      padding: 8px 14px; border-radius: 8px; cursor: pointer;
+      font-size: 12px; font-family: inherit; display: flex; align-items: center;
+      gap: 6px; margin-right: 8px;
+    }
+    .stop-all-btn:hover { background: #b91c1c; }
     
     @media (max-width: 500px) {
       .music-card { flex-wrap: wrap; gap: 8px; }
@@ -138,6 +148,7 @@
     <div class="page-title">
       <i class="fa-solid fa-music"></i> لیست مداحی‌ها
       <button class="add-btn" id="addMusicBtn"><i class="fa-solid fa-plus"></i> افزودن مداحی</button>
+      <button class="stop-all-btn" id="stopAllBtn" style="display:none;"><i class="fa-solid fa-stop"></i> توقف پخش</button>
     </div>
     <div class="music-list" id="musicList">
       <div style="text-align: center; padding: 32px; color: var(--text-light);"><i class="fa-solid fa-spinner fa-pulse"></i><p style="margin-top: 8px; font-size: 12px;">در حال بارگذاری...</p></div>
@@ -170,6 +181,8 @@
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
     let toastTimer;
+    let currentAudio = null;
+    let currentPlayingBtn = null;
     
     function showToast(msg, type) {
       clearTimeout(toastTimer);
@@ -182,6 +195,19 @@
     }
     
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
+    
+    function stopAllAudio() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+      if (currentPlayingBtn) {
+        currentPlayingBtn.classList.remove('playing');
+        currentPlayingBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        currentPlayingBtn = null;
+      }
+      $('stopAllBtn').style.display = 'none';
+    }
     
     function checkSession() {
       const d = localStorage.getItem('admin_session');
@@ -217,7 +243,8 @@
       } catch(e) {}
     })();
     
-    $('logoutBtn').onclick = () => { localStorage.clear(); window.location.href = 'login.html'; };
+    $('logoutBtn').onclick = () => { stopAllAudio(); localStorage.clear(); window.location.href = 'login.html'; };
+    $('stopAllBtn').onclick = stopAllAudio;
     
     let musicData = [];
     
@@ -237,21 +264,45 @@
                 <div class="music-url" title="${item.src}">${item.src}</div>
               </div>
               <div class="music-actions">
-                <button class="action-btn" onclick="playPreview('${item.src.replace(/'/g, "\\'")}')"><i class="fa-solid fa-play"></i></button>
+                <button class="action-btn play-btn" data-src="${item.src.replace(/"/g, '&quot;')}" data-index="${index}"><i class="fa-solid fa-play"></i></button>
                 <button class="action-btn delete" onclick="openDeleteModal(${item.id})"><i class="fa-solid fa-trash"></i></button>
               </div>
             </div>
           `).join('');
+          
+          document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const src = this.dataset.src;
+              
+              if (currentAudio && currentPlayingBtn === this) {
+                stopAllAudio();
+                return;
+              }
+              
+              stopAllAudio();
+              
+              currentAudio = new Audio(src);
+              currentAudio.volume = 0.3;
+              currentAudio.play().catch(() => showToast('خطا در پخش فایل', 'error'));
+              
+              this.classList.add('playing');
+              this.innerHTML = '<i class="fa-solid fa-pause"></i>';
+              currentPlayingBtn = this;
+              $('stopAllBtn').style.display = 'flex';
+              
+              currentAudio.addEventListener('ended', () => {
+                this.classList.remove('playing');
+                this.innerHTML = '<i class="fa-solid fa-play"></i>';
+                currentAudio = null;
+                currentPlayingBtn = null;
+                $('stopAllBtn').style.display = 'none';
+              });
+            });
+          });
         } else {
           list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-light);"><i class="fa-solid fa-music" style="font-size:36px;margin-bottom:8px;display:block;opacity:0.5;"></i><p style="font-size:13px;">مداحی‌ای ثبت نشده است</p></div>`;
         }
       } catch(e) { showToast('خطا در دریافت لیست', 'error'); }
-    }
-    
-    function playPreview(src) {
-      const audio = new Audio(src);
-      audio.volume = 0.3;
-      audio.play().catch(() => showToast('خطا در پخش فایل', 'error'));
     }
     
     function openAddModal() { $('musicUrl').value = ''; $('addModal').classList.add('active'); $('musicUrl').focus(); }
