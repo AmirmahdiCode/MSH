@@ -85,8 +85,9 @@
     .admin-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
     .admin-username { font-size: 10px; color: var(--text-light); }
     .admin-role { font-size: 10px; padding: 4px 10px; border-radius: 6px; font-weight: 600; background: var(--bg2); color: var(--primary-dark); }
-    .admin-role.owner { background: #fef3c7; color: #d97706; }
-    .admin-role.maker { background: #fce7f3; color: #db2777; }
+    .admin-role.super_admin { background: #fce7f3; color: #db2777; }
+    .admin-role.admin { background: #dbeafe; color: #2563eb; }
+    .admin-role.editor { background: #fef3c7; color: #d97706; }
     .admin-actions { display: flex; gap: 6px; }
     
     .action-btn { width: 34px; height: 34px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; background: var(--bg2); color: var(--text); }
@@ -150,7 +151,7 @@
       <div class="form-group"><label>نام</label><input type="text" class="form-input" id="addName" placeholder="نام مدیر"></div>
       <div class="form-group"><label>نام کاربری</label><input type="text" class="form-input" id="addUsername" placeholder="نام کاربری"></div>
       <div class="form-group"><label>رمز عبور</label><input type="password" class="form-input" id="addPassword" placeholder="رمز عبور"></div>
-      <div class="form-group"><label>مقام</label><select class="form-select" id="addRole"><option value="ادمین">ادمین</option><option value="ادمین ویژه">ادمین ویژه</option></select></div>
+      <div class="form-group"><label>مقام</label><select class="form-select" id="addRole"><option value="admin">ادمین</option><option value="editor">ادیتور</option></select></div>
       <div class="modal-btns"><button class="btn-cancel" onclick="closeAddModal()">انصراف</button><button class="btn-submit" id="submitAdd">افزودن</button></div>
     </div>
   </div>
@@ -158,7 +159,7 @@
   <div class="modal-overlay" id="editModal">
     <div class="modal">
       <h3><i class="fa-solid fa-pen-to-square"></i> تغییر مقام</h3>
-      <div class="form-group"><label>مقام جدید</label><select class="form-select" id="editRole"><option value="سازنده">سازنده</option><option value="مالک">مالک</option><option value="ادمین ویژه">ادمین ویژه</option><option value="ادمین">ادمین</option></select><input type="hidden" id="editTargetId"></div>
+      <div class="form-group"><label>مقام جدید</label><select class="form-select" id="editRole"><option value="super_admin">سازنده</option><option value="admin">ادمین</option><option value="editor">ادیتور</option></select><input type="hidden" id="editTargetId"></div>
       <div class="modal-btns"><button class="btn-cancel" onclick="closeEditModal()">انصراف</button><button class="btn-submit" id="submitEdit">ذخیره</button></div>
     </div>
   </div>
@@ -173,7 +174,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyJlSVIO4r7z2scxaMINEykuKDEE37yDOqD_fV18tGk0qCJhK6Ip2t0Tx8HrxyGAL78/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwwVtBTWyDPuyRV7XHo3THXdFN4LMxYeNJpNLG02bG8lLhzj66hqpwZHz12Du-av_SV/exec';
     
     const $ = (id) => document.getElementById(id);
     const toast = $('floatingToast'), toastIcon = $('toastIcon'), toastMessage = $('toastMessage');
@@ -191,22 +192,18 @@
     
     function hideToast() { toast.classList.remove('show'); clearTimeout(toastTimer); }
     
-    async function getClientIP() {
-      try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); return d.ip; }
-      catch(e) { return '0.0.0.0'; }
-    }
-    
     function checkSession() {
       const d = localStorage.getItem('admin_session');
       if (!d) { window.location.href = 'login.html'; return null; }
-      try { const s = JSON.parse(d); if (Date.now() - s.timestamp > 1800000) { localStorage.clear(); window.location.href = 'login.html'; return null; } return s; }
+      try { const s = JSON.parse(d); if (Date.now() - s.timestamp > 3600000) { localStorage.clear(); window.location.href = 'login.html'; return null; } return s; }
       catch(e) { localStorage.clear(); window.location.href = 'login.html'; return null; }
     }
     
     const session = checkSession(); if (!session) throw new Error();
     const admin = session.admin;
+    const sessionToken = localStorage.getItem('session_token');
     
-    if (admin.role !== 'سازنده' && admin.role !== 'مالک') { window.location.href = 'dashboard.html'; }
+    if (admin.role !== 'super_admin') { window.location.href = 'dashboard.html'; }
     
     (function() {
       const t = localStorage.getItem('heyat-theme');
@@ -234,22 +231,31 @@
     async function loadAdmins() {
       const list = $('adminsList');
       try {
-        const res = await fetch(API_URL + '?action=getAdmins', { method: 'POST', body: JSON.stringify({}) });
+        const res = await fetch(API_URL + '?action=getAdmins', { 
+          method: 'POST', 
+          body: JSON.stringify({ sessionToken }) 
+        });
         const data = await res.json();
+        
         if (data.success && data.data.length > 0) {
           list.innerHTML = data.data.map(item => {
-            let roleClass = '';
-            if (item.role === 'سازنده') roleClass = 'maker';
-            else if (item.role === 'مالک') roleClass = 'owner';
+            const roleLabels = { super_admin: 'سازنده', admin: 'ادمین', editor: 'ادیتور' };
+            const roleDisplay = roleLabels[item.role] || item.role;
             
             let actionsHTML = '';
-            if (admin.role === 'سازنده' && item.role !== 'سازنده') {
-              actionsHTML = `<button class="action-btn" onclick="openEditModal('${item.id}', '${item.role}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="action-btn delete" onclick="openDeleteModal('${item.id}')"><i class="fa-solid fa-trash"></i></button>`;
-            } else if (admin.role === 'مالک' && (item.role === 'ادمین' || item.role === 'ادمین ویژه')) {
-              actionsHTML = `<button class="action-btn delete" onclick="openDeleteModal('${item.id}')"><i class="fa-solid fa-trash"></i></button>`;
+            if (item.role !== 'super_admin') {
+              actionsHTML = `
+                <button class="action-btn" onclick="openEditModal('${item.id}', '${item.role}')"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="action-btn delete" onclick="openDeleteModal('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+              `;
             }
             
-            return `<div class="admin-card"><div class="admin-avatar"><i class="fa-solid fa-user"></i></div><div class="admin-info"><div class="admin-name">${item.name}</div><div class="admin-username">@${item.username}</div></div><span class="admin-role ${roleClass}">${item.role}</span>${actionsHTML ? `<div class="admin-actions">${actionsHTML}</div>` : ''}</div>`;
+            return `<div class="admin-card">
+              <div class="admin-avatar"><i class="fa-solid fa-user"></i></div>
+              <div class="admin-info"><div class="admin-name">${item.name}</div><div class="admin-username">@${item.username}</div></div>
+              <span class="admin-role ${item.role}">${roleDisplay}</span>
+              ${actionsHTML ? `<div class="admin-actions">${actionsHTML}</div>` : ''}
+            </div>`;
           }).join('');
         } else {
           list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-light);"><i class="fa-solid fa-users-slash" style="font-size:36px;margin-bottom:8px;display:block;"></i><p style="font-size:13px;">مدیری یافت نشد</p></div>`;
@@ -258,7 +264,7 @@
     }
     
     function openAddModal() { $('addModal').classList.add('active'); $('addName').focus(); }
-    function closeAddModal() { $('addModal').classList.remove('active'); $('addName').value = ''; $('addUsername').value = ''; $('addPassword').value = ''; $('addRole').value = 'ادمین'; }
+    function closeAddModal() { $('addModal').classList.remove('active'); $('addName').value = ''; $('addUsername').value = ''; $('addPassword').value = ''; $('addRole').value = 'admin'; }
     $('addAdminBtn').onclick = openAddModal;
     $('addModal').onclick = (e) => { if (e.target === $('addModal')) closeAddModal(); };
     
@@ -267,11 +273,13 @@
       if (!name || !username || !password) { showToast('لطفاً همه فیلدها را پر کنید', 'warning'); return; }
       $('submitAdd').disabled = true; $('submitAdd').textContent = 'در حال افزودن...';
       try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=addAdmin', { method: 'POST', body: JSON.stringify({ name, username, password, role, clientIP: ip }) });
+        const res = await fetch(API_URL + '?action=addAdmin', { 
+          method: 'POST', 
+          body: JSON.stringify({ name, username, password, role, sessionToken }) 
+        });
         const data = await res.json();
         if (data.success) { showToast('مدیر جدید با موفقیت اضافه شد', 'success'); closeAddModal(); loadAdmins(); }
-        else showToast(data.message, 'error');
+        else showToast(data.message || 'خطا در افزودن', 'error');
       } catch(e) { showToast('خطای سرور', 'error'); }
       $('submitAdd').disabled = false; $('submitAdd').textContent = 'افزودن';
     };
@@ -284,11 +292,13 @@
       const targetId = $('editTargetId').value, newRole = $('editRole').value;
       $('submitEdit').disabled = true; $('submitEdit').textContent = 'در حال ذخیره...';
       try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=changeRole', { method: 'POST', body: JSON.stringify({ targetId, newRole, clientIP: ip }) });
+        const res = await fetch(API_URL + '?action=changeRole', { 
+          method: 'POST', 
+          body: JSON.stringify({ targetId, newRole, sessionToken }) 
+        });
         const data = await res.json();
         if (data.success) { showToast('مقام با موفقیت تغییر کرد', 'success'); closeEditModal(); loadAdmins(); }
-        else showToast(data.message, 'error');
+        else showToast(data.message || 'خطا', 'error');
       } catch(e) { showToast('خطای سرور', 'error'); }
       $('submitEdit').disabled = false; $('submitEdit').textContent = 'ذخیره';
     };
@@ -301,11 +311,13 @@
       const targetId = $('deleteTargetId').value;
       $('submitDelete').disabled = true; $('submitDelete').textContent = 'در حال حذف...';
       try {
-        const ip = await getClientIP();
-        const res = await fetch(API_URL + '?action=deleteAdmin', { method: 'POST', body: JSON.stringify({ targetId, clientIP: ip }) });
+        const res = await fetch(API_URL + '?action=deleteAdmin', { 
+          method: 'POST', 
+          body: JSON.stringify({ targetId, sessionToken }) 
+        });
         const data = await res.json();
         if (data.success) { showToast('مدیر با موفقیت حذف شد', 'success'); closeDeleteModal(); loadAdmins(); }
-        else showToast(data.message, 'error');
+        else showToast(data.message || 'خطا', 'error');
       } catch(e) { showToast('خطای سرور', 'error'); }
       $('submitDelete').disabled = false; $('submitDelete').textContent = 'حذف';
     };
