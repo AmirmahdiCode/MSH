@@ -13,17 +13,17 @@
       --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
-      --card-border: #e2e8f0; --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --card-border: #e2e8f0; --shadow: 0 2px 12px #000000;
       --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
     }
     
     [data-theme="dark"] {
-      --bg: #0f172a !important; --bg2: #1e293b !important; --bg3: #334155 !important;
-      --primary: #14b8a6 !important; --primary-dark: #0d9488 !important; --primary-light: #5eead4 !important;
-      --primary-rgb: 20, 184, 166 !important; --dark: #f1f5f9 !important; --text: #cbd5e1 !important;
-      --text-light: #64748b !important; --white: #1e293b !important; --card-bg: #1e293b !important;
-      --card-border: #334155 !important; --header-bg: #1e293b !important; --footer-bg: #1e293b !important;
-      --logo-filter: brightness(0) invert(1) !important;
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
+      --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
+      --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
+      --card-border: #334155; --header-bg: #1e293b; --footer-bg: #1e293b;
+      --logo-filter: brightness(0) invert(1);
     }
     
     [data-muharram="true"] {
@@ -44,7 +44,7 @@
     }
     
     .header {
-      background: var(--header-bg); box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      background: var(--header-bg); box-shadow: 0 1px 8px #000000;
       padding: 14px 20px; position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
     }
@@ -60,7 +60,7 @@
       width: 42px; height: 42px; border-radius: 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
+      box-shadow: 0 3px 12px #000000;
       overflow: hidden; padding: 6px;
     }
     
@@ -86,7 +86,7 @@
     .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
     
     .main-container { 
-      flex: 1; max-width: 900px; width: 100%; margin: 24px auto; padding: 0 12px;
+      flex: 1; max-width: 900px; width: 100%; margin: 24px auto; padding: 0 12px 80px;
       display: flex; gap: 24px; align-items: flex-start;
     }
     
@@ -99,7 +99,7 @@
       width: 340px; height: 200px;
       background: linear-gradient(145deg, #1a3a3a 0%, #0d2525 30%, var(--primary-dark) 60%, var(--primary) 100%);
       border-radius: 18px; padding: 0; color: #e0e0e0;
-      box-shadow: 0 16px 48px rgba(var(--primary-rgb), 0.4), 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 16px 48px #000000, 0 4px 12px #000000;
       overflow: hidden;
       transition: all 0.3s ease;
     }
@@ -182,21 +182,22 @@
       100% { transform: scale(1); }
     }
     
-    .bank-card .bubbles {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; overflow: hidden; z-index: 0;
+    .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
+    
+    @keyframes shootingStar {
+      0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateX(-300px) translateY(400px) rotate(-35deg); opacity: 0; }
     }
     
-    .bank-card .bubble {
+    .shooting-star {
       position: absolute;
-      background: rgba(255, 255, 255, 0.07);
+      width: 2px;
+      height: 80px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
       border-radius: 50%;
-      animation: floatBubble 5s ease-in-out infinite;
-    }
-    
-    @keyframes floatBubble {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.08; }
-      50% { transform: translateY(-25px) scale(1.4); opacity: 0.2; }
+      animation: shootingStar 1.5s linear infinite;
+      opacity: 0;
     }
     
     .hadith-wrapper {
@@ -247,14 +248,94 @@
       display: flex; align-items: center; gap: 4px;
     }
     
-    .footer {
-      text-align: center; padding: 20px; background: var(--footer-bg);
-      border-top: 1px solid var(--bg3); transition: all 0.3s ease;
+    .floating-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      gap: 12px;
+      z-index: 998;
     }
-    .footer-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
-    .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; display: flex; align-items: center; gap: 4px; transition: color 0.3s; }
-    .footer-links a:hover { color: var(--dark); }
-    .footer-text { font-size: 10px; color: var(--text-light); transition: color 0.3s; }
+    
+    .floating-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2), border-radius 0.4s ease;
+      box-shadow: 0 2px 12px #000000;
+      position: relative;
+      direction: rtl;
+      font-family: inherit;
+    }
+    
+    .floating-btn i {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    
+    .floating-btn .btn-text {
+      opacity: 0;
+      padding: 0 56px 0 18px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+      direction: rtl;
+      text-align: right;
+    }
+    
+    .floating-btn.expanded {
+      width: 150px;
+      border-radius: 24px;
+    }
+    
+    .floating-btn.expanded .btn-text {
+      opacity: 1;
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: #fff;
+      margin-right: 2px;
+      animation: blink 0.8s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--footer-bg);
+      border-top: 1px solid var(--bg3);
+      transition: all 0.3s ease;
+    }
+    
+    .footer-text { font-size: 10px; color: var(--text-light); }
     
     @media (max-width: 700px) {
       .main-container {
@@ -266,6 +347,11 @@
       .hadith-container { height: auto; min-height: 180px; }
       .header-title { font-size: 14px; }
       .header-subtitle { font-size: 7px; }
+      .floating-actions { bottom: 16px; right: 12px; gap: 8px; }
+      .floating-btn { width: 42px; height: 42px; }
+      .floating-btn i { width: 42px; height: 42px; font-size: 16px; }
+      .floating-btn .btn-text { padding: 0 48px 0 14px; font-size: 11px; }
+      .floating-btn.expanded { width: 135px; }
     }
     
     @media (max-width: 400px) {
@@ -305,7 +391,7 @@
     
     <div class="card-wrapper">
       <div class="bank-card" id="cardBox">
-        <div class="bubbles" id="cardBubbles"></div>
+        <div id="cardStars"></div>
         
         <button class="copy-icon-btn" onclick="copyCard('5892107046518703', this)" title="کپی شماره کارت">
           <i class="fa-solid fa-copy"></i>
@@ -331,15 +417,24 @@
 
   </section>
 
+  <div class="floating-actions">
+    <button class="floating-btn" id="floatingPhone" onclick="window.location.href='../Contact/'" title="ارتباط با ما">
+      <span class="btn-text" id="phoneText"></span>
+      <i class="fa-solid fa-phone"></i>
+    </button>
+    <button class="floating-btn" id="floatingAddress" onclick="window.location.href='../Address/'" title="نشانی ما">
+      <span class="btn-text" id="addressText"></span>
+      <i class="fa-solid fa-location-dot"></i>
+    </button>
+  </div>
+
   <footer class="footer">
-    <div class="footer-links">
-      <a href="../Contact/"><i class="fa-solid fa-phone"></i> ارتباط با ما</a>
-      <a href="../Address/"><i class="fa-solid fa-location-dot"></i> نشانی ما</a>
-    </div>
     <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
   </footer>
 
   <script>
+    const $ = (id) => document.getElementById(id);
+    
     (function() {
       const saved = localStorage.getItem('heyat-theme');
       if (saved === 'dark') {
@@ -347,7 +442,7 @@
       }
     })();
     
-    const themeToggle = document.getElementById('themeToggle');
+    const themeToggle = $('themeToggle');
     const icon = themeToggle.querySelector('i');
     
     const savedTheme = localStorage.getItem('heyat-theme');
@@ -358,7 +453,6 @@
       document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
       icon.className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
       localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
-      refreshBubbles();
     });
     
     (async function() {
@@ -371,27 +465,23 @@
           document.documentElement.setAttribute('data-muharram', 'true');
         }
       } catch(e) {}
-      refreshBubbles();
     })();
     
-    function generateBubbles() {
-      let html = '';
-      for (let i = 0; i < 14; i++) {
-        const size = Math.random() * 30 + 10;
+    function generateShootingStars(container, count = 10) {
+      if (!container) return;
+      let html = '<div class="shooting-star-container">';
+      for (let i = 0; i < count; i++) {
         const left = Math.random() * 90;
-        const delay = Math.random() * 5;
-        const duration = Math.random() * 5 + 4;
-        html += `<div class="bubble" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*80}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
+        const top = Math.random() * 60;
+        const delay = Math.random() * 3;
+        const duration = 1 + Math.random() * 2;
+        html += `<div class="shooting-star" style="left:${left}%;top:${top}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
       }
-      return html;
+      html += '</div>';
+      container.innerHTML = html;
     }
     
-    function refreshBubbles() {
-      const box = document.getElementById('cardBubbles');
-      if (box) box.innerHTML = generateBubbles();
-    }
-    
-    refreshBubbles();
+    setTimeout(() => generateShootingStars($('cardStars'), 10), 100);
     
     function copyCard(number, btn) {
       navigator.clipboard.writeText(number).then(() => {
@@ -404,6 +494,72 @@
           btn.classList.remove('copied'); 
         }, 2000);
       });
+    }
+    
+    function typeText(element, text, callback) {
+      let i = 0;
+      element.innerHTML = '<span class="typing-cursor"></span>';
+      const cursor = element.querySelector('.typing-cursor');
+      
+      function type() {
+        if (i < text.length) {
+          cursor.insertAdjacentText('beforebegin', text[i]);
+          i++;
+          setTimeout(type, 80);
+        } else {
+          cursor.remove();
+          if (callback) setTimeout(callback, 2000);
+        }
+      }
+      type();
+    }
+    
+    function clearText(element, callback) {
+      element.textContent = '';
+      if (callback) callback();
+    }
+    
+    function animateFloatingButtons() {
+      const phoneBtn = $('floatingPhone');
+      const addrBtn = $('floatingAddress');
+      const phoneText = $('phoneText');
+      const addrText = $('addressText');
+      
+      if (!phoneBtn || !addrBtn) return;
+      
+      let toggle = true;
+      
+      function cycle() {
+        if (toggle) {
+          if (addrBtn.classList.contains('expanded')) {
+            clearText(addrText);
+            addrBtn.classList.remove('expanded');
+          }
+          setTimeout(() => {
+            phoneBtn.classList.add('expanded');
+            typeText(phoneText, 'ارتباط با ما', () => {
+              clearText(phoneText);
+              phoneBtn.classList.remove('expanded');
+            });
+          }, 400);
+        } else {
+          if (phoneBtn.classList.contains('expanded')) {
+            clearText(phoneText);
+            phoneBtn.classList.remove('expanded');
+          }
+          setTimeout(() => {
+            addrBtn.classList.add('expanded');
+            typeText(addrText, 'نشانی ما', () => {
+              clearText(addrText);
+              addrBtn.classList.remove('expanded');
+            });
+          }, 400);
+        }
+        toggle = !toggle;
+      }
+      
+      cycle();
+      setInterval(cycle, 5000);
     }
     
     const hadiths = [
@@ -499,6 +655,7 @@
     
     setInterval(createHadithComment, 5000);
     createHadithComment();
+    setTimeout(animateFloatingButtons, 1000);
   </script>
 
   <script src="../music.js"></script>
