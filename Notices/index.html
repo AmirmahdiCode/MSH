@@ -13,8 +13,8 @@
       --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
-      --card-border: #e2e8f0; --shadow: 0 2px 12px rgba(0,0,0,0.04);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
+      --card-border: #e2e8f0; --shadow: 0 2px 12px #000000;
+      --shadow-hover: 0 8px 24px #000000;
       --header-bg: #ffffff; --footer-bg: #ffffff;
       --overlay: rgba(13, 148, 136, 0.05);
       --logo-filter: none; --modal-bg: rgba(0,0,0,0.9);
@@ -25,8 +25,8 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --shadow: 0 2px 12px rgba(0,0,0,0.3);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+      --card-border: #334155; --shadow: 0 2px 12px #000000;
+      --shadow-hover: 0 8px 24px #000000;
       --header-bg: #1e293b; --footer-bg: #1e293b;
       --overlay: rgba(20, 184, 166, 0.08);
       --logo-filter: brightness(0) invert(1);
@@ -50,7 +50,7 @@
     }
     
     .header {
-      background: var(--header-bg); box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      background: var(--header-bg); box-shadow: 0 1px 8px #000000;
       padding: 14px 20px; position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
     }
@@ -66,7 +66,7 @@
       width: 42px; height: 42px; border-radius: 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
+      box-shadow: 0 3px 12px #000000;
       overflow: hidden; padding: 6px;
     }
     
@@ -84,7 +84,7 @@
     .back-btn:hover, .theme-toggle:hover { background: var(--primary); color: #fff; }
     .theme-toggle:hover { transform: rotate(15deg); }
     
-    .main-container { flex: 1; max-width: 800px; width: 100%; margin: 24px auto; padding: 0 12px; }
+    .main-container { flex: 1; max-width: 800px; width: 100%; margin: 24px auto; padding: 0 12px 80px; }
     
     .loader-wrapper { display: flex; align-items: center; justify-content: center; min-height: 50vh; }
     .loader {
@@ -102,7 +102,7 @@
       width: 100%; max-width: 350px; aspect-ratio: 2/3;
       object-fit: cover; display: block;
       background: var(--bg2); border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
+      box-shadow: 0 8px 32px #000000;
     }
     
     .notice-hero-placeholder {
@@ -111,7 +111,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 64px; color: rgba(255,255,255,0.3);
       border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
+      box-shadow: 0 8px 32px #000000;
     }
     
     .notice-info-card {
@@ -167,12 +167,94 @@
     .share-btn:hover { background: var(--primary-dark); }
     .share-btn.copied { background: #10b981; }
     
-    .footer {
-      text-align: center; padding: 20px; background: var(--footer-bg);
-      border-top: 1px solid var(--bg3); margin-top: auto;
+    .floating-actions {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      gap: 12px;
+      z-index: 998;
     }
-    .footer-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
-    .footer-links a { color: var(--primary-dark); font-size: 11px; text-decoration: none; }
+    
+    .floating-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2), border-radius 0.4s ease;
+      box-shadow: 0 2px 12px #000000;
+      position: relative;
+      direction: rtl;
+      font-family: inherit;
+    }
+    
+    .floating-btn i {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    
+    .floating-btn .btn-text {
+      opacity: 0;
+      padding: 0 56px 0 18px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+      direction: rtl;
+      text-align: right;
+    }
+    
+    .floating-btn.expanded {
+      width: 150px;
+      border-radius: 24px;
+    }
+    
+    .floating-btn.expanded .btn-text {
+      opacity: 1;
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: #fff;
+      margin-right: 2px;
+      animation: blink 0.8s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--footer-bg);
+      border-top: 1px solid var(--bg3);
+      transition: all 0.3s ease;
+      margin-top: auto;
+    }
+    
     .footer-text { font-size: 10px; color: var(--text-light); }
     
     @media (max-width: 650px) {
@@ -181,6 +263,11 @@
       .notice-info-card { padding: 18px; }
       .notice-info-card .notice-title { font-size: 18px; }
       .notice-hero-image, .notice-hero-placeholder { max-width: 280px; }
+      .floating-actions { bottom: 16px; right: 12px; gap: 8px; }
+      .floating-btn { width: 42px; height: 42px; }
+      .floating-btn i { width: 42px; height: 42px; font-size: 16px; }
+      .floating-btn .btn-text { padding: 0 48px 0 14px; font-size: 11px; }
+      .floating-btn.expanded { width: 135px; }
     }
   </style>
 </head>
@@ -208,11 +295,18 @@
     <div class="loader-wrapper"><div class="loader"></div></div>
   </section>
 
+  <div class="floating-actions">
+    <button class="floating-btn" id="floatingPhone" onclick="window.location.href='../Contact/'" title="ارتباط با ما">
+      <span class="btn-text" id="phoneText"></span>
+      <i class="fa-solid fa-phone"></i>
+    </button>
+    <button class="floating-btn" id="floatingAddress" onclick="window.location.href='../Address/'" title="نشانی ما">
+      <span class="btn-text" id="addressText"></span>
+      <i class="fa-solid fa-location-dot"></i>
+    </button>
+  </div>
+
   <footer class="footer">
-    <div class="footer-links">
-      <a href="../Contact/"><i class="fa-solid fa-phone"></i> ارتباط با ما</a>
-      <a href="../Address/"><i class="fa-solid fa-location-dot"></i> نشانی ما</a>
-    </div>
     <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
   </footer>
 
@@ -258,6 +352,72 @@
         btn.classList.add('copied');
         setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
       });
+    }
+    
+    function typeText(element, text, callback) {
+      let i = 0;
+      element.innerHTML = '<span class="typing-cursor"></span>';
+      const cursor = element.querySelector('.typing-cursor');
+      
+      function type() {
+        if (i < text.length) {
+          cursor.insertAdjacentText('beforebegin', text[i]);
+          i++;
+          setTimeout(type, 80);
+        } else {
+          cursor.remove();
+          if (callback) setTimeout(callback, 2000);
+        }
+      }
+      type();
+    }
+    
+    function clearText(element, callback) {
+      element.textContent = '';
+      if (callback) callback();
+    }
+    
+    function animateFloatingButtons() {
+      const phoneBtn = $('floatingPhone');
+      const addrBtn = $('floatingAddress');
+      const phoneText = $('phoneText');
+      const addrText = $('addressText');
+      
+      if (!phoneBtn || !addrBtn) return;
+      
+      let toggle = true;
+      
+      function cycle() {
+        if (toggle) {
+          if (addrBtn.classList.contains('expanded')) {
+            clearText(addrText);
+            addrBtn.classList.remove('expanded');
+          }
+          setTimeout(() => {
+            phoneBtn.classList.add('expanded');
+            typeText(phoneText, 'ارتباط با ما', () => {
+              clearText(phoneText);
+              phoneBtn.classList.remove('expanded');
+            });
+          }, 400);
+        } else {
+          if (phoneBtn.classList.contains('expanded')) {
+            clearText(phoneText);
+            phoneBtn.classList.remove('expanded');
+          }
+          setTimeout(() => {
+            addrBtn.classList.add('expanded');
+            typeText(addrText, 'نشانی ما', () => {
+              clearText(addrText);
+              addrBtn.classList.remove('expanded');
+            });
+          }, 400);
+        }
+        toggle = !toggle;
+      }
+      
+      cycle();
+      setInterval(cycle, 5000);
     }
     
     async function loadNoticeData() {
@@ -315,6 +475,7 @@
     }
     
     loadNoticeData();
+    setTimeout(animateFloatingButtons, 1000);
   </script>
 
   <script src="../music.js"></script>
