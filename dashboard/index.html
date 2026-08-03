@@ -13,8 +13,8 @@
       --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
-      --card-border: #e2e8f0; --shadow: 0 2px 12px rgba(0,0,0,0.04);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.08);
+      --card-border: #e2e8f0; --shadow: 0 2px 12px #000000;
+      --shadow-hover: 0 8px 24px #000000;
       --header-bg: #ffffff; --footer-bg: #ffffff;
       --overlay: rgba(13, 148, 136, 0.05);
       --announcement-bg: #f0fdfa; --announcement-border: #ccfbf1;
@@ -27,8 +27,8 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --shadow: 0 2px 12px rgba(0,0,0,0.3);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+      --card-border: #334155; --shadow: 0 2px 12px #000000;
+      --shadow-hover: 0 8px 24px #000000;
       --header-bg: #1e293b; --footer-bg: #1e293b;
       --overlay: rgba(20, 184, 166, 0.08);
       --announcement-bg: #1a2e2b; --announcement-border: #164e4a;
@@ -56,7 +56,7 @@
     }
     
     .header {
-      background: var(--header-bg); box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      background: var(--header-bg); box-shadow: 0 1px 8px #000000;
       padding: 14px 20px; position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
     }
@@ -72,7 +72,7 @@
       width: 42px; height: 42px; border-radius: 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px rgba(var(--primary-rgb), 0.2);
+      box-shadow: 0 3px 12px #000000;
       overflow: hidden; padding: 6px;
     }
     
@@ -131,7 +131,7 @@
       position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
       background: var(--card-bg); border: 1px solid var(--primary-light);
       border-radius: 12px; padding: 12px 18px;
-      box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2);
+      box-shadow: 0 8px 32px #000000;
       z-index: 9999; font-size: 11px; max-width: 340px; width: 90%;
       animation: toastIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
       pointer-events: auto;
@@ -160,7 +160,7 @@
     
     .calendar-section, .prayer-section {
       background: var(--card-bg); border-radius: 14px; padding: 10px;
-      box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.3), 0 0 16px rgba(var(--primary-rgb), 0.08);
+      box-shadow: 0 0 0 1px rgba(var(--primary-rgb), 0.3), 0 0 16px #000000;
       transition: all 0.3s ease; position: relative; overflow: hidden;
       width: 260px; flex-shrink: 0;
     }
@@ -175,12 +175,26 @@
     .prayer-time { font-size: 10px; font-weight: 700; color: var(--primary); direction: ltr; transition: color 0.3s; }
     .prayer-date { text-align: center; font-size: 9px; color: var(--text-light); margin-bottom: 8px; position: relative; z-index: 1; }
     
-    .calendar-section .bubbles, .prayer-section .bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
-    .calendar-section .bubble, .prayer-section .bubble { position: absolute; background: rgba(var(--primary-rgb), 0.08); border-radius: 50%; animation: floatBubble 5s ease-in-out infinite; }
+    .calendar-section .shooting-star-container, .prayer-section .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
     
-    @keyframes floatBubble {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
-      50% { transform: translateY(-18px) scale(1.2); opacity: 0.5; }
+    @keyframes shootingStar {
+      0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateX(-300px) translateY(400px) rotate(-35deg); opacity: 0; }
+    }
+    
+    .shooting-star {
+      position: absolute;
+      width: 2px;
+      height: 80px;
+      background: linear-gradient(to bottom, rgba(100, 100, 100, 0.6), transparent);
+      border-radius: 50%;
+      animation: shootingStar 1.5s linear infinite;
+      opacity: 0;
+    }
+    
+    [data-theme="dark"] .shooting-star {
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
     }
     
     .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; position: relative; z-index: 1; }
@@ -220,7 +234,7 @@
     
     .events-section { margin-bottom: 24px; }
     .search-box { width: 100%; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card-bg); color: var(--text); font-size: 13px; font-family: inherit; margin-bottom: 12px; transition: all 0.3s ease; }
-    .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1); }
+    .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px #000000; }
     .no-result { text-align: center; padding: 20px; color: var(--text-light); font-size: 13px; width: 100%; flex-shrink: 0; }
     
     .events-track { display: flex; gap: 10px; overflow-x: auto; padding: 8px 0 12px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2); }
@@ -232,7 +246,7 @@
     .event-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
     .event-card.today { border-color: var(--primary); animation: glowBorder 2s ease-in-out infinite alternate; }
     .event-card.today:hover { border-color: var(--primary); }
-    @keyframes glowBorder { from { border-color: var(--primary); box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.2); } to { border-color: var(--primary-light); box-shadow: 0 0 16px rgba(var(--primary-rgb), 0.4); } }
+    @keyframes glowBorder { from { border-color: var(--primary); box-shadow: 0 0 8px #000000; } to { border-color: var(--primary-light); box-shadow: 0 0 16px #000000; } }
     .event-card.past { opacity: 0.5; }
     .event-card.past:hover { opacity: 0.8; }
     .event-image { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--bg2); }
@@ -251,10 +265,9 @@
     [data-muharram="true"] .donation-card { background: linear-gradient(135deg, #fef2f2, #fecaca); }
     [data-theme="dark"][data-muharram="true"] .donation-card { background: linear-gradient(135deg, #2e1a1a, #4e1616); }
     .donation-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-    .donation-card .bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
-    .donation-card .bubble { position: absolute; background: rgba(var(--primary-rgb), 0.1); border-radius: 50%; animation: floatBubble 4s ease-in-out infinite; }
+    .donation-card .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
     .donation-card .card-content { position: relative; z-index: 1; padding: 16px 12px 0 12px; display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; }
-    .donation-card .donation-icon-circle { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 24px; color: #fff; box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.3); }
+    .donation-card .donation-icon-circle { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 24px; color: #fff; box-shadow: 0 4px 16px #000000; }
     .donation-card .donation-title { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; transition: color 0.3s; }
     .donation-card .donation-subtitle { font-size: 10px; color: var(--text-light); margin-bottom: 12px; transition: color 0.3s; }
     .donation-card .donation-tag { font-size: 9px; background: var(--primary); color: #fff; padding: 3px 10px; border-radius: 12px; font-weight: 600; margin-bottom: 8px; }
@@ -279,7 +292,7 @@
     
     .image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
     .image-modal.active { display: flex; }
-    .image-modal img { max-width: 90%; max-height: 80vh; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+    .image-modal img { max-width: 90%; max-height: 80vh; border-radius: 8px; box-shadow: 0 8px 32px #000000; }
     .image-modal .modal-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
     .image-modal .modal-close:hover { background: rgba(255,255,255,0.2); }
     .image-modal .modal-info { color: #fff; text-align: center; margin-top: 16px; font-size: 13px; }
@@ -455,6 +468,20 @@
     let allAnnouncements = [];
     let currentMonth = 5; let currentYear = 1405;
     
+    function generateShootingStars(container, count = 8) {
+      if (!container) return;
+      let html = '<div class="shooting-star-container">';
+      for (let i = 0; i < count; i++) {
+        const left = Math.random() * 90;
+        const top = Math.random() * 60;
+        const delay = Math.random() * 3;
+        const duration = 1 + Math.random() * 2;
+        html += `<div class="shooting-star" style="left:${left}%;top:${top}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
+    
     function buildCountdownBar() {
       const upcoming = allEvents.filter(e => new Date(e.date) >= new Date(new Date().setHours(0,0,0,0)));
       upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -494,7 +521,7 @@
     function updateCountdown() { const bar = document.querySelector('.countdown-bar'); if (bar) bar.outerHTML = buildCountdownBar(); }
     
     function buildPrayerWidget() {
-      return `<div class="prayer-section"><div class="bubbles" id="prayerBubbles"></div><div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی</div><div class="prayer-date" id="prayerDate">در حال دریافت...</div><div class="prayer-list" id="prayerList"><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> صبح</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> ظهر</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> عصر</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> مغرب</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> عشاء</span><span class="prayer-time">--:--</span></div></div></div>`;
+      return `<div class="prayer-section"><div id="prayerStars"></div><div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی</div><div class="prayer-date" id="prayerDate">در حال دریافت...</div><div class="prayer-list" id="prayerList"><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> صبح</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> ظهر</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> عصر</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> مغرب</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> عشاء</span><span class="prayer-time">--:--</span></div></div></div>`;
     }
     
     async function loadPrayerTimes() {
@@ -508,7 +535,7 @@
           const pDate = document.getElementById('prayerDate');
           if (pDate) pDate.textContent = `${date.hijri.weekday.ar} - ${date.hijri.day} ${date.hijri.month.ar} ${date.hijri.year}`;
           [{ selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },{ selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },{ selector: '.prayer-item:nth-child(3) .prayer-time', value: timings.Dhuhr },{ selector: '.prayer-item:nth-child(4) .prayer-time', value: timings.Asr },{ selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Maghrib },{ selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Isha }].forEach(t => { const el = document.querySelector(t.selector); if (el) el.textContent = t.value.split(' ')[0]; });
-          highlightNextPrayer(timings); generatePrayerBubbles(); updateCountdown();
+          highlightNextPrayer(timings); generateShootingStars(document.getElementById('prayerStars'), 6); updateCountdown();
         }
       } catch(e) {}
     }
@@ -523,13 +550,10 @@
       }
     }
     
-    function generatePrayerBubbles() { const box = document.getElementById('prayerBubbles'); if (!box) return; let html = ''; for (let i = 0; i < 8; i++) { const size = Math.random() * 20 + 6; html += `<div class="bubble" style="width:${size}px;height:${size}px;left:${Math.random()*85}%;bottom:${Math.random()*70}%;animation-delay:${Math.random()*4}s;animation-duration:${Math.random()*4+3}s;"></div>`; } box.innerHTML = html; }
-    
     function buildCalendar() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
       const today = gregorianToPersian(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
-      let bubblesHTML = ''; for (let i = 0; i < 8; i++) { const size = Math.random() * 20 + 6; bubblesHTML += `<div class="bubble" style="width:${size}px;height:${size}px;left:${Math.random()*85}%;bottom:${Math.random()*70}%;animation-delay:${Math.random()*4}s;animation-duration:${Math.random()*4+3}s;"></div>`; }
-      let html = `<div class="calendar-section"><div class="bubbles">${bubblesHTML}</div><div class="calendar-header"><button class="calendar-nav" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-right"></i></button><span class="calendar-month-title">${months[currentMonth - 1]} ${currentYear}</span><button class="calendar-nav" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-left"></i></button></div><div class="calendar-grid">`;
+      let html = `<div class="calendar-section"><div id="calendarStars"></div><div class="calendar-header"><button class="calendar-nav" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-right"></i></button><span class="calendar-month-title">${months[currentMonth - 1]} ${currentYear}</span><button class="calendar-nav" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-left"></i></button></div><div class="calendar-grid">`;
       ['','','','','','',''].forEach(d => { html += `<div class="calendar-day-name">${d}</div>`; });
       const firstDay = getDayOfWeek(currentYear, currentMonth, 1); const daysInMonth = getDaysInMonth(currentYear, currentMonth);
       for (let i = 0; i < firstDay; i++) { html += '<div class="calendar-day empty"></div>'; }
@@ -549,7 +573,7 @@
     }
     
     function changeMonth(dir) { currentMonth += dir; if (currentMonth > 12) { currentMonth = 1; currentYear++; } if (currentMonth < 1) { currentMonth = 12; currentYear--; } refreshCalendar(); }
-    function refreshCalendar() { const calSection = document.querySelector('.calendar-section'); if (calSection) calSection.outerHTML = buildCalendar(); }
+    function refreshCalendar() { const calSection = document.querySelector('.calendar-section'); if (calSection) { calSection.outerHTML = buildCalendar(); generateShootingStars(document.getElementById('calendarStars'), 8); } }
     
     function showDayInfo(dateStr, el) {
       const existing = document.querySelector('.day-info-toast');
@@ -578,9 +602,10 @@
     function getCloudColorLight() { return isMuharram ? 'rgba(220, 38, 38, 0.3)' : 'rgba(13, 148, 136, 0.3)'; }
     
     function buildDonationCard() {
-      let bubblesHTML = ''; for (let i = 0; i < 8; i++) { bubblesHTML += `<div class="bubble" style="width:${Math.random()*20+10}px;height:${Math.random()*20+10}px;left:${Math.random()*80}%;bottom:${Math.random()*60}%;animation-delay:${Math.random()*3}s;animation-duration:${Math.random()*3+3}s;"></div>`; }
       const logoSrc = getDonationLogo(); const cloudColor = getCloudColor(); const cloudColorLight = getCloudColorLight();
-      return `<div class="donation-card" onclick="window.location.href='../Donates/';"><div class="bubbles">${bubblesHTML}</div><div class="card-content"><div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div><div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div><div class="donation-subtitle">با کمک های خود یاری‌گر برگزاری مراسمات باشید</div><span class="donation-tag">رسمی</span><div class="clouds-row"><i class="fa-solid fa-cloud cloud-float" style="font-size:40px; color:${cloudColor}; animation-delay:${Math.random()*2}s; left:${Math.random()*40+10}%;"></i><i class="fa-solid fa-cloud cloud-float" style="font-size:32px; color:${cloudColorLight}; animation-delay:${Math.random()*2+1}s; left:${Math.random()*40+40}%;"></i></div><img src="${logoSrc}" class="donation-logo-img" alt="شهدای گمنام"></div></div>`;
+      let html = `<div class="donation-card" onclick="window.location.href='../Donates/';"><div id="donationStars"></div><div class="card-content"><div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div><div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div><div class="donation-subtitle">با کمک های خود یاری‌گر برگزاری مراسمات باشید</div><span class="donation-tag">رسمی</span><div class="clouds-row"><i class="fa-solid fa-cloud cloud-float" style="font-size:40px; color:${cloudColor}; animation-delay:${Math.random()*2}s; left:${Math.random()*40+10}%;"></i><i class="fa-solid fa-cloud cloud-float" style="font-size:32px; color:${cloudColorLight}; animation-delay:${Math.random()*2+1}s; left:${Math.random()*40+40}%;"></i></div><img src="${logoSrc}" class="donation-logo-img" alt="شهدای گمنام"></div></div>`;
+      setTimeout(() => generateShootingStars(document.getElementById('donationStars'), 5), 100);
+      return html;
     }
     
     async function loadAllData() {
