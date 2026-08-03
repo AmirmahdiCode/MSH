@@ -175,7 +175,7 @@
     .prayer-time { font-size: 10px; font-weight: 700; color: var(--primary); direction: ltr; transition: color 0.3s; }
     .prayer-date { text-align: center; font-size: 9px; color: var(--text-light); margin-bottom: 8px; position: relative; z-index: 1; }
     
-    .calendar-section .shooting-star-container, .prayer-section .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
+    .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
     
     @keyframes shootingStar {
       0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; }
@@ -221,7 +221,6 @@
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; margin-bottom: 10px;
       transition: all 0.3s ease; cursor: pointer; display: flex; gap: 14px; box-shadow: var(--shadow); position: relative; overflow: hidden;
     }
-    .announcement-item::before { content: ''; position: absolute; right: 0; top: 0; width: 3px; height: 100%; background: linear-gradient(to bottom, var(--primary), var(--primary-dark)); }
     .announcement-item:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
     .announcement-image { width: 90px; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; background: var(--bg2); flex-shrink: 0; }
     .announcement-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--primary); background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.08), rgba(var(--primary-rgb), 0.03)); }
@@ -350,6 +349,8 @@
       display: inline-block;
       transition: opacity 0.3s ease;
       white-space: nowrap;
+      direction: rtl;
+      text-align: right;
     }
     
     .floating-btn.expanded {
@@ -629,7 +630,9 @@
           const pDate = document.getElementById('prayerDate');
           if (pDate) pDate.textContent = `${date.hijri.weekday.ar} - ${date.hijri.day} ${date.hijri.month.ar} ${date.hijri.year}`;
           [{ selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },{ selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },{ selector: '.prayer-item:nth-child(3) .prayer-time', value: timings.Dhuhr },{ selector: '.prayer-item:nth-child(4) .prayer-time', value: timings.Asr },{ selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Maghrib },{ selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Isha }].forEach(t => { const el = document.querySelector(t.selector); if (el) el.textContent = t.value.split(' ')[0]; });
-          highlightNextPrayer(timings); generateShootingStars(document.getElementById('prayerStars'), 6); updateCountdown();
+          highlightNextPrayer(timings);
+          generateShootingStars(document.getElementById('prayerStars'), 6);
+          updateCountdown();
         }
       } catch(e) {}
     }
@@ -666,7 +669,16 @@
     }
     
     function changeMonth(dir) { currentMonth += dir; if (currentMonth > 12) { currentMonth = 1; currentYear++; } if (currentMonth < 1) { currentMonth = 12; currentYear--; } refreshCalendar(); }
-    function refreshCalendar() { const calSection = document.querySelector('.calendar-section'); if (calSection) { calSection.outerHTML = buildCalendar(); generateShootingStars(document.getElementById('calendarStars'), 8); } }
+    
+    function refreshCalendar() {
+      const calSection = document.querySelector('.calendar-section');
+      if (calSection) {
+        calSection.outerHTML = buildCalendar();
+        setTimeout(() => {
+          generateShootingStars(document.getElementById('calendarStars'), 8);
+        }, 50);
+      }
+    }
     
     function showDayInfo(dateStr, el) {
       const existing = document.querySelector('.day-info-toast');
@@ -696,8 +708,14 @@
     
     function buildDonationCard() {
       const logoSrc = getDonationLogo(); const cloudColor = getCloudColor(); const cloudColorLight = getCloudColorLight();
-      let html = `<div class="donation-card" onclick="window.location.href='../Donates/';"><div id="donationStars"></div><div class="card-content"><div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div><div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div><div class="donation-subtitle">با کمک های خود یاری‌گر برگزاری مراسمات باشید</div><span class="donation-tag">رسمی</span><div class="clouds-row"><i class="fa-solid fa-cloud cloud-float" style="font-size:40px; color:${cloudColor}; animation-delay:${Math.random()*2}s; left:${Math.random()*40+10}%;"></i><i class="fa-solid fa-cloud cloud-float" style="font-size:32px; color:${cloudColorLight}; animation-delay:${Math.random()*2+1}s; left:${Math.random()*40+40}%;"></i></div><img src="${logoSrc}" class="donation-logo-img" alt="شهدای گمنام"></div></div>`;
-      setTimeout(() => generateShootingStars(document.getElementById('donationStars'), 5), 100);
+      const uniqueId = 'donationStars_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+      let html = `<div class="donation-card" onclick="window.location.href='../Donates/';"><div id="${uniqueId}"></div><div class="card-content"><div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div><div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div><div class="donation-subtitle">با کمک های خود یاری‌گر برگزاری مراسمات باشید</div><span class="donation-tag">رسمی</span><div class="clouds-row"><i class="fa-solid fa-cloud cloud-float" style="font-size:40px; color:${cloudColor}; animation-delay:${Math.random()*2}s; left:${Math.random()*40+10}%;"></i><i class="fa-solid fa-cloud cloud-float" style="font-size:32px; color:${cloudColorLight}; animation-delay:${Math.random()*2+1}s; left:${Math.random()*40+40}%;"></i></div><img src="${logoSrc}" class="donation-logo-img" alt="شهدای گمنام"></div></div>`;
+      
+      setTimeout(() => {
+        const container = document.getElementById(uniqueId);
+        if (container) generateShootingStars(container, 5);
+      }, 200);
+      
       return html;
     }
     
@@ -736,17 +754,29 @@
       
       function cycle() {
         if (toggle) {
-          phoneBtn.classList.add('expanded');
-          typeText(phoneText, 'ارتباط با ما', () => {
-            clearText(phoneText);
-            phoneBtn.classList.remove('expanded');
-          });
-        } else {
-          addrBtn.classList.add('expanded');
-          typeText(addrText, 'نشانی ما', () => {
+          if (addrBtn.classList.contains('expanded')) {
             clearText(addrText);
             addrBtn.classList.remove('expanded');
-          });
+          }
+          setTimeout(() => {
+            phoneBtn.classList.add('expanded');
+            typeText(phoneText, 'ارتباط با ما', () => {
+              clearText(phoneText);
+              phoneBtn.classList.remove('expanded');
+            });
+          }, 400);
+        } else {
+          if (phoneBtn.classList.contains('expanded')) {
+            clearText(phoneText);
+            phoneBtn.classList.remove('expanded');
+          }
+          setTimeout(() => {
+            addrBtn.classList.add('expanded');
+            typeText(addrText, 'نشانی ما', () => {
+              clearText(addrText);
+              addrBtn.classList.remove('expanded');
+            });
+          }, 400);
         }
         toggle = !toggle;
       }
@@ -787,14 +817,35 @@
           const archiveItems = [];
           for (const event of evtData.data) { try { const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId', { method: 'POST', body: JSON.stringify({ eventId: event.id }) }); const archiveData = await archiveRes.json(); if (archiveData.success && archiveData.data.images) { archiveData.data.images.forEach(img => { archiveItems.push({ eventId: event.id, title: event.title, date: event.date, location: event.location, image: img }); }); } } catch(e) {} }
           
-          if (archiveItems.length > 0) { const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15); galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`; container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML; if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid')); }
-          else { galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`; container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML; }
+          if (archiveItems.length > 0) {
+            const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15);
+            galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`;
+            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+            if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid'));
+          } else {
+            galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
+            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+          }
+          
+          setTimeout(() => {
+            generateShootingStars(document.getElementById('calendarStars'), 8);
+            const donationStars = document.querySelector('[id^="donationStars_"]');
+            if (donationStars) generateShootingStars(donationStars, 5);
+          }, 300);
+          
           setTimeout(() => showDayInfo(todayStr), 1500);
           setTimeout(loadPrayerTimes, 500);
         } else {
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><div class="events-track">${buildDonationCard()}<div class="event-card"><div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div><div class="event-info" style="text-align:center;"><div class="event-title">مراسمی ثبت نشده است</div></div></div></div></div>`;
           galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
           container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+          
+          setTimeout(() => {
+            generateShootingStars(document.getElementById('calendarStars'), 8);
+            const donationStars = document.querySelector('[id^="donationStars_"]');
+            if (donationStars) generateShootingStars(donationStars, 5);
+          }, 300);
+          
           setTimeout(() => showDayInfo(todayStr), 1500);
           setTimeout(loadPrayerTimes, 500);
         }
@@ -804,7 +855,9 @@
         setInterval(updateCountdown, 30000);
         
         setTimeout(animateFloatingButtons, 1000);
-      } catch(e) { container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAllData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`; }
+      } catch(e) {
+        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAllData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`;
+      }
     }
     
     loadAllData();
