@@ -13,8 +13,8 @@
       --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
-      --card-border: #e2e8f0; --shadow: 0 2px 12px #000000;
-      --shadow-hover: 0 8px 24px #000000;
+      --card-border: #e2e8f0; --shadow: 4px 4px 0 #000000;
+      --shadow-hover: 6px 6px 0 #000000;
       --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
     }
     
@@ -23,8 +23,8 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --shadow: 0 2px 12px #000000;
-      --shadow-hover: 0 8px 24px #000000;
+      --card-border: #334155; --shadow: 4px 4px 0 #000000;
+      --shadow-hover: 6px 6px 0 #000000;
       --header-bg: #1e293b; --footer-bg: #1e293b;
       --logo-filter: brightness(0) invert(1);
     }
@@ -47,9 +47,10 @@
     }
     
     .header {
-      background: var(--header-bg); box-shadow: 0 1px 8px #000000;
+      background: var(--header-bg); box-shadow: 0 4px 0 #000000;
       padding: 14px 20px; position: sticky; top: 0; z-index: 100;
-      border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
+      border: 1px solid #000000; border-top: none; transition: all 0.3s ease;
+      margin: 0 0 4px 0;
     }
     
     .header-inner {
@@ -60,11 +61,11 @@
     .header-right { display: flex; align-items: center; gap: 10px; }
     
     .header-logo {
-      width: 42px; height: 42px; border-radius: 12px;
+      width: 42px; height: 42px; border-radius: 4px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px #000000;
-      overflow: hidden; padding: 6px;
+      box-shadow: 3px 3px 0 #000000;
+      overflow: hidden; padding: 6px; border: 1px solid #000000;
     }
     
     .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
@@ -73,36 +74,28 @@
     .header-btns { display: flex; align-items: center; gap: 8px; }
     
     .back-btn, .theme-toggle {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
+      background: var(--bg2); border: 1px solid #000000; padding: 10px; border-radius: 4px;
       cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; transition: all 0.3s ease; text-decoration: none;
+      width: 40px; height: 40px; transition: all 0.15s ease; text-decoration: none;
+      box-shadow: 3px 3px 0 #000000;
     }
-    .back-btn:hover, .theme-toggle:hover { background: var(--primary); color: #fff; }
-    .theme-toggle:hover { transform: rotate(15deg); }
+    .back-btn:active, .theme-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     
     .main-container { flex: 1; max-width: 650px; width: 100%; margin: 24px auto; padding: 0 12px 80px; }
     
-    .page-header {
-      text-align: center; margin-bottom: 28px;
-    }
+    .page-header { text-align: center; margin-bottom: 28px; }
     
     .page-icon {
       width: 64px; height: 64px; margin: 0 auto 16px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      border-radius: 4px; display: flex; align-items: center; justify-content: center;
       font-size: 26px; color: #fff;
-      box-shadow: 0 8px 24px #000000;
+      box-shadow: 4px 4px 0 #000000; border: 1px solid #000000;
     }
     
-    .page-title {
-      font-size: 20px; font-weight: 800; color: var(--dark);
-      margin-bottom: 4px;
-    }
-    
-    .page-subtitle {
-      font-size: 11px; color: var(--text-light);
-    }
+    .page-title { font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+    .page-subtitle { font-size: 11px; color: var(--text-light); }
     
     .section-label {
       font-size: 11px; font-weight: 700; color: var(--text-light);
@@ -111,25 +104,23 @@
       display: flex; align-items: center; gap: 6px;
     }
     
-    .social-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-    }
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     
     .social-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 14px; text-decoration: none;
+      background: var(--card-bg); border: 1px solid #000000;
+      border-radius: 4px; padding: 14px; text-decoration: none;
       display: flex; flex-direction: column; align-items: center;
-      gap: 8px; transition: all 0.3s ease; cursor: pointer;
-      box-shadow: var(--shadow); text-align: center;
+      gap: 8px; transition: all 0.15s ease; cursor: pointer;
+      box-shadow: 4px 4px 0 #000000; text-align: center;
       position: relative; overflow: hidden;
     }
-    
-    .social-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
+    .social-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
     
     .social-card .social-icon {
-      width: 42px; height: 42px; border-radius: 12px;
+      width: 42px; height: 42px; border-radius: 4px;
       display: flex; align-items: center; justify-content: center;
       font-size: 20px; position: relative; flex-shrink: 0;
+      border: 1px solid #000000; box-shadow: 2px 2px 0 #000000;
     }
     
     .social-card .social-icon img { width: 22px; height: 22px; object-fit: contain; }
@@ -149,82 +140,63 @@
     .admin-dot {
       position: absolute; top: -3px; right: -3px;
       width: 16px; height: 16px; background: #f59e0b;
-      border-radius: 50%; border: 2px solid var(--card-bg);
+      border-radius: 2px; border: 1px solid #000000;
       display: flex; align-items: center; justify-content: center;
       font-size: 7px; color: #fff;
     }
     
-    .social-card .social-name {
-      font-size: 11px; font-weight: 700; color: var(--dark);
-      line-height: 1.4;
-    }
+    .social-card .social-name { font-size: 11px; font-weight: 700; color: var(--dark); line-height: 1.4; }
+    .social-card .social-id { font-size: 9px; color: var(--text-light); direction: ltr; }
     
-    .social-card .social-id {
-      font-size: 9px; color: var(--text-light);
-      direction: ltr;
-    }
-    
-    .admin-list {
-      display: flex; flex-direction: column; gap: 8px;
-    }
+    .admin-list { display: flex; flex-direction: column; gap: 8px; }
     
     .admin-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 14px 16px; text-decoration: none;
+      background: var(--card-bg); border: 1px solid #000000;
+      border-radius: 4px; padding: 14px 16px; text-decoration: none;
       display: flex; align-items: center; gap: 14px;
-      transition: all 0.3s ease; box-shadow: var(--shadow);
+      transition: all 0.15s ease; box-shadow: 4px 4px 0 #000000;
       cursor: pointer; position: relative; overflow: hidden;
     }
-    
-    .admin-card:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary-light); }
+    .admin-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
     
     .admin-card .admin-icon {
-      width: 42px; height: 42px; border-radius: 12px;
+      width: 42px; height: 42px; border-radius: 4px;
       display: flex; align-items: center; justify-content: center;
       font-size: 20px; position: relative; flex-shrink: 0;
+      border: 1px solid #000000; box-shadow: 2px 2px 0 #000000;
     }
     
     .admin-card .admin-icon img { width: 22px; height: 22px; object-fit: contain; }
     .admin-card .admin-icon.eitaa img { width: 26px; height: 26px; }
     
     .admin-card .admin-info { flex: 1; min-width: 0; }
-    .admin-card .admin-name {
-      font-size: 13px; font-weight: 700; color: var(--dark);
-      margin-bottom: 3px;
-    }
-    .admin-card .admin-user {
-      font-size: 10px; color: var(--text-light); direction: ltr; text-align: right;
-    }
-    .admin-card .admin-arrow {
-      color: var(--text-light); font-size: 14px;
-    }
+    .admin-card .admin-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+    .admin-card .admin-user { font-size: 10px; color: var(--text-light); direction: ltr; text-align: right; }
+    .admin-card .admin-arrow { color: var(--text-light); font-size: 14px; }
     
     .supporter-card {
       background: var(--card-bg); border: 2px dashed #f43f5e;
-      border-radius: 14px; padding: 16px; display: flex;
+      border-radius: 4px; padding: 16px; display: flex;
       align-items: center; gap: 14px; text-decoration: none; color: var(--text);
-      box-shadow: var(--shadow); transition: all 0.3s ease;
+      box-shadow: 4px 4px 0 #000000; transition: all 0.15s ease;
       cursor: pointer; margin-top: 24px;
     }
-    .supporter-card:hover { transform: translateX(-4px); box-shadow: var(--shadow-hover); background: #fff5f5; }
+    .supporter-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
     [data-theme="dark"] .supporter-card:hover { background: #2e1a1a; }
     
     .supporter-card .supporter-avatar {
-      width: 48px; height: 48px; border-radius: 14px; object-fit: cover; flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 4px; object-fit: cover; flex-shrink: 0;
+      border: 1px solid #000000;
     }
     
     .supporter-card .supporter-info { flex: 1; min-width: 0; }
-    .supporter-card .supporter-name {
-      font-size: 13px; font-weight: 700; color: #f43f5e; margin-bottom: 3px;
-    }
-    .supporter-card .supporter-user {
-      font-size: 10px; color: var(--text-light); direction: ltr; text-align: right;
-    }
+    .supporter-card .supporter-name { font-size: 13px; font-weight: 700; color: #f43f5e; margin-bottom: 3px; }
+    .supporter-card .supporter-user { font-size: 10px; color: var(--text-light); direction: ltr; text-align: right; }
     
     .supporter-badge {
       font-size: 9px; background: #f43f5e; color: #fff;
-      padding: 5px 12px; border-radius: 8px; white-space: nowrap;
-      flex-shrink: 0; font-weight: 700;
+      padding: 5px 12px; border-radius: 2px; white-space: nowrap;
+      flex-shrink: 0; font-weight: 700; border: 1px solid #000000;
     }
     
     .floating-actions {
@@ -239,10 +211,10 @@
     .floating-btn {
       width: 48px;
       height: 48px;
-      border-radius: 24px;
+      border-radius: 4px;
       background: var(--primary);
       color: #fff;
-      border: none;
+      border: 1px solid #000000;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -250,8 +222,8 @@
       padding: 0;
       overflow: hidden;
       white-space: nowrap;
-      transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2), border-radius 0.4s ease;
-      box-shadow: 0 2px 12px #000000;
+      transition: all 0.15s ease;
+      box-shadow: 4px 4px 0 #000000;
       position: relative;
       direction: rtl;
       font-family: inherit;
@@ -282,14 +254,9 @@
       text-align: right;
     }
     
-    .floating-btn.expanded {
-      width: 150px;
-      border-radius: 24px;
-    }
-    
-    .floating-btn.expanded .btn-text {
-      opacity: 1;
-    }
+    .floating-btn.expanded { width: 150px; border-radius: 4px; }
+    .floating-btn.expanded .btn-text { opacity: 1; }
+    .floating-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
     
     .typing-cursor {
       display: inline-block;
@@ -310,7 +277,7 @@
       text-align: center;
       padding: 20px;
       background: var(--footer-bg);
-      border-top: 1px solid var(--bg3);
+      border-top: 1px solid #000000;
       transition: all 0.3s ease;
       margin-top: auto;
     }
@@ -321,7 +288,7 @@
       .header-title { font-size: 14px; }
       .header-subtitle { font-size: 7px; }
       .floating-actions { bottom: 16px; right: 12px; gap: 8px; }
-      .floating-btn { width: 42px; height: 42px; }
+      .floating-btn { width: 42px; height: 42px; box-shadow: 3px 3px 0 #000000; }
       .floating-btn i { width: 42px; height: 42px; font-size: 16px; }
       .floating-btn .btn-text { padding: 0 48px 0 14px; font-size: 11px; }
       .floating-btn.expanded { width: 135px; }
