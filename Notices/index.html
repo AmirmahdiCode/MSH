@@ -13,8 +13,9 @@
       --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
-      --card-border: #e2e8f0; --shadow: 0 2px 12px #000000;
-      --shadow-hover: 0 8px 24px #000000;
+      --card-border: #e2e8f0; --shadow: 4px 4px 0 #000000;
+      --shadow-hover: 6px 6px 0 #000000;
+      --shadow-sm: 2px 2px 0 #000000;
       --header-bg: #ffffff; --footer-bg: #ffffff;
       --overlay: rgba(13, 148, 136, 0.05);
       --logo-filter: none; --modal-bg: rgba(0,0,0,0.9);
@@ -25,8 +26,9 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --shadow: 0 2px 12px #000000;
-      --shadow-hover: 0 8px 24px #000000;
+      --card-border: #334155; --shadow: 4px 4px 0 #000000;
+      --shadow-hover: 6px 6px 0 #000000;
+      --shadow-sm: 2px 2px 0 #000000;
       --header-bg: #1e293b; --footer-bg: #1e293b;
       --overlay: rgba(20, 184, 166, 0.08);
       --logo-filter: brightness(0) invert(1);
@@ -50,9 +52,10 @@
     }
     
     .header {
-      background: var(--header-bg); box-shadow: 0 1px 8px #000000;
+      background: var(--header-bg); box-shadow: 0 4px 0 #000000;
       padding: 14px 20px; position: sticky; top: 0; z-index: 100;
-      border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
+      border: 1px solid #000000; border-top: none; transition: all 0.3s ease;
+      margin: 0 0 4px 0;
     }
     
     .header-inner {
@@ -63,11 +66,11 @@
     .header-right { display: flex; align-items: center; gap: 10px; }
     
     .header-logo {
-      width: 42px; height: 42px; border-radius: 12px;
+      width: 42px; height: 42px; border-radius: 4px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px #000000;
-      overflow: hidden; padding: 6px;
+      box-shadow: 3px 3px 0 #000000;
+      overflow: hidden; padding: 6px; border: 1px solid #000000;
     }
     
     .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
@@ -76,19 +79,19 @@
     .header-btns { display: flex; align-items: center; gap: 8px; }
     
     .back-btn, .theme-toggle {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
+      background: var(--bg2); border: 1px solid #000000; padding: 10px; border-radius: 4px;
       cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; transition: all 0.3s ease; text-decoration: none;
+      width: 40px; height: 40px; transition: all 0.15s ease; text-decoration: none;
+      box-shadow: 3px 3px 0 #000000;
     }
-    .back-btn:hover, .theme-toggle:hover { background: var(--primary); color: #fff; }
-    .theme-toggle:hover { transform: rotate(15deg); }
+    .back-btn:active, .theme-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     
     .main-container { flex: 1; max-width: 800px; width: 100%; margin: 24px auto; padding: 0 12px 80px; }
     
     .loader-wrapper { display: flex; align-items: center; justify-content: center; min-height: 50vh; }
     .loader {
-      width: 48px; height: 48px; border: 4px solid var(--bg3);
+      width: 48px; height: 48px; border: 4px solid #000000;
       border-top-color: var(--primary); border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -101,8 +104,8 @@
     .notice-hero-image {
       width: 100%; max-width: 350px; aspect-ratio: 2/3;
       object-fit: cover; display: block;
-      background: var(--bg2); border-radius: 16px;
-      box-shadow: 0 8px 32px #000000;
+      background: var(--bg2); border-radius: 4px;
+      box-shadow: 5px 5px 0 #000000; border: 1px solid #000000;
     }
     
     .notice-hero-placeholder {
@@ -110,14 +113,14 @@
       background: linear-gradient(135deg, var(--primary-dark), var(--primary));
       display: flex; align-items: center; justify-content: center;
       font-size: 64px; color: rgba(255,255,255,0.3);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px #000000;
+      border-radius: 4px;
+      box-shadow: 5px 5px 0 #000000; border: 1px solid #000000;
     }
     
     .notice-info-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 24px; margin-bottom: 24px;
-      box-shadow: var(--shadow);
+      background: var(--card-bg); border: 1px solid #000000;
+      border-radius: 4px; padding: 24px; margin-bottom: 24px;
+      box-shadow: 4px 4px 0 #000000;
     }
     
     .notice-info-card .notice-title {
@@ -133,8 +136,9 @@
     .notice-meta-item {
       display: flex; align-items: center; gap: 8px;
       padding: 6px 14px; background: var(--bg2);
-      border-radius: 20px; font-size: 11px; color: var(--text);
+      border-radius: 2px; font-size: 11px; color: var(--text);
       margin-left: 6px; margin-bottom: 6px;
+      border: 1px solid #000000; box-shadow: 2px 2px 0 #000000;
     }
     
     .notice-meta-dot {
@@ -146,25 +150,28 @@
       display: inline-flex; align-items: center;
       font-size: 10px; background: rgba(var(--primary-rgb), 0.1);
       color: var(--primary-dark); padding: 6px 12px;
-      border-radius: 20px; font-weight: 700;
+      border-radius: 2px; font-weight: 700;
       margin-left: 6px; margin-bottom: 6px;
+      border: 1px solid #000000;
     }
     
     .notice-content-box {
-      background: var(--bg2); border-radius: 14px;
+      background: var(--bg2); border-radius: 2px;
       padding: 20px; font-size: 14px; line-height: 2;
       color: var(--text); white-space: pre-line;
+      border: 1px solid #000000;
       border-right: 4px solid var(--primary);
     }
     
     .share-btn {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 10px 20px; background: var(--primary); color: #fff;
-      border-radius: 12px; font-size: 13px; font-weight: 600;
-      cursor: pointer; border: none; font-family: inherit;
-      transition: all 0.3s ease; margin-top: 12px;
+      border-radius: 4px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: 1px solid #000000; font-family: inherit;
+      transition: all 0.15s ease; margin-top: 12px;
+      box-shadow: 3px 3px 0 #000000;
     }
-    .share-btn:hover { background: var(--primary-dark); }
+    .share-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     .share-btn.copied { background: #10b981; }
     
     .floating-actions {
@@ -179,10 +186,10 @@
     .floating-btn {
       width: 48px;
       height: 48px;
-      border-radius: 24px;
+      border-radius: 4px;
       background: var(--primary);
       color: #fff;
-      border: none;
+      border: 1px solid #000000;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -190,8 +197,8 @@
       padding: 0;
       overflow: hidden;
       white-space: nowrap;
-      transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2), border-radius 0.4s ease;
-      box-shadow: 0 2px 12px #000000;
+      transition: all 0.15s ease;
+      box-shadow: 4px 4px 0 #000000;
       position: relative;
       direction: rtl;
       font-family: inherit;
@@ -224,12 +231,14 @@
     
     .floating-btn.expanded {
       width: 150px;
-      border-radius: 24px;
+      border-radius: 4px;
     }
     
     .floating-btn.expanded .btn-text {
       opacity: 1;
     }
+    
+    .floating-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
     
     .typing-cursor {
       display: inline-block;
@@ -250,7 +259,7 @@
       text-align: center;
       padding: 20px;
       background: var(--footer-bg);
-      border-top: 1px solid var(--bg3);
+      border-top: 1px solid #000000;
       transition: all 0.3s ease;
       margin-top: auto;
     }
@@ -264,7 +273,7 @@
       .notice-info-card .notice-title { font-size: 18px; }
       .notice-hero-image, .notice-hero-placeholder { max-width: 280px; }
       .floating-actions { bottom: 16px; right: 12px; gap: 8px; }
-      .floating-btn { width: 42px; height: 42px; }
+      .floating-btn { width: 42px; height: 42px; box-shadow: 3px 3px 0 #000000; }
       .floating-btn i { width: 42px; height: 42px; font-size: 16px; }
       .floating-btn .btn-text { padding: 0 48px 0 14px; font-size: 11px; }
       .floating-btn.expanded { width: 135px; }
@@ -424,7 +433,7 @@
       const container = $('mainContent');
       
       if (!NOTICE_ID) {
-        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه‌ای انتخاب نشده است</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
+        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه‌ای انتخاب نشده است</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;font-size:13px;text-decoration:none;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
         return;
       }
       
@@ -464,13 +473,13 @@
             
             container.innerHTML = html;
           } else {
-            container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه پیدا نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
+            container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه پیدا نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;font-size:13px;text-decoration:none;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
           }
         } else {
-          container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه‌ای یافت نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
+          container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>اطلاعیه‌ای یافت نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;font-size:13px;text-decoration:none;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div></div>`;
         }
       } catch(e) {
-        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadNoticeData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`;
+        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadNoticeData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;cursor:pointer;font-size:13px;font-family:inherit;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div></div>`;
       }
     }
     
