@@ -13,7 +13,7 @@
       --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
-      --card-border: #e2e8f0; --shadow: 0 2px 12px #000000;
+      --card-border: #e2e8f0; --shadow: 4px 4px 0 #000000;
       --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
     }
     
@@ -22,7 +22,8 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --header-bg: #1e293b; --footer-bg: #1e293b;
+      --card-border: #334155; --shadow: 4px 4px 0 #000000;
+      --header-bg: #1e293b; --footer-bg: #1e293b;
       --logo-filter: brightness(0) invert(1);
     }
     
@@ -44,9 +45,10 @@
     }
     
     .header {
-      background: var(--header-bg); box-shadow: 0 1px 8px #000000;
+      background: var(--header-bg); box-shadow: 0 4px 0 #000000;
       padding: 14px 20px; position: sticky; top: 0; z-index: 100;
-      border-bottom: 1px solid var(--bg3); transition: all 0.3s ease;
+      border: 1px solid #000000; border-top: none; transition: all 0.3s ease;
+      margin: 0 0 4px 0;
     }
     
     .header-inner {
@@ -57,11 +59,11 @@
     .header-right { display: flex; align-items: center; gap: 10px; }
     
     .header-logo {
-      width: 42px; height: 42px; border-radius: 12px;
+      width: 42px; height: 42px; border-radius: 4px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px #000000;
-      overflow: hidden; padding: 6px;
+      box-shadow: 3px 3px 0 #000000;
+      overflow: hidden; padding: 6px; border: 1px solid #000000;
     }
     
     .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
@@ -70,38 +72,37 @@
     .header-btns { display: flex; align-items: center; gap: 8px; }
     
     .back-btn {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
+      background: var(--bg2); border: 1px solid #000000; padding: 10px; border-radius: 4px;
       cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; text-decoration: none; transition: all 0.3s ease;
+      width: 40px; height: 40px; text-decoration: none; transition: all 0.15s ease;
+      box-shadow: 3px 3px 0 #000000;
     }
-    .back-btn:hover { background: var(--primary); color: #fff; }
+    .back-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     
     .theme-toggle {
-      background: var(--bg2); border: none; padding: 10px; border-radius: 50%;
+      background: var(--bg2); border: 1px solid #000000; padding: 10px; border-radius: 4px;
       cursor: pointer; font-size: 18px; color: var(--text);
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; transition: all 0.3s ease;
+      width: 40px; height: 40px; transition: all 0.15s ease;
+      box-shadow: 3px 3px 0 #000000;
     }
-    .theme-toggle:hover { background: var(--primary); color: #fff; transform: rotate(15deg); }
+    .theme-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     
     .main-container { 
       flex: 1; max-width: 900px; width: 100%; margin: 24px auto; padding: 0 12px 80px;
       display: flex; gap: 24px; align-items: flex-start;
     }
     
-    .card-wrapper {
-      flex-shrink: 0;
-    }
+    .card-wrapper { flex-shrink: 0; }
     
     .bank-card {
       position: relative;
       width: 340px; height: 200px;
       background: linear-gradient(145deg, #1a3a3a 0%, #0d2525 30%, var(--primary-dark) 60%, var(--primary) 100%);
-      border-radius: 18px; padding: 0; color: #e0e0e0;
-      box-shadow: 0 16px 48px #000000, 0 4px 12px #000000;
-      overflow: hidden;
-      transition: all 0.3s ease;
+      border-radius: 4px; padding: 0; color: #e0e0e0;
+      box-shadow: 6px 6px 0 #000000, 0 0 0 1px #000000;
+      overflow: hidden; transition: all 0.3s ease;
     }
     
     [data-muharram="true"] .bank-card {
@@ -112,13 +113,12 @@
       position: absolute; top: 24px; left: 24px;
       width: 40px; height: 30px;
       background: linear-gradient(135deg, #c9a84c, #e4c76b);
-      border-radius: 6px;
-      border: 1px solid #a08030;
+      border-radius: 4px; border: 1px solid #000000;
     }
     
     .bank-card .card-chip::after {
       content: ''; position: absolute; top: 7px; left: 7px;
-      width: 26px; height: 16px; border-radius: 3px;
+      width: 26px; height: 16px; border-radius: 2px;
       background: linear-gradient(180deg, #b8942e, #d4b44a);
     }
     
@@ -147,9 +147,7 @@
       letter-spacing: 0.5px; white-space: nowrap;
     }
     
-    .bank-card .card-bank {
-      text-align: right; flex-shrink: 0;
-    }
+    .bank-card .card-bank { text-align: right; flex-shrink: 0; }
     
     .bank-card .card-bank-name {
       font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75);
@@ -158,23 +156,16 @@
     
     .bank-card .copy-icon-btn {
       position: absolute; top: 16px; right: 16px;
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.3);
+      width: 32px; height: 32px; border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.3);
       background: rgba(255,255,255,0.08);
       color: #fff; cursor: pointer; font-size: 13px;
       display: flex; align-items: center; justify-content: center;
-      transition: all 0.3s ease; z-index: 2;
+      transition: all 0.15s ease; z-index: 2;
       backdrop-filter: blur(4px);
     }
-    .copy-icon-btn:hover {
-      background: rgba(255,255,255,0.18);
-      border-color: rgba(255,255,255,0.5);
-      transform: scale(1.08);
-    }
-    .copy-icon-btn.copied {
-      background: #10b981; border-color: #10b981;
-      animation: popIn 0.4s ease;
-    }
+    .copy-icon-btn:active { transform: translate(2px, 2px); }
+    .copy-icon-btn.copied { background: #10b981; border-color: #10b981; animation: popIn 0.4s ease; }
     
     @keyframes popIn {
       0% { transform: scale(0.8); }
@@ -200,47 +191,29 @@
       opacity: 0;
     }
     
-    .hadith-wrapper {
-      flex: 1; min-width: 0;
-      align-self: flex-start;
-    }
+    .hadith-wrapper { flex: 1; min-width: 0; align-self: flex-start; }
     
-    .hadith-container {
-      position: relative; width: 100%;
-      height: 200px;
-      overflow: hidden;
-    }
+    .hadith-container { position: relative; width: 100%; height: 200px; overflow: hidden; }
     
     .hadith-comment {
       position: absolute; bottom: 0; left: 0; right: 0;
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 10px; padding: 10px 14px;
-      box-shadow: var(--shadow); 
+      background: var(--card-bg); border: 1px solid #000000;
+      border-radius: 4px; padding: 10px 14px;
+      box-shadow: 4px 4px 0 #000000; 
       transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-      opacity: 0;
-      transform: translateY(30px);
-      pointer-events: none;
+      opacity: 0; transform: translateY(30px); pointer-events: none;
     }
     
-    .hadith-comment.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .hadith-comment.moving {
-      transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-    }
+    .hadith-comment.visible { opacity: 1; transform: translateY(0); }
+    .hadith-comment.moving { transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1.2); }
     
     .hadith-comment .hadith-text {
       font-size: 12px; font-weight: 500; color: var(--dark);
-      line-height: 1.7;
-      transition: color 0.3s;
+      line-height: 1.7; transition: color 0.3s;
       display: flex; align-items: center; gap: 6px;
     }
     
-    .hadith-comment .hadith-text i {
-      color: var(--primary); font-size: 10px; flex-shrink: 0;
-    }
+    .hadith-comment .hadith-text i { color: var(--primary); font-size: 10px; flex-shrink: 0; }
     
     .hadith-comment .hadith-source {
       font-size: 9px; color: var(--primary); font-weight: 700;
@@ -260,10 +233,10 @@
     .floating-btn {
       width: 48px;
       height: 48px;
-      border-radius: 24px;
+      border-radius: 4px;
       background: var(--primary);
       color: #fff;
-      border: none;
+      border: 1px solid #000000;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -271,8 +244,8 @@
       padding: 0;
       overflow: hidden;
       white-space: nowrap;
-      transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2), border-radius 0.4s ease;
-      box-shadow: 0 2px 12px #000000;
+      transition: all 0.15s ease;
+      box-shadow: 4px 4px 0 #000000;
       position: relative;
       direction: rtl;
       font-family: inherit;
@@ -303,14 +276,9 @@
       text-align: right;
     }
     
-    .floating-btn.expanded {
-      width: 150px;
-      border-radius: 24px;
-    }
-    
-    .floating-btn.expanded .btn-text {
-      opacity: 1;
-    }
+    .floating-btn.expanded { width: 150px; border-radius: 4px; }
+    .floating-btn.expanded .btn-text { opacity: 1; }
+    .floating-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
     
     .typing-cursor {
       display: inline-block;
@@ -331,24 +299,21 @@
       text-align: center;
       padding: 20px;
       background: var(--footer-bg);
-      border-top: 1px solid var(--bg3);
+      border-top: 1px solid #000000;
       transition: all 0.3s ease;
     }
     
     .footer-text { font-size: 10px; color: var(--text-light); }
     
     @media (max-width: 700px) {
-      .main-container {
-        flex-direction: column; align-items: center; gap: 4px;
-        max-width: 500px;
-      }
+      .main-container { flex-direction: column; align-items: center; gap: 4px; max-width: 500px; }
       .card-wrapper { display: flex; justify-content: center; }
       .hadith-wrapper { width: 100%; }
       .hadith-container { height: auto; min-height: 180px; }
       .header-title { font-size: 14px; }
       .header-subtitle { font-size: 7px; }
       .floating-actions { bottom: 16px; right: 12px; gap: 8px; }
-      .floating-btn { width: 42px; height: 42px; }
+      .floating-btn { width: 42px; height: 42px; box-shadow: 3px 3px 0 #000000; }
       .floating-btn i { width: 42px; height: 42px; font-size: 16px; }
       .floating-btn .btn-text { padding: 0 48px 0 14px; font-size: 11px; }
       .floating-btn.expanded { width: 135px; }
@@ -575,26 +540,6 @@
       { text: 'کمک به مراسم اهل بیت، یاری دین است.', source: 'امام علی (ع)' },
       { text: 'انفاق برای عزای حسین، اجر جهاد دارد.', source: 'امام رضا (ع)' },
       { text: 'هر لقمه در راه حسین، نور است.', source: 'امام صادق (ع)' },
-      { text: 'برپایی مجلس عزا، احیای امر ماست.', source: 'امام صادق (ع)' },
-      { text: 'اشک بر حسین، کفاره گناهان است.', source: 'امام رضا (ع)' },
-      { text: 'هر که برای اهل بیت هزینه کند، خدا جبران کند.', source: 'امام جواد (ع)' },
-      { text: 'خدمت به دستگاه حسین، عزت دو جهان است.', source: 'علامه مجلسی' },
-      { text: 'بخشش در راه خدا، کلید رزق بی‌پایان است.', source: 'امام علی (ع)' },
-      { text: 'سفره امام حسین، سفره بهشت است.', source: 'شیخ عباس قمی' },
-      { text: 'هر چه برای حسین دهی، هزار برابر برگردد.', source: 'امام صادق (ع)' },
-      { text: 'نذری اهل بیت، نذر خداست.', source: 'امام باقر (ع)' },
-      { text: 'کمک به هیأت، تعظیم شعائر الهی است.', source: 'قرآن کریم' },
-      { text: 'دست دهنده در راه خدا، دست خداست.', source: 'امام علی (ع)' },
-      { text: 'برگزاری مراسم حسینی، زنده نگه داشتن اسلام است.', source: 'امام خمینی (ره)' },
-      { text: 'هر اشک برای حسین، دریای رحمت آورد.', source: 'امام صادق (ع)' },
-      { text: 'اطعام در عزای حسین، اطعام ملائکه است.', source: 'امام صادق (ع)' },
-      { text: 'یاری دین با مال، جهاد مالی است.', source: 'امام علی (ع)' },
-      { text: 'هر قدم در راه حسین، هزار حسنه دارد.', source: 'امام باقر (ع)' },
-      { text: 'انفاق پنهانی، خشم خدا را فرو نشاند.', source: 'پیامبر اکرم (ص)' },
-      { text: 'کمک به عزاداری، پاداش شهید دارد.', source: 'امام صادق (ع)' },
-      { text: 'مال، امانت خداست؛ در راه حسین خرج کن.', source: 'شهید مطهری' },
-      { text: 'هر که مجلس حسینی برپا کند، خدا رحمتش کند.', source: 'امام صادق (ع)' },
-      { text: 'انفاق، بلا را دفع می‌کند.', source: 'امام علی (ع)' },
     ];
     
     let currentHadith = 0;
