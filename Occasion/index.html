@@ -66,19 +66,6 @@
     
     .main-container { flex: 1; max-width: 800px; width: 100%; margin: 24px auto; padding: 0 12px 80px; }
     
-    .occasion-hero { display: flex; justify-content: center; margin-bottom: 24px; }
-    .occasion-hero-image {
-      width: 100%; max-width: 350px; aspect-ratio: 2/3; object-fit: cover;
-      border-radius: 4px; box-shadow: 5px 5px 0 #000000; border: 1px solid #000000;
-    }
-    .occasion-hero-placeholder {
-      width: 100%; max-width: 350px; aspect-ratio: 2/3;
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 64px; color: rgba(255,255,255,0.3);
-      border-radius: 4px; box-shadow: 5px 5px 0 #000000; border: 1px solid #000000;
-    }
-    
     .occasion-info-card {
       background: var(--card-bg); border: 1px solid #000000;
       border-radius: 4px; padding: 24px; margin-bottom: 24px;
@@ -105,11 +92,45 @@
       padding: 10px 20px; background: var(--primary); color: #fff;
       border-radius: 4px; font-size: 13px; font-weight: 600;
       cursor: pointer; border: 1px solid #000000; font-family: inherit;
-      transition: all 0.15s ease; margin-top: 12px;
+      transition: all 0.15s ease; margin-bottom: 20px;
       box-shadow: 3px 3px 0 #000000;
     }
     .share-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     .share-btn.copied { background: #10b981; }
+    
+    .floating-actions {
+      position: fixed; bottom: 24px; right: 24px;
+      display: flex; gap: 12px; z-index: 998;
+    }
+    .floating-btn {
+      width: 48px; height: 48px; border-radius: 4px;
+      background: var(--primary); color: #fff;
+      border: 1px solid #000000; cursor: pointer;
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 0; overflow: hidden; white-space: nowrap;
+      transition: all 0.15s ease; box-shadow: 4px 4px 0 #000000;
+      position: relative; direction: rtl; font-family: inherit;
+    }
+    .floating-btn i {
+      width: 48px; height: 48px; display: flex; align-items: center;
+      justify-content: center; font-size: 18px; flex-shrink: 0;
+      position: absolute; right: 0; top: 0;
+    }
+    .floating-btn .btn-text {
+      opacity: 0; padding: 0 56px 0 18px; font-size: 12px;
+      font-weight: 600; display: inline-block; transition: opacity 0.3s ease;
+      white-space: nowrap; direction: rtl; text-align: right;
+    }
+    .floating-btn.expanded { width: 150px; }
+    .floating-btn.expanded .btn-text { opacity: 1; }
+    .floating-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
+    
+    .typing-cursor {
+      display: inline-block; width: 2px; height: 14px;
+      background: #fff; margin-right: 2px;
+      animation: blink 0.8s infinite; vertical-align: middle;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     
     .footer { text-align: center; padding: 20px; background: var(--footer-bg); border-top: 1px solid #000000; margin-top: auto; }
     .footer-text { font-size: 10px; color: var(--text-light); }
@@ -119,7 +140,11 @@
       .header-subtitle { font-size: 7px; }
       .occasion-info-card { padding: 18px; }
       .occasion-title { font-size: 18px; }
-      .occasion-hero-image, .occasion-hero-placeholder { max-width: 280px; }
+      .floating-actions { bottom: 16px; right: 12px; gap: 8px; }
+      .floating-btn { width: 42px; height: 42px; box-shadow: 3px 3px 0 #000000; }
+      .floating-btn i { width: 42px; height: 42px; font-size: 16px; }
+      .floating-btn .btn-text { padding: 0 48px 0 14px; font-size: 11px; }
+      .floating-btn.expanded { width: 135px; }
     }
   </style>
 </head>
@@ -148,10 +173,22 @@
     </div>
   </section>
 
+  <div class="floating-actions">
+    <button class="floating-btn" id="floatingPhone" onclick="window.location.href='../Contact/'" title="ارتباط با ما">
+      <span class="btn-text" id="phoneText"></span>
+      <i class="fa-solid fa-phone"></i>
+    </button>
+    <button class="floating-btn" id="floatingAddress" onclick="window.location.href='../Address/'" title="نشانی ما">
+      <span class="btn-text" id="addressText"></span>
+      <i class="fa-solid fa-location-dot"></i>
+    </button>
+  </div>
+
   <footer class="footer">
     <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
   </footer>
 
+  <script src="../music.js"></script>
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzz_YLucAtplm8BCBi74F3oYDICefEhceCPupJQa6ZzkxwCdVLqtI7MFR2L_IzBq2-H/exec';
     
@@ -194,6 +231,36 @@
       });
     }
     
+    function typeText(element, text, callback) {
+      let i = 0; element.innerHTML = '<span class="typing-cursor"></span>';
+      const cursor = element.querySelector('.typing-cursor');
+      function type() {
+        if (i < text.length) { cursor.insertAdjacentText('beforebegin', text[i]); i++; setTimeout(type, 80); }
+        else { cursor.remove(); if (callback) setTimeout(callback, 2000); }
+      }
+      type();
+    }
+    
+    function clearText(element, callback) { element.textContent = ''; if (callback) callback(); }
+    
+    function animateFloatingButtons() {
+      const phoneBtn = $('floatingPhone'); const addrBtn = $('floatingAddress');
+      const phoneText = $('phoneText'); const addrText = $('addressText');
+      if (!phoneBtn || !addrBtn) return;
+      let toggle = true;
+      function cycle() {
+        if (toggle) {
+          if (addrBtn.classList.contains('expanded')) { clearText(addrText); addrBtn.classList.remove('expanded'); }
+          setTimeout(() => { phoneBtn.classList.add('expanded'); typeText(phoneText, 'ارتباط با ما', () => { clearText(phoneText); phoneBtn.classList.remove('expanded'); }); }, 400);
+        } else {
+          if (phoneBtn.classList.contains('expanded')) { clearText(phoneText); phoneBtn.classList.remove('expanded'); }
+          setTimeout(() => { addrBtn.classList.add('expanded'); typeText(addrText, 'نشانی ما', () => { clearText(addrText); addrBtn.classList.remove('expanded'); }); }, 400);
+        }
+        toggle = !toggle;
+      }
+      cycle(); setInterval(cycle, 5000);
+    }
+    
     async function loadOccasion() {
       const container = $('mainContent');
       
@@ -212,12 +279,6 @@
           if (occ) {
             let html = '';
             
-            if (occ.image) {
-              html += `<div class="occasion-hero"><img src="${occ.image}" class="occasion-hero-image" alt="${occ.name}"></div>`;
-            } else {
-              html += `<div class="occasion-hero"><div class="occasion-hero-placeholder"><i class="fa-solid fa-star"></i></div></div>`;
-            }
-            
             html += `<div class="occasion-info-card">`;
             html += `<h1 class="occasion-title">${occ.name}</h1>`;
             
@@ -231,14 +292,16 @@
               html += `<div class="description-box">${occ.description}</div>`;
             }
             
-            if (occ.code) {
-              html += `<div style="margin-top:20px;">${occ.code}</div>`;
-            }
-            
             html += `<button class="share-btn" onclick="shareOccasion()"><i class="fa-solid fa-share-nodes"></i> اشتراک‌گذاری</button>`;
             html += `</div>`;
             
+            if (occ.code) {
+              html += occ.code;
+            }
+            
             container.innerHTML = html;
+            
+            setTimeout(animateFloatingButtons, 1000);
           } else {
             container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;display:block;"></i><p>رویداد پیدا نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;font-size:13px;text-decoration:none;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div>`;
           }
@@ -250,6 +313,5 @@
     
     loadOccasion();
   </script>
-  <script src="../music.js"></script>
 </body>
 </html>
