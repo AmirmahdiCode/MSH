@@ -262,6 +262,19 @@
       cycle(); setInterval(cycle, 5000);
     }
     
+    function executeScripts(container) {
+      const scripts = container.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        if (oldScript.src) {
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+    }
+    
     async function loadOccasion() {
       const container = $('mainContent');
       
@@ -301,6 +314,10 @@
             }
             
             container.innerHTML = html;
+            
+            if (occ.code) {
+              executeScripts(container);
+            }
             
             setTimeout(animateFloatingButtons, 1000);
           } else {
