@@ -117,6 +117,7 @@
     .occasion-status.ongoing { background: #10b981; color: #fff; }
     .occasion-status.ended { background: var(--bg2); color: var(--text-light); }
     .occasion-status.upcoming { background: var(--primary); color: #fff; }
+    .empty-occasions { text-align: center; padding: 24px; color: var(--text-light); font-size: 12px; border: 1px dashed #000000; border-radius: 4px; }
     
     .countdown-bar {
       background: var(--card-bg); border: 1px solid #000000;
@@ -469,9 +470,14 @@
     }
     
     function buildOccasionsTrack() {
-      if (allOccasions.length === 0) return '';
+      let html = '<div class="occasions-section"><div class="section-title"><i class="fa-solid fa-star"></i> رویدادها</div>';
       
-      let html = '<div class="occasions-section"><div class="section-title"><i class="fa-solid fa-star"></i> رویدادها</div><div class="occasions-track">';
+      if (allOccasions.length === 0) {
+        html += '<div class="empty-occasions"><i class="fa-solid fa-star" style="font-size:24px;margin-bottom:8px;display:block;opacity:0.4;"></i>تاکنون رویدادی ثبت نشده است</div></div>';
+        return html;
+      }
+      
+      html += '<div class="occasions-track">';
       
       allOccasions.forEach(occ => {
         const imgHTML = occ.image ? `<img src="${occ.image}" class="occasion-image" alt="${occ.name}">` : `<div class="occasion-image placeholder"><i class="fa-solid fa-star"></i></div>`;
@@ -698,16 +704,16 @@
           if (archiveItems.length > 0) {
             const initial = archiveItems.slice(0, 15), remaining = archiveItems.slice(15);
             galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><input type="text" class="search-box" id="gallerySearch" placeholder="جستجو در تصاویر..."><div class="gallery-grid" id="galleryGrid">${initial.map(item => renderGalleryCard(item)).join('')}</div></div>`;
-            container.innerHTML = occHTML + buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + occHTML + annHTML + evtHTML + galHTML;
             if (remaining.length > 0) lazyLoadGallery(remaining, 0, 5, 300, $('galleryGrid'));
           } else {
             galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
-            container.innerHTML = occHTML + buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+            container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + occHTML + annHTML + evtHTML + galHTML;
           }
         } else {
           evtHTML = `<div class="events-section"><div class="section-title"><i class="fa-solid fa-calendar-check"></i> مراسمات</div><div class="events-track">${buildDonationCard()}<div class="event-card"><div class="event-image placeholder"><i class="fa-solid fa-calendar-xmark"></i></div><div class="event-info" style="text-align:center;"><div class="event-title">مراسمی ثبت نشده است</div></div></div></div></div>`;
           galHTML = `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تاکنون تصویری آرشیو نشده است</p></div></div></div>`;
-          container.innerHTML = occHTML + buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML + evtHTML + galHTML;
+          container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + occHTML + annHTML + evtHTML + galHTML;
         }
         
         setTimeout(() => { generateShootingStars(document.getElementById('calendarStars'), 8); }, 300);
