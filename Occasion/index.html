@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رویداد | شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
+      --primary: #0d9488; --primary-dark: #0f766e; --primary-rgb: 13, 148, 136;
+      --dark: #0f172a; --text: #334155; --text-light: #94a3b8;
+      --white: #ffffff; --card-bg: #ffffff; --card-border: #e2e8f0;
+      --shadow: 4px 4px 0 #000000; --header-bg: #ffffff; --footer-bg: #ffffff;
+      --logo-filter: none; --danger: #dc2626; --success: #10b981;
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --primary: #14b8a6; --primary-dark: #0d9488; --primary-rgb: 20, 184, 166;
+      --dark: #f1f5f9; --text: #cbd5e1; --text-light: #64748b;
+      --white: #1e293b; --card-bg: #1e293b; --card-border: #334155;
+      --header-bg: #1e293b; --footer-bg: #1e293b;
+      --logo-filter: brightness(0) invert(1);
+    }
+    
+    [data-muharram="true"] { --primary: #dc2626; --primary-dark: #b91c1c; --primary-rgb: 220, 38, 38; }
+    [data-theme="dark"][data-muharram="true"] { --primary: #ef4444; --primary-dark: #dc2626; --primary-rgb: 239, 68, 68; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    
+    .header {
+      background: var(--header-bg); box-shadow: 0 4px 0 #000000;
+      padding: 14px 20px; position: sticky; top: 0; z-index: 100;
+      border: 1px solid #000000; border-top: none;
+      margin: 0 0 4px 0;
+    }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1100px; margin: 0 auto; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-logo {
+      width: 42px; height: 42px; border-radius: 4px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 3px 3px 0 #000000; overflow: hidden; padding: 6px; border: 1px solid #000000;
+    }
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
+    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .header-subtitle { font-size: 8px; color: var(--text-light); }
+    .header-btns { display: flex; align-items: center; gap: 8px; }
+    
+    .back-btn, .theme-toggle {
+      background: var(--bg2); border: 1px solid #000000; padding: 10px; border-radius: 4px;
+      cursor: pointer; font-size: 18px; color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; transition: all 0.15s ease; text-decoration: none;
+      box-shadow: 3px 3px 0 #000000;
+    }
+    .back-btn:active, .theme-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
+    
+    .main-container { flex: 1; max-width: 800px; width: 100%; margin: 24px auto; padding: 0 12px 80px; }
+    
+    .occasion-hero { display: flex; justify-content: center; margin-bottom: 24px; }
+    .occasion-hero-image {
+      width: 100%; max-width: 350px; aspect-ratio: 2/3; object-fit: cover;
+      border-radius: 4px; box-shadow: 5px 5px 0 #000000; border: 1px solid #000000;
+    }
+    .occasion-hero-placeholder {
+      width: 100%; max-width: 350px; aspect-ratio: 2/3;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px; color: rgba(255,255,255,0.3);
+      border-radius: 4px; box-shadow: 5px 5px 0 #000000; border: 1px solid #000000;
+    }
+    
+    .occasion-info-card {
+      background: var(--card-bg); border: 1px solid #000000;
+      border-radius: 4px; padding: 24px; margin-bottom: 24px;
+      box-shadow: 4px 4px 0 #000000;
+    }
+    .occasion-title { font-size: 22px; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+    .occasion-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .meta-item {
+      padding: 6px 14px; background: var(--bg2); border-radius: 2px;
+      font-size: 11px; border: 1px solid #000000; box-shadow: 2px 2px 0 #000000;
+    }
+    .tag-badge {
+      font-size: 10px; background: rgba(var(--primary-rgb), 0.1); color: var(--primary-dark);
+      padding: 6px 12px; border-radius: 2px; font-weight: 700;
+      border: 1px solid #000000;
+    }
+    .description-box {
+      background: var(--bg2); border-radius: 2px; padding: 20px;
+      font-size: 14px; line-height: 2; border: 1px solid #000000;
+      border-right: 4px solid var(--primary); white-space: pre-line;
+    }
+    .share-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px; background: var(--primary); color: #fff;
+      border-radius: 4px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: 1px solid #000000; font-family: inherit;
+      transition: all 0.15s ease; margin-top: 12px;
+      box-shadow: 3px 3px 0 #000000;
+    }
+    .share-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
+    .share-btn.copied { background: #10b981; }
+    
+    .footer { text-align: center; padding: 20px; background: var(--footer-bg); border-top: 1px solid #000000; margin-top: auto; }
+    .footer-text { font-size: 10px; color: var(--text-light); }
+    
+    @media (max-width: 650px) {
+      .header-title { font-size: 14px; }
+      .header-subtitle { font-size: 7px; }
+      .occasion-info-card { padding: 18px; }
+      .occasion-title { font-size: 18px; }
+      .occasion-hero-image, .occasion-hero-placeholder { max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo"><img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو"></div>
+        <div>
+          <div class="header-title">شهدای گمنام شورابیل</div>
+          <div class="header-subtitle">سایت رسمی اطلاع رسانی و گزارش مراسمات</div>
+        </div>
+      </div>
+      <div class="header-btns">
+        <a href="../dashboard/" class="back-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        <button class="theme-toggle" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-container" id="mainContent">
+    <div style="text-align: center; padding: 40px; color: var(--text-light);">
+      <i class="fa-solid fa-spinner fa-pulse" style="font-size: 32px; margin-bottom: 12px; display: block;"></i>
+      <p>در حال بارگذاری...</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
+  </footer>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzz_YLucAtplm8BCBi74F3oYDICefEhceCPupJQa6ZzkxwCdVLqtI7MFR2L_IzBq2-H/exec';
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const OCCASION_ID = urlParams.get('id') || localStorage.getItem('selectedOccasionId');
+    
+    if (urlParams.get('id')) localStorage.setItem('selectedOccasionId', urlParams.get('id'));
+    
+    const $ = (id) => document.getElementById(id);
+    const themeToggle = $('themeToggle'), icon = themeToggle.querySelector('i');
+    
+    const savedTheme = localStorage.getItem('heyat-theme');
+    if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); icon.classList.replace('fa-moon', 'fa-sun'); }
+    
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      icon.className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+      localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
+    });
+    
+    (async function() {
+      try {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
+        const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
+        const j = await r.json();
+        if (j.code === 200 && j.data.hijri.month.number === 1) document.documentElement.setAttribute('data-muharram', 'true');
+      } catch(e) {}
+    })();
+    
+    function shareOccasion() {
+      const url = window.location.origin + window.location.pathname + '?id=' + OCCASION_ID;
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.querySelector('.share-btn');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> لینک کپی شد';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+    
+    async function loadOccasion() {
+      const container = $('mainContent');
+      
+      if (!OCCASION_ID) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;display:block;"></i><p>رویدادی انتخاب نشده است</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;font-size:13px;text-decoration:none;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div>`;
+        return;
+      }
+      
+      try {
+        const res = await fetch(API_URL + '?action=getOccasions');
+        const data = await res.json();
+        
+        if (data.success) {
+          const occ = data.data.find(o => o.id === OCCASION_ID);
+          
+          if (occ) {
+            let html = '';
+            
+            if (occ.image) {
+              html += `<div class="occasion-hero"><img src="${occ.image}" class="occasion-hero-image" alt="${occ.name}"></div>`;
+            } else {
+              html += `<div class="occasion-hero"><div class="occasion-hero-placeholder"><i class="fa-solid fa-star"></i></div></div>`;
+            }
+            
+            html += `<div class="occasion-info-card">`;
+            html += `<h1 class="occasion-title">${occ.name}</h1>`;
+            
+            html += `<div class="occasion-meta">`;
+            if (occ.startDate) html += `<span class="meta-item"><i class="fa-solid fa-calendar"></i> ${new Date(occ.startDate).toLocaleDateString('fa-IR')}</span>`;
+            if (occ.endDate) html += `<span class="meta-item"><i class="fa-solid fa-calendar-check"></i> تا ${new Date(occ.endDate).toLocaleDateString('fa-IR')}</span>`;
+            if (occ.tag) html += `<span class="tag-badge">${occ.tag}</span>`;
+            html += `</div>`;
+            
+            if (occ.description) {
+              html += `<div class="description-box">${occ.description}</div>`;
+            }
+            
+            if (occ.code) {
+              html += `<div style="margin-top:20px;">${occ.code}</div>`;
+            }
+            
+            html += `<button class="share-btn" onclick="shareOccasion()"><i class="fa-solid fa-share-nodes"></i> اشتراک‌گذاری</button>`;
+            html += `</div>`;
+            
+            container.innerHTML = html;
+          } else {
+            container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;display:block;"></i><p>رویداد پیدا نشد</p><a href="../dashboard/" style="display:inline-block;margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;font-size:13px;text-decoration:none;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-arrow-right"></i> بازگشت</a></div>`;
+          }
+        }
+      } catch(e) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;display:block;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadOccasion()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:4px;cursor:pointer;font-size:13px;font-family:inherit;box-shadow:3px 3px 0 #000000;"><i class="fa-solid fa-rotate-right"></i> تلاش مجدد</button></div>`;
+      }
+    }
+    
+    loadOccasion();
+  </script>
+  <script src="../music.js"></script>
+</body>
+</html>
