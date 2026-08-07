@@ -94,19 +94,19 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     
     .occasions-section { margin-bottom: 20px; }
-    .occasions-track { display: flex; gap: 10px; overflow-x: auto; padding: 8px 0 12px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2); }
+    .occasions-track { display: flex; gap: 10px; overflow-x: auto; padding: 8px 4px 16px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2); }
     .occasions-track::-webkit-scrollbar { height: 6px; }
     .occasions-track::-webkit-scrollbar-track { background: var(--bg2); border-radius: 3px; }
     .occasions-track::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
     
     .occasion-card {
-      min-width: 260px; max-width: 260px; background: var(--card-bg);
-      border-radius: 4px; overflow: hidden; box-shadow: 4px 4px 0 #000000;
+      min-width: 240px; max-width: 240px; background: var(--card-bg);
+      border-radius: 4px; overflow: visible; box-shadow: 4px 4px 0 #000000;
       transition: all 0.15s ease; cursor: pointer; border: 1px solid #000000;
       flex-shrink: 0;
     }
     .occasion-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
-    .occasion-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg2); }
+    .occasion-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg2); border-radius: 4px 4px 0 0; }
     .occasion-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 36px; color: var(--primary); }
     .occasion-info { padding: 12px 14px; }
     .occasion-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -166,13 +166,14 @@
     }
     
     .prayer-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px; position: relative; z-index: 1; }
-    .prayer-list { display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 1; }
-    .prayer-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-radius: 2px; background: var(--bg2); transition: all 0.3s ease; border: 1px solid transparent; }
+    .prayer-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; position: relative; z-index: 1; }
+    .prayer-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border-radius: 2px; background: var(--bg2); transition: all 0.3s ease; border: 1px solid transparent; font-size: 9px; }
     .prayer-item.next { background: var(--primary); color: #fff; border-color: #000000; box-shadow: 2px 2px 0 #000000; }
     .prayer-item.next .prayer-name { color: #fff; }
     .prayer-item.next .prayer-time { color: #fff; }
-    .prayer-name { font-size: 10px; font-weight: 600; color: var(--dark); display: flex; align-items: center; gap: 4px; }
-    .prayer-time { font-size: 10px; font-weight: 700; color: var(--primary); direction: ltr; }
+    .prayer-item.night { grid-column: 1 / -1; justify-content: center; gap: 12px; }
+    .prayer-name { font-size: 9px; font-weight: 600; color: var(--dark); display: flex; align-items: center; gap: 3px; }
+    .prayer-time { font-size: 9px; font-weight: 700; color: var(--primary); direction: ltr; }
     .prayer-date { text-align: center; font-size: 9px; color: var(--text-light); margin-bottom: 8px; position: relative; z-index: 1; }
     
     .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
@@ -218,17 +219,17 @@
     .search-box { width: 100%; padding: 10px 14px; border: 1px solid #000000; border-radius: 4px; background: var(--card-bg); color: var(--text); font-size: 13px; font-family: inherit; margin-bottom: 12px; box-shadow: 3px 3px 0 #000000; }
     .search-box:focus { outline: none; transform: translate(1px, 1px); box-shadow: 2px 2px 0 #000000; }
     
-    .events-track { display: flex; gap: 10px; overflow-x: auto; padding: 8px 0 12px; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2); }
+    .events-track { display: flex; gap: 10px; overflow-x: auto; padding: 8px 4px 16px; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2); }
     .events-track::-webkit-scrollbar { height: 6px; }
     .events-track::-webkit-scrollbar-track { background: var(--bg2); border-radius: 3px; }
     .events-track::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
     
-    .event-card { min-width: 220px; max-width: 220px; background: var(--card-bg); border-radius: 4px; overflow: hidden; box-shadow: 4px 4px 0 #000000; transition: all 0.15s ease; cursor: pointer; border: 1px solid #000000; flex-shrink: 0; }
+    .event-card { min-width: 200px; max-width: 200px; background: var(--card-bg); border-radius: 4px; overflow: visible; box-shadow: 4px 4px 0 #000000; transition: all 0.15s ease; cursor: pointer; border: 1px solid #000000; flex-shrink: 0; }
     .event-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
     .event-card.today { border-color: var(--primary); border-width: 2px; animation: glowBorder 2s ease-in-out infinite alternate; }
     @keyframes glowBorder { from { border-color: var(--primary); } to { border-color: var(--primary-light); } }
     .event-card.past { opacity: 0.5; }
-    .event-image { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--bg2); }
+    .event-image { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--bg2); border-radius: 4px 4px 0 0; }
     .event-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--primary); }
     .event-info { padding: 10px 12px; }
     .event-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -239,7 +240,7 @@
     .event-tag { font-size: 9px; color: var(--primary-dark); background: var(--overlay); padding: 3px 10px; border-radius: 2px; font-weight: 600; border: 1px solid #000000; }
     .today-tag { font-size: 9px; background: var(--primary); color: #fff; padding: 3px 10px; border-radius: 2px; font-weight: 700; animation: pulse 1.5s ease-in-out infinite; border: 1px solid #000000; }
     
-    .donation-card { min-width: 220px; max-width: 220px; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-radius: 4px; overflow: hidden; box-shadow: 4px 4px 0 #000000; transition: all 0.15s ease; cursor: pointer; border: 1px solid #000000; flex-shrink: 0; position: relative; display: flex; flex-direction: column; }
+    .donation-card { min-width: 200px; max-width: 200px; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-radius: 4px; overflow: visible; box-shadow: 4px 4px 0 #000000; transition: all 0.15s ease; cursor: pointer; border: 1px solid #000000; flex-shrink: 0; position: relative; display: flex; flex-direction: column; }
     [data-theme="dark"] .donation-card { background: linear-gradient(135deg, #1a2e2b, #164e4a); }
     [data-muharram="true"] .donation-card { background: linear-gradient(135deg, #fef2f2, #fecaca); }
     [data-theme="dark"][data-muharram="true"] .donation-card { background: linear-gradient(135deg, #2e1a1a, #4e1616); }
@@ -539,7 +540,15 @@
     function updateCountdown() { const bar = document.querySelector('.countdown-bar'); if (bar) bar.outerHTML = buildCountdownBar(); }
     
     function buildPrayerWidget() {
-      return `<div class="prayer-section"><div id="prayerStars"></div><div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی</div><div class="prayer-date" id="prayerDate">در حال دریافت...</div><div class="prayer-list" id="prayerList"><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> صبح</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> ظهر</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> عصر</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> مغرب</span><span class="prayer-time">--:--</span></div><div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> عشاء</span><span class="prayer-time">--:--</span></div></div></div>`;
+      return `<div class="prayer-section"><div id="prayerStars"></div><div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی</div><div class="prayer-date" id="prayerDate">در حال دریافت...</div><div class="prayer-list" id="prayerList">
+        <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> صبح</span><span class="prayer-time">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع</span><span class="prayer-time">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> ظهر</span><span class="prayer-time">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> عصر</span><span class="prayer-time">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> مغرب</span><span class="prayer-time">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> عشاء</span><span class="prayer-time">--:--</span></div>
+        <div class="prayer-item night"><span class="prayer-name"><i class="fa-solid fa-clock"></i> نیمه شب شرعی</span><span class="prayer-time">--:--</span></div>
+      </div></div>`;
     }
     
     async function loadPrayerTimes() {
@@ -552,7 +561,15 @@
           prayerTimesCache[now.toDateString()] = timings.Maghrib.split(' ')[0];
           const pDate = document.getElementById('prayerDate');
           if (pDate) pDate.textContent = `${data.data.date.hijri.weekday.ar} - ${data.data.date.hijri.day} ${data.data.date.hijri.month.ar} ${data.data.date.hijri.year}`;
-          [{ selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },{ selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },{ selector: '.prayer-item:nth-child(3) .prayer-time', value: timings.Dhuhr },{ selector: '.prayer-item:nth-child(4) .prayer-time', value: timings.Asr },{ selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Maghrib },{ selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Isha }].forEach(t => { const el = document.querySelector(t.selector); if (el) el.textContent = t.value.split(' ')[0]; });
+          [
+            { selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },
+            { selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },
+            { selector: '.prayer-item:nth-child(3) .prayer-time', value: timings.Dhuhr },
+            { selector: '.prayer-item:nth-child(4) .prayer-time', value: timings.Asr },
+            { selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Maghrib },
+            { selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Isha },
+            { selector: '.prayer-item:nth-child(7) .prayer-time', value: timings.Midnight }
+          ].forEach(t => { const el = document.querySelector(t.selector); if (el) el.textContent = t.value.split(' ')[0]; });
           highlightNextPrayer(timings);
           generateShootingStars(document.getElementById('prayerStars'), 6);
           updateCountdown();
@@ -563,8 +580,9 @@
     function highlightNextPrayer(timings) {
       const now = new Date(); const currentTime = now.getHours() * 60 + now.getMinutes();
       const items = document.querySelectorAll('.prayer-item'); items.forEach(item => item.classList.remove('next'));
-      for (let i = 0; i < 6; i++) {
-        const parts = [timings.Fajr, timings.Sunrise, timings.Dhuhr, timings.Asr, timings.Maghrib, timings.Isha][i].split(':');
+      const prayers = [timings.Fajr, timings.Sunrise, timings.Dhuhr, timings.Asr, timings.Maghrib, timings.Isha, timings.Midnight];
+      for (let i = 0; i < prayers.length; i++) {
+        const parts = prayers[i].split(':');
         if (parseInt(parts[0]) * 60 + parseInt(parts[1]) > currentTime) { if (items[i]) items[i].classList.add('next'); break; }
       }
     }
