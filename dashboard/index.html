@@ -165,7 +165,7 @@
       width: 260px; flex-shrink: 0;
     }
     
-    .prayer-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px; position: relative; z-index: 1; }
+    .prayer-title { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; text-align: center; position: relative; z-index: 1; }
     .prayer-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; position: relative; z-index: 1; }
     .prayer-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border-radius: 2px; background: var(--bg2); transition: all 0.3s ease; border: 1px solid transparent; font-size: 9px; }
     .prayer-item.next { background: var(--primary); color: #fff; border-color: #000000; box-shadow: 2px 2px 0 #000000; }
@@ -174,7 +174,7 @@
     .prayer-item.night { grid-column: 1 / -1; justify-content: center; gap: 12px; }
     .prayer-name { font-size: 9px; font-weight: 600; color: var(--dark); display: flex; align-items: center; gap: 3px; }
     .prayer-time { font-size: 9px; font-weight: 700; color: var(--primary); direction: ltr; }
-    .prayer-date { text-align: center; font-size: 9px; color: var(--text-light); margin-bottom: 8px; position: relative; z-index: 1; }
+    .prayer-date { grid-column: 1 / -1; text-align: center; font-size: 10px; font-weight: 600; color: var(--dark); margin-bottom: 6px; position: relative; z-index: 1; padding: 6px; background: var(--bg2); border-radius: 2px; border: 1px solid #000000; }
     
     .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
     @keyframes shootingStar { 0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; } 70% { opacity: 1; } 100% { transform: translateX(-300px) translateY(400px) rotate(-35deg); opacity: 0; } }
@@ -540,7 +540,8 @@
     function updateCountdown() { const bar = document.querySelector('.countdown-bar'); if (bar) bar.outerHTML = buildCountdownBar(); }
     
     function buildPrayerWidget() {
-      return `<div class="prayer-section"><div id="prayerStars"></div><div class="prayer-title"><i class="fa-solid fa-mosque"></i> اوقات شرعی</div><div class="prayer-date" id="prayerDate">در حال دریافت...</div><div class="prayer-list" id="prayerList">
+      return `<div class="prayer-section"><div id="prayerStars"></div><div class="prayer-title">اوقات شرعی اردبیل</div><div class="prayer-list" id="prayerList">
+        <div class="prayer-date" id="prayerDate">در حال دریافت...</div>
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> صبح</span><span class="prayer-time">--:--</span></div>
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع</span><span class="prayer-time">--:--</span></div>
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i> ظهر</span><span class="prayer-time">--:--</span></div>
@@ -562,13 +563,13 @@
           const pDate = document.getElementById('prayerDate');
           if (pDate) pDate.textContent = `${data.data.date.hijri.weekday.ar} - ${data.data.date.hijri.day} ${data.data.date.hijri.month.ar} ${data.data.date.hijri.year}`;
           [
-            { selector: '.prayer-item:nth-child(1) .prayer-time', value: timings.Fajr },
-            { selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Sunrise },
-            { selector: '.prayer-item:nth-child(3) .prayer-time', value: timings.Dhuhr },
-            { selector: '.prayer-item:nth-child(4) .prayer-time', value: timings.Asr },
-            { selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Maghrib },
-            { selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Isha },
-            { selector: '.prayer-item:nth-child(7) .prayer-time', value: timings.Midnight }
+            { selector: '.prayer-item:nth-child(2) .prayer-time', value: timings.Fajr },
+            { selector: '.prayer-item:nth-child(3) .prayer-time', value: timings.Sunrise },
+            { selector: '.prayer-item:nth-child(4) .prayer-time', value: timings.Dhuhr },
+            { selector: '.prayer-item:nth-child(5) .prayer-time', value: timings.Asr },
+            { selector: '.prayer-item:nth-child(6) .prayer-time', value: timings.Maghrib },
+            { selector: '.prayer-item:nth-child(7) .prayer-time', value: timings.Isha },
+            { selector: '.prayer-item:nth-child(8) .prayer-time', value: timings.Midnight }
           ].forEach(t => { const el = document.querySelector(t.selector); if (el) el.textContent = t.value.split(' ')[0]; });
           highlightNextPrayer(timings);
           generateShootingStars(document.getElementById('prayerStars'), 6);
@@ -583,7 +584,7 @@
       const prayers = [timings.Fajr, timings.Sunrise, timings.Dhuhr, timings.Asr, timings.Maghrib, timings.Isha, timings.Midnight];
       for (let i = 0; i < prayers.length; i++) {
         const parts = prayers[i].split(':');
-        if (parseInt(parts[0]) * 60 + parseInt(parts[1]) > currentTime) { if (items[i]) items[i].classList.add('next'); break; }
+        if (parseInt(parts[0]) * 60 + parseInt(parts[1]) > currentTime) { if (items[i+1]) items[i+1].classList.add('next'); break; }
       }
     }
     
