@@ -11,94 +11,64 @@
   <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v1.0.0/dist/font-face.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@v1.0.0/dist/font-face.css" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     :root {
       --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
       --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
-      --primary-rgb: 13, 148, 136;
-      --dark: #0f172a; --text: #334155; --text-light: #94a3b8;
-      --white: #ffffff; --card-bg: #ffffff;
-      --card-border: #e2e8f0;
-      --shadow: 4px 4px 0 #000000;
-      --radius: 12px;
-      --border: 1px solid #000000;
-      --header-bg: #ffffff;
-      --footer-bg: #ffffff;
+      --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
+      --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
+      --card-border: #e2e8f0; --shadow: 4px 4px 0 #000000;
+      --shadow-hover: 6px 6px 0 #000000;
+      --shadow-sm: 2px 2px 0 #000000;
+      --header-bg: #ffffff; --footer-bg: #ffffff;
       --overlay: rgba(13, 148, 136, 0.05);
-      --logo-filter: none;
-      --font: 'Vazirmatn', Tahoma, sans-serif;
-      --event-dot: #10b981;
-      --notice-dot: #3b82f6;
+      --announcement-bg: #f0fdfa; --announcement-border: #ccfbf1;
+      --logo-filter: none; --modal-bg: rgba(0,0,0,0.9);
+      --event-dot: #10b981; --notice-dot: #3b82f6;
+      --radius: 12px;
     }
-
+    
     [data-theme="dark"] {
       --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
-      --primary-rgb: 20, 184, 166;
-      --dark: #f1f5f9; --text: #cbd5e1; --text-light: #64748b;
-      --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155;
-      --header-bg: #1e293b;
-      --footer-bg: #1e293b;
+      --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
+      --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
+      --card-border: #334155; --shadow: 4px 4px 0 #000000;
+      --shadow-hover: 6px 6px 0 #000000;
+      --shadow-sm: 2px 2px 0 #000000;
+      --header-bg: #1e293b; --footer-bg: #1e293b;
       --overlay: rgba(20, 184, 166, 0.08);
+      --announcement-bg: #1a2e2b; --announcement-border: #164e4a;
       --logo-filter: brightness(0) invert(1);
     }
-
-    [data-special-theme="muharram"] {
+    
+    [data-muharram="true"] {
       --primary: #dc2626; --primary-dark: #b91c1c; --primary-light: #fca5a5;
-      --primary-rgb: 220, 38, 38;
-      --overlay: rgba(220, 38, 38, 0.05);
+      --primary-rgb: 220, 38, 38; --overlay: rgba(220, 38, 38, 0.05);
+      --announcement-bg: #fef2f2; --announcement-border: #fecaca;
       --event-dot: #dc2626;
     }
-    [data-theme="dark"][data-special-theme="muharram"] {
+    
+    [data-theme="dark"][data-muharram="true"] {
       --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fca5a5;
-      --primary-rgb: 239, 68, 68;
-      --overlay: rgba(239, 68, 68, 0.08);
+      --primary-rgb: 239, 68, 68; --overlay: rgba(239, 68, 68, 0.08);
+      --announcement-bg: #2e1a1a; --announcement-border: #4e1616;
     }
-
-    [data-special-theme="blue"] {
-      --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #60a5fa;
-      --primary-rgb: 37, 99, 235;
-      --overlay: rgba(37, 99, 235, 0.05);
-    }
-    [data-theme="dark"][data-special-theme="blue"] {
-      --primary: #3b82f6; --primary-dark: #2563eb; --primary-light: #93c5fd;
-      --primary-rgb: 59, 130, 246;
-      --overlay: rgba(59, 130, 246, 0.08);
-    }
-
-    [data-special-theme="wiladat"] {
-      --primary: #22c55e; --primary-dark: #16a34a; --primary-light: #86efac;
-      --primary-rgb: 34, 197, 94;
-      --overlay: rgba(34, 197, 94, 0.05);
-    }
-    [data-theme="dark"][data-special-theme="wiladat"] {
-      --primary: #4ade80; --primary-dark: #22c55e; --primary-light: #bbf7d0;
-      --primary-rgb: 74, 222, 128;
-      --overlay: rgba(74, 222, 128, 0.08);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    img { pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
-
+    
     body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      transition: background 0.3s ease, color 0.3s ease;
+      font-family: 'Vazirmatn', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      transition: all 0.3s ease;
     }
-
+    
     .header {
       background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--primary);
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      padding: 10px 20px; position: sticky; top: 0; z-index: 100;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
       transition: all 0.3s ease;
     }
@@ -108,13 +78,10 @@
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--primary);
     }
-
-    .header-inner {
-      display: flex; align-items: center; justify-content: flex-start;
-      gap: 12px; max-width: 1100px; margin: 0 auto;
-    }
+    
+    .header-inner { display: flex; align-items: center; justify-content: flex-start; gap: 12px; max-width: 1100px; margin: 0 auto; }
     .header-right { display: flex; align-items: center; gap: 10px; }
-
+    
     .header-logo {
       width: 42px; height: 42px; border-radius: 4px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -122,69 +89,22 @@
       box-shadow: 3px 3px 0 #000000; overflow: hidden; padding: 6px; border: 1px solid #000000;
     }
     .header-logo img { width: 130%; height: 130%; object-fit: contain; filter: var(--logo-filter); }
-    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); }
-    .header-subtitle { font-size: 8px; color: var(--text-light); }
-
-    .main-container {
-      flex: 1; max-width: 900px; width: 100%;
-      margin: 16px auto; padding: 0 12px 120px;
-      display: flex; flex-direction: column; gap: 14px;
-    }
-
+    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
+    .header-subtitle { font-size: 8px; color: var(--text-light); transition: color 0.3s; }
+    
+    .main-container { flex: 1; max-width: 900px; width: 100%; margin: 16px auto; padding: 0 12px 100px; }
+    
     .loader-wrapper { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
-    .loader {
-      width: 48px; height: 48px; border: 4px solid #000000;
-      border-top-color: var(--primary); border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
+    .loader { width: 48px; height: 48px; border: 4px solid #000000; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .section-title {
-      font-size: 16px; font-weight: 800; color: var(--dark);
-      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
-    }
-    .section-title::after { content: ''; flex: 1; height: 2px; background: #000000; }
-    .section-title i { color: var(--primary); }
-
-    .occasions-section { margin-bottom: 8px; }
-    .occasions-track {
-      display: flex; gap: 10px; overflow-x: auto;
-      padding: 8px 2px 16px; scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2);
-    }
-    .occasions-track::-webkit-scrollbar { height: 5px; }
-    .occasions-track::-webkit-scrollbar-track { background: var(--bg2); border-radius: 3px; }
-    .occasions-track::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-
-    .occasion-card {
-      min-width: 220px; max-width: 220px;
-      background: var(--card-bg); border-radius: var(--radius);
-      overflow: hidden; box-shadow: 3px 3px 0 #000000;
-      transition: all 0.2s ease; cursor: pointer; border: var(--border);
-      flex-shrink: 0;
-    }
-    .occasion-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
-    .occasion-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--bg2); }
-    .occasion-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 36px; color: var(--primary); }
-    .occasion-info { padding: 12px 14px; }
-    .occasion-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; line-height: 1.4; }
-    .occasion-footer { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .occasion-status { font-size: 9px; padding: 3px 8px; border-radius: 20px; font-weight: 700; border: 1px solid #000000; }
-    .occasion-status.ongoing { background: #10b981; color: #fff; }
-    .occasion-status.ended { background: var(--bg2); color: var(--text-light); }
-    .occasion-status.upcoming { background: var(--primary); color: #fff; }
-    .empty-occasions {
-      text-align: center; padding: 24px; color: var(--text-light);
-      font-size: 12px; border: 1px dashed #000000; border-radius: var(--radius);
-    }
-
+    
     .countdown-bar {
-      background: var(--card-bg); border: var(--border);
-      border-radius: 20px; padding: 8px 14px; margin-bottom: 4px;
+      background: var(--card-bg); border: 1px solid #000000;
+      border-radius: 20px; padding: 8px 14px; margin-bottom: 16px;
       box-shadow: 3px 3px 0 #000000; cursor: pointer;
-      transition: all 0.2s ease; display: flex; align-items: center;
-      justify-content: space-between; max-width: 560px; margin-left: auto; margin-right: auto;
+      transition: all 0.15s ease; display: flex; align-items: center;
+      justify-content: space-between;
+      max-width: 560px; margin-left: auto; margin-right: auto;
     }
     .countdown-bar:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     .countdown-bar .countdown-right { display: flex; align-items: center; gap: 8px; }
@@ -196,47 +116,56 @@
     .countdown-bar .countdown-arrow { color: var(--primary); font-size: 12px; }
     .countdown-bar.no-event { cursor: default; opacity: 0.6; }
     .countdown-bar.no-event .countdown-time { background: var(--text-light); }
-
-    .top-row { display: flex; gap: 14px; margin-bottom: 8px; justify-content: center; flex-wrap: wrap; }
-
+    
+    .day-info-toast {
+      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--card-bg); border: 1px solid #000000;
+      border-radius: 12px; padding: 12px 18px;
+      box-shadow: 3px 3px 0 #000000;
+      z-index: 9999; font-size: 11px; max-width: 340px; width: 90%;
+      animation: toastIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+    }
+    .day-info-toast.fading { animation: toastOut 0.3s ease-in forwards; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-30px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateX(-50%) translateY(0); } to { opacity: 0; transform: translateX(-50%) translateY(-30px); } }
+    .day-info-toast .toast-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .day-info-toast .toast-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; font-size: 10px; cursor: pointer; color: var(--text); }
+    .day-info-toast .toast-item:hover { color: var(--primary); }
+    .day-info-toast .toast-item i { font-size: 9px; width: 14px; text-align: center; }
+    .day-info-toast .no-info { color: var(--text-light); font-size: 10px; }
+    .day-info-toast .toast-close { position: absolute; top: 8px; left: 10px; background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 14px; padding: 4px; }
+    
+    .top-row { display: flex; gap: 16px; margin-bottom: 24px; justify-content: center; flex-wrap: wrap; }
+    
     .calendar-section, .prayer-section {
-      background: var(--card-bg); border: var(--border); border-radius: var(--radius);
-      padding: 10px; box-shadow: 3px 3px 0 #000000; width: 260px; flex-shrink: 0;
+      background: var(--card-bg); border: 1px solid #000000; border-radius: var(--radius); padding: 10px;
+      box-shadow: 3px 3px 0 #000000;
+      transition: all 0.3s ease; position: relative; overflow: hidden;
+      width: 260px; flex-shrink: 0;
     }
-
-    .prayer-title { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; text-align: center; }
-    .prayer-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-    .prayer-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 5px 8px; border-radius: 8px; background: var(--bg2);
-      font-size: 9px; transition: all 0.3s ease; border: 1px solid transparent;
-    }
+    
+    .prayer-title { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; text-align: center; position: relative; z-index: 1; }
+    .prayer-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; position: relative; z-index: 1; }
+    .prayer-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border-radius: 8px; background: var(--bg2); transition: all 0.3s ease; border: 1px solid transparent; font-size: 9px; }
     .prayer-item.next { background: var(--primary); color: #fff; border-color: #000000; }
     .prayer-item.next .prayer-name { color: #fff; }
     .prayer-item.next .prayer-time { color: #fff; }
     .prayer-item.night { grid-column: 1 / -1; justify-content: center; gap: 12px; }
     .prayer-name { font-size: 9px; font-weight: 600; color: var(--dark); display: flex; align-items: center; gap: 3px; }
     .prayer-time { font-size: 9px; font-weight: 700; color: var(--primary); direction: ltr; }
-    .prayer-date { grid-column: 1 / -1; text-align: center; font-size: 10px; font-weight: 600; color: var(--dark); margin-bottom: 6px; padding: 6px; background: var(--bg2); border-radius: 8px; border: 1px solid #000000; }
-
-    .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .calendar-nav {
-      width: 26px; height: 26px; border-radius: 8px; border: 1px solid #000000;
-      background: var(--bg2); cursor: pointer; font-size: 12px; color: var(--text);
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s ease;
-    }
+    .prayer-date { grid-column: 1 / -1; text-align: center; font-size: 10px; font-weight: 600; color: var(--dark); margin-bottom: 6px; position: relative; z-index: 1; padding: 6px; background: var(--bg2); border-radius: 8px; border: 1px solid #000000; }
+    
+    .shooting-star-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 0; }
+    @keyframes shootingStar { 0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; } 70% { opacity: 1; } 100% { transform: translateX(-300px) translateY(400px) rotate(-35deg); opacity: 0; } }
+    .shooting-star { position: absolute; width: 2px; height: 80px; background: linear-gradient(to bottom, rgba(100, 100, 100, 0.6), transparent); border-radius: 50%; animation: shootingStar 1.5s linear infinite; opacity: 0; }
+    [data-theme="dark"] .shooting-star { background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent); }
+    
+    .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; position: relative; z-index: 1; }
+    .calendar-nav { width: 26px; height: 26px; border-radius: 8px; border: 1px solid #000000; background: var(--bg2); cursor: pointer; font-size: 12px; color: var(--text); display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
     .calendar-nav:active { transform: scale(0.9); }
-    .calendar-month-title { font-size: 12px; font-weight: 700; color: var(--dark); }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-    .calendar-day-name { text-align: center; font-size: 8px; font-weight: 600; color: var(--text-light); padding: 3px 0; }
-    .calendar-day {
-      text-align: center; padding: 4px 1px; border-radius: 8px;
-      font-size: 10px; cursor: pointer; transition: all 0.2s ease;
-      position: relative; color: var(--text); min-height: 30px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      border: 1px solid transparent;
-    }
+    .calendar-month-title { font-size: 12px; font-weight: 700; color: var(--dark); user-select: none; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; position: relative; z-index: 1; }
+    .calendar-day { text-align: center; padding: 4px 1px; border-radius: 8px; font-size: 10px; cursor: pointer; transition: all 0.15s ease; position: relative; color: var(--text); min-height: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; border: 1px solid transparent; }
     .calendar-day:hover { background: var(--bg2); border-color: #000000; }
     .calendar-day.today { background: var(--primary); color: #fff; font-weight: 700; border-color: #000000; }
     .calendar-day.empty { cursor: default; }
@@ -245,23 +174,68 @@
     .calendar-day .dot { width: 3px; height: 3px; border-radius: 50%; }
     .calendar-day .dot.event { background: var(--event-dot); }
     .calendar-day .dot.notice { background: var(--notice-dot); }
-
-    .announcements-section { margin-bottom: 8px; }
+    
+    .announcements-section { margin-bottom: 24px; }
+    .section-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content: ''; flex: 1; height: 2px; background: #000000; }
+    
     .announcement-item {
-      background: var(--card-bg); border: var(--border); border-radius: var(--radius);
-      padding: 12px; margin-bottom: 10px; transition: all 0.2s ease;
-      cursor: pointer; display: flex; gap: 14px; box-shadow: 3px 3px 0 #000000;
+      background: var(--card-bg); border: 1px solid #000000; border-radius: var(--radius); padding: 12px; margin-bottom: 10px;
+      transition: all 0.15s ease; cursor: pointer; display: flex; gap: 14px; box-shadow: 3px 3px 0 #000000;
     }
     .announcement-item:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     .announcement-image { width: 90px; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; background: var(--bg2); flex-shrink: 0; border: 1px solid #000000; }
-    .announcement-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--primary); background: var(--overlay); }
-    .announcement-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+    .announcement-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--primary); background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.08), rgba(var(--primary-rgb), 0.03)); }
+    .announcement-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
     .announcement-title { font-size: 14px; font-weight: 700; color: var(--dark); line-height: 1.5; }
     .announcement-text { font-size: 11px; color: var(--text-light); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
     .announcement-footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .announcement-date { font-size: 10px; color: var(--text-light); display: flex; align-items: center; gap: 4px; }
-    .announcement-tag { font-size: 10px; background: var(--overlay); color: var(--primary-dark); padding: 4px 10px; border-radius: 20px; font-weight: 600; border: 1px solid #000000; }
-
+    .announcement-tag { font-size: 10px; background: var(--overlay); color: var(--primary-dark); padding: 4px 10px; border-radius: 20px; white-space: nowrap; font-weight: 600; border: 1px solid #000000; }
+    
+    .memories-section { margin-bottom: 24px; }
+    .memories-track { display: flex; gap: 10px; overflow-x: auto; padding: 8px 2px 16px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2); }
+    .memories-track::-webkit-scrollbar { height: 5px; }
+    .memories-track::-webkit-scrollbar-track { background: var(--bg2); border-radius: 3px; }
+    .memories-track::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+    
+    .memory-card {
+      min-width: 200px; max-width: 200px; background: var(--card-bg);
+      border-radius: var(--radius); overflow: hidden; box-shadow: 3px 3px 0 #000000;
+      transition: all 0.15s ease; cursor: pointer; border: 1px solid #000000;
+      flex-shrink: 0;
+    }
+    .memory-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
+    .memory-image { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--bg2); }
+    .memory-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--primary); }
+    .memory-info { padding: 10px 12px; }
+    .memory-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .memory-date { font-size: 9px; color: var(--text-light); display: flex; align-items: center; gap: 3px; }
+    .memory-count { font-size: 9px; color: var(--primary-dark); font-weight: 600; margin-top: 4px; }
+    .empty-memories {
+      text-align: center; padding: 24px; color: var(--text-light);
+      font-size: 12px; border: 1px dashed #000000; border-radius: var(--radius);
+    }
+    
+    .gallery-section { margin-bottom: 24px; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .gallery-card {
+      background: var(--card-bg); border-radius: var(--radius); overflow: hidden;
+      box-shadow: 3px 3px 0 #000000; border: 1px solid #000000;
+      transition: all 0.15s ease; cursor: pointer; aspect-ratio: 4/3;
+    }
+    .gallery-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
+    .gallery-image { width: 100%; height: 100%; object-fit: cover; }
+    .empty-gallery { grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 16px; color: var(--text-light); text-align: center; }
+    .empty-gallery i { font-size: 44px; color: var(--primary-light); margin-bottom: 10px; }
+    .empty-gallery p { font-size: 13px; }
+    
+    .image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
+    .image-modal.active { display: flex; }
+    .image-modal img { max-width: 90%; max-height: 80vh; border-radius: 12px; box-shadow: 3px 3px 0 #000000; border: 1px solid #000000; }
+    .image-modal .modal-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: 1px solid #000000; border-radius: 12px; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .image-modal .modal-info { color: #fff; text-align: center; margin-top: 16px; font-size: 13px; }
+    
     .bottom-nav {
       position: fixed; bottom: 8px; right: 10%; left: 10%;
       width: 80%; margin: 0 auto;
@@ -280,11 +254,11 @@
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--primary);
     }
-
+    
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 1px;
       cursor: pointer; text-decoration: none; color: var(--text-light);
-      padding: 4px 6px; font-family: var(--font); background: none; border: none;
+      padding: 4px 6px; font-family: inherit; background: none; border: none;
     }
     .nav-item img { width: 20px; height: 20px; opacity: 0.5; filter: brightness(0); }
     [data-theme="dark"] .nav-item img { filter: brightness(0) invert(1); }
@@ -298,7 +272,7 @@
       filter: brightness(0) invert(1);
     }
     .nav-item span { font-size: 7px; font-weight: 600; }
-
+    
     .more-popup {
       position: fixed; bottom: 70px; left: 10%;
       width: 15%;
@@ -330,16 +304,26 @@
     .more-popup .more-item {
       display: flex; align-items: center; gap: 6px;
       cursor: pointer; text-decoration: none; color: var(--text-light);
-      padding: 4px 8px; font-family: var(--font);
+      padding: 4px 8px; font-family: inherit;
       background: none; border: none;
       text-align: right;
     }
     .more-popup .more-item img { width: 16px; height: 16px; opacity: 0.6; filter: brightness(0); }
     [data-theme="dark"] .more-popup .more-item img { filter: brightness(0) invert(1); }
     .more-popup .more-item span { font-size: 8px; font-weight: 600; }
-
+    
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
     @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    @media (max-width: 900px) and (min-width: 651px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 650px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .top-row { gap: 8px; }
+      .calendar-section, .prayer-section { width: calc(50% - 6px); padding: 8px; }
+      .header-title { font-size: 14px; }
+      .announcement-image { width: 75px; }
+      .more-popup { width: 30%; }
+    }
   </style>
 </head>
 <body>
@@ -358,9 +342,15 @@
     </div>
   </header>
 
-  <main class="main-container" id="mainContent">
+  <section class="main-container" id="mainContent">
     <div class="loader-wrapper"><div class="loader"></div></div>
-  </main>
+  </section>
+
+  <div class="image-modal" id="imageModal">
+    <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-times"></i></button>
+    <img src="" alt="" id="modalImage">
+    <div class="modal-info"><h4 id="modalTitle"></h4><p id="modalMeta"></p></div>
+  </div>
 
   <div class="more-popup" id="morePopup">
     <div class="popup-title">سایر</div>
@@ -389,10 +379,6 @@
       <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
       <span>مراسمات</span>
     </div>
-    <div class="nav-item" onclick="window.location.href='../Occasion/';">
-      <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
-      <span>رویدادها</span>
-    </div>
     <div class="nav-item" onclick="window.location.href='../prayer/';">
       <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
       <span>آرشیوها</span>
@@ -408,64 +394,55 @@
   </nav>
 
   <script src="../music.js"></script>
+  <script src="../notif.js"></script>
   <script>
-    const $ = (id) => document.getElementById(id);
     const API_URL = 'https://script.google.com/macros/s/AKfycbypWWml5JQ0CIjurUfrOVRkI5O33d2u3GT-51hzEliYa1JZ8_3oA9Mfh8gNeCDhIvRS/exec';
-
-    const fontMap = {
-      'Samim': "'Samim', Tahoma, sans-serif",
-      'Sahel': "'Sahel', Tahoma, sans-serif",
-      'IRANSans': "'IRANSans', Tahoma, sans-serif",
-      'Vazirmatn': "'Vazirmatn', Tahoma, sans-serif",
-      'Estedad': "'Estedad', Tahoma, sans-serif"
-    };
-
-    function getSettings() {
-      try {
-        return JSON.parse(localStorage.getItem('shohada-settings')) || {
-          font: 'Vazirmatn', theme: 'none',
-          themeMode: 'light', musicEnabled: true, musicVolume: 50,
-          musicList: [], soundEnabled: true, soundVolume: 50
-        };
-      } catch(e) {
-        return { font: 'Vazirmatn', theme: 'none', themeMode: 'light', musicEnabled: true, musicVolume: 50, musicList: [], soundEnabled: true, soundVolume: 50 };
-      }
-    }
-
-    function saveSettings(s) { localStorage.setItem('shohada-settings', JSON.stringify(s)); }
-
-    function applyTheme(s) {
-      const root = document.documentElement;
-      root.setAttribute('data-theme', s.themeMode);
-      root.setAttribute('data-special-theme', s.theme || 'none');
-      const fontFamily = fontMap[s.font] || fontMap['Vazirmatn'];
-      root.style.setProperty('--font', fontFamily);
-      document.body.style.fontFamily = fontFamily;
-    }
-
-    let settings = getSettings();
-    applyTheme(settings);
-
+    
+    const $ = (id) => document.getElementById(id);
+    
+    let isMuharram = false;
+    let prayerTimesCache = {};
+    let toastTimeout;
+    let allEvents = [];
+    let allAnnouncements = [];
+    let currentMonth = 5; let currentYear = 1405;
+    let selectedMemoryEvent = null;
+    
+    function openAnnouncement(id) { localStorage.setItem('selectedAnnouncementId', id); window.location.href = '../Notices/'; }
+    function openEvent(id) { localStorage.setItem('selectedEventId', id); window.location.href = '../Events/'; }
+    
     function toggleMorePopup() {
       const popup = $('morePopup');
       popup.classList.toggle('active');
     }
-
-    function openAnnouncement(id) { localStorage.setItem('selectedAnnouncementId', id); window.location.href = '../Notices/'; }
-    function openOccasion(id) { localStorage.setItem('selectedOccasionId', id); window.location.href = '../Occasion/'; }
-
-    let allEvents = [];
-    let allAnnouncements = [];
-    let allOccasions = [];
-    let prayerTimesCache = {};
-    let currentMonth = 5; let currentYear = 1405;
-
+    
+    function openModal(src, title, meta) {
+      $('modalImage').src = src; $('modalTitle').textContent = title; $('modalMeta').textContent = meta;
+      $('imageModal').classList.add('active'); document.body.style.overflow = 'hidden';
+    }
+    function closeModal() { $('imageModal').classList.remove('active'); document.body.style.overflow = ''; }
+    $('imageModal').onclick = function(e) { if (e.target === this) closeModal(); };
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    
+    (async function() {
+      try {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
+        const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
+        const j = await r.json();
+        if (j.code === 200 && j.data.hijri.month.number === 1) {
+          document.documentElement.setAttribute('data-muharram', 'true');
+          isMuharram = true;
+        }
+      } catch(e) {}
+    })();
+    
     function persianDate(year, month, day) { this.year = year; this.month = month; this.day = day; }
     persianDate.prototype.toLocaleDateString = function() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
       return `${this.day} ${months[this.month-1]} ${this.year}`;
     };
-
+    
     function gregorianToPersian(gy, gm, gd) {
       const g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
       const jy = gy <= 1600 ? 0 : 979; gy -= gy <= 1600 ? 621 : 1600;
@@ -478,86 +455,72 @@
       const jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
       return new persianDate(jy2, jm, jd);
     }
-
+    
     function getDaysInMonth(year, month) { if (month <= 6) return 31; if (month <= 11) return 30; return ((year - 1) % 4 === 3) ? 30 : 29; }
-
+    
     function getDayOfWeek(year, month, day) {
       const g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
       const gy = year + 621;
-      const gm = month;
-      const gd = day;
-      const gy2 = gm > 2 ? gy + 1 : gy;
-      let days = 355666 + (365 * gy) + parseInt((gy2 + 3) / 4) - parseInt((gy2 + 99) / 100) + parseInt((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
+      const gy2 = month > 2 ? gy + 1 : gy;
+      let days = 355666 + (365 * gy) + parseInt((gy2 + 3) / 4) - parseInt((gy2 + 99) / 100) + parseInt((gy2 + 399) / 400) + day + g_d_m[month - 1];
       days += 31;
       return days % 7;
     }
-
+    
     function toPersianDate(dateStr) { const d = new Date(dateStr); const pd = gregorianToPersian(d.getFullYear(), d.getMonth() + 1, d.getDate()); return `${pd.year}-${String(pd.month).padStart(2,'0')}-${String(pd.day).padStart(2,'0')}`; }
     function formatPersianDate(dateStr) { const parts = dateStr.split('-'); const pd = new persianDate(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2])); return pd.toLocaleDateString(); }
-
-    function getOccasionStatus(startDate, endDate) {
-      if (!startDate) return { text: 'نامشخص', class: '' };
-      const now = new Date();
-      const start = new Date(startDate);
-      if (endDate) {
-        const end = new Date(endDate);
-        if (now >= start && now <= end) return { text: 'در حال برگزاری', class: 'ongoing' };
-        if (now > end) return { text: 'پایان یافته', class: 'ended' };
-        return { text: 'به‌زودی', class: 'upcoming' };
+    
+    function generateShootingStars(container, count = 8) {
+      if (!container) return;
+      let html = '<div class="shooting-star-container">';
+      for (let i = 0; i < count; i++) {
+        const left = Math.random() * 90; const top = Math.random() * 60;
+        const delay = Math.random() * 3; const duration = 1 + Math.random() * 2;
+        html += `<div class="shooting-star" style="left:${left}%;top:${top}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
       }
-      if (now >= start) return { text: 'در حال برگزاری', class: 'ongoing' };
-      return { text: 'به‌زودی', class: 'upcoming' };
+      html += '</div>'; container.innerHTML = html;
     }
-
-    function buildOccasionsTrack() {
-      let html = '<div class="occasions-section"><div class="section-title"><i class="fa-solid fa-star"></i> رویدادها</div>';
-      if (allOccasions.length === 0) {
-        html += '<div class="empty-occasions">تاکنون رویدادی ثبت نشده است</div></div>';
-        return html;
-      }
-      html += '<div class="occasions-track">';
-      allOccasions.forEach(occ => {
-        const imgHTML = occ.image ? `<img src="${occ.image}" class="occasion-image" alt="">` : `<div class="occasion-image placeholder"><i class="fa-solid fa-star"></i></div>`;
-        const status = getOccasionStatus(occ.startDate, occ.endDate);
-        html += `<div class="occasion-card" onclick="openOccasion('${occ.id}')">${imgHTML}<div class="occasion-info"><div class="occasion-name">${occ.name}</div><div class="occasion-footer"><span class="occasion-status ${status.class}">${status.text}</span></div></div></div>`;
-      });
-      html += '</div></div>';
-      return html;
-    }
-
+    
     function buildCountdownBar() {
       const upcoming = allEvents.filter(e => new Date(e.date) >= new Date(new Date().setHours(0,0,0,0)));
       upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
       if (upcoming.length === 0) {
-        return '<div class="countdown-bar no-event"><div class="countdown-right"><i class="fa-solid fa-calendar-xmark countdown-icon"></i><span class="countdown-text">مراسمی برای روزهای آینده ثبت نشده</span></div></div>';
+        return `<div class="countdown-bar no-event"><div class="countdown-right"><i class="fa-solid fa-calendar-xmark countdown-icon"></i><span class="countdown-text">مراسمی برای روزهای آینده ثبت نشده</span></div></div>`;
       }
-      const nextEvent = upcoming[0];
-      const eventDate = new Date(nextEvent.date);
+      
+      const nextEvent = upcoming[0]; const eventDate = new Date(nextEvent.date); const now = new Date();
       const maghribTime = prayerTimesCache[eventDate.toDateString()];
+      
       if (maghribTime) {
         const [hours, minutes] = maghribTime.split(':').map(Number);
         const eventStartTime = new Date(eventDate); eventStartTime.setHours(hours - 2, minutes, 0, 0);
         const endTime = new Date(eventDate); endTime.setHours(23, 59, 59, 999);
-        if (new Date() >= eventStartTime && new Date() <= endTime) {
-          return `<div class="countdown-bar"><div class="countdown-right"><i class="fa-solid fa-circle" style="font-size:8px;color:#10b981;"></i><span class="countdown-text" style="font-weight:600;">${nextEvent.title}</span></div><div class="countdown-left"><span class="countdown-time" style="background:#10b981;">در حال برگزاری</span><i class="fa-solid fa-chevron-left countdown-arrow"></i></div></div>`;
+        
+        if (now >= eventStartTime && now <= endTime) {
+          return `<div class="countdown-bar" onclick="openEvent('${nextEvent.id}')"><div class="countdown-right"><i class="fa-solid fa-circle" style="font-size:8px;color:#10b981;animation:pulse 1.5s ease-in-out infinite;"></i><span class="countdown-text" style="font-weight:600;">${nextEvent.title}</span></div><div class="countdown-left"><span class="countdown-time" style="background:#10b981;">در حال برگزاری</span><i class="fa-solid fa-chevron-left countdown-arrow"></i></div></div>`;
         }
-        if (new Date() < eventStartTime) {
-          const diff = eventStartTime - new Date();
+        
+        if (now < eventStartTime) {
+          const diff = eventStartTime - now;
           const days = Math.floor(diff / (1000 * 60 * 60 * 24));
           const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
           let timeText = '';
-          if (days > 0) timeText += `${days} روز `;
+          if (days > 0) timeText = `${days} روز `;
           if (hrs > 0 || days > 0) timeText += `${hrs} ساعت `;
           timeText += `${mins} دقیقه`;
-          return `<div class="countdown-bar"><div class="countdown-right"><i class="fa-solid fa-hourglass-half countdown-icon"></i><span class="countdown-text" style="font-weight:600;">${nextEvent.title}</span></div><div class="countdown-left"><span class="countdown-time">${timeText} مانده</span><i class="fa-solid fa-chevron-left countdown-arrow"></i></div></div>`;
+          return `<div class="countdown-bar" onclick="openEvent('${nextEvent.id}')"><div class="countdown-right"><i class="fa-solid fa-hourglass-half countdown-icon"></i><span class="countdown-text" style="font-weight:600;">${nextEvent.title}</span></div><div class="countdown-left"><span class="countdown-time">${timeText} مانده</span><i class="fa-solid fa-chevron-left countdown-arrow"></i></div></div>`;
         }
       }
-      return '<div class="countdown-bar no-event"><div class="countdown-right"><i class="fa-solid fa-hourglass-half countdown-icon"></i><span class="countdown-text">در حال دریافت...</span></div></div>';
+      
+      return `<div class="countdown-bar no-event"><div class="countdown-right"><i class="fa-solid fa-hourglass-half countdown-icon"></i><span class="countdown-text">در حال دریافت...</span></div></div>`;
     }
-
+    
+    function updateCountdown() { const bar = document.querySelector('.countdown-bar'); if (bar) bar.outerHTML = buildCountdownBar(); }
+    
     function buildPrayerWidget() {
-      return `<div class="prayer-section"><div class="prayer-title">اوقات شرعی اردبیل</div><div class="prayer-list" id="prayerList">
+      return `<div class="prayer-section"><div id="prayerStars"></div><div class="prayer-title">اوقات شرعی اردبیل</div><div class="prayer-list" id="prayerList">
         <div class="prayer-date" id="prayerDate">در حال دریافت...</div>
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> صبح</span><span class="prayer-time">--:--</span></div>
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-sun"></i> طلوع</span><span class="prayer-time">--:--</span></div>
@@ -565,10 +528,10 @@
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i> عصر</span><span class="prayer-time">--:--</span></div>
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-cloud-moon"></i> مغرب</span><span class="prayer-time">--:--</span></div>
         <div class="prayer-item"><span class="prayer-name"><i class="fa-solid fa-moon"></i> عشاء</span><span class="prayer-time">--:--</span></div>
-        <div class="prayer-item night"><span class="prayer-name"><i class="fa-solid fa-clock"></i> نیمه شب</span><span class="prayer-time">--:--</span></div>
+        <div class="prayer-item night"><span class="prayer-name"><i class="fa-solid fa-clock"></i> نیمه شب شرعی</span><span class="prayer-time">--:--</span></div>
       </div></div>`;
     }
-
+    
     async function loadPrayerTimes() {
       try {
         const now = new Date(); const month = String(now.getMonth() + 1).padStart(2, '0'); const day = String(now.getDate()).padStart(2, '0'); const year = now.getFullYear();
@@ -588,23 +551,34 @@
             { selector: '.prayer-item:nth-child(7) .prayer-time', value: timings.Isha },
             { selector: '.prayer-item:nth-child(8) .prayer-time', value: timings.Midnight }
           ].forEach(t => { const el = document.querySelector(t.selector); if (el) el.textContent = t.value.split(' ')[0]; });
+          highlightNextPrayer(timings);
+          generateShootingStars(document.getElementById('prayerStars'), 6);
+          updateCountdown();
         }
       } catch(e) {}
     }
-
+    
+    function highlightNextPrayer(timings) {
+      const now = new Date(); const currentTime = now.getHours() * 60 + now.getMinutes();
+      const items = document.querySelectorAll('.prayer-item'); items.forEach(item => item.classList.remove('next'));
+      const prayers = [timings.Fajr, timings.Sunrise, timings.Dhuhr, timings.Asr, timings.Maghrib, timings.Isha, timings.Midnight];
+      for (let i = 0; i < prayers.length; i++) {
+        const parts = prayers[i].split(':');
+        if (parseInt(parts[0]) * 60 + parseInt(parts[1]) > currentTime) { if (items[i+1]) items[i+1].classList.add('next'); break; }
+      }
+    }
+    
     function buildCalendar() {
       const months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
       const today = gregorianToPersian(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
-      let html = `<div class="calendar-section"><div class="calendar-header"><button class="calendar-nav" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-right"></i></button><span class="calendar-month-title">${months[currentMonth - 1]} ${currentYear}</span><button class="calendar-nav" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-left"></i></button></div><div class="calendar-grid">`;
-      const dayNames = ['ش','ی','د','س','چ','پ','ج'];
-      dayNames.forEach(d => { html += `<div class="calendar-day-name">${d}</div>`; });
+      let html = `<div class="calendar-section"><div id="calendarStars"></div><div class="calendar-header"><button class="calendar-nav" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-right"></i></button><span class="calendar-month-title">${months[currentMonth - 1]} ${currentYear}</span><button class="calendar-nav" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-left"></i></button></div><div class="calendar-grid">`;
       const firstDay = getDayOfWeek(currentYear, currentMonth, 1);
       const daysInMonth = getDaysInMonth(currentYear, currentMonth);
       for (let i = 0; i < firstDay; i++) { html += '<div class="calendar-day empty"></div>'; }
       for (let d = 1; d <= daysInMonth; d++) {
         const isToday = (currentYear === today.year && currentMonth === today.month && d === today.day);
         const dateStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        html += `<div class="calendar-day ${isToday ? 'today' : ''}" data-date="${dateStr}">${d}`;
+        html += `<div class="calendar-day ${isToday ? 'today' : ''}" onclick="showDayInfo('${dateStr}', this)" data-date="${dateStr}">${d}`;
         if (allEvents.some(e => e.datePersian === dateStr) || allAnnouncements.some(a => a.datePersian === dateStr)) {
           html += '<div class="dots">';
           if (allEvents.some(e => e.datePersian === dateStr)) html += '<span class="dot event"></span>';
@@ -615,23 +589,132 @@
       }
       return html + '</div></div>';
     }
-
-    function changeMonth(dir) { currentMonth += dir; if (currentMonth > 12) { currentMonth = 1; currentYear++; } if (currentMonth < 1) { currentMonth = 12; currentYear--; } const cal = document.querySelector('.calendar-section'); if (cal) cal.outerHTML = buildCalendar(); }
-
+    
+    function changeMonth(dir) { currentMonth += dir; if (currentMonth > 12) { currentMonth = 1; currentYear++; } if (currentMonth < 1) { currentMonth = 12; currentYear--; } refreshCalendar(); }
+    
+    function refreshCalendar() {
+      const calSection = document.querySelector('.calendar-section');
+      if (calSection) {
+        calSection.outerHTML = buildCalendar();
+        setTimeout(() => { generateShootingStars(document.getElementById('calendarStars'), 8); }, 50);
+      }
+    }
+    
+    function showDayInfo(dateStr, el) {
+      const existing = document.querySelector('.day-info-toast');
+      if (existing) { if (el && existing.dataset.date === dateStr) { closeDayToast(); return; } existing.remove(); document.removeEventListener('click', closeDayToastOnClick); }
+      clearTimeout(toastTimeout);
+      const events = allEvents.filter(e => e.datePersian === dateStr);
+      const notices = allAnnouncements.filter(a => a.datePersian === dateStr);
+      let html = `<button class="toast-close" onclick="closeDayToast()"><i class="fa-solid fa-times"></i></button><div class="toast-title"><i class="fa-solid fa-calendar-day" style="color:var(--primary);"></i> ${formatPersianDate(dateStr)}</div>`;
+      if (events.length === 0 && notices.length === 0) html += '<div class="no-info">مراسم یا اطلاعیه‌ای برای این روز ثبت نشده است</div>';
+      events.forEach(e => { html += `<div class="toast-item" onclick="openEvent('${e.id}')"><i class="fa-solid fa-calendar-check" style="color:var(--event-dot);"></i> ${e.title} (${e.location || 'نامشخص'})</div>`; });
+      notices.forEach(a => { html += `<div class="toast-item" onclick="openAnnouncement('${a.id}')"><i class="fa-solid fa-bullhorn" style="color:var(--notice-dot);"></i> ${a.title}</div>`; });
+      const toast = document.createElement('div'); toast.className = 'day-info-toast'; toast.innerHTML = html; toast.dataset.date = dateStr;
+      document.body.appendChild(toast);
+      setTimeout(() => { document.addEventListener('click', closeDayToastOnClick); }, 50);
+      toastTimeout = setTimeout(() => { if (toast.parentNode) { toast.classList.add('fading'); setTimeout(() => { if (toast.parentNode) toast.remove(); document.removeEventListener('click', closeDayToastOnClick); }, 300); } }, 5000);
+    }
+    
+    function closeDayToast() { const toast = document.querySelector('.day-info-toast'); if (toast) { toast.classList.add('fading'); setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300); } document.removeEventListener('click', closeDayToastOnClick); clearTimeout(toastTimeout); }
+    function closeDayToastOnClick(e) { const toast = document.querySelector('.day-info-toast'); if (toast && !toast.contains(e.target)) { closeDayToast(); } }
+    
+    function renderGalleryCard(item) { const d = new Date(item.date); return `<div class="gallery-card" onclick="openModal('${item.image}', '${item.title.replace(/'/g, "\\'")}', '${d.toLocaleDateString('fa-IR')} — ${item.location||'مشخص نشده'}')"><img src="${item.image}" class="gallery-image" alt="" loading="lazy"></div>`; }
+    
+    async function loadMemories() {
+      if (allEvents.length === 0) return;
+      const sorted = [...allEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
+      const randomFour = [];
+      const usedIndexes = new Set();
+      for (let i = 0; i < Math.min(4, sorted.length); i++) {
+        let idx;
+        if (i % 2 === 0) {
+          idx = 0;
+          while (usedIndexes.has(idx) && idx < sorted.length) idx++;
+        } else {
+          idx = sorted.length - 1;
+          while (usedIndexes.has(idx) && idx >= 0) idx--;
+        }
+        if (idx >= 0 && idx < sorted.length && !usedIndexes.has(idx)) {
+          usedIndexes.add(idx);
+          randomFour.push(sorted[idx]);
+        }
+      }
+      if (randomFour.length === 0) return;
+      
+      const memoriesHTML = randomFour.map(event => {
+        const d = new Date(event.date);
+        return `<div class="memory-card" onclick="loadGallery('${event.id}', '${event.title.replace(/'/g, "\\'")}')">
+          ${event.image ? `<img src="${event.image}" class="memory-image" alt="">` : `<div class="memory-image placeholder"><i class="fa-solid fa-image"></i></div>`}
+          <div class="memory-info">
+            <div class="memory-title">${event.title}</div>
+            <div class="memory-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</div>
+          </div>
+        </div>`;
+      }).join('');
+      
+      const memoriesSection = document.createElement('div');
+      memoriesSection.className = 'memories-section';
+      memoriesSection.id = 'memoriesSection';
+      memoriesSection.innerHTML = `<div class="section-title"><i class="fa-solid fa-images"></i> مرور خاطرات</div><div class="memories-track">${memoriesHTML}</div>`;
+      
+      const announcements = document.querySelector('.announcements-section');
+      if (announcements) {
+        announcements.parentNode.insertBefore(memoriesSection, announcements);
+      } else {
+        document.getElementById('mainContent').appendChild(memoriesSection);
+      }
+    }
+    
+    async function loadGallery(eventId, title) {
+      const existingGallery = document.querySelector('.gallery-section');
+      if (existingGallery) existingGallery.remove();
+      
+      const gallerySection = document.createElement('div');
+      gallerySection.className = 'gallery-section';
+      gallerySection.id = 'gallerySection';
+      gallerySection.innerHTML = `<div class="section-title"><i class="fa-solid fa-images"></i> ${title}</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-spinner fa-pulse"></i><p>در حال دریافت...</p></div></div>`;
+      
+      const memoriesSection = document.getElementById('memoriesSection');
+      if (memoriesSection) memoriesSection.parentNode.insertBefore(gallerySection, memoriesSection.nextSibling);
+      else document.getElementById('mainContent').appendChild(gallerySection);
+      
+      gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      try {
+        const res = await fetch(API_URL + '?action=getArchiveByEventId', { method: 'POST', body: JSON.stringify({ eventId: eventId }) });
+        const data = await res.json();
+        
+        let images = [];
+        if (data.success && Array.isArray(data.data.images)) images = data.data.images;
+        else if (data.data && Array.isArray(data.data.images)) images = data.data.images;
+        else if (Array.isArray(data)) images = data;
+        
+        const galleryGrid = gallerySection.querySelector('.gallery-grid');
+        
+        if (images.length > 0) {
+          galleryGrid.innerHTML = images.map(img => `<div class="gallery-card" onclick="openModal('${img}', '${title.replace(/'/g, "\\'")}', '${new Date().toLocaleDateString('fa-IR')}')"><img src="${img}" class="gallery-image" alt="" loading="lazy"></div>`).join('');
+        } else {
+          galleryGrid.innerHTML = '<div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تصویری برای این مراسم آرشیو نشده است</p></div>';
+        }
+      } catch(e) {
+        const galleryGrid = gallerySection.querySelector('.gallery-grid');
+        galleryGrid.innerHTML = '<div class="empty-gallery"><i class="fa-solid fa-circle-exclamation"></i><p>خطا در دریافت تصاویر</p></div>';
+      }
+    }
+    
     async function loadAllData() {
       const container = $('mainContent');
       try {
-        const [evtRes, annRes, occRes] = await Promise.all([
+        const [evtRes, annRes] = await Promise.all([
           fetch(API_URL + '?action=getEvents'),
-          fetch(API_URL + '?action=getActiveAnnouncements'),
-          fetch(API_URL + '?action=getOccasions')
+          fetch(API_URL + '?action=getActiveAnnouncements')
         ]);
         
         const evtData = await evtRes.json();
         const annData = await annRes.json();
-        const occData = await occRes.json();
         
-        let events = [], announcements = [], occasions = [];
+        let events = [], announcements = [];
         
         if (Array.isArray(evtData)) events = evtData;
         else if (evtData.success && Array.isArray(evtData.data)) events = evtData.data;
@@ -641,32 +724,32 @@
         else if (annData.success && Array.isArray(annData.data)) announcements = annData.data;
         else if (annData.data && Array.isArray(annData.data)) announcements = annData.data;
         
-        if (Array.isArray(occData)) occasions = occData;
-        else if (occData.success && Array.isArray(occData.data)) occasions = occData.data;
-        else if (occData.data && Array.isArray(occData.data)) occasions = occData.data;
-        
         allEvents = events.map(e => ({ ...e, datePersian: e.date ? toPersianDate(e.date) : null }));
         allAnnouncements = announcements.map(a => ({ ...a, datePersian: a.date ? toPersianDate(a.date) : null }));
-        allOccasions = occasions;
         
-        let html = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + buildOccasionsTrack();
+        const today = new Date(); const todayPersian = gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        const todayStr = `${todayPersian.year}-${String(todayPersian.month).padStart(2,'0')}-${String(todayPersian.day).padStart(2,'0')}`;
+        
+        let annHTML = '';
         
         if (allAnnouncements.length > 0) {
-          html += `<div class="announcements-section"><div class="section-title"><i class="fa-solid fa-bullhorn"></i> اطلاعیه‌ها</div>${[...allAnnouncements].reverse().map(item => {
-            const d = item.date ? new Date(item.date) : null;
-            return `<div class="announcement-item" onclick="openAnnouncement('${item.id}')">${item.image ? `<img src="${item.image}" class="announcement-image" alt="">` : `<div class="announcement-image placeholder"><i class="fa-solid fa-bullhorn"></i></div>`}<div class="announcement-body"><div class="announcement-title">${item.title}</div>${item.content ? `<div class="announcement-text">${item.content}</div>` : ''}<div class="announcement-footer">${d ? `<span class="announcement-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span>` : ''}${item.tag ? `<span class="announcement-tag">${item.tag}</span>` : ''}</div></div></div>`;
-          }).join('')}</div>`;
+          annHTML = `<div class="announcements-section"><div class="section-title"><i class="fa-solid fa-bullhorn"></i> اطلاعیه‌ها</div>${[...allAnnouncements].reverse().map(item => { const d = item.date ? new Date(item.date) : null; return `<div class="announcement-item" onclick="openAnnouncement('${item.id}')">${item.image ? `<img src="${item.image}" class="announcement-image" alt="">` : `<div class="announcement-image placeholder"><i class="fa-solid fa-bullhorn"></i></div>`}<div class="announcement-body"><div class="announcement-title">${item.title}</div>${item.content ? `<div class="announcement-text">${item.content}</div>` : ''}<div class="announcement-footer">${d ? `<span class="announcement-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span>` : ''}${item.tag ? `<span class="announcement-tag">${item.tag}</span>` : ''}</div></div></div>`; }).join('')}</div>`;
         } else {
-          html += `<div class="announcements-section"><div class="section-title"><i class="fa-solid fa-bullhorn"></i> اطلاعیه‌ها</div><div class="announcement-item"><div class="announcement-image placeholder"><i class="fa-solid fa-circle-info"></i></div><div class="announcement-body"><div class="announcement-title">اطلاعیه‌ای برای نمایش وجود ندارد</div></div></div></div>`;
+          annHTML = `<div class="announcements-section"><div class="section-title"><i class="fa-solid fa-bullhorn"></i> اطلاعیه‌ها</div><div class="announcement-item"><div class="announcement-image placeholder"><i class="fa-solid fa-circle-info"></i></div><div class="announcement-body"><div class="announcement-title">اطلاعیه‌ای برای نمایش وجود ندارد</div></div></div></div>`;
         }
         
-        container.innerHTML = html;
-        loadPrayerTimes();
+        container.innerHTML = buildCountdownBar() + `<div class="top-row">${buildCalendar()}${buildPrayerWidget()}</div>` + annHTML;
+        
+        setTimeout(() => { generateShootingStars(document.getElementById('calendarStars'), 8); }, 300);
+        setTimeout(() => showDayInfo(todayStr), 1500);
+        setTimeout(loadPrayerTimes, 500);
+        setTimeout(loadMemories, 800);
+        setInterval(updateCountdown, 30000);
       } catch(e) {
-        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAllData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:var(--border);border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;">تلاش مجدد</button></div></div>`;
+        container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAllData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;">تلاش مجدد</button></div></div>`;
       }
     }
-
+    
     loadAllData();
   </script>
 </body>
