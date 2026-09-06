@@ -334,7 +334,7 @@
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 1px;
       cursor: pointer; text-decoration: none; color: var(--text-light);
-      padding: 4px 6px; font-family: var(--font); background: none; border: none;
+      padding: 4px 6px; font-family: inherit; background: none; border: none;
     }
     .nav-item img { width: 20px; height: 20px; opacity: 0.5; filter: brightness(0); }
     [data-theme="dark"] .nav-item img { filter: brightness(0) invert(1); }
@@ -380,7 +380,7 @@
     .more-popup .more-item {
       display: flex; align-items: center; gap: 6px;
       cursor: pointer; text-decoration: none; color: var(--text-light);
-      padding: 4px 8px; font-family: var(--font);
+      padding: 4px 8px; font-family: inherit;
       background: none; border: none;
       text-align: right;
     }
@@ -390,6 +390,11 @@
 
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
     @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 650px) {
+      .more-popup { width: 30%; }
+      .header-title { font-size: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -563,10 +568,6 @@
     <div class="nav-item" onclick="window.location.href='../Events/';">
       <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
       <span>مراسمات</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='../Occasion/';">
-      <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
-      <span>رویدادها</span>
     </div>
     <div class="nav-item" onclick="window.location.href='../prayer/';">
       <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
