@@ -136,7 +136,7 @@
 
     .main-container {
       flex: 1; max-width: 700px; width: 100%;
-      margin: 16px auto; padding: 0 12px 100px;
+      margin: 16px auto; padding: 0 12px 120px;
       display: flex; flex-direction: column; gap: 14px;
     }
 
@@ -321,23 +321,18 @@
     }
     .music-item.active .music-check { background: var(--primary); border-color: var(--primary); }
 
-    .bottom-nav-wrap {
-      position: fixed; bottom: 8px; left: 0; right: 0;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      z-index: 999;
-      pointer-events: none;
-    }
     .bottom-nav {
+      position: fixed; bottom: 8px; right: 10%; left: 10%;
+      width: 80%; margin: 0 auto;
       background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--primary);
       border-radius: 25px;
       display: flex; justify-content: space-around; align-items: center;
-      padding: 4px 8px;
-      pointer-events: all;
+      padding: 4px 4px;
+      z-index: 999;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
     }
     [data-theme="dark"] .bottom-nav {
       background: rgba(30, 41, 59, 0.5);
@@ -345,21 +340,11 @@
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--primary);
     }
-    .bottom-nav.shrink {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      padding: 0;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .bottom-nav.shrink .nav-item { display: none; }
-    .bottom-nav.shrink .nav-more-btn { display: flex; }
 
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 1px;
       cursor: pointer; text-decoration: none; color: var(--text-light);
-      padding: 4px 10px; font-family: var(--font); background: none; border: none;
+      padding: 4px 6px; font-family: var(--font); background: none; border: none;
     }
     .nav-item img { width: 20px; height: 20px; opacity: 0.5; filter: brightness(0); }
     [data-theme="dark"] .nav-item img { filter: brightness(0) invert(1); }
@@ -375,69 +360,47 @@
     .nav-item span { font-size: 7px; font-weight: 600; }
     .nav-item.no-label span { display: none; }
 
-    .nav-more-btn {
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      background: var(--primary);
-      border: 1px solid #000000;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 14px; cursor: pointer;
-      flex-shrink: 0;
-      transition: all 0.3s ease;
-    }
-    .nav-more-btn:active { transform: scale(0.9); }
-    .nav-more-btn.back-btn {
-      background: var(--primary-dark);
-    }
-
-    .more-menu {
-      background: rgba(255, 255, 255, 0.5);
+    .more-popup {
+      position: fixed; bottom: 55px; right: 10%; left: 10%;
+      width: 80%; margin: 0 auto;
+      background: rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--primary);
-      border-radius: 25px;
-      padding: 4px 8px;
-      display: flex; align-items: center; gap: 8px;
-      pointer-events: all;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      width: 0;
-      overflow: hidden;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+      border-radius: 20px;
+      padding: 10px;
+      z-index: 998;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      display: none;
+      animation: popupIn 0.3s ease;
     }
-    [data-theme="dark"] .more-menu {
-      background: rgba(30, 41, 59, 0.5);
+    [data-theme="dark"] .more-popup {
+      background: rgba(30, 41, 59, 0.6);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--primary);
     }
-    .more-menu.active {
-      width: auto;
-      opacity: 1;
-      pointer-events: all;
+    .more-popup.active { display: block; }
+    .more-popup .popup-title {
+      font-size: 10px; font-weight: 800; color: var(--dark);
+      margin-bottom: 8px; text-align: center;
     }
-    .more-back-btn {
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      background: var(--primary);
-      border: 1px solid #000000;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 14px; cursor: pointer;
-      flex-shrink: 0;
+    .more-popup .popup-items {
+      display: flex; justify-content: space-around; align-items: center;
+      gap: 8px;
     }
-    .more-item {
-      display: flex; flex-direction: column; align-items: center; gap: 1px;
+    .more-popup .more-item {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
       cursor: pointer; text-decoration: none; color: var(--text-light);
-      padding: 4px 10px; font-family: var(--font);
+      padding: 6px 8px; font-family: var(--font);
       background: none; border: none;
-      white-space: nowrap;
     }
-    .more-item img { width: 20px; height: 20px; opacity: 0.5; filter: brightness(0); }
-    [data-theme="dark"] .more-item img { filter: brightness(0) invert(1); }
-    .more-item span { font-size: 7px; font-weight: 600; }
+    .more-popup .more-item img { width: 22px; height: 22px; opacity: 0.6; filter: brightness(0); }
+    [data-theme="dark"] .more-popup .more-item img { filter: brightness(0) invert(1); }
+    .more-popup .more-item span { font-size: 8px; font-weight: 600; }
 
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -590,51 +553,49 @@
 
   </main>
 
-  <div class="bottom-nav-wrap" id="bottomNavWrap">
-    <nav class="bottom-nav" id="bottomNav">
-      <div class="nav-item active" onclick="window.location.href='../dashboard/';">
-        <img src="https://uploadkon.ir/uploads/bdf329_26home-iconbase-1-.svg" alt="خانه">
-        <span>خانه</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../Events/';">
-        <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
-        <span>مراسمات</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../Occasion/';">
-        <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
-        <span>رویدادها</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../prayer/';">
-        <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
-        <span>آرشیوها</span>
-      </div>
-      <div class="nav-item active no-label" onclick="window.location.href='../Setting/';">
-        <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="تنظیمات">
-      </div>
-    </nav>
-
-    <div class="nav-more-btn" id="navMoreBtn" onclick="toggleMoreMenu()">
-      <i class="fa-solid fa-ellipsis"></i>
-    </div>
-
-    <div class="more-menu" id="moreMenu">
-      <div class="more-back-btn" onclick="toggleMoreMenu()">
-        <i class="fa-solid fa-arrow-right"></i>
-      </div>
-      <div class="more-item" onclick="window.location.href='../About/';">
+  <div class="more-popup" id="morePopup">
+    <div class="popup-title">سایر</div>
+    <div class="popup-items">
+      <button class="more-item" onclick="window.location.href='../About/';">
         <img src="https://uploadkon.ir/uploads/60be06_26info-circle-iconbase.svg" alt="درباره ما">
         <span>درباره ما</span>
-      </div>
-      <div class="more-item" onclick="window.location.href='../Address/';">
+      </button>
+      <button class="more-item" onclick="window.location.href='../Address/';">
         <img src="https://uploadkon.ir/uploads/204a06_26location-iconbase.svg" alt="مکان ما">
         <span>مکان ما</span>
-      </div>
-      <div class="more-item" onclick="window.location.href='../Contact/';">
+      </button>
+      <button class="more-item" onclick="window.location.href='../Contact/';">
         <img src="https://uploadkon.ir/uploads/393e06_26calling-iconbase.svg" alt="ارتباط با ما">
         <span>ارتباط با ما</span>
-      </div>
+      </button>
     </div>
   </div>
+
+  <nav class="bottom-nav" id="bottomNav">
+    <div class="nav-item active" onclick="window.location.href='../dashboard/';">
+      <img src="https://uploadkon.ir/uploads/bdf329_26home-iconbase-1-.svg" alt="خانه">
+      <span>خانه</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Events/';">
+      <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
+      <span>مراسمات</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Occasion/';">
+      <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
+      <span>رویدادها</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../prayer/';">
+      <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
+      <span>آرشیوها</span>
+    </div>
+    <div class="nav-item active no-label" onclick="window.location.href='../Setting/';">
+      <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="تنظیمات">
+    </div>
+    <div class="nav-item" onclick="toggleMorePopup()">
+      <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="بیشتر" style="opacity:0.6; filter:none;">
+      <span>بیشتر</span>
+    </div>
+  </nav>
 
   <script>
     const $ = (id) => document.getElementById(id);
@@ -672,19 +633,9 @@
     let settings = getSettings();
     applyTheme(settings);
 
-    function toggleMoreMenu() {
-      const moreMenu = $('moreMenu');
-      const bottomNav = $('bottomNav');
-      const moreBtn = $('navMoreBtn');
-      if (moreMenu.classList.contains('active')) {
-        moreMenu.classList.remove('active');
-        bottomNav.classList.remove('shrink');
-        moreBtn.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
-      } else {
-        moreMenu.classList.add('active');
-        bottomNav.classList.add('shrink');
-        moreBtn.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
-      }
+    function toggleMorePopup() {
+      const popup = $('morePopup');
+      popup.classList.toggle('active');
     }
 
     function setupScrollSelector(selectorId, valueKey, onSelect) {
