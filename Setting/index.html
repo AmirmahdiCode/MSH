@@ -330,8 +330,7 @@
       border: 1px solid var(--primary);
       border-radius: 25px;
       display: flex; justify-content: space-around; align-items: center;
-      padding: 4px 4px;
-      z-index: 999;
+      padding: 4px 0; z-index: 999;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     }
     [data-theme="dark"] .bottom-nav {
@@ -572,7 +571,7 @@
   </div>
 
   <nav class="bottom-nav" id="bottomNav">
-    <div class="nav-item active" onclick="window.location.href='../dashboard/';">
+    <div class="nav-item" onclick="window.location.href='../dashboard/';">
       <img src="https://uploadkon.ir/uploads/bdf329_26home-iconbase-1-.svg" alt="خانه">
       <span>خانه</span>
     </div>
@@ -591,10 +590,10 @@
     <div class="nav-item active no-label" onclick="window.location.href='../Setting/';">
       <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="تنظیمات">
     </div>
-    <div class="nav-item" onclick="toggleMorePopup()">
-      <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="بیشتر" style="opacity:0.6; filter:none;">
+    <button class="nav-item" onclick="toggleMorePopup()">
+      <i class="fa-solid fa-ellipsis" style="font-size:18px; color:var(--text-light);"></i>
       <span>بیشتر</span>
-    </div>
+    </button>
   </nav>
 
   <script>
