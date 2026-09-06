@@ -19,8 +19,6 @@
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
       --card-border: #e2e8f0; --shadow: 4px 4px 0 #000000;
-      --shadow-hover: 6px 6px 0 #000000;
-      --shadow-sm: 2px 2px 0 #000000;
       --header-bg: #ffffff; --footer-bg: #ffffff;
       --overlay: rgba(13, 148, 136, 0.05);
       --announcement-bg: #f0fdfa; --announcement-border: #ccfbf1;
@@ -34,10 +32,7 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --shadow: 4px 4px 0 #000000;
-      --shadow-hover: 6px 6px 0 #000000;
-      --shadow-sm: 2px 2px 0 #000000;
-      --header-bg: #1e293b; --footer-bg: #1e293b;
+      --card-border: #334155; --header-bg: #1e293b; --footer-bg: #1e293b;
       --overlay: rgba(20, 184, 166, 0.08);
       --announcement-bg: #1a2e2b; --announcement-border: #164e4a;
       --logo-filter: brightness(0) invert(1);
@@ -89,8 +84,8 @@
       box-shadow: 3px 3px 0 #000000; overflow: hidden; padding: 6px; border: 1px solid #000000;
     }
     .header-logo img { width: 130%; height: 130%; object-fit: contain; filter: var(--logo-filter); }
-    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
-    .header-subtitle { font-size: 8px; color: var(--text-light); transition: color 0.3s; }
+    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .header-subtitle { font-size: 8px; color: var(--text-light); }
     
     .main-container { flex: 1; max-width: 900px; width: 100%; margin: 16px auto; padding: 0 12px 100px; }
     
@@ -206,16 +201,11 @@
       flex-shrink: 0;
     }
     .memory-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
-    .memory-image { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--bg2); }
-    .memory-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--primary); }
+    .memory-image { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--bg2); filter: grayscale(100%); }
+    .memory-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--primary); filter: grayscale(100%); }
     .memory-info { padding: 10px 12px; }
     .memory-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .memory-date { font-size: 9px; color: var(--text-light); display: flex; align-items: center; gap: 3px; }
-    .memory-count { font-size: 9px; color: var(--primary-dark); font-weight: 600; margin-top: 4px; }
-    .empty-memories {
-      text-align: center; padding: 24px; color: var(--text-light);
-      font-size: 12px; border: 1px dashed #000000; border-radius: var(--radius);
-    }
     
     .gallery-section { margin-bottom: 24px; }
     .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -406,7 +396,6 @@
     let allEvents = [];
     let allAnnouncements = [];
     let currentMonth = 5; let currentYear = 1405;
-    let selectedMemoryEvent = null;
     
     function openAnnouncement(id) { localStorage.setItem('selectedAnnouncementId', id); window.location.href = '../Notices/'; }
     function openEvent(id) { localStorage.setItem('selectedEventId', id); window.location.href = '../Events/'; }
@@ -619,8 +608,6 @@
     function closeDayToast() { const toast = document.querySelector('.day-info-toast'); if (toast) { toast.classList.add('fading'); setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300); } document.removeEventListener('click', closeDayToastOnClick); clearTimeout(toastTimeout); }
     function closeDayToastOnClick(e) { const toast = document.querySelector('.day-info-toast'); if (toast && !toast.contains(e.target)) { closeDayToast(); } }
     
-    function renderGalleryCard(item) { const d = new Date(item.date); return `<div class="gallery-card" onclick="openModal('${item.image}', '${item.title.replace(/'/g, "\\'")}', '${d.toLocaleDateString('fa-IR')} — ${item.location||'مشخص نشده'}')"><img src="${item.image}" class="gallery-image" alt="" loading="lazy"></div>`; }
-    
     async function loadMemories() {
       if (allEvents.length === 0) return;
       const sorted = [...allEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -682,7 +669,7 @@
       gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       
       try {
-        const res = await fetch(API_URL + '?action=getArchiveByEventId', { method: 'POST', body: JSON.stringify({ eventId: eventId }) });
+        const res = await fetch(API_URL + '?action=getArchiveByEventId&eventId=' + eventId);
         const data = await res.json();
         
         let images = [];
