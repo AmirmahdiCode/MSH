@@ -116,9 +116,9 @@
       width: 42px; height: 42px; border-radius: 4px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 3px 3px 0 #000000; overflow: hidden; padding: 0; border: 1px solid #000000;
+      box-shadow: 3px 3px 0 #000000; overflow: hidden; padding: 6px; border: 1px solid #000000;
     }
-    .header-logo img { width: 200%; height: 200%; object-fit: contain; filter: var(--logo-filter); }
+    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
     .header-title { font-size: 16px; font-weight: 700; color: var(--dark); }
     .header-subtitle { font-size: 8px; color: var(--text-light); }
 
@@ -351,7 +351,7 @@
 
     .more-popup {
       position: fixed; bottom: 70px; left: 10%;
-      width: 30%;
+      width: 15%;
       background: rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -711,11 +711,21 @@
       list.innerHTML = '<div style="font-size:10px;color:var(--text-light);padding:8px;text-align:center;">در حال دریافت...</div>';
       try {
         const res = await fetch(API_URL + '?action=getMusic');
-        const data = await res.json();
-        if (data.success && data.data && data.data.length > 0) {
+        const raw = await res.json();
+        
+        let data = [];
+        if (Array.isArray(raw)) {
+          data = raw;
+        } else if (raw.success && Array.isArray(raw.data)) {
+          data = raw.data;
+        } else if (raw.data && Array.isArray(raw.data)) {
+          data = raw.data;
+        }
+        
+        if (data.length > 0) {
           const selected = settings.musicList || [];
-          list.innerHTML = data.data.map((m) => {
-            const src = m.src;
+          list.innerHTML = data.map((m, i) => {
+            const src = typeof m === 'string' ? m : (m.src || '');
             const name = getFileNameFromUrl(src);
             const isActive = selected.length === 0 || selected.includes(src);
             return `<div class="music-item ${isActive ? 'active' : ''}" data-src="${src}">
