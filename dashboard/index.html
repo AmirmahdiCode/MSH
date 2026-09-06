@@ -25,6 +25,7 @@
       --logo-filter: none; --modal-bg: rgba(0,0,0,0.9);
       --event-dot: #10b981; --notice-dot: #3b82f6;
       --radius: 12px;
+      --font: 'Vazirmatn', Tahoma, sans-serif;
     }
     
     [data-theme="dark"] {
@@ -38,21 +39,39 @@
       --logo-filter: brightness(0) invert(1);
     }
     
-    [data-muharram="true"] {
+    [data-special-theme="muharram"] {
       --primary: #dc2626; --primary-dark: #b91c1c; --primary-light: #fca5a5;
       --primary-rgb: 220, 38, 38; --overlay: rgba(220, 38, 38, 0.05);
       --announcement-bg: #fef2f2; --announcement-border: #fecaca;
       --event-dot: #dc2626;
     }
     
-    [data-theme="dark"][data-muharram="true"] {
+    [data-theme="dark"][data-special-theme="muharram"] {
       --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fca5a5;
       --primary-rgb: 239, 68, 68; --overlay: rgba(239, 68, 68, 0.08);
       --announcement-bg: #2e1a1a; --announcement-border: #4e1616;
     }
     
+    [data-special-theme="blue"] {
+      --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #60a5fa;
+      --primary-rgb: 37, 99, 235; --overlay: rgba(37, 99, 235, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="blue"] {
+      --primary: #3b82f6; --primary-dark: #2563eb; --primary-light: #93c5fd;
+      --primary-rgb: 59, 130, 246; --overlay: rgba(59, 130, 246, 0.08);
+    }
+    
+    [data-special-theme="wiladat"] {
+      --primary: #22c55e; --primary-dark: #16a34a; --primary-light: #86efac;
+      --primary-rgb: 34, 197, 94; --overlay: rgba(34, 197, 94, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="wiladat"] {
+      --primary: #4ade80; --primary-dark: #22c55e; --primary-light: #bbf7d0;
+      --primary-rgb: 74, 222, 128; --overlay: rgba(74, 222, 128, 0.08);
+    }
+    
     body {
-      font-family: 'Vazirmatn', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: var(--font);
       background: var(--bg); color: var(--text);
       min-height: 100vh; display: flex; flex-direction: column;
       transition: all 0.3s ease;
@@ -129,6 +148,44 @@
     .day-info-toast .toast-item i { font-size: 9px; width: 14px; text-align: center; }
     .day-info-toast .no-info { color: var(--text-light); font-size: 10px; }
     .day-info-toast .toast-close { position: absolute; top: 8px; left: 10px; background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 14px; padding: 4px; }
+    
+    .event-day-toast {
+      position: fixed;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      padding: 10px 18px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      z-index: 997;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 85%;
+      width: max-content;
+      animation: eventToastIn 0.5s cubic-bezier(0.25, 0.8, 0.25, 1.2) forwards;
+    }
+    [data-theme="dark"] .event-day-toast {
+      background: rgba(30, 41, 59, 0.6);
+    }
+    .event-day-toast.fading {
+      animation: eventToastOut 0.5s ease-in forwards;
+    }
+    @keyframes eventToastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(100px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes eventToastOut {
+      from { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to { opacity: 0; transform: translateX(-50%) translateY(100px); }
+    }
     
     .top-row { display: flex; gap: 16px; margin-bottom: 24px; justify-content: center; flex-wrap: wrap; }
     
@@ -367,6 +424,10 @@
       <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
       <span>مراسمات</span>
     </div>
+    <div class="nav-item" onclick="window.location.href='../Occasion/';">
+      <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
+      <span>رویدادها</span>
+    </div>
     <div class="nav-item" onclick="window.location.href='../prayer/';">
       <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
       <span>آرشیوها</span>
@@ -387,6 +448,38 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbypWWml5JQ0CIjurUfrOVRkI5O33d2u3GT-51hzEliYa1JZ8_3oA9Mfh8gNeCDhIvRS/exec';
     
     const $ = (id) => document.getElementById(id);
+    
+    const fontMap = {
+      'Samim': "'Samim', Tahoma, sans-serif",
+      'Sahel': "'Sahel', Tahoma, sans-serif",
+      'IRANSans': "'IRANSans', Tahoma, sans-serif",
+      'Vazirmatn': "'Vazirmatn', Tahoma, sans-serif",
+      'Estedad': "'Estedad', Tahoma, sans-serif"
+    };
+    
+    function getSettings() {
+      try {
+        return JSON.parse(localStorage.getItem('shohada-settings')) || {
+          font: 'Vazirmatn', theme: 'none',
+          themeMode: 'light', musicEnabled: true, musicVolume: 50,
+          musicList: [], soundEnabled: true, soundVolume: 50
+        };
+      } catch(e) {
+        return { font: 'Vazirmatn', theme: 'none', themeMode: 'light', musicEnabled: true, musicVolume: 50, musicList: [], soundEnabled: true, soundVolume: 50 };
+      }
+    }
+    
+    function applyTheme(s) {
+      const root = document.documentElement;
+      root.setAttribute('data-theme', s.themeMode);
+      root.setAttribute('data-special-theme', s.theme || 'none');
+      const fontFamily = fontMap[s.font] || fontMap['Vazirmatn'];
+      root.style.setProperty('--font', fontFamily);
+      document.body.style.fontFamily = fontFamily;
+    }
+    
+    let settings = getSettings();
+    applyTheme(settings);
     
     let isMuharram = false;
     let prayerTimesCache = {};
@@ -418,7 +511,9 @@
         const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
         const j = await r.json();
         if (j.code === 200 && j.data.hijri.month.number === 1) {
-          document.documentElement.setAttribute('data-muharram', 'true');
+          if (settings.theme === 'none') {
+            document.documentElement.setAttribute('data-special-theme', 'muharram');
+          }
           isMuharram = true;
         }
       } catch(e) {}
@@ -595,6 +690,38 @@
     function closeDayToast() { const toast = document.querySelector('.day-info-toast'); if (toast) { toast.classList.add('fading'); setTimeout(() => { if (toast.parentNode) toast.remove(); }, 300); } document.removeEventListener('click', closeDayToastOnClick); clearTimeout(toastTimeout); }
     function closeDayToastOnClick(e) { const toast = document.querySelector('.day-info-toast'); if (toast && !toast.contains(e.target)) { closeDayToast(); } }
     
+    function showTodayEventToast() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const todayEvents = allEvents.filter(e => {
+        const eventDate = new Date(e.date);
+        eventDate.setHours(0, 0, 0, 0);
+        return eventDate.getTime() === today.getTime();
+      });
+      
+      let toastHTML = '';
+      
+      if (todayEvents.length > 0) {
+        const eventTitles = todayEvents.map(e => e.title).join(' و ');
+        toastHTML = `<i class="fa-solid fa-calendar-check" style="color:var(--primary);"></i> امروز مراسم ${eventTitles} برگزار خواهد شد`;
+      } else {
+        toastHTML = `<i class="fa-solid fa-calendar-xmark" style="color:var(--text-light);"></i> برای امروز مراسمی ثبت نشده`;
+      }
+      
+      const toast = document.createElement('div');
+      toast.className = 'event-day-toast';
+      toast.innerHTML = toastHTML;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.add('fading');
+        setTimeout(() => {
+          if (toast.parentNode) toast.remove();
+        }, 500);
+      }, 4000);
+    }
+    
     async function loadMemories() {
       if (allEvents.length === 0) return;
       const sorted = [...allEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -716,6 +843,7 @@
         
         setTimeout(() => { generateShootingStars(document.getElementById('calendarStars'), 8); }, 300);
         setTimeout(() => showDayInfo(todayStr), 1500);
+        setTimeout(() => showTodayEventToast(), 2000);
         setTimeout(loadPrayerTimes, 500);
         setTimeout(loadMemories, 800);
         setInterval(updateCountdown, 30000);
