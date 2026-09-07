@@ -514,7 +514,6 @@
     let toastTimeout;
     let allEvents = [];
     let allAnnouncements = [];
-    let currentMonth = 5; let currentYear = 1405;
     
     function openAnnouncement(id) { localStorage.setItem('selectedAnnouncementId', id); window.location.href = '../Notices/'; }
     function openEvent(id) { localStorage.setItem('selectedEventId', id); window.location.href = '../Events/'; }
@@ -715,6 +714,8 @@
       return html + '</div></div>';
     }
     
+    let currentMonth, currentYear;
+    
     function changeMonth(dir) { currentMonth += dir; if (currentMonth > 12) { currentMonth = 1; currentYear++; } if (currentMonth < 1) { currentMonth = 12; currentYear--; } refreshCalendar(); }
     
     function refreshCalendar() {
@@ -882,7 +883,10 @@
         allEvents = events.map(e => ({ ...e, datePersian: e.date ? toPersianDate(e.date) : null }));
         allAnnouncements = announcements.map(a => ({ ...a, datePersian: a.date ? toPersianDate(a.date) : null }));
         
-        const today = new Date(); const todayPersian = gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        const today = new Date();
+        const todayPersian = gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        currentMonth = todayPersian.month;
+        currentYear = todayPersian.year;
         const todayStr = `${todayPersian.year}-${String(todayPersian.month).padStart(2,'0')}-${String(todayPersian.day).padStart(2,'0')}`;
         
         let annHTML = '';
