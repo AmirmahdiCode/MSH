@@ -426,6 +426,7 @@
     const BATCH_SIZE = 10;
     let isLoading = false;
     let localLikes = {};
+    let likesCache = {};
     
     function getLocalLikes() {
       try {
@@ -448,29 +449,49 @@
       return `${eventId}_${index}`;
     }
     
-    function renderNextBatch() {
+    async function getLikesCount(mediaId) {
+      if (likesCache[mediaId] !== undefined) return likesCache[mediaId];
+      
+      try {
+        const res = await fetch(EXPLORE_API + '?action=getLikes&archiveId=' + mediaId);
+        const data = await res.json();
+        const likes = data.success ? (parseInt(data.likes) || 0) : 0;
+        likesCache[mediaId] = likes;
+        return likes;
+      } catch(e) {
+        return 0;
+      }
+    }
+    
+    async function renderNextBatch() {
       const grid = document.querySelector('.explore-grid');
       if (!grid) return;
       
       const end = Math.min(displayedCount + BATCH_SIZE, allMedia.length);
       
-      let batchHTML = '';
       for (let i = displayedCount; i < end; i++) {
         const item = allMedia[i];
+        const likesCount = await getLikesCount(item.id);
+        
+        let itemHTML = '';
         if (item.type === 'video') {
-          batchHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')">
+          itemHTML = `<div class="explore-item" onclick="openFullscreen('${item.id}')">
             <video src="${item.src}" muted loop autoplay playsinline preload="metadata"></video>
             <div class="video-indicator"><i class="fa-solid fa-play"></i></div>
+            ${likesCount > 0 ? `<div class="like-count"><i class="fa-solid fa-heart"></i> ${likesCount}</div>` : ''}
           </div>`;
         } else {
-          batchHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')"><img src="${item.src}" alt="" loading="lazy"></div>`;
+          itemHTML = `<div class="explore-item" onclick="openFullscreen('${item.id}')">
+            <img src="${item.src}" alt="" loading="lazy">
+            ${likesCount > 0 ? `<div class="like-count"><i class="fa-solid fa-heart"></i> ${likesCount}</div>` : ''}
+          </div>`;
         }
+        
+        grid.insertAdjacentHTML('beforeend', itemHTML);
       }
       
       const loadingEl = grid.querySelector('.loading-more');
       if (loadingEl) loadingEl.remove();
-      
-      grid.insertAdjacentHTML('beforeend', batchHTML);
       
       const videos = grid.querySelectorAll('.explore-item video');
       videos.forEach(v => { v.playbackRate = 4; });
@@ -559,7 +580,7 @@
         
         container.innerHTML = '<div class="explore-grid"></div>';
         displayedCount = 0;
-        renderNextBatch();
+        await renderNextBatch();
         
         window.addEventListener('scroll', checkScroll);
       } catch(e) {
@@ -567,16 +588,13 @@
       }
     }
     
-    function openFullscreen(mediaId) {
+    async function openFullscreen(mediaId) {
       const viewer = $('fullscreenViewer');
       const content = $('viewerContent');
       
       content.innerHTML = '';
       
-      const startIndex = allMedia.findIndex(m => m.id === mediaId);
-      if (startIndex === -1) return;
-      
-      for (let i = startIndex; i < allMedia.length; i++) {
+      for (let i = 0; i < allMedia.length; i++) {
         const item = allMedia[i];
         let mediaHTML = '';
         
@@ -595,13 +613,14 @@
         }
         
         const isLiked = localLikes[item.id] === true;
+        const likesCount = await getLikesCount(item.id);
         
         const itemHTML = `<div class="viewer-item" data-media-id="${item.id}">
           ${mediaHTML}
           <div class="viewer-actions">
             <button class="viewer-action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${item.id}', this)">
               <i class="fa-solid fa-heart"></i>
-              <span>لایک</span>
+              <span>${likesCount} لایک</span>
             </button>
             <button class="viewer-action-btn" onclick="shareMedia('${item.id}')">
               <i class="fa-solid fa-share-nodes"></i>
@@ -655,6 +674,10 @@
       }
       
       saveLocalLikes();
+      delete likesCache[mediaId];
+      
+      const newCount = await getLikesCount(mediaId);
+      btn.querySelector('span').textContent = newCount + ' لایک';
     }
     
     async function shareMedia(mediaId) {
