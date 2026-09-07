@@ -41,7 +41,7 @@ class MusicPlayer {
       this.audio.volume = (this.settings.musicVolume || 50) / 100;
       
       if (this.settings.musicEnabled) {
-        if (this.audio.paused) {
+        if (this.audio.paused && this.state.playing) {
           this.audio.play().catch(() => {});
         }
       } else {
@@ -153,11 +153,4 @@ class MusicPlayer {
   }
 }
 
-const musicPlayer = new MusicPlayer();
-
-window.addEventListener('storage', (e) => {
-  if (e.key === 'shohada-settings') {
-    musicPlayer.settings = musicPlayer.getSettings();
-    musicPlayer.applySettings();
-  }
-});
+window.musicPlayer = new MusicPlayer();
