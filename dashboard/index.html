@@ -243,41 +243,69 @@
     .announcement-date { font-size: 10px; color: var(--text-light); display: flex; align-items: center; gap: 4px; }
     .announcement-tag { font-size: 10px; background: var(--overlay); color: var(--primary-dark); padding: 4px 10px; border-radius: 20px; white-space: nowrap; font-weight: 600; border: 1px solid #000000; }
     
-    .memories-section { margin-bottom: 24px; }
-    .memories-track { display: flex; gap: 10px; overflow-x: auto; padding: 8px 2px 16px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg2); }
-    .memories-track::-webkit-scrollbar { height: 5px; }
-    .memories-track::-webkit-scrollbar-track { background: var(--bg2); border-radius: 3px; }
-    .memories-track::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-    
-    .memory-card {
-      min-width: 200px; max-width: 200px; background: var(--card-bg);
-      border-radius: var(--radius); overflow: hidden; box-shadow: 3px 3px 0 #000000;
-      transition: all 0.15s ease; cursor: pointer; border: 1px solid #000000;
-      flex-shrink: 0;
-    }
-    .memory-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
-    .memory-image { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--bg2); filter: grayscale(100%); }
-    .memory-image.placeholder { display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--primary); filter: grayscale(100%); }
-    .memory-info { padding: 10px 12px; }
-    .memory-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .memory-date { font-size: 9px; color: var(--text-light); display: flex; align-items: center; gap: 3px; }
-    
-    .gallery-section { margin-bottom: 24px; }
-    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .gallery-card {
+    .explore-section { margin-bottom: 24px; }
+    .explore-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .explore-card {
       background: var(--card-bg); border-radius: var(--radius); overflow: hidden;
       box-shadow: 3px 3px 0 #000000; border: 1px solid #000000;
-      transition: all 0.15s ease; cursor: pointer; aspect-ratio: 4/3;
+      transition: all 0.15s ease; cursor: pointer; position: relative;
+      aspect-ratio: 1/1;
     }
-    .gallery-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
-    .gallery-image { width: 100%; height: 100%; object-fit: cover; }
-    .empty-gallery { grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 16px; color: var(--text-light); text-align: center; }
-    .empty-gallery i { font-size: 44px; color: var(--primary-light); margin-bottom: 10px; }
-    .empty-gallery p { font-size: 13px; }
+    .explore-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
+    .explore-image { width: 100%; height: 100%; object-fit: cover; }
+    
+    .explore-video-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, var(--primary-dark) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+    }
+    .explore-video-placeholder .video-play-circle {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      margin-bottom: 8px;
+    }
+    .explore-video-placeholder .video-label {
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 700;
+    }
+    .explore-video-placeholder .video-timeline {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .explore-video-placeholder .video-timeline-progress {
+      height: 100%;
+      width: 30%;
+      background: var(--primary);
+    }
+    
+    .empty-explore { grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 16px; color: var(--text-light); text-align: center; }
+    .empty-explore i { font-size: 44px; color: var(--primary-light); margin-bottom: 10px; }
+    .empty-explore p { font-size: 13px; }
     
     .image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
     .image-modal.active { display: flex; }
-    .image-modal img { max-width: 90%; max-height: 80vh; border-radius: 12px; box-shadow: 3px 3px 0 #000000; border: 1px solid #000000; }
+    .image-modal img, .image-modal video, .image-modal iframe { max-width: 90%; max-height: 80vh; border-radius: 12px; box-shadow: 3px 3px 0 #000000; border: 1px solid #000000; }
+    .image-modal iframe { width: 80%; height: 60vh; }
     .image-modal .modal-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: 1px solid #000000; border-radius: 12px; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .image-modal .modal-info { color: #fff; text-align: center; margin-top: 16px; font-size: 13px; }
     
@@ -360,9 +388,9 @@
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
     @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    @media (max-width: 900px) and (min-width: 651px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px) and (min-width: 651px) { .explore-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 650px) {
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .explore-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
       .top-row { gap: 8px; }
       .calendar-section, .prayer-section { width: calc(50% - 6px); padding: 8px; }
       .header-title { font-size: 14px; }
@@ -393,7 +421,7 @@
 
   <div class="image-modal" id="imageModal">
     <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-times"></i></button>
-    <img src="" alt="" id="modalImage">
+    <div id="modalContent"></div>
     <div class="modal-info"><h4 id="modalTitle"></h4><p id="modalMeta"></p></div>
   </div>
 
@@ -496,11 +524,37 @@
       popup.classList.toggle('active');
     }
     
-    function openModal(src, title, meta) {
-      $('modalImage').src = src; $('modalTitle').textContent = title; $('modalMeta').textContent = meta;
-      $('imageModal').classList.add('active'); document.body.style.overflow = 'hidden';
+    function openImageModal(src, title) {
+      $('modalContent').innerHTML = `<img src="${src}" alt="">`;
+      $('modalTitle').textContent = title || '';
+      $('modalMeta').textContent = '';
+      $('imageModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
-    function closeModal() { $('imageModal').classList.remove('active'); document.body.style.overflow = ''; }
+    
+    function openVideoModal(src, title) {
+      let content;
+      if (src.includes('aparat.com') || src.includes('youtube.com') || src.includes('youtu.be') || src.includes('namasha.com')) {
+        let embedSrc = src;
+        if (src.includes('aparat.com/v/')) embedSrc = `https://www.aparat.com/video/video/embed/videohash/${src.split('/v/')[1]?.split('?')[0]}/vt/frame`;
+        else if (src.includes('youtube.com/watch?v=')) embedSrc = `https://www.youtube.com/embed/${src.split('v=')[1]?.split('&')[0]}`;
+        else if (src.includes('youtu.be/')) embedSrc = `https://www.youtube.com/embed/${src.split('youtu.be/')[1]?.split('?')[0]}`;
+        content = `<iframe src="${embedSrc}" frameborder="0" allowfullscreen></iframe>`;
+      } else {
+        content = `<video src="${src}" controls></video>`;
+      }
+      $('modalContent').innerHTML = content;
+      $('modalTitle').textContent = title || '';
+      $('modalMeta').textContent = '';
+      $('imageModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+      $('imageModal').classList.remove('active');
+      $('modalContent').innerHTML = '';
+      document.body.style.overflow = '';
+    }
     $('imageModal').onclick = function(e) { if (e.target === this) closeModal(); };
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     
@@ -722,85 +776,85 @@
       }, 4000);
     }
     
-    async function loadMemories() {
-      if (allEvents.length === 0) return;
-      const sorted = [...allEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
-      const randomFour = [];
-      const usedIndexes = new Set();
-      for (let i = 0; i < Math.min(4, sorted.length); i++) {
-        let idx;
-        if (i % 2 === 0) {
-          idx = 0;
-          while (usedIndexes.has(idx) && idx < sorted.length) idx++;
-        } else {
-          idx = sorted.length - 1;
-          while (usedIndexes.has(idx) && idx >= 0) idx--;
-        }
-        if (idx >= 0 && idx < sorted.length && !usedIndexes.has(idx)) {
-          usedIndexes.add(idx);
-          randomFour.push(sorted[idx]);
-        }
-      }
-      if (randomFour.length === 0) return;
-      
-      const memoriesHTML = randomFour.map(event => {
-        const d = new Date(event.date);
-        return `<div class="memory-card" onclick="loadGallery('${event.id}', '${event.title.replace(/'/g, "\\'")}')">
-          ${event.image ? `<img src="${event.image}" class="memory-image" alt="">` : `<div class="memory-image placeholder"><i class="fa-solid fa-image"></i></div>`}
-          <div class="memory-info">
-            <div class="memory-title">${event.title}</div>
-            <div class="memory-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</div>
-          </div>
-        </div>`;
-      }).join('');
-      
-      const memoriesSection = document.createElement('div');
-      memoriesSection.className = 'memories-section';
-      memoriesSection.id = 'memoriesSection';
-      memoriesSection.innerHTML = `<div class="section-title"><i class="fa-solid fa-images"></i> مرور خاطرات</div><div class="memories-track">${memoriesHTML}</div>`;
-      
-      const announcements = document.querySelector('.announcements-section');
-      if (announcements) {
-        announcements.parentNode.insertBefore(memoriesSection, announcements.nextSibling);
-      } else {
-        document.getElementById('mainContent').appendChild(memoriesSection);
-      }
-    }
-    
-    async function loadGallery(eventId, title) {
-      const existingGallery = document.querySelector('.gallery-section');
-      if (existingGallery) existingGallery.remove();
-      
-      const gallerySection = document.createElement('div');
-      gallerySection.className = 'gallery-section';
-      gallerySection.id = 'gallerySection';
-      gallerySection.innerHTML = `<div class="section-title"><i class="fa-solid fa-images"></i> ${title}</div><div class="gallery-grid"><div class="empty-gallery"><i class="fa-solid fa-spinner fa-pulse"></i><p>در حال دریافت...</p></div></div>`;
-      
-      const memoriesSection = document.getElementById('memoriesSection');
-      if (memoriesSection) memoriesSection.parentNode.insertBefore(gallerySection, memoriesSection.nextSibling);
-      else document.getElementById('mainContent').appendChild(gallerySection);
-      
-      gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
+    async function loadExplore() {
       try {
-        const res = await fetch(API_URL + '?action=getArchiveByEventId&eventId=' + eventId);
-        const data = await res.json();
+        if (allEvents.length === 0) {
+          const exploreSection = document.createElement('div');
+          exploreSection.className = 'explore-section';
+          exploreSection.innerHTML = `<div class="section-title"><i class="fa-solid fa-compass"></i> مرور خاطرات</div><div class="explore-grid"><div class="empty-explore"><i class="fa-solid fa-image"></i><p>آرشیوی یافت نشد</p></div></div>`;
+          const announcements = document.querySelector('.announcements-section');
+          if (announcements) announcements.parentNode.insertBefore(exploreSection, announcements.nextSibling);
+          else document.getElementById('mainContent').appendChild(exploreSection);
+          return;
+        }
         
-        let images = [];
-        if (data.success && Array.isArray(data.data.images)) images = data.data.images;
-        else if (data.data && Array.isArray(data.data.images)) images = data.data.images;
-        else if (Array.isArray(data)) images = data;
+        const shuffledEvents = [...allEvents].sort(() => Math.random() - 0.5);
+        const selectedEvents = shuffledEvents.slice(0, Math.min(10, shuffledEvents.length));
         
-        const galleryGrid = gallerySection.querySelector('.gallery-grid');
+        let mediaItems = [];
         
-        if (images.length > 0) {
-          galleryGrid.innerHTML = images.map(img => `<div class="gallery-card" onclick="openModal('${img}', '${title.replace(/'/g, "\\'")}', '${new Date().toLocaleDateString('fa-IR')}')"><img src="${img}" class="gallery-image" alt="" loading="lazy"></div>`).join('');
+        for (const event of selectedEvents) {
+          try {
+            const res = await fetch(API_URL + '?action=getArchiveByEventId&eventId=' + event.id);
+            const data = await res.json();
+            
+            let images = [];
+            let videos = [];
+            
+            if (data.success && data.data) {
+              images = data.data.images || [];
+              videos = data.data.videos || [];
+            } else if (data.data) {
+              images = data.data.images || [];
+              videos = data.data.videos || [];
+            }
+            
+            if (typeof images === 'string') images = images.split(',').filter(Boolean);
+            if (typeof videos === 'string') videos = videos.split(',').filter(Boolean);
+            
+            images.forEach(img => mediaItems.push({ type: 'image', src: img.trim(), title: event.title || '' }));
+            videos.forEach(vid => mediaItems.push({ type: 'video', src: vid.trim(), title: event.title || '' }));
+          } catch(e) {}
+        }
+        
+        const shuffled = mediaItems.sort(() => Math.random() - 0.5);
+        const randomTwenty = shuffled.slice(0, 20);
+        
+        const exploreSection = document.createElement('div');
+        exploreSection.className = 'explore-section';
+        exploreSection.id = 'exploreSection';
+        
+        if (randomTwenty.length > 0) {
+          exploreSection.innerHTML = `<div class="section-title"><i class="fa-solid fa-compass"></i> مرور خاطرات</div><div class="explore-grid">${randomTwenty.map((item) => {
+            if (item.type === 'video') {
+              return `<div class="explore-card" onclick="openVideoModal('${item.src.replace(/'/g, "\\'")}', '${(item.title || '').replace(/'/g, "\\'")}')">
+                <div class="explore-video-placeholder">
+                  <div class="video-play-circle"><i class="fa-solid fa-play"></i></div>
+                  <div class="video-label">ویدیو</div>
+                  <div class="video-timeline"><div class="video-timeline-progress"></div></div>
+                </div>
+              </div>`;
+            } else {
+              return `<div class="explore-card" onclick="openImageModal('${item.src.replace(/'/g, "\\'")}', '${(item.title || '').replace(/'/g, "\\'")}')"><img src="${item.src}" class="explore-image" alt="" loading="lazy"></div>`;
+            }
+          }).join('')}</div>`;
         } else {
-          galleryGrid.innerHTML = '<div class="empty-gallery"><i class="fa-solid fa-image"></i><p>تصویری برای این مراسم آرشیو نشده است</p></div>';
+          exploreSection.innerHTML = `<div class="section-title"><i class="fa-solid fa-compass"></i> مرور خاطرات</div><div class="explore-grid"><div class="empty-explore"><i class="fa-solid fa-image"></i><p>آرشیوی یافت نشد</p></div></div>`;
+        }
+        
+        const announcements = document.querySelector('.announcements-section');
+        if (announcements) {
+          announcements.parentNode.insertBefore(exploreSection, announcements.nextSibling);
+        } else {
+          document.getElementById('mainContent').appendChild(exploreSection);
         }
       } catch(e) {
-        const galleryGrid = gallerySection.querySelector('.gallery-grid');
-        galleryGrid.innerHTML = '<div class="empty-gallery"><i class="fa-solid fa-circle-exclamation"></i><p>خطا در دریافت تصاویر</p></div>';
+        const exploreSection = document.createElement('div');
+        exploreSection.className = 'explore-section';
+        exploreSection.innerHTML = `<div class="section-title"><i class="fa-solid fa-compass"></i> مرور خاطرات</div><div class="explore-grid"><div class="empty-explore"><i class="fa-solid fa-circle-exclamation"></i><p>خطا در دریافت آرشیو</p></div></div>`;
+        const announcements = document.querySelector('.announcements-section');
+        if (announcements) announcements.parentNode.insertBefore(exploreSection, announcements.nextSibling);
+        else document.getElementById('mainContent').appendChild(exploreSection);
       }
     }
     
@@ -845,7 +899,7 @@
         setTimeout(() => showDayInfo(todayStr), 1500);
         setTimeout(() => showTodayEventToast(), 2000);
         setTimeout(loadPrayerTimes, 500);
-        setTimeout(loadMemories, 800);
+        setTimeout(loadExplore, 800);
         setInterval(updateCountdown, 30000);
       } catch(e) {
         container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadAllData()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;">تلاش مجدد</button></div></div>`;
