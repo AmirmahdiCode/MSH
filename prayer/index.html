@@ -105,10 +105,6 @@
     .loader { width: 48px; height: 48px; border: 4px solid #000000; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    .section-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .section-title::after { content: ''; flex: 1; height: 2px; background: #000000; }
-    .section-title i { color: var(--primary); }
-    
     .explore-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -126,20 +122,28 @@
     .explore-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
     .explore-item:nth-child(4) { grid-row: span 2; }
     .explore-item:nth-child(7) { grid-column: span 2; }
-    .explore-item img { width: 100%; height: 100%; object-fit: cover; }
+    .explore-item img, .explore-item video { width: 100%; height: 100%; object-fit: cover; }
     .explore-item .video-indicator {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 40px; height: 40px; background: rgba(0,0,0,0.6);
+      width: 40px; height: 40px; background: rgba(0,0,0,0.5);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       color: #fff; font-size: 16px; border: 1px solid #000000;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
+    .explore-item:hover .video-indicator { opacity: 1; }
     .explore-item .like-count {
       position: absolute; bottom: 8px; right: 8px;
       background: rgba(0,0,0,0.6); color: #fff;
       padding: 2px 8px; border-radius: 20px;
       font-size: 9px; display: flex; align-items: center; gap: 4px;
       pointer-events: none;
+    }
+    .loading-more {
+      text-align: center; padding: 20px;
+      color: var(--text-light); font-size: 12px;
+      grid-column: 1/-1;
     }
     .empty-explore { text-align: center; padding: 32px 16px; color: var(--text-light); grid-column: 1/-1; }
     .empty-explore i { font-size: 44px; margin-bottom: 10px; display: block; color: var(--primary-light); }
@@ -150,17 +154,16 @@
       background: #000; z-index: 9999;
       display: none;
       flex-direction: column;
-      overflow-y: auto;
     }
     .fullscreen-viewer.active { display: flex; }
     .viewer-header {
-      position: sticky; top: 0;
-      display: flex; align-items: center; justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: flex-end;
       padding: 12px 20px;
       background: rgba(0,0,0,0.8);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      z-index: 10;
+      z-index: 100;
     }
     .viewer-close {
       width: 40px; height: 40px; border-radius: 50%;
@@ -168,22 +171,26 @@
       color: #fff; font-size: 18px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
     }
-    .viewer-count { color: #fff; font-size: 12px; font-weight: 700; }
     
     .viewer-content {
       flex: 1;
-      display: flex;
-      flex-direction: column;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-top: 60px;
     }
     .viewer-item {
       width: 100%;
-      min-height: 100vh;
+      min-height: calc(100vh - 60px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
       padding: 20px;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     .viewer-item img {
       max-width: 100%;
@@ -260,12 +267,6 @@
     }
     .nav-item span { font-size: 7px; font-weight: 600; }
     
-    .nav-item.more-active { color: var(--primary); }
-    .nav-item.more-active i {
-      color: var(--primary);
-      animation: bounce 1.5s ease-in-out infinite;
-    }
-    
     .more-popup {
       position: fixed; bottom: 70px; left: 10%;
       width: 15%;
@@ -305,16 +306,6 @@
     .more-popup .more-item img { width: 16px; height: 16px; opacity: 0.6; filter: brightness(0); }
     [data-theme="dark"] .more-popup .more-item img { filter: brightness(0) invert(1); }
     .more-popup .more-item span { font-size: 8px; font-weight: 600; }
-    .more-popup .more-item.current {
-      color: var(--primary);
-      font-weight: 800;
-    }
-    .more-popup .more-item.current img {
-      opacity: 1;
-    }
-    .more-popup .more-item.current span {
-      font-weight: 800;
-    }
     
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
     @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -349,7 +340,6 @@
   <div class="fullscreen-viewer" id="fullscreenViewer">
     <div class="viewer-header">
       <button class="viewer-close" onclick="closeFullscreen()"><i class="fa-solid fa-times"></i></button>
-      <span class="viewer-count" id="viewerCount"></span>
     </div>
     <div class="viewer-content" id="viewerContent"></div>
   </div>
@@ -432,7 +422,9 @@
     applyTheme(settings);
     
     let allMedia = [];
-    let currentViewerIndex = 0;
+    let displayedCount = 0;
+    const BATCH_SIZE = 10;
+    let isLoading = false;
     let localLikes = {};
     
     function getLocalLikes() {
@@ -449,24 +441,58 @@
     
     function toggleMorePopup() {
       const popup = $('morePopup');
-      const moreBtn = $('moreBtn');
       popup.classList.toggle('active');
-      
-      if (popup.classList.contains('active')) {
-        moreBtn.classList.add('more-active');
-      } else {
-        moreBtn.classList.remove('more-active');
-      }
     }
     
     function getArchiveId(eventId, index) {
       return `${eventId}_${index}`;
     }
     
-    function getFileNameFromUrl(url) {
-      const parts = url.split('/');
-      const name = decodeURIComponent(parts[parts.length - 1].split('?')[0]);
-      return name.replace(/\.[^.]+$/, '') || 'فایل';
+    function renderNextBatch() {
+      const grid = document.querySelector('.explore-grid');
+      if (!grid) return;
+      
+      const end = Math.min(displayedCount + BATCH_SIZE, allMedia.length);
+      
+      let batchHTML = '';
+      for (let i = displayedCount; i < end; i++) {
+        const item = allMedia[i];
+        if (item.type === 'video') {
+          batchHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')">
+            <video src="${item.src}" muted loop autoplay playsinline preload="metadata"></video>
+            <div class="video-indicator"><i class="fa-solid fa-play"></i></div>
+          </div>`;
+        } else {
+          batchHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')"><img src="${item.src}" alt="" loading="lazy"></div>`;
+        }
+      }
+      
+      const loadingEl = grid.querySelector('.loading-more');
+      if (loadingEl) loadingEl.remove();
+      
+      grid.insertAdjacentHTML('beforeend', batchHTML);
+      
+      const videos = grid.querySelectorAll('.explore-item video');
+      videos.forEach(v => { v.playbackRate = 4; });
+      
+      displayedCount = end;
+      isLoading = false;
+      
+      if (displayedCount < allMedia.length) {
+        grid.insertAdjacentHTML('beforeend', '<div class="loading-more">در حال بارگذاری...</div>');
+      }
+    }
+    
+    function checkScroll() {
+      if (isLoading) return;
+      
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const pageHeight = document.body.offsetHeight;
+      
+      if (scrollPosition >= pageHeight - 300 && displayedCount < allMedia.length) {
+        isLoading = true;
+        setTimeout(renderNextBatch, 100);
+      }
     }
     
     async function loadExplore() {
@@ -508,8 +534,7 @@
                 id: getArchiveId(event.id, index),
                 type: 'image',
                 src: img.trim(),
-                title: event.title || '',
-                eventId: event.id
+                title: event.title || ''
               });
             });
             
@@ -519,8 +544,7 @@
                 id: getArchiveId(event.id, videoStartIndex + index),
                 type: 'video',
                 src: vid.trim(),
-                title: event.title || '',
-                eventId: event.id
+                title: event.title || ''
               });
             });
           } catch(e) {}
@@ -533,81 +557,76 @@
           return;
         }
         
-        let gridHTML = '';
-        allMedia.forEach(item => {
-          if (item.type === 'video') {
-            gridHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')">
-              <img src="https://cdn.imgurl.ir/uploads/v68396_InShot_20260817_190450653.jpg" alt="" loading="lazy">
-              <div class="video-indicator"><i class="fa-solid fa-play"></i></div>
-            </div>`;
-          } else {
-            gridHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')"><img src="${item.src}" alt="" loading="lazy"></div>`;
-          }
-        });
+        container.innerHTML = '<div class="explore-grid"></div>';
+        displayedCount = 0;
+        renderNextBatch();
         
-        container.innerHTML = `<div class="explore-grid">${gridHTML}</div>`;
+        window.addEventListener('scroll', checkScroll);
       } catch(e) {
         container.innerHTML = '<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadExplore()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;">تلاش مجدد</button></div></div>';
       }
     }
     
     function openFullscreen(mediaId) {
-      currentViewerIndex = allMedia.findIndex(m => m.id === mediaId);
-      if (currentViewerIndex === -1) return;
-      
       const viewer = $('fullscreenViewer');
+      const content = $('viewerContent');
+      
+      content.innerHTML = '';
+      
+      const startIndex = allMedia.findIndex(m => m.id === mediaId);
+      if (startIndex === -1) return;
+      
+      for (let i = startIndex; i < allMedia.length; i++) {
+        const item = allMedia[i];
+        let mediaHTML = '';
+        
+        if (item.type === 'image') {
+          mediaHTML = `<img src="${item.src}" alt="">`;
+        } else {
+          if (item.src.includes('aparat.com') || item.src.includes('youtube.com') || item.src.includes('youtu.be') || item.src.includes('namasha.com')) {
+            let embedSrc = item.src;
+            if (item.src.includes('aparat.com/v/')) embedSrc = `https://www.aparat.com/video/video/embed/videohash/${item.src.split('/v/')[1]?.split('?')[0]}/vt/frame`;
+            else if (item.src.includes('youtube.com/watch?v=')) embedSrc = `https://www.youtube.com/embed/${item.src.split('v=')[1]?.split('&')[0]}`;
+            else if (item.src.includes('youtu.be/')) embedSrc = `https://www.youtube.com/embed/${item.src.split('youtu.be/')[1]?.split('?')[0]}`;
+            mediaHTML = `<iframe src="${embedSrc}" frameborder="0" allowfullscreen></iframe>`;
+          } else {
+            mediaHTML = `<video src="${item.src}" controls playsinline></video>`;
+          }
+        }
+        
+        const isLiked = localLikes[item.id] === true;
+        
+        const itemHTML = `<div class="viewer-item" data-media-id="${item.id}">
+          ${mediaHTML}
+          <div class="viewer-actions">
+            <button class="viewer-action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${item.id}', this)">
+              <i class="fa-solid fa-heart"></i>
+              <span>لایک</span>
+            </button>
+            <button class="viewer-action-btn" onclick="shareMedia('${item.id}')">
+              <i class="fa-solid fa-share-nodes"></i>
+              <span>اشتراک‌گذاری</span>
+            </button>
+          </div>
+        </div>`;
+        
+        content.insertAdjacentHTML('beforeend', itemHTML);
+      }
+      
       viewer.classList.add('active');
       document.body.style.overflow = 'hidden';
-      renderViewerItem();
+      
+      setTimeout(() => {
+        const target = content.querySelector(`[data-media-id="${mediaId}"]`);
+        if (target) target.scrollIntoView({ behavior: 'auto', block: 'center' });
+      }, 50);
     }
     
     function closeFullscreen() {
       const viewer = $('fullscreenViewer');
       viewer.classList.remove('active');
       document.body.style.overflow = '';
-    }
-    
-    function renderViewerItem() {
-      const item = allMedia[currentViewerIndex];
-      if (!item) return;
-      
-      const viewerContent = $('viewerContent');
-      const viewerCount = $('viewerCount');
-      
-      viewerCount.textContent = `${currentViewerIndex + 1} / ${allMedia.length}`;
-      
-      let mediaHTML = '';
-      if (item.type === 'image') {
-        mediaHTML = `<img src="${item.src}" alt="">`;
-      } else {
-        if (item.src.includes('aparat.com') || item.src.includes('youtube.com') || item.src.includes('youtu.be') || item.src.includes('namasha.com')) {
-          let embedSrc = item.src;
-          if (item.src.includes('aparat.com/v/')) embedSrc = `https://www.aparat.com/video/video/embed/videohash/${item.src.split('/v/')[1]?.split('?')[0]}/vt/frame`;
-          else if (item.src.includes('youtube.com/watch?v=')) embedSrc = `https://www.youtube.com/embed/${item.src.split('v=')[1]?.split('&')[0]}`;
-          else if (item.src.includes('youtu.be/')) embedSrc = `https://www.youtube.com/embed/${item.src.split('youtu.be/')[1]?.split('?')[0]}`;
-          mediaHTML = `<iframe src="${embedSrc}" frameborder="0" allowfullscreen></iframe>`;
-        } else {
-          mediaHTML = `<video src="${item.src}" controls></video>`;
-        }
-      }
-      
-      const isLiked = localLikes[item.id] === true;
-      
-      viewerContent.innerHTML = `<div class="viewer-item">
-        ${mediaHTML}
-        <div class="viewer-actions">
-          <button class="viewer-action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${item.id}', this)">
-            <i class="fa-solid fa-heart"></i>
-            <span>لایک</span>
-          </button>
-          <button class="viewer-action-btn" onclick="shareMedia('${item.id}')">
-            <i class="fa-solid fa-share-nodes"></i>
-            <span>اشتراک‌گذاری</span>
-          </button>
-        </div>
-      </div>`;
-      
-      viewerContent.scrollTop = 0;
+      $('viewerContent').innerHTML = '';
     }
     
     async function toggleLike(mediaId, btn) {
@@ -642,7 +661,7 @@
       const url = window.location.origin + window.location.pathname + '?post=' + mediaId;
       try {
         await navigator.clipboard.writeText(url);
-        const btn = document.querySelector('.viewer-action-btn[onclick="shareMedia(\'' + mediaId + '\')"]');
+        const btn = document.querySelector(`.viewer-action-btn[onclick="shareMedia('${mediaId}')"]`);
         if (btn) {
           const orig = btn.innerHTML;
           btn.innerHTML = '<i class="fa-solid fa-check"></i><span>کپی شد</span>';
@@ -651,32 +670,9 @@
       } catch(e) {}
     }
     
-    function showNext() {
-      if (currentViewerIndex < allMedia.length - 1) {
-        currentViewerIndex++;
-        renderViewerItem();
-      }
-    }
-    
-    function showPrev() {
-      if (currentViewerIndex > 0) {
-        currentViewerIndex--;
-        renderViewerItem();
-      }
-    }
-    
-    $('fullscreenViewer').addEventListener('scroll', function() {
-      const viewerContent = $('viewerContent');
-      if (viewerContent.scrollTop + viewerContent.clientHeight >= viewerContent.scrollHeight - 100) {
-        showNext();
-      }
-    });
-    
     document.addEventListener('keydown', (e) => {
       if ($('fullscreenViewer').classList.contains('active')) {
         if (e.key === 'Escape') closeFullscreen();
-        if (e.key === 'ArrowDown') { e.preventDefault(); showNext(); }
-        if (e.key === 'ArrowUp') { e.preventDefault(); showPrev(); }
       }
     });
     
