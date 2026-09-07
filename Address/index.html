@@ -101,19 +101,6 @@
     
     .main-container { flex: 1; max-width: 800px; width: 100%; margin: 16px auto; padding: 0 12px 100px; }
     
-    .page-header { text-align: center; margin-bottom: 24px; }
-    .page-icon {
-      width: 56px; height: 56px; margin: 0 auto 12px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; color: #fff;
-      border: 1px solid #000000;
-      box-shadow: 3px 3px 0 #000000;
-    }
-    .page-title { font-size: 18px; font-weight: 800; color: var(--dark); }
-    .page-subtitle { font-size: 11px; color: var(--text-light); margin-top: 4px; }
-    
     .location-card {
       background: var(--card-bg); border: 1px solid #000000; border-radius: var(--radius);
       padding: 20px; margin-bottom: 16px; box-shadow: 3px 3px 0 #000000;
@@ -140,28 +127,8 @@
       box-shadow: 2px 2px 0 #000000;
     }
     .location-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
-    .location-btn.secondary {
-      background: var(--bg2);
-      color: var(--text);
-    }
+    .location-btn.secondary { background: var(--bg2); color: var(--text); }
     .location-btn.copied { background: #10b981; }
-    
-    .map-preview {
-      width: 100%; aspect-ratio: 16/9; border-radius: var(--radius);
-      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.03));
-      border: 1px solid #000000;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 48px; color: var(--primary);
-      margin-bottom: 16px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      box-shadow: 3px 3px 0 #000000;
-    }
-    .map-preview iframe { width: 100%; height: 100%; border: none; }
-    .map-preview .map-placeholder { text-align: center; }
-    .map-preview .map-placeholder i { font-size: 48px; display: block; margin-bottom: 8px; color: var(--primary); }
-    .map-preview .map-placeholder span { font-size: 11px; color: var(--text-light); }
     
     .bottom-nav {
       position: fixed; bottom: 8px; right: 10%; left: 10%;
@@ -199,6 +166,12 @@
       filter: brightness(0) invert(1);
     }
     .nav-item span { font-size: 7px; font-weight: 600; }
+    
+    .nav-item.more-active { color: var(--primary); }
+    .nav-item.more-active i {
+      color: var(--primary);
+      animation: bounce 1.5s ease-in-out infinite;
+    }
     
     .more-popup {
       position: fixed; bottom: 70px; left: 10%;
@@ -267,19 +240,6 @@
 
   <main class="main-container">
 
-    <div class="page-header">
-      <div class="page-icon"><i class="fa-solid fa-location-dot"></i></div>
-      <div class="page-title">مکان ما</div>
-      <div class="page-subtitle">شهدای گمنام شورابیل — اردبیل</div>
-    </div>
-
-    <div class="map-preview" id="mapPreview" onclick="openMap()">
-      <div class="map-placeholder">
-        <i class="fa-solid fa-map-location-dot"></i>
-        <span>برای مشاهده نقشه کلیک کنید</span>
-      </div>
-    </div>
-
     <div class="location-card">
       <div class="location-card-header"><i class="fa-solid fa-map-pin"></i> نشانی</div>
       <div class="location-content">استان اردبیل، شهر اردبیل، شورابیل، یادمان شهدای گمنام شورابیل</div>
@@ -341,7 +301,7 @@
       <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="تنظیمات">
       <span>تنظیمات</span>
     </div>
-    <button class="nav-item" onclick="toggleMorePopup()">
+    <button class="nav-item" id="moreBtn" onclick="toggleMorePopup()">
       <i class="fa-solid fa-ellipsis" style="font-size:18px; color:var(--text-light);"></i>
       <span>بیشتر</span>
     </button>
@@ -377,7 +337,17 @@
     let settings = getSettings();
     applyTheme(settings);
     
-    function toggleMorePopup() { $('morePopup').classList.toggle('active'); }
+    function toggleMorePopup() {
+      const popup = $('morePopup');
+      const moreBtn = $('moreBtn');
+      popup.classList.toggle('active');
+      
+      if (popup.classList.contains('active')) {
+        moreBtn.classList.add('more-active');
+      } else {
+        moreBtn.classList.remove('more-active');
+      }
+    }
     
     function copyAddress() {
       const address = 'استان اردبیل، شهر اردبیل، شورابیل، یادمان شهدای گمنام شورابیل';
@@ -390,10 +360,6 @@
           setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
         }
       });
-    }
-    
-    function openMap() {
-      window.open('https://balad.ir/search?q=%D8%B4%D9%87%D8%AF%D8%A7%DB%8C%20%DA%AF%D9%85%D9%86%D8%A7%D9%85%20%D8%B4%D9%88%D8%B1%D8%A7%D8%A8%DB%8C%D9%84', '_blank');
     }
   </script>
 </body>
