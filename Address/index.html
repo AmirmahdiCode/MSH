@@ -145,7 +145,6 @@
       box-shadow: 2px 2px 0 #000000;
     }
     .location-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
-    .location-btn.secondary { background: var(--bg2); color: var(--text); }
     .location-btn.copied { background: #10b981; }
     
     .bottom-nav {
@@ -225,10 +224,21 @@
       padding: 4px 8px; font-family: inherit;
       background: none; border: none;
       text-align: right;
+      border-radius: 8px;
     }
     .more-popup .more-item img { width: 16px; height: 16px; opacity: 0.6; filter: brightness(0); }
     [data-theme="dark"] .more-popup .more-item img { filter: brightness(0) invert(1); }
     .more-popup .more-item span { font-size: 8px; font-weight: 600; }
+    .more-popup .more-item.current {
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .more-popup .more-item.current img {
+      opacity: 1;
+    }
+    .more-popup .more-item.current span {
+      font-weight: 800;
+    }
     
     @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
     @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -271,21 +281,11 @@
         <div class="map-card-header"><i class="fa-solid fa-map-pin"></i> نشان</div>
         <iframe class="map-iframe" src="https://map.neshan.org/embed?q=%D8%B4%D9%87%D8%AF%D8%A7%DB%8C%20%DA%AF%D9%85%D9%86%D8%A7%D9%85%20%D8%B4%D9%88%D8%B1%D8%A7%D8%A8%DB%8C%D9%84" loading="lazy"></iframe>
       </div>
-
-      <div class="map-card">
-        <div class="map-card-header"><i class="fa-solid fa-location-dot"></i> بلد</div>
-        <iframe class="map-iframe" src="https://balad.ir/embed?q=%D8%B4%D9%87%D8%AF%D8%A7%DB%8C%20%DA%AF%D9%85%D9%86%D8%A7%D9%85%20%D8%B4%D9%88%D8%B1%D8%A7%D8%A8%DB%8C%D9%84" loading="lazy"></iframe>
-      </div>
     </div>
 
     <div class="location-card">
       <div class="location-card-header"><i class="fa-solid fa-map-pin"></i> نشانی</div>
       <div class="location-content">استان اردبیل، شهر اردبیل، شورابیل، یادمان شهدای گمنام شورابیل</div>
-    </div>
-
-    <div class="location-card">
-      <div class="location-card-header"><i class="fa-solid fa-route"></i> مسیر دسترسی</div>
-      <div class="location-content">از میدان شورابیل به سمت دریاچه شورابیل، یادمان شهدای گمنام در ضلع جنوبی دریاچه قرار دارد.</div>
     </div>
 
     <div class="location-actions">
@@ -301,7 +301,7 @@
         <img src="https://uploadkon.ir/uploads/60be06_26info-circle-iconbase.svg" alt="درباره ما">
         <span>درباره ما</span>
       </button>
-      <button class="more-item" onclick="window.location.href='../Address/';">
+      <button class="more-item current" onclick="window.location.href='../Address/';">
         <img src="https://uploadkon.ir/uploads/204a06_26location-iconbase.svg" alt="مکان ما">
         <span>مکان ما</span>
       </button>
