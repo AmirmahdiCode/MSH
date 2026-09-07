@@ -150,6 +150,7 @@
     @keyframes cloudDrift { 0%, 100% { transform: translateY(-50%) translateX(0); } 25% { transform: translateY(-60%) translateX(8px); } 50% { transform: translateY(-50%) translateX(16px); } 75% { transform: translateY(-40%) translateX(8px); } }
     .donation-logo-img { width: 100%; object-fit: contain; margin-top: auto; }
     
+    .event-detail-section { margin-top: 24px; }
     .event-hero { display: flex; justify-content: center; margin-bottom: 24px; }
     .event-hero-image { width: 100%; max-width: 350px; aspect-ratio: 2/3; object-fit: cover; display: block; background: var(--bg2); border-radius: var(--radius); box-shadow: 3px 3px 0 #000000; border: 1px solid #000000; }
     .event-hero-placeholder { width: 100%; max-width: 350px; aspect-ratio: 2/3; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); display: flex; align-items: center; justify-content: center; font-size: 64px; color: rgba(255,255,255,0.3); border-radius: var(--radius); box-shadow: 3px 3px 0 #000000; border: 1px solid #000000; }
@@ -173,6 +174,11 @@
     .empty-state { text-align: center; padding: 32px 16px; color: var(--text-light); grid-column: 1/-1; }
     .empty-state i { font-size: 44px; margin-bottom: 10px; display: block; color: var(--primary-light); }
     .empty-state p { font-size: 13px; }
+    
+    .image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
+    .image-modal.active { display: flex; }
+    .image-modal img { max-width: 90%; max-height: 80vh; border-radius: 12px; box-shadow: 3px 3px 0 #000000; border: 1px solid #000000; }
+    .image-modal .modal-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: 1px solid #000000; border-radius: 12px; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     
     .bottom-nav {
       position: fixed; bottom: 8px; right: 10%; left: 10%;
@@ -284,6 +290,11 @@
     <div class="loader-wrapper"><div class="loader"></div></div>
   </main>
 
+  <div class="image-modal" id="imageModal">
+    <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-times"></i></button>
+    <img src="" alt="" id="modalImage">
+  </div>
+
   <div class="more-popup" id="morePopup">
     <div class="popup-title">سایر</div>
     <div class="popup-items">
@@ -363,12 +374,96 @@
     let allEvents = [];
     
     function toggleMorePopup() { $('morePopup').classList.toggle('active'); }
-    function openEvent(id) { localStorage.setItem('selectedEventId', id); window.location.href = '../Events/?id=' + id; }
+    function openModal(src) { $('modalImage').src = src; $('imageModal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeModal() { $('imageModal').classList.remove('active'); document.body.style.overflow = ''; }
+    $('imageModal').onclick = function(e) { if (e.target === this) closeModal(); };
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     
     function getDonationLogo() { return 'https://cdn.imgurl.ir/uploads/l811037_InShot_20260727_155607399.png'; }
     
     function buildDonationCard() {
       return `<div class="donation-card" onclick="window.location.href='../Donates/';"><div class="card-content"><div class="donation-icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div><div class="donation-title">منتظر کمک‌های نقدی شما هستیم</div><div class="donation-subtitle">با کمک های خود یاری‌گر برگزاری مراسمات باشید</div><span class="donation-tag">رسمی</span><div class="clouds-row"><i class="fa-solid fa-cloud cloud-float" style="font-size:40px; color:rgba(13,148,136,0.5); left:10%;"></i><i class="fa-solid fa-cloud cloud-float" style="font-size:32px; color:rgba(13,148,136,0.3); left:40%; animation-delay:1s;"></i></div><img src="${getDonationLogo()}" class="donation-logo-img" alt="شهدای گمنام"></div></div>`;
+    }
+    
+    function shareEvent() {
+      const url = window.location.origin + window.location.pathname + '?id=' + selectedEventId;
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.querySelector('.share-btn');
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> لینک کپی شد';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+        }
+      });
+    }
+    
+    let selectedEventId = null;
+    
+    async function showEventDetail(eventId) {
+      selectedEventId = eventId;
+      const container = $('mainContent');
+      const detailSection = document.getElementById('eventDetailSection');
+      
+      if (detailSection) detailSection.remove();
+      
+      const event = allEvents.find(e => String(e.id) === String(eventId));
+      if (!event) return;
+      
+      const newSection = document.createElement('div');
+      newSection.className = 'event-detail-section';
+      newSection.id = 'eventDetailSection';
+      newSection.innerHTML = '<div class="loader-wrapper"><div class="loader"></div></div>';
+      container.appendChild(newSection);
+      
+      setTimeout(() => {
+        newSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+      
+      const [archiveRes] = await Promise.all([
+        fetch(API_URL + '?action=getArchiveByEventId&eventId=' + eventId)
+      ]);
+      
+      const archiveData = await archiveRes.json();
+      let images = [];
+      
+      if (archiveData.success && archiveData.data) images = archiveData.data.images || [];
+      else if (archiveData.data) images = archiveData.data.images || [];
+      if (typeof images === 'string') images = images.split(',').filter(Boolean);
+      
+      const eventDate = new Date(event.date);
+      const dateStr = eventDate.toLocaleDateString('fa-IR');
+      
+      let html = '';
+      
+      if (event.image) {
+        html += `<div class="event-hero"><img src="${event.image}" class="event-hero-image" alt="${event.title}"></div>`;
+      } else {
+        html += `<div class="event-hero"><div class="event-hero-placeholder"><i class="fa-solid fa-mosque"></i></div></div>`;
+      }
+      
+      html += `<div class="event-info-card">`;
+      html += `<h1 class="event-title-detail">${event.title}</h1>`;
+      html += `<div class="timeline">`;
+      html += `<div class="timeline-item"><div class="timeline-dot"></div> ${dateStr}</div>`;
+      if (event.location) html += `<div class="timeline-item"><div class="timeline-dot" style="background:var(--primary-light);"></div> ${event.location}</div>`;
+      if (event.tag) html += `<span class="event-tag-badge">${event.tag}</span>`;
+      html += `</div>`;
+      
+      if (event.description) {
+        html += `<div class="event-description-box">${event.description}</div>`;
+      }
+      
+      html += `<button class="share-btn" onclick="shareEvent()"><i class="fa-solid fa-share-nodes"></i> اشتراک‌گذاری</button>`;
+      html += `</div>`;
+      
+      if (images.length > 0) {
+        html += `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid">${images.map(img => `<div class="gallery-card" onclick="openModal('${img}')"><img src="${img}" class="gallery-image" alt="" loading="lazy"></div>`).join('')}</div></div>`;
+      } else {
+        html += `<div class="gallery-section"><div class="section-title"><i class="fa-solid fa-images"></i> تصاویر</div><div class="gallery-grid"><div class="empty-state"><i class="fa-solid fa-image"></i><p>تصویری برای این مراسم آرشیو نشده است</p></div></div></div>`;
+      }
+      
+      newSection.innerHTML = html;
     }
     
     async function loadEvents() {
@@ -395,7 +490,7 @@
         upcoming.forEach(event => {
           const d = new Date(event.date);
           const isToday = d.toDateString() === new Date().toDateString();
-          trackHTML += `<div class="event-card ${isToday?'today':''}" onclick="openEvent('${event.id}')">
+          trackHTML += `<div class="event-card ${isToday?'today':''}" onclick="showEventDetail('${event.id}')">
             ${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}
             <div class="event-info"><div class="event-title">${event.title}</div>
             <div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div>
@@ -409,7 +504,7 @@
         
         past.forEach(event => {
           const d = new Date(event.date);
-          trackHTML += `<div class="event-card past" onclick="openEvent('${event.id}')">
+          trackHTML += `<div class="event-card past" onclick="showEventDetail('${event.id}')">
             ${event.image ? `<img src="${event.image}" class="event-image" alt="">` : `<div class="event-image placeholder"><i class="fa-solid fa-mosque"></i></div>`}
             <div class="event-info"><div class="event-title">${event.title}</div>
             <div class="event-meta"><span class="event-date"><i class="fa-solid fa-clock"></i> ${d.toLocaleDateString('fa-IR')}</span><span class="event-location"><i class="fa-solid fa-location-dot"></i> ${event.location||'مشخص نشده'}</span></div>
@@ -426,6 +521,12 @@
               c.style.display = (q==='' || c.textContent.toLowerCase().includes(q)) ? '' : 'none';
             });
           };
+        }
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventIdFromUrl = urlParams.get('id');
+        if (eventIdFromUrl) {
+          showEventDetail(eventIdFromUrl);
         }
       } catch(e) {
         container.innerHTML = `<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadEvents()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;">تلاش مجدد</button></div></div>`;
