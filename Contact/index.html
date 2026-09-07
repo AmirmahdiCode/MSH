@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ارتباط با ما | شهدای گمنام شورابیل</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v1.0.0/dist/font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/samim-font@v1.0.0/dist/font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v1.0.0/dist/font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@v1.0.0/dist/font-face.css" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -14,8 +19,11 @@
       --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
       --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
       --card-border: #e2e8f0; --shadow: 4px 4px 0 #000000;
-      --shadow-hover: 6px 6px 0 #000000;
-      --header-bg: #ffffff; --footer-bg: #ffffff; --logo-filter: none;
+      --header-bg: #ffffff; --footer-bg: #ffffff;
+      --overlay: rgba(13, 148, 136, 0.05);
+      --logo-filter: none;
+      --radius: 12px;
+      --font: 'Vazirmatn', Tahoma, sans-serif;
     }
     
     [data-theme="dark"] {
@@ -23,79 +31,88 @@
       --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
       --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
       --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
-      --card-border: #334155; --shadow: 4px 4px 0 #000000;
-      --shadow-hover: 6px 6px 0 #000000;
-      --header-bg: #1e293b; --footer-bg: #1e293b;
+      --card-border: #334155; --header-bg: #1e293b; --footer-bg: #1e293b;
+      --overlay: rgba(20, 184, 166, 0.08);
       --logo-filter: brightness(0) invert(1);
     }
     
-    [data-muharram="true"] {
+    [data-special-theme="muharram"] {
       --primary: #dc2626; --primary-dark: #b91c1c; --primary-light: #fca5a5;
-      --primary-rgb: 220, 38, 38;
+      --primary-rgb: 220, 38, 38; --overlay: rgba(220, 38, 38, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="muharram"] {
+      --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fca5a5;
+      --primary-rgb: 239, 68, 68; --overlay: rgba(239, 68, 68, 0.08);
     }
     
-    [data-theme="dark"][data-muharram="true"] {
-      --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fca5a5;
-      --primary-rgb: 239, 68, 68;
+    [data-special-theme="blue"] {
+      --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #60a5fa;
+      --primary-rgb: 37, 99, 235; --overlay: rgba(37, 99, 235, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="blue"] {
+      --primary: #3b82f6; --primary-dark: #2563eb; --primary-light: #93c5fd;
+      --primary-rgb: 59, 130, 246; --overlay: rgba(59, 130, 246, 0.08);
+    }
+    
+    [data-special-theme="wiladat"] {
+      --primary: #22c55e; --primary-dark: #16a34a; --primary-light: #86efac;
+      --primary-rgb: 34, 197, 94; --overlay: rgba(34, 197, 94, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="wiladat"] {
+      --primary: #4ade80; --primary-dark: #22c55e; --primary-light: #bbf7d0;
+      --primary-rgb: 74, 222, 128; --overlay: rgba(74, 222, 128, 0.08);
     }
     
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: var(--font);
       background: var(--bg); color: var(--text);
       min-height: 100vh; display: flex; flex-direction: column;
       transition: all 0.3s ease;
     }
     
     .header {
-      background: var(--header-bg); box-shadow: 0 4px 0 #000000;
-      padding: 14px 20px; position: sticky; top: 0; z-index: 100;
-      border: 1px solid #000000; border-top: none; transition: all 0.3s ease;
-      margin: 0 0 4px 0;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary);
+      padding: 10px 20px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+    [data-theme="dark"] .header {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary);
     }
     
-    .header-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; max-width: 1100px; margin: 0 auto;
-    }
-    
+    .header-inner { display: flex; align-items: center; justify-content: flex-start; gap: 12px; max-width: 1100px; margin: 0 auto; }
     .header-right { display: flex; align-items: center; gap: 10px; }
     
     .header-logo {
       width: 42px; height: 42px; border-radius: 4px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 3px 3px 0 #000000;
-      overflow: hidden; padding: 6px; border: 1px solid #000000;
+      box-shadow: 3px 3px 0 #000000; overflow: hidden; padding: 6px; border: 1px solid #000000;
     }
+    .header-logo img { width: 130%; height: 130%; object-fit: contain; filter: var(--logo-filter); }
+    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .header-subtitle { font-size: 8px; color: var(--text-light); }
     
-    .header-logo img { width: 100%; height: 100%; object-fit: contain; filter: var(--logo-filter); }
-    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); transition: color 0.3s; }
-    .header-subtitle { font-size: 8px; color: var(--text-light); transition: color 0.3s; }
-    .header-btns { display: flex; align-items: center; gap: 8px; }
+    .main-container { flex: 1; max-width: 800px; width: 100%; margin: 16px auto; padding: 0 12px 100px; }
     
-    .back-btn, .theme-toggle {
-      background: var(--bg2); border: 1px solid #000000; padding: 10px; border-radius: 4px;
-      cursor: pointer; font-size: 18px; color: var(--text);
-      display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; transition: all 0.15s ease; text-decoration: none;
-      box-shadow: 3px 3px 0 #000000;
-    }
-    .back-btn:active, .theme-toggle:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
-    
-    .main-container { flex: 1; max-width: 650px; width: 100%; margin: 24px auto; padding: 0 12px 80px; }
-    
-    .page-header { text-align: center; margin-bottom: 28px; }
-    
+    .page-header { text-align: center; margin-bottom: 24px; }
     .page-icon {
-      width: 64px; height: 64px; margin: 0 auto 16px;
+      width: 56px; height: 56px; margin: 0 auto 12px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      border-radius: 4px; display: flex; align-items: center; justify-content: center;
-      font-size: 26px; color: #fff;
-      box-shadow: 4px 4px 0 #000000; border: 1px solid #000000;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; color: #fff;
+      border: 1px solid #000000;
+      box-shadow: 3px 3px 0 #000000;
     }
-    
-    .page-title { font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
-    .page-subtitle { font-size: 11px; color: var(--text-light); }
+    .page-title { font-size: 18px; font-weight: 800; color: var(--dark); }
+    .page-subtitle { font-size: 11px; color: var(--text-light); margin-top: 4px; }
     
     .section-label {
       font-size: 11px; font-weight: 700; color: var(--text-light);
@@ -103,55 +120,37 @@
       margin-bottom: 10px; margin-top: 24px;
       display: flex; align-items: center; gap: 6px;
     }
+    .section-label i { color: var(--primary); }
     
     .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     
     .social-card {
       background: var(--card-bg); border: 1px solid #000000;
-      border-radius: 4px; padding: 14px; text-decoration: none;
+      border-radius: var(--radius); padding: 14px; text-decoration: none;
       display: flex; flex-direction: column; align-items: center;
       gap: 8px; transition: all 0.15s ease; cursor: pointer;
-      box-shadow: 4px 4px 0 #000000; text-align: center;
+      box-shadow: 3px 3px 0 #000000; text-align: center;
       position: relative; overflow: hidden;
     }
-    .social-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
+    .social-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     
     .social-card .social-icon {
-      width: 42px; height: 42px; border-radius: 4px;
+      width: 42px; height: 42px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 20px; position: relative; flex-shrink: 0;
       border: 1px solid #000000; box-shadow: 2px 2px 0 #000000;
     }
-    
     .social-card .social-icon img { width: 22px; height: 22px; object-fit: contain; }
     .social-icon.eitaa img { width: 26px; height: 26px; }
     .social-icon.rubika img { width: 24px; height: 24px; }
-    
     .social-icon.instagram { background: linear-gradient(135deg, rgba(249,206,52,0.15), rgba(238,42,123,0.15), rgba(98,40,215,0.15)); color: #e1306c; }
     .social-icon.eitaa { background: #fff7ed; }
     .social-icon.telegram { background: rgba(42,171,238,0.12); color: #2AABEE; }
     .social-icon.rubika { background: #fefce8; }
     .social-icon.bale { background: #f0fdf4; }
-    
     [data-theme="dark"] .social-icon.eitaa { background: #2a1f0a; }
     [data-theme="dark"] .social-icon.rubika { background: #1a1a0a; }
     [data-theme="dark"] .social-icon.bale { background: #0a1a0f; }
-    
-    .admin-icon.eitaa { background: #fff7ed; }
-    .admin-icon.telegram { background: rgba(42,171,238,0.12); color: #2AABEE; }
-    .admin-icon.bale { background: #f0fdf4; }
-    
-    [data-theme="dark"] .admin-icon.eitaa { background: #2a1f0a; }
-    [data-theme="dark"] .admin-icon.telegram { background: rgba(42,171,238,0.08); color: #2AABEE; }
-    [data-theme="dark"] .admin-icon.bale { background: #0a1a0f; }
-    
-    .admin-dot {
-      position: absolute; top: -3px; right: -3px;
-      width: 16px; height: 16px; background: #f59e0b;
-      border-radius: 2px; border: 1px solid #000000;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 7px; color: #fff;
-    }
     
     .social-card .social-name { font-size: 11px; font-weight: 700; color: var(--dark); line-height: 1.4; }
     .social-card .social-id { font-size: 9px; color: var(--text-light); direction: ltr; }
@@ -160,22 +159,35 @@
     
     .admin-card {
       background: var(--card-bg); border: 1px solid #000000;
-      border-radius: 4px; padding: 14px 16px; text-decoration: none;
+      border-radius: var(--radius); padding: 14px 16px; text-decoration: none;
       display: flex; align-items: center; gap: 14px;
-      transition: all 0.15s ease; box-shadow: 4px 4px 0 #000000;
+      transition: all 0.15s ease; box-shadow: 3px 3px 0 #000000;
       cursor: pointer; position: relative; overflow: hidden;
     }
-    .admin-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
+    .admin-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     
     .admin-card .admin-icon {
-      width: 42px; height: 42px; border-radius: 4px;
+      width: 42px; height: 42px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 20px; position: relative; flex-shrink: 0;
       border: 1px solid #000000; box-shadow: 2px 2px 0 #000000;
     }
-    
     .admin-card .admin-icon img { width: 22px; height: 22px; object-fit: contain; }
     .admin-card .admin-icon.eitaa img { width: 26px; height: 26px; }
+    .admin-icon.eitaa { background: #fff7ed; }
+    .admin-icon.telegram { background: rgba(42,171,238,0.12); color: #2AABEE; }
+    .admin-icon.bale { background: #f0fdf4; }
+    [data-theme="dark"] .admin-icon.eitaa { background: #2a1f0a; }
+    [data-theme="dark"] .admin-icon.telegram { background: rgba(42,171,238,0.08); color: #2AABEE; }
+    [data-theme="dark"] .admin-icon.bale { background: #0a1a0f; }
+    
+    .admin-dot {
+      position: absolute; top: -3px; right: -3px;
+      width: 16px; height: 16px; background: #f59e0b;
+      border-radius: 50%; border: 1px solid #000000;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7px; color: #fff;
+    }
     
     .admin-card .admin-info { flex: 1; min-width: 0; }
     .admin-card .admin-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
@@ -184,125 +196,125 @@
     
     .supporter-card {
       background: var(--card-bg); border: 2px dashed #f43f5e;
-      border-radius: 4px; padding: 16px; display: flex;
+      border-radius: var(--radius); padding: 16px; display: flex;
       align-items: center; gap: 14px; text-decoration: none; color: var(--text);
-      box-shadow: 4px 4px 0 #000000; transition: all 0.15s ease;
+      box-shadow: 3px 3px 0 #000000; transition: all 0.15s ease;
       cursor: pointer; margin-top: 24px;
     }
-    .supporter-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
-    [data-theme="dark"] .supporter-card:hover { background: #2e1a1a; }
+    .supporter-card:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000000; }
     
     .supporter-card .supporter-avatar {
-      width: 48px; height: 48px; border-radius: 4px; object-fit: cover; flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
       border: 1px solid #000000;
     }
-    
     .supporter-card .supporter-info { flex: 1; min-width: 0; }
     .supporter-card .supporter-name { font-size: 13px; font-weight: 700; color: #f43f5e; margin-bottom: 3px; }
     .supporter-card .supporter-user { font-size: 10px; color: var(--text-light); direction: ltr; text-align: right; }
-    
     .supporter-badge {
       font-size: 9px; background: #f43f5e; color: #fff;
-      padding: 5px 12px; border-radius: 2px; white-space: nowrap;
+      padding: 5px 12px; border-radius: 20px; white-space: nowrap;
       flex-shrink: 0; font-weight: 700; border: 1px solid #000000;
     }
     
-    .floating-actions {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      display: flex;
-      gap: 12px;
+    .bottom-nav {
+      position: fixed; bottom: 8px; right: 10%; left: 10%;
+      width: 80%; margin: 0 auto;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+      border-radius: 25px;
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 4px 0; z-index: 999;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    [data-theme="dark"] .bottom-nav {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+    }
+    
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 1px;
+      cursor: pointer; text-decoration: none; color: var(--text-light);
+      padding: 4px 6px; font-family: inherit; background: none; border: none;
+    }
+    .nav-item img { width: 20px; height: 20px; opacity: 0.5; filter: brightness(0); }
+    [data-theme="dark"] .nav-item img { filter: brightness(0) invert(1); }
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active img {
+      opacity: 1;
+      filter: none;
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+    [data-theme="dark"] .nav-item.active img {
+      filter: brightness(0) invert(1);
+    }
+    .nav-item span { font-size: 7px; font-weight: 600; }
+    
+    .nav-item.more-active { color: var(--primary); }
+    .nav-item.more-active i {
+      color: var(--primary);
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+    
+    .more-popup {
+      position: fixed; bottom: 70px; left: 10%;
+      width: 15%;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      padding: 6px;
       z-index: 998;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      display: none;
+      animation: popupIn 0.3s ease;
     }
-    
-    .floating-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 4px;
-      background: var(--primary);
-      color: #fff;
-      border: 1px solid #000000;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-      box-shadow: 4px 4px 0 #000000;
-      position: relative;
-      direction: rtl;
-      font-family: inherit;
+    [data-theme="dark"] .more-popup {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
     }
-    
-    .floating-btn i {
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-      position: absolute;
-      right: 0;
-      top: 0;
+    .more-popup.active { display: block; }
+    .more-popup .popup-title {
+      font-size: 9px; font-weight: 800; color: var(--dark);
+      margin-bottom: 4px; text-align: center;
     }
-    
-    .floating-btn .btn-text {
-      opacity: 0;
-      padding: 0 56px 0 18px;
-      font-size: 12px;
-      font-weight: 600;
-      display: inline-block;
-      transition: opacity 0.3s ease;
-      white-space: nowrap;
-      direction: rtl;
+    .more-popup .popup-items {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .more-popup .more-item {
+      display: flex; align-items: center; gap: 6px;
+      cursor: pointer; text-decoration: none; color: var(--text-light);
+      padding: 4px 8px; font-family: inherit;
+      background: none; border: none;
       text-align: right;
+      border-radius: 8px;
+    }
+    .more-popup .more-item img { width: 16px; height: 16px; opacity: 0.6; filter: brightness(0); }
+    [data-theme="dark"] .more-popup .more-item img { filter: brightness(0) invert(1); }
+    .more-popup .more-item span { font-size: 8px; font-weight: 600; }
+    .more-popup .more-item.current {
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .more-popup .more-item.current img {
+      opacity: 1;
+    }
+    .more-popup .more-item.current span {
+      font-weight: 800;
     }
     
-    .floating-btn.expanded { width: 150px; border-radius: 4px; }
-    .floating-btn.expanded .btn-text { opacity: 1; }
-    .floating-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000000; }
-    
-    .typing-cursor {
-      display: inline-block;
-      width: 2px;
-      height: 14px;
-      background: #fff;
-      margin-right: 2px;
-      animation: blink 0.8s infinite;
-      vertical-align: middle;
-    }
-    
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    
-    .footer {
-      text-align: center;
-      padding: 20px;
-      background: var(--footer-bg);
-      border-top: 1px solid #000000;
-      transition: all 0.3s ease;
-      margin-top: auto;
-    }
-    
-    .footer-text { font-size: 10px; color: var(--text-light); }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
     @media (max-width: 650px) {
       .header-title { font-size: 14px; }
-      .header-subtitle { font-size: 7px; }
-      .floating-actions { bottom: 16px; right: 12px; gap: 8px; }
-      .floating-btn { width: 42px; height: 42px; box-shadow: 3px 3px 0 #000000; }
-      .floating-btn i { width: 42px; height: 42px; font-size: 16px; }
-      .floating-btn .btn-text { padding: 0 48px 0 14px; font-size: 11px; }
-      .floating-btn.expanded { width: 135px; }
-    }
-    
-    @media (max-width: 400px) {
+      .more-popup { width: 30%; }
       .social-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -316,27 +328,23 @@
           <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
         </div>
         <div>
-          <div class="header-title">شهدای گمنام شورابیل</div>
-          <div class="header-subtitle">سایت رسمی اطلاع رسانی و گزارش مراسمات</div>
+          <div class="header-title">ارتباط با ما</div>
+          <div class="header-subtitle">شهدای گمنام شورابیل</div>
         </div>
-      </div>
-      <div class="header-btns">
-        <a href="../dashboard/" class="back-btn" title="بازگشت"><i class="fa-solid fa-arrow-right"></i></a>
-        <button class="theme-toggle" id="themeToggle" title="تغییر تم"><i class="fa-solid fa-moon"></i></button>
       </div>
     </div>
   </header>
 
-  <section class="main-container">
-    
+  <main class="main-container">
+
     <div class="page-header">
       <div class="page-icon"><i class="fa-solid fa-comments"></i></div>
       <div class="page-title">ارتباط با ما</div>
       <div class="page-subtitle">ما را در شبکه‌های اجتماعی دنبال کنید</div>
     </div>
-    
+
     <div class="section-label"><i class="fa-solid fa-globe"></i> شبکه‌های اجتماعی</div>
-    
+
     <div class="social-grid">
       <a href="https://www.instagram.com/mehman_parvanehha" target="_blank" class="social-card">
         <div class="social-icon instagram"><i class="fa-brands fa-instagram"></i></div>
@@ -349,34 +357,34 @@
         <div class="social-name">تلگرام - شهدای گمنام شورابیل</div>
         <div class="social-id">@shohada_gomnam_shorabil</div>
       </a>
-      
+
       <a href="https://eitaa.com/shohada_gomnam_shorabil" target="_blank" class="social-card">
         <div class="social-icon eitaa"><img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا"></div>
         <div class="social-name">ایتا - شهدای گمنام شورابیل</div>
         <div class="social-id">@shohada_gomnam_shorabil</div>
       </a>
-      
+
       <a href="https://eitaa.com/abna135" target="_blank" class="social-card">
         <div class="social-icon eitaa"><img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا"></div>
         <div class="social-name">ایتا - هیئت نوجوانان ابناالزهرا</div>
         <div class="social-id">@abna135</div>
       </a>
-      
+
       <a href="https://rubika.ir/shohada_gomnam_shorabil" target="_blank" class="social-card">
         <div class="social-icon rubika"><img src="https://cdn.imgurl.ir/uploads/d223339_InShot_20260718_003716233.png" alt="روبیکا"></div>
         <div class="social-name">روبیکا - شهدای گمنام شورابیل</div>
         <div class="social-id">@shohada_gomnam_shorabil</div>
       </a>
-      
+
       <a href="https://ble.ir/shohada_gomnam_shorabil" target="_blank" class="social-card">
         <div class="social-icon bale"><img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله"></div>
         <div class="social-name">بله - شهدای گمنام شورابیل</div>
         <div class="social-id">@shohada_gomnam_shorabil</div>
       </a>
     </div>
-    
+
     <div class="section-label"><i class="fa-solid fa-user-shield"></i> ادمین‌ها</div>
-    
+
     <div class="admin-list">
       <a href="https://eitaa.com/ya_zahraaaaaaaaaaaaa" target="_blank" class="admin-card">
         <div class="admin-icon eitaa"><img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
@@ -386,7 +394,7 @@
         </div>
         <div class="admin-arrow"><i class="fa-solid fa-chevron-left"></i></div>
       </a>
-      
+
       <a href="https://eitaa.com/pesare315engelab" target="_blank" class="admin-card">
         <div class="admin-icon eitaa"><img src="https://cdn.imgurl.ir/uploads/r01821_eita-icon.webp" alt="ایتا"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
         <div class="admin-info">
@@ -395,7 +403,7 @@
         </div>
         <div class="admin-arrow"><i class="fa-solid fa-chevron-left"></i></div>
       </a>
-      
+
       <a href="https://t.me/Ummolbanin8566" target="_blank" class="admin-card">
         <div class="admin-icon telegram"><i class="fa-brands fa-telegram-plane"></i><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
         <div class="admin-info">
@@ -404,9 +412,9 @@
         </div>
         <div class="admin-arrow"><i class="fa-solid fa-chevron-left"></i></div>
       </a>
-      
+
       <a href="https://ble.ir/ommolbanin8566" target="_blank" class="admin-card">
-        <div class="admin-icon bale"><img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله" style="width:22px;height:22px;"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
+        <div class="admin-icon bale"><img src="https://cdn.imgurl.ir/uploads/y6400_Bale_logo.png" alt="بله"><span class="admin-dot"><i class="fa-solid fa-user-tie"></i></span></div>
         <div class="admin-info">
           <div class="admin-name">بله - ادمین شهدای گمنام شورابیل</div>
           <div class="admin-user">@ommolbanin8566</div>
@@ -414,7 +422,7 @@
         <div class="admin-arrow"><i class="fa-solid fa-chevron-left"></i></div>
       </a>
     </div>
-    
+
     <a href="https://eitaa.com/Amirmahdi_code" target="_blank" class="supporter-card">
       <img src="https://cdn.imgurl.ir/uploads/m87412_4b5310ee-fa5a-4d2e-a58c-a9337ddb4f92.png" class="supporter-avatar" alt="حمایت از سازنده">
       <div class="supporter-info">
@@ -424,117 +432,94 @@
       <span class="supporter-badge">رسمی</span>
     </a>
 
-  </section>
+  </main>
 
-  <div class="floating-actions">
-    <button class="floating-btn" id="floatingPhone" onclick="window.location.href='../Contact/'" title="ارتباط با ما">
-      <span class="btn-text" id="phoneText"></span>
-      <i class="fa-solid fa-phone"></i>
-    </button>
-    <button class="floating-btn" id="floatingAddress" onclick="window.location.href='../Address/'" title="نشانی ما">
-      <span class="btn-text" id="addressText"></span>
-      <i class="fa-solid fa-location-dot"></i>
-    </button>
+  <div class="more-popup" id="morePopup">
+    <div class="popup-title">سایر</div>
+    <div class="popup-items">
+      <button class="more-item" onclick="window.location.href='../About/';">
+        <img src="https://uploadkon.ir/uploads/60be06_26info-circle-iconbase.svg" alt="درباره ما">
+        <span>درباره ما</span>
+      </button>
+      <button class="more-item" onclick="window.location.href='../Address/';">
+        <img src="https://uploadkon.ir/uploads/204a06_26location-iconbase.svg" alt="مکان ما">
+        <span>مکان ما</span>
+      </button>
+      <button class="more-item current" onclick="window.location.href='../Contact/';">
+        <img src="https://uploadkon.ir/uploads/393e06_26calling-iconbase.svg" alt="ارتباط با ما">
+        <span>ارتباط با ما</span>
+      </button>
+    </div>
   </div>
 
-  <footer class="footer">
-    <p class="footer-text">خادمین شهدای گمنام شورابیل — کلیه حقوق محفوظ است</p>
-  </footer>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-    const themeToggle = $('themeToggle');
-    const icon = themeToggle.querySelector('i');
-    
-    const savedTheme = localStorage.getItem('heyat-theme');
-    if (savedTheme === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); icon.classList.replace('fa-moon', 'fa-sun'); }
-    
-    themeToggle.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      icon.className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-      localStorage.setItem('heyat-theme', isDark ? 'light' : 'dark');
-    });
-    
-    (async function() {
-      try {
-        const now = new Date();
-        const d = String(now.getDate()).padStart(2,'0'), m = String(now.getMonth()+1).padStart(2,'0'), y = now.getFullYear();
-        const r = await fetch(`https://api.aladhan.com/v1/gToH/${d}-${m}-${y}`);
-        const j = await r.json();
-        if (j.code === 200 && j.data.hijri.month.number === 1) document.documentElement.setAttribute('data-muharram', 'true');
-      } catch(e) {}
-    })();
-    
-    function typeText(element, text, callback) {
-      let i = 0;
-      element.innerHTML = '<span class="typing-cursor"></span>';
-      const cursor = element.querySelector('.typing-cursor');
-      
-      function type() {
-        if (i < text.length) {
-          cursor.insertAdjacentText('beforebegin', text[i]);
-          i++;
-          setTimeout(type, 80);
-        } else {
-          cursor.remove();
-          if (callback) setTimeout(callback, 2000);
-        }
-      }
-      type();
-    }
-    
-    function clearText(element, callback) {
-      element.textContent = '';
-      if (callback) callback();
-    }
-    
-    function animateFloatingButtons() {
-      const phoneBtn = $('floatingPhone');
-      const addrBtn = $('floatingAddress');
-      const phoneText = $('phoneText');
-      const addrText = $('addressText');
-      
-      if (!phoneBtn || !addrBtn) return;
-      
-      let toggle = true;
-      
-      function cycle() {
-        if (toggle) {
-          if (addrBtn.classList.contains('expanded')) {
-            clearText(addrText);
-            addrBtn.classList.remove('expanded');
-          }
-          setTimeout(() => {
-            phoneBtn.classList.add('expanded');
-            typeText(phoneText, 'ارتباط با ما', () => {
-              clearText(phoneText);
-              phoneBtn.classList.remove('expanded');
-            });
-          }, 400);
-        } else {
-          if (phoneBtn.classList.contains('expanded')) {
-            clearText(phoneText);
-            phoneBtn.classList.remove('expanded');
-          }
-          setTimeout(() => {
-            addrBtn.classList.add('expanded');
-            typeText(addrText, 'نشانی ما', () => {
-              clearText(addrText);
-              addrBtn.classList.remove('expanded');
-            });
-          }, 400);
-        }
-        toggle = !toggle;
-      }
-      
-      cycle();
-      setInterval(cycle, 5000);
-    }
-    
-    setTimeout(animateFloatingButtons, 1000);
-  </script>
+  <nav class="bottom-nav" id="bottomNav">
+    <div class="nav-item" onclick="window.location.href='../dashboard/';">
+      <img src="https://uploadkon.ir/uploads/bdf329_26home-iconbase-1-.svg" alt="خانه">
+      <span>خانه</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Events/';">
+      <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
+      <span>مراسمات</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Occasion/';">
+      <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
+      <span>رویدادها</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../prayer/';">
+      <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
+      <span>آرشیوها</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Setting/';">
+      <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="تنظیمات">
+      <span>تنظیمات</span>
+    </div>
+    <button class="nav-item" id="moreBtn" onclick="toggleMorePopup()">
+      <i class="fa-solid fa-ellipsis" style="font-size:18px; color:var(--text-light);"></i>
+      <span>بیشتر</span>
+    </button>
+  </nav>
 
   <script src="../music.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    
+    const fontMap = {
+      'Samim': "'Samim', Tahoma, sans-serif",
+      'Sahel': "'Sahel', Tahoma, sans-serif",
+      'IRANSans': "'IRANSans', Tahoma, sans-serif",
+      'Vazirmatn': "'Vazirmatn', Tahoma, sans-serif",
+      'Estedad': "'Estedad', Tahoma, sans-serif"
+    };
+    
+    function getSettings() {
+      try {
+        return JSON.parse(localStorage.getItem('shohada-settings')) || { font: 'Vazirmatn', theme: 'none', themeMode: 'light' };
+      } catch(e) { return { font: 'Vazirmatn', theme: 'none', themeMode: 'light' }; }
+    }
+    
+    function applyTheme(s) {
+      const root = document.documentElement;
+      root.setAttribute('data-theme', s.themeMode);
+      root.setAttribute('data-special-theme', s.theme || 'none');
+      const fontFamily = fontMap[s.font] || fontMap['Vazirmatn'];
+      root.style.setProperty('--font', fontFamily);
+      document.body.style.fontFamily = fontFamily;
+    }
+    
+    let settings = getSettings();
+    applyTheme(settings);
+    
+    function toggleMorePopup() {
+      const popup = $('morePopup');
+      const moreBtn = $('moreBtn');
+      popup.classList.toggle('active');
+      
+      if (popup.classList.contains('active')) {
+        moreBtn.classList.add('more-active');
+      } else {
+        moreBtn.classList.remove('more-active');
+      }
+    }
+  </script>
 </body>
 </html>
