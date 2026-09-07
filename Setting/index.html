@@ -569,6 +569,10 @@
       <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
       <span>مراسمات</span>
     </div>
+    <div class="nav-item" onclick="window.location.href='../Occasion/';">
+      <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
+      <span>رویدادها</span>
+    </div>
     <div class="nav-item" onclick="window.location.href='../prayer/';">
       <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
       <span>آرشیوها</span>
@@ -583,6 +587,7 @@
     </button>
   </nav>
 
+  <script src="../music.js"></script>
   <script>
     const $ = (id) => document.getElementById(id);
     const API_URL = 'https://script.google.com/macros/s/AKfycbypWWml5JQ0CIjurUfrOVRkI5O33d2u3GT-51hzEliYa1JZ8_3oA9Mfh8gNeCDhIvRS/exec';
@@ -607,7 +612,10 @@
       }
     }
 
-    function saveSettings(s) { localStorage.setItem('shohada-settings', JSON.stringify(s)); }
+    function saveSettings(s) {
+      localStorage.setItem('shohada-settings', JSON.stringify(s));
+      applyMusicSettings(s);
+    }
 
     function applyTheme(s) {
       const root = document.documentElement;
@@ -620,6 +628,27 @@
 
     let settings = getSettings();
     applyTheme(settings);
+
+    function applyMusicSettings(s) {
+      const audioElements = document.querySelectorAll('audio, #globalAudio');
+      audioElements.forEach(audio => {
+        audio.volume = (s.musicVolume || 50) / 100;
+        if (s.musicEnabled) {
+          if (audio.paused) audio.play().catch(() => {});
+        } else {
+          audio.pause();
+        }
+      });
+      
+      if (window.globalMusicPlayer) {
+        window.globalMusicPlayer.volume = (s.musicVolume || 50) / 100;
+        if (s.musicEnabled) {
+          if (window.globalMusicPlayer.paused) window.globalMusicPlayer.play().catch(() => {});
+        } else {
+          window.globalMusicPlayer.pause();
+        }
+      }
+    }
 
     function toggleMorePopup() {
       const popup = $('morePopup');
@@ -756,7 +785,9 @@
         list.innerHTML = '<div style="font-size:10px;color:var(--text-light);padding:8px;text-align:center;">خطا در دریافت موسیقی</div>';
       }
     }
+    
     loadMusicList();
+    applyMusicSettings(settings);
   </script>
 </body>
 </html>
