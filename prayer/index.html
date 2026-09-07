@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>آرشیو | شهدای گمنام شورابیل</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v1.0.0/dist/font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/samim-font@v1.0.0/dist/font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v1.0.0/dist/font-face.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-sans-font@v1.0.0/dist/font-face.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
+      --primary: #0d9488; --primary-dark: #0f766e; --primary-light: #5eead4;
+      --primary-rgb: 13, 148, 136; --dark: #0f172a; --text: #334155;
+      --text-light: #94a3b8; --white: #ffffff; --card-bg: #ffffff;
+      --card-border: #e2e8f0; --shadow: 4px 4px 0 #000000;
+      --header-bg: #ffffff; --footer-bg: #ffffff;
+      --overlay: rgba(13, 148, 136, 0.05);
+      --logo-filter: none;
+      --radius: 12px;
+      --font: 'Vazirmatn', Tahoma, sans-serif;
+    }
+    
+    [data-theme="dark"] {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --primary: #14b8a6; --primary-dark: #0d9488; --primary-light: #5eead4;
+      --primary-rgb: 20, 184, 166; --dark: #f1f5f9; --text: #cbd5e1;
+      --text-light: #64748b; --white: #1e293b; --card-bg: #1e293b;
+      --card-border: #334155; --header-bg: #1e293b; --footer-bg: #1e293b;
+      --overlay: rgba(20, 184, 166, 0.08);
+      --logo-filter: brightness(0) invert(1);
+    }
+    
+    [data-special-theme="muharram"] {
+      --primary: #dc2626; --primary-dark: #b91c1c; --primary-light: #fca5a5;
+      --primary-rgb: 220, 38, 38; --overlay: rgba(220, 38, 38, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="muharram"] {
+      --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fca5a5;
+      --primary-rgb: 239, 68, 68; --overlay: rgba(239, 68, 68, 0.08);
+    }
+    
+    [data-special-theme="blue"] {
+      --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #60a5fa;
+      --primary-rgb: 37, 99, 235; --overlay: rgba(37, 99, 235, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="blue"] {
+      --primary: #3b82f6; --primary-dark: #2563eb; --primary-light: #93c5fd;
+      --primary-rgb: 59, 130, 246; --overlay: rgba(59, 130, 246, 0.08);
+    }
+    
+    [data-special-theme="wiladat"] {
+      --primary: #22c55e; --primary-dark: #16a34a; --primary-light: #86efac;
+      --primary-rgb: 34, 197, 94; --overlay: rgba(34, 197, 94, 0.05);
+    }
+    [data-theme="dark"][data-special-theme="wiladat"] {
+      --primary: #4ade80; --primary-dark: #22c55e; --primary-light: #bbf7d0;
+      --primary-rgb: 74, 222, 128; --overlay: rgba(74, 222, 128, 0.08);
+    }
+    
+    body {
+      font-family: var(--font);
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+      transition: all 0.3s ease;
+    }
+    
+    .header {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary);
+      padding: 10px 20px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+    [data-theme="dark"] .header {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary);
+    }
+    
+    .header-inner { display: flex; align-items: center; justify-content: flex-start; gap: 12px; max-width: 1100px; margin: 0 auto; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    
+    .header-logo {
+      width: 42px; height: 42px; border-radius: 4px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 3px 3px 0 #000000; overflow: hidden; padding: 6px; border: 1px solid #000000;
+    }
+    .header-logo img { width: 130%; height: 130%; object-fit: contain; filter: var(--logo-filter); }
+    .header-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .header-subtitle { font-size: 8px; color: var(--text-light); }
+    
+    .main-container { flex: 1; max-width: 900px; width: 100%; margin: 16px auto; padding: 0 12px 100px; }
+    
+    .loader-wrapper { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+    .loader { width: 48px; height: 48px; border: 4px solid #000000; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .section-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content: ''; flex: 1; height: 2px; background: #000000; }
+    .section-title i { color: var(--primary); }
+    
+    .explore-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      grid-auto-rows: 150px;
+    }
+    .explore-item {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 4px;
+      background: var(--bg2);
+      border: 1px solid #000000;
+    }
+    .explore-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .explore-item:nth-child(4) { grid-row: span 2; }
+    .explore-item:nth-child(7) { grid-column: span 2; }
+    .explore-item img { width: 100%; height: 100%; object-fit: cover; }
+    .explore-item .video-indicator {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 40px; height: 40px; background: rgba(0,0,0,0.6);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 16px; border: 1px solid #000000;
+      pointer-events: none;
+    }
+    .explore-item .like-count {
+      position: absolute; bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.6); color: #fff;
+      padding: 2px 8px; border-radius: 20px;
+      font-size: 9px; display: flex; align-items: center; gap: 4px;
+      pointer-events: none;
+    }
+    .empty-explore { text-align: center; padding: 32px 16px; color: var(--text-light); grid-column: 1/-1; }
+    .empty-explore i { font-size: 44px; margin-bottom: 10px; display: block; color: var(--primary-light); }
+    .empty-explore p { font-size: 13px; }
+    
+    .fullscreen-viewer {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #000; z-index: 9999;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .fullscreen-viewer.active { display: flex; }
+    .viewer-header {
+      position: sticky; top: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10;
+    }
+    .viewer-close {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: 1px solid #fff;
+      color: #fff; font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .viewer-count { color: #fff; font-size: 12px; font-weight: 700; }
+    
+    .viewer-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .viewer-item {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 20px;
+    }
+    .viewer-item img {
+      max-width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .viewer-item video {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 8px;
+    }
+    .viewer-item iframe {
+      width: 100%;
+      height: 60vh;
+      border-radius: 8px;
+    }
+    .viewer-actions {
+      display: flex; align-items: center; gap: 16px;
+      margin-top: 16px;
+      padding: 12px 20px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .viewer-action-btn {
+      background: none; border: none; color: #fff;
+      font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .viewer-action-btn:active { transform: scale(0.9); }
+    .viewer-action-btn.liked { color: #ef4444; }
+    .viewer-action-btn span { font-size: 11px; font-weight: 600; }
+    
+    .bottom-nav {
+      position: fixed; bottom: 8px; right: 10%; left: 10%;
+      width: 80%; margin: 0 auto;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+      border-radius: 25px;
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 4px 0; z-index: 999;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    [data-theme="dark"] .bottom-nav {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+    }
+    
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 1px;
+      cursor: pointer; text-decoration: none; color: var(--text-light);
+      padding: 4px 6px; font-family: inherit; background: none; border: none;
+    }
+    .nav-item img { width: 20px; height: 20px; opacity: 0.5; filter: brightness(0); }
+    [data-theme="dark"] .nav-item img { filter: brightness(0) invert(1); }
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active img {
+      opacity: 1;
+      filter: none;
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+    [data-theme="dark"] .nav-item.active img {
+      filter: brightness(0) invert(1);
+    }
+    .nav-item span { font-size: 7px; font-weight: 600; }
+    
+    .nav-item.more-active { color: var(--primary); }
+    .nav-item.more-active i {
+      color: var(--primary);
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+    
+    .more-popup {
+      position: fixed; bottom: 70px; left: 10%;
+      width: 15%;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      padding: 6px;
+      z-index: 998;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      display: none;
+      animation: popupIn 0.3s ease;
+    }
+    [data-theme="dark"] .more-popup {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+    }
+    .more-popup.active { display: block; }
+    .more-popup .popup-title {
+      font-size: 9px; font-weight: 800; color: var(--dark);
+      margin-bottom: 4px; text-align: center;
+    }
+    .more-popup .popup-items {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .more-popup .more-item {
+      display: flex; align-items: center; gap: 6px;
+      cursor: pointer; text-decoration: none; color: var(--text-light);
+      padding: 4px 8px; font-family: inherit;
+      background: none; border: none;
+      text-align: right;
+      border-radius: 8px;
+    }
+    .more-popup .more-item img { width: 16px; height: 16px; opacity: 0.6; filter: brightness(0); }
+    [data-theme="dark"] .more-popup .more-item img { filter: brightness(0) invert(1); }
+    .more-popup .more-item span { font-size: 8px; font-weight: 600; }
+    .more-popup .more-item.current {
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .more-popup .more-item.current img {
+      opacity: 1;
+    }
+    .more-popup .more-item.current span {
+      font-weight: 800;
+    }
+    
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes popupIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    @media (max-width: 650px) {
+      .header-title { font-size: 14px; }
+      .more-popup { width: 30%; }
+      .explore-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-right">
+        <div class="header-logo">
+          <img src="https://cdn.imgurl.ir/uploads/f57721_InShot_20260714_014548498.png" alt="لوگو">
+        </div>
+        <div>
+          <div class="header-title">آرشیو</div>
+          <div class="header-subtitle">شهدای گمنام شورابیل</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container" id="mainContent">
+    <div class="loader-wrapper"><div class="loader"></div></div>
+  </main>
+
+  <div class="fullscreen-viewer" id="fullscreenViewer">
+    <div class="viewer-header">
+      <button class="viewer-close" onclick="closeFullscreen()"><i class="fa-solid fa-times"></i></button>
+      <span class="viewer-count" id="viewerCount"></span>
+    </div>
+    <div class="viewer-content" id="viewerContent"></div>
+  </div>
+
+  <div class="more-popup" id="morePopup">
+    <div class="popup-title">سایر</div>
+    <div class="popup-items">
+      <button class="more-item" onclick="window.location.href='../About/';">
+        <img src="https://uploadkon.ir/uploads/60be06_26info-circle-iconbase.svg" alt="درباره ما">
+        <span>درباره ما</span>
+      </button>
+      <button class="more-item" onclick="window.location.href='../Address/';">
+        <img src="https://uploadkon.ir/uploads/204a06_26location-iconbase.svg" alt="مکان ما">
+        <span>مکان ما</span>
+      </button>
+      <button class="more-item" onclick="window.location.href='../Contact/';">
+        <img src="https://uploadkon.ir/uploads/393e06_26calling-iconbase.svg" alt="ارتباط با ما">
+        <span>ارتباط با ما</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav">
+    <div class="nav-item" onclick="window.location.href='../dashboard/';">
+      <img src="https://uploadkon.ir/uploads/bdf329_26home-iconbase-1-.svg" alt="خانه">
+      <span>خانه</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Events/';">
+      <img src="https://uploadkon.ir/uploads/d24706_26calendar-iconbase.svg" alt="مراسمات">
+      <span>مراسمات</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Occasion/';">
+      <img src="https://uploadkon.ir/uploads/6e4206_26notification-iconbase.svg" alt="رویدادها">
+      <span>رویدادها</span>
+    </div>
+    <div class="nav-item active" onclick="window.location.href='../prayer/';">
+      <img src="https://uploadkon.ir/uploads/99db06_26camera-iconbase.svg" alt="آرشیوها">
+      <span>آرشیوها</span>
+    </div>
+    <div class="nav-item" onclick="window.location.href='../Setting/';">
+      <img src="https://uploadkon.ir/uploads/629f29_26setting-iconbase.svg" alt="تنظیمات">
+      <span>تنظیمات</span>
+    </div>
+    <button class="nav-item" id="moreBtn" onclick="toggleMorePopup()">
+      <i class="fa-solid fa-ellipsis" style="font-size:18px; color:var(--text-light);"></i>
+      <span>بیشتر</span>
+    </button>
+  </nav>
+
+  <script src="../music.js"></script>
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbypWWml5JQ0CIjurUfrOVRkI5O33d2u3GT-51hzEliYa1JZ8_3oA9Mfh8gNeCDhIvRS/exec';
+    const EXPLORE_API = 'https://script.google.com/macros/s/AKfycbxtAEH8TWV2ACKvpzzT-iJwE2uJdLzc_fCnqw9etsudjiFgCxnmZUKoeat7P5QRQ2ue/exec';
+    const $ = (id) => document.getElementById(id);
+    
+    const fontMap = {
+      'Samim': "'Samim', Tahoma, sans-serif",
+      'Sahel': "'Sahel', Tahoma, sans-serif",
+      'IRANSans': "'IRANSans', Tahoma, sans-serif",
+      'Vazirmatn': "'Vazirmatn', Tahoma, sans-serif",
+      'Estedad': "'Estedad', Tahoma, sans-serif"
+    };
+    
+    function getSettings() {
+      try {
+        return JSON.parse(localStorage.getItem('shohada-settings')) || { font: 'Vazirmatn', theme: 'none', themeMode: 'light' };
+      } catch(e) { return { font: 'Vazirmatn', theme: 'none', themeMode: 'light' }; }
+    }
+    
+    function applyTheme(s) {
+      const root = document.documentElement;
+      root.setAttribute('data-theme', s.themeMode);
+      root.setAttribute('data-special-theme', s.theme || 'none');
+      const fontFamily = fontMap[s.font] || fontMap['Vazirmatn'];
+      root.style.setProperty('--font', fontFamily);
+      document.body.style.fontFamily = fontFamily;
+    }
+    
+    let settings = getSettings();
+    applyTheme(settings);
+    
+    let allMedia = [];
+    let currentViewerIndex = 0;
+    let localLikes = {};
+    
+    function getLocalLikes() {
+      try {
+        return JSON.parse(localStorage.getItem('explore_likes')) || {};
+      } catch(e) { return {}; }
+    }
+    
+    function saveLocalLikes() {
+      localStorage.setItem('explore_likes', JSON.stringify(localLikes));
+    }
+    
+    localLikes = getLocalLikes();
+    
+    function toggleMorePopup() {
+      const popup = $('morePopup');
+      const moreBtn = $('moreBtn');
+      popup.classList.toggle('active');
+      
+      if (popup.classList.contains('active')) {
+        moreBtn.classList.add('more-active');
+      } else {
+        moreBtn.classList.remove('more-active');
+      }
+    }
+    
+    function getArchiveId(eventId, index) {
+      return `${eventId}_${index}`;
+    }
+    
+    function getFileNameFromUrl(url) {
+      const parts = url.split('/');
+      const name = decodeURIComponent(parts[parts.length - 1].split('?')[0]);
+      return name.replace(/\.[^.]+$/, '') || 'فایل';
+    }
+    
+    async function loadExplore() {
+      const container = $('mainContent');
+      try {
+        await fetch(EXPLORE_API + '?action=syncExplore');
+        
+        const res = await fetch(API_URL + '?action=getEvents');
+        const raw = await res.json();
+        
+        let events = [];
+        if (Array.isArray(raw)) events = raw;
+        else if (raw.success && Array.isArray(raw.data)) events = raw.data;
+        else if (raw.data && Array.isArray(raw.data)) events = raw.data;
+        
+        allMedia = [];
+        
+        for (const event of events) {
+          try {
+            const archiveRes = await fetch(API_URL + '?action=getArchiveByEventId&eventId=' + event.id);
+            const archiveData = await archiveRes.json();
+            
+            let images = [];
+            let videos = [];
+            
+            if (archiveData.success && archiveData.data) {
+              images = archiveData.data.images || [];
+              videos = archiveData.data.videos || [];
+            } else if (archiveData.data) {
+              images = archiveData.data.images || [];
+              videos = archiveData.data.videos || [];
+            }
+            
+            if (typeof images === 'string') images = images.split(',').filter(Boolean);
+            if (typeof videos === 'string') videos = videos.split(',').filter(Boolean);
+            
+            images.forEach((img, index) => {
+              allMedia.push({
+                id: getArchiveId(event.id, index),
+                type: 'image',
+                src: img.trim(),
+                title: event.title || '',
+                eventId: event.id
+              });
+            });
+            
+            const videoStartIndex = images.length;
+            videos.forEach((vid, index) => {
+              allMedia.push({
+                id: getArchiveId(event.id, videoStartIndex + index),
+                type: 'video',
+                src: vid.trim(),
+                title: event.title || '',
+                eventId: event.id
+              });
+            });
+          } catch(e) {}
+        }
+        
+        allMedia = allMedia.sort(() => Math.random() - 0.5);
+        
+        if (allMedia.length === 0) {
+          container.innerHTML = '<div class="empty-explore"><i class="fa-solid fa-image"></i><p>آرشیوی یافت نشد</p></div>';
+          return;
+        }
+        
+        let gridHTML = '';
+        allMedia.forEach(item => {
+          if (item.type === 'video') {
+            gridHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')">
+              <img src="https://cdn.imgurl.ir/uploads/v68396_InShot_20260817_190450653.jpg" alt="" loading="lazy">
+              <div class="video-indicator"><i class="fa-solid fa-play"></i></div>
+            </div>`;
+          } else {
+            gridHTML += `<div class="explore-item" onclick="openFullscreen('${item.id}')"><img src="${item.src}" alt="" loading="lazy"></div>`;
+          }
+        });
+        
+        container.innerHTML = `<div class="explore-grid">${gridHTML}</div>`;
+      } catch(e) {
+        container.innerHTML = '<div class="loader-wrapper"><div style="text-align:center;color:var(--text-light);"><i class="fa-solid fa-circle-exclamation" style="font-size:48px;margin-bottom:12px;"></i><p>خطا در دریافت اطلاعات</p><button onclick="loadExplore()" style="margin-top:12px;padding:8px 20px;background:var(--primary);color:#fff;border:1px solid #000000;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;">تلاش مجدد</button></div></div>';
+      }
+    }
+    
+    function openFullscreen(mediaId) {
+      currentViewerIndex = allMedia.findIndex(m => m.id === mediaId);
+      if (currentViewerIndex === -1) return;
+      
+      const viewer = $('fullscreenViewer');
+      viewer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      renderViewerItem();
+    }
+    
+    function closeFullscreen() {
+      const viewer = $('fullscreenViewer');
+      viewer.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    function renderViewerItem() {
+      const item = allMedia[currentViewerIndex];
+      if (!item) return;
+      
+      const viewerContent = $('viewerContent');
+      const viewerCount = $('viewerCount');
+      
+      viewerCount.textContent = `${currentViewerIndex + 1} / ${allMedia.length}`;
+      
+      let mediaHTML = '';
+      if (item.type === 'image') {
+        mediaHTML = `<img src="${item.src}" alt="">`;
+      } else {
+        if (item.src.includes('aparat.com') || item.src.includes('youtube.com') || item.src.includes('youtu.be') || item.src.includes('namasha.com')) {
+          let embedSrc = item.src;
+          if (item.src.includes('aparat.com/v/')) embedSrc = `https://www.aparat.com/video/video/embed/videohash/${item.src.split('/v/')[1]?.split('?')[0]}/vt/frame`;
+          else if (item.src.includes('youtube.com/watch?v=')) embedSrc = `https://www.youtube.com/embed/${item.src.split('v=')[1]?.split('&')[0]}`;
+          else if (item.src.includes('youtu.be/')) embedSrc = `https://www.youtube.com/embed/${item.src.split('youtu.be/')[1]?.split('?')[0]}`;
+          mediaHTML = `<iframe src="${embedSrc}" frameborder="0" allowfullscreen></iframe>`;
+        } else {
+          mediaHTML = `<video src="${item.src}" controls></video>`;
+        }
+      }
+      
+      const isLiked = localLikes[item.id] === true;
+      
+      viewerContent.innerHTML = `<div class="viewer-item">
+        ${mediaHTML}
+        <div class="viewer-actions">
+          <button class="viewer-action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${item.id}', this)">
+            <i class="fa-solid fa-heart"></i>
+            <span>لایک</span>
+          </button>
+          <button class="viewer-action-btn" onclick="shareMedia('${item.id}')">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>اشتراک‌گذاری</span>
+          </button>
+        </div>
+      </div>`;
+      
+      viewerContent.scrollTop = 0;
+    }
+    
+    async function toggleLike(mediaId, btn) {
+      const isLiked = localLikes[mediaId] === true;
+      
+      if (isLiked) {
+        localLikes[mediaId] = false;
+        btn.classList.remove('liked');
+        try {
+          await fetch(EXPLORE_API + '?action=removeLike', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'removeLike', archiveId: mediaId })
+          });
+        } catch(e) {}
+      } else {
+        localLikes[mediaId] = true;
+        btn.classList.add('liked');
+        try {
+          await fetch(EXPLORE_API + '?action=addLike', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'addLike', archiveId: mediaId })
+          });
+        } catch(e) {}
+      }
+      
+      saveLocalLikes();
+    }
+    
+    async function shareMedia(mediaId) {
+      const url = window.location.origin + window.location.pathname + '?post=' + mediaId;
+      try {
+        await navigator.clipboard.writeText(url);
+        const btn = document.querySelector('.viewer-action-btn[onclick="shareMedia(\'' + mediaId + '\')"]');
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = '<i class="fa-solid fa-check"></i><span>کپی شد</span>';
+          setTimeout(() => { btn.innerHTML = orig; }, 2000);
+        }
+      } catch(e) {}
+    }
+    
+    function showNext() {
+      if (currentViewerIndex < allMedia.length - 1) {
+        currentViewerIndex++;
+        renderViewerItem();
+      }
+    }
+    
+    function showPrev() {
+      if (currentViewerIndex > 0) {
+        currentViewerIndex--;
+        renderViewerItem();
+      }
+    }
+    
+    $('fullscreenViewer').addEventListener('scroll', function() {
+      const viewerContent = $('viewerContent');
+      if (viewerContent.scrollTop + viewerContent.clientHeight >= viewerContent.scrollHeight - 100) {
+        showNext();
+      }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if ($('fullscreenViewer').classList.contains('active')) {
+        if (e.key === 'Escape') closeFullscreen();
+        if (e.key === 'ArrowDown') { e.preventDefault(); showNext(); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); showPrev(); }
+      }
+    });
+    
+    loadExplore();
+  </script>
+</body>
+</html>
