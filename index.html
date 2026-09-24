@@ -158,7 +158,7 @@ body{
   border:1px solid var(--glass-border);
   box-shadow:var(--glass-shadow);
   display:flex;align-items:center;
-  transition:all .3s ease;
+  transition:background .3s ease;
   cursor:pointer;
   color:var(--text);
   font-family:var(--font);
@@ -170,7 +170,7 @@ body{
   padding:0 10px;
   animation:itemSlide .6s ease .3s backwards;
 }
-.sub-profile:hover{background:var(--accent-bg);transform:translateY(-2px);}
+.sub-profile:hover{background:var(--accent-bg);}
 .sub-profile:active{transform:scale(.97);}
 
 .profile-avatar{
@@ -180,7 +180,6 @@ body{
   flex-shrink:0;
   overflow:hidden;
 }
-.profile-avatar i{animation:softFloat 3.6s ease-in-out infinite;}
 .profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 
 .profile-name{
@@ -198,7 +197,7 @@ body{
   position:relative;
   animation:itemSlide .6s ease .4s backwards;
 }
-.sub-notif:hover{background:var(--accent-bg);transform:translateY(-2px);}
+.sub-notif:hover{background:var(--accent-bg);}
 .sub-notif:active{transform:scale(.97);}
 .sub-notif i{font-size:15px;color:var(--accent);}
 .sub-notif .badge{
@@ -228,7 +227,7 @@ body{
   justify-content:center;
   padding:0;
 }
-.icon-btn:hover{background:var(--accent-bg);transform:translateY(-2px);}
+.icon-btn:hover{background:var(--accent-bg);}
 .icon-btn:active{transform:scale(.94);}
 .icon-btn i{font-size:16px;color:var(--accent);}
 .icon-btn.active{background:var(--accent);}
@@ -239,20 +238,31 @@ body{
   to{opacity:1;transform:translateX(0);}
 }
 
+.main{
+  position:relative;z-index:5;
+  padding:128px 12px 110px;
+  min-height:100vh;
+}
+
 .footer{
   position:fixed;
-  top:115px;right:3px;left:3px;
-  z-index:98;
-  border-radius:var(--radius-sm);
-  background:var(--glass-bg);
-  backdrop-filter:blur(18px) saturate(160%);
-  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  bottom:8px;right:5%;left:5%;width:90%;
+  margin:0 auto;
+  z-index:999;
+  border-radius:25px;
+  background:var(--glass-bg-strong);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
   border:1px solid var(--accent-line);
   box-shadow:var(--glass-shadow);
   padding:4px 0;
   display:flex;justify-content:space-around;align-items:center;
-  animation:headerEnter .8s cubic-bezier(.2,.8,.2,1) .25s backwards;
+  animation:footerEnter .8s cubic-bezier(.2,.8,.2,1) .3s backwards;
   transition:background .5s ease,border .5s ease;
+}
+@keyframes footerEnter{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
 }
 
 .nav-item{
@@ -275,20 +285,20 @@ body{
 .nav-item:nth-child(2) i{animation-delay:-.7s;animation-duration:4.4s;}
 .nav-item:nth-child(3) i{animation-delay:-1.6s;animation-duration:4.1s;}
 .nav-item:nth-child(4) i{animation-delay:-2.3s;animation-duration:4.6s;}
+.nav-item:nth-child(5) i{animation-delay:-3.1s;animation-duration:3.9s;}
 
 .nav-item span{font-size:7px;font-weight:600;}
 .nav-item:active{transform:scale(.9);}
 .nav-item.active{color:var(--accent);}
 .nav-item.active i{
   color:var(--accent);
-  animation:fa-bounce 1s ease infinite;
+  animation:navBounce 1s ease infinite;
   filter:drop-shadow(0 0 6px var(--accent-glow));
 }
 
-.main{
-  position:relative;z-index:5;
-  padding:175px 12px 30px;
-  min-height:100vh;
+@keyframes navBounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-4px);}
 }
 </style>
 </head>
@@ -330,10 +340,16 @@ body{
   </div>
 </div>
 
+<main class="main"></main>
+
 <footer class="footer">
   <button class="nav-item active">
     <i class="fa-solid fa-house fa-bounce"></i>
     <span>خانه</span>
+  </button>
+  <button class="nav-item">
+    <i class="fa-solid fa-screwdriver-wrench"></i>
+    <span>سرویس</span>
   </button>
   <button class="nav-item">
     <i class="fa-solid fa-calendar"></i>
@@ -344,12 +360,10 @@ body{
     <span>کتابخانه</span>
   </button>
   <button class="nav-item">
-    <i class="fa-solid fa-photo-film"></i>
-    <span>اکسپلور</span>
+    <i class="fa-solid fa-user"></i>
+    <span>پروفایل</span>
   </button>
 </footer>
-
-<main class="main"></main>
 
 <script>
 (function(){
@@ -403,10 +417,11 @@ body{
 
   var navItems = document.querySelectorAll('.nav-item');
   var iconMap = {
-    'خانه':     {on:'fa-solid fa-house fa-bounce',         off:'fa-solid fa-house'},
-    'رویداد':   {on:'fa-solid fa-calendar fa-bounce',      off:'fa-solid fa-calendar'},
-    'کتابخانه': {on:'fa-solid fa-book-bookmark fa-bounce', off:'fa-solid fa-book-bookmark'},
-    'اکسپلور':  {on:'fa-solid fa-photo-film fa-bounce',    off:'fa-solid fa-photo-film'}
+    'خانه':     {on:'fa-solid fa-house fa-bounce',                off:'fa-solid fa-house'},
+    'سرویس':    {on:'fa-solid fa-screwdriver-wrench fa-bounce',   off:'fa-solid fa-screwdriver-wrench'},
+    'رویداد':   {on:'fa-solid fa-calendar fa-bounce',             off:'fa-solid fa-calendar'},
+    'کتابخانه': {on:'fa-solid fa-book-bookmark fa-bounce',        off:'fa-solid fa-book-bookmark'},
+    'پروفایل':  {on:'fa-solid fa-user fa-bounce',                 off:'fa-solid fa-user'}
   };
 
   navItems.forEach(function(item){
