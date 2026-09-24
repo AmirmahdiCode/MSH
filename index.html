@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شهدای گمنام شورابیل</title>
-<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
 <style>
 :root{
@@ -317,7 +317,7 @@ body{
       <i class="fa-solid fa-music fa-float"></i>
     </button>
     <button class="icon-btn" id="btnTheme" aria-label="تغییر تم">
-      <i class="fa-solid fa-moon fa-float"></i>
+      <i class="fa-solid fa-moon fa-flip-360"></i>
     </button>
   </div>
 </div>
@@ -371,9 +371,9 @@ body{
   function aemalTheme(t){
     body.setAttribute('data-theme', t);
     if(t === 'dark'){
-      taghirIcon(themeIcon, 'fa-solid fa-sun fa-float');
+      taghirIcon(themeIcon, 'fa-solid fa-sun fa-spin');
     } else {
-      taghirIcon(themeIcon, 'fa-solid fa-moon fa-float');
+      taghirIcon(themeIcon, 'fa-solid fa-moon fa-flip-360');
     }
   }
 
