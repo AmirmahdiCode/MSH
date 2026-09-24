@@ -134,7 +134,7 @@ body{
 
 .header-sub{
   position:fixed;
-  top:70px;right:3px;left:3px;
+  top:73px;right:3px;left:3px;
   z-index:99;
   display:flex;
   align-items:stretch;
@@ -171,7 +171,7 @@ body{
 .profile-avatar{
   width:24px;height:24px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-size:12px;color:var(--accent);
+  font-size:13px;color:var(--accent);
   flex-shrink:0;
   overflow:hidden;
 }
@@ -194,7 +194,7 @@ body{
 }
 .sub-notif:hover{background:var(--accent-bg);transform:translateY(-2px);}
 .sub-notif:active{transform:scale(.97);}
-.sub-notif i{font-size:13px;color:var(--accent);}
+.sub-notif i{font-size:15px;color:var(--accent);}
 .sub-notif .badge{
   position:absolute;top:-4px;right:-4px;
   min-width:16px;height:16px;
@@ -224,7 +224,7 @@ body{
 }
 .icon-btn:hover{background:var(--accent-bg);transform:translateY(-2px);}
 .icon-btn:active{transform:scale(.94);}
-.icon-btn i{font-size:14px;color:var(--accent);}
+.icon-btn i{font-size:16px;color:var(--accent);}
 .icon-btn.active{background:var(--accent);}
 .icon-btn.active i{color:#fff;}
 
@@ -235,7 +235,7 @@ body{
 
 .main{
   position:relative;z-index:5;
-  padding:125px 12px 110px;
+  padding:128px 12px 110px;
   min-height:100vh;
 }
 
@@ -272,14 +272,27 @@ body{
 }
 .nav-item i{
   font-size:20px;
-  transition:color .3s ease;
   color:var(--text-soft);
+  transition:color .3s ease;
+  animation:navFloat 4s ease-in-out infinite;
 }
+.nav-item:nth-child(1) i{animation-delay:0s;animation-duration:3.8s;}
+.nav-item:nth-child(2) i{animation-delay:-.7s;animation-duration:4.4s;}
+.nav-item:nth-child(3) i{animation-delay:-1.6s;animation-duration:4.1s;}
+.nav-item:nth-child(4) i{animation-delay:-2.3s;animation-duration:4.6s;}
+.nav-item:nth-child(5) i{animation-delay:-3.1s;animation-duration:3.9s;}
+
+@keyframes navFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-2.5px);}
+}
+
 .nav-item span{font-size:7px;font-weight:600;}
 .nav-item:active{transform:scale(.9);}
 .nav-item.active{color:var(--accent);}
 .nav-item.active i{
   color:var(--accent);
+  animation:none;
   filter:drop-shadow(0 0 6px var(--accent-glow));
 }
 </style>
@@ -307,14 +320,14 @@ body{
   </div>
 
   <div class="sub-notif" id="subNotif">
-    <i class="fa-solid fa-bell fa-shake"></i>
+    <i class="fa-solid fa-bell fa-swing"></i>
     <span>اعلان‌ها</span>
     <span class="badge">3</span>
   </div>
 
   <div class="sub-actions">
     <button class="icon-btn" id="btnMusic" aria-label="موسیقی">
-      <i class="fa-solid fa-music fa-float"></i>
+      <i class="fa-solid fa-music fa-fade"></i>
     </button>
     <button class="icon-btn" id="btnTheme" aria-label="تغییر تم">
       <i class="fa-solid fa-moon fa-flip-360"></i>
@@ -330,19 +343,19 @@ body{
     <span>خانه</span>
   </button>
   <button class="nav-item">
-    <i class="fa-solid fa-calendar fa-float"></i>
+    <i class="fa-solid fa-calendar"></i>
     <span>رویداد</span>
   </button>
   <button class="nav-item">
-    <i class="fa-solid fa-user fa-float"></i>
+    <i class="fa-solid fa-user"></i>
     <span>پروفایل</span>
   </button>
   <button class="nav-item">
-    <i class="fa-solid fa-photo-film fa-float"></i>
+    <i class="fa-solid fa-photo-film"></i>
     <span>اکسپلور</span>
   </button>
   <button class="nav-item">
-    <i class="fa-solid fa-book-bookmark fa-float"></i>
+    <i class="fa-solid fa-book-bookmark"></i>
     <span>کتابخانه</span>
   </button>
 </footer>
@@ -395,18 +408,18 @@ body{
       taghirIcon(musicIcon, 'fa-solid fa-music fa-buzz');
       btnMusic.classList.add('active');
     } else {
-      taghirIcon(musicIcon, 'fa-solid fa-music fa-float');
+      taghirIcon(musicIcon, 'fa-solid fa-music fa-fade');
       btnMusic.classList.remove('active');
     }
   });
 
   var navItems = document.querySelectorAll('.nav-item');
   var iconMap = {
-    'خانه':     {on:'fa-solid fa-house fa-bounce',         off:'fa-solid fa-house fa-float'},
-    'رویداد':   {on:'fa-solid fa-calendar fa-bounce',      off:'fa-solid fa-calendar fa-float'},
-    'پروفایل':  {on:'fa-solid fa-user fa-bounce',          off:'fa-solid fa-user fa-float'},
-    'اکسپلور':  {on:'fa-solid fa-photo-film fa-bounce',    off:'fa-solid fa-photo-film fa-float'},
-    'کتابخانه': {on:'fa-solid fa-book-bookmark fa-bounce', off:'fa-solid fa-book-bookmark fa-float'}
+    'خانه':     {on:'fa-solid fa-house fa-bounce',         off:'fa-solid fa-house'},
+    'رویداد':   {on:'fa-solid fa-calendar fa-bounce',      off:'fa-solid fa-calendar'},
+    'پروفایل':  {on:'fa-solid fa-user fa-bounce',          off:'fa-solid fa-user'},
+    'اکسپلور':  {on:'fa-solid fa-photo-film fa-bounce',    off:'fa-solid fa-photo-film'},
+    'کتابخانه': {on:'fa-solid fa-book-bookmark fa-bounce', off:'fa-solid fa-book-bookmark'}
   };
 
   navItems.forEach(function(item){
