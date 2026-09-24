@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شهدای گمنام شورابیل</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
 <style>
 :root{
@@ -22,23 +22,22 @@
   --radius:16px;
   --radius-sm:12px;
   --font:'Vazirmatn',Tahoma,sans-serif;
+  --bg-body:#fdfcf9;
 }
 
 [data-theme="dark"]{
-  --text:#e8e8e8;
-  --text-soft:rgba(232,232,232,.55);
-  --glass-bg:rgba(60,60,60,.45);
-  --glass-bg-strong:rgba(45,45,45,.75);
-  --glass-border:rgba(47,168,125,.28);
-  --glass-shadow:0 6px 24px rgba(0,0,0,.35);
-}
-
-[data-theme="dark"] body{
-  background:#1e1e1e;
-}
-
-[data-theme="dark"][data-season="muharram"] body{
-  background:#1e1a1a;
+  --accent:#5fd0a4;
+  --accent-soft:#7fe0b8;
+  --accent-glow:rgba(95,208,164,.55);
+  --accent-line:rgba(95,208,164,.25);
+  --accent-bg:rgba(95,208,164,.14);
+  --text:#ececec;
+  --text-soft:rgba(236,236,236,.6);
+  --glass-bg:rgba(255,255,255,.08);
+  --glass-bg-strong:rgba(50,50,50,.72);
+  --glass-border:rgba(255,255,255,.12);
+  --glass-shadow:0 6px 24px rgba(0,0,0,.4);
+  --bg-body:#222222;
 }
 
 [data-season="muharram"]{
@@ -47,12 +46,15 @@
   --accent-glow:rgba(168,47,47,.45);
   --accent-line:rgba(168,47,47,.20);
   --accent-bg:rgba(168,47,47,.10);
-  --glass-border:rgba(168,47,47,.18);
-  --glass-shadow:0 6px 24px rgba(168,47,47,.10);
 }
 
 [data-theme="dark"][data-season="muharram"]{
-  --glass-border:rgba(201,90,90,.30);
+  --accent:#e07f7f;
+  --accent-soft:#f0a0a0;
+  --accent-glow:rgba(224,127,127,.55);
+  --accent-line:rgba(224,127,127,.25);
+  --accent-bg:rgba(224,127,127,.14);
+  --bg-body:#222020;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -61,7 +63,7 @@ html,body{height:100%;}
 
 body{
   font-family:var(--font);
-  background:#fdfcf9;
+  background:var(--bg-body);
   color:var(--text);
   min-height:100vh;
   overflow-x:hidden;
@@ -101,7 +103,7 @@ body{
 }
 
 .header-logo{
-  width:40px;height:40px;
+  width:48px;height:48px;
   object-fit:contain;
   flex-shrink:0;
   filter:drop-shadow(0 0 8px var(--accent-glow));
@@ -132,7 +134,7 @@ body{
 
 .header-sub{
   position:fixed;
-  top:64px;right:3px;left:3px;
+  top:70px;right:3px;left:3px;
   z-index:99;
   display:flex;
   align-items:stretch;
@@ -172,14 +174,8 @@ body{
   font-size:12px;color:var(--accent);
   flex-shrink:0;
   overflow:hidden;
-  animation:avatarFloat 3s ease-in-out infinite;
 }
 .profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-
-@keyframes avatarFloat{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-1.5px);}
-}
 
 .profile-name{
   font-size:11px;font-weight:700;
@@ -239,7 +235,7 @@ body{
 
 .main{
   position:relative;z-index:5;
-  padding:120px 12px 110px;
+  padding:125px 12px 110px;
   min-height:100vh;
 }
 
@@ -253,7 +249,7 @@ body{
   backdrop-filter:blur(20px) saturate(160%);
   -webkit-backdrop-filter:blur(20px) saturate(160%);
   border:1px solid var(--accent-line);
-  box-shadow:0 4px 20px rgba(30,122,90,.10);
+  box-shadow:var(--glass-shadow);
   padding:4px 0;
   display:flex;justify-content:space-around;align-items:center;
   animation:footerEnter .8s cubic-bezier(.2,.8,.2,1) .3s backwards;
@@ -276,7 +272,7 @@ body{
 }
 .nav-item i{
   font-size:20px;
-  transition:all .3s ease;
+  transition:color .3s ease;
   color:var(--text-soft);
 }
 .nav-item span{font-size:7px;font-weight:600;}
