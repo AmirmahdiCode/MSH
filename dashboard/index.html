@@ -64,7 +64,7 @@
   display:block;
 }
 
-.calendar-row{
+.top-row{
   display:flex;
   gap:10px;
   margin-top:-55px;
@@ -79,13 +79,14 @@
 }
 
 .glass-card{
+  position:relative;
   background:rgba(255,255,255,.55);
   backdrop-filter:blur(22px) saturate(180%);
   -webkit-backdrop-filter:blur(22px) saturate(180%);
   border:1px solid var(--glass-border);
   border-radius:24px;
   box-shadow:var(--glass-shadow);
-  padding:14px 12px;
+  overflow:hidden;
   transition:background .5s ease,border .5s ease;
 }
 
@@ -94,124 +95,246 @@
   border:1px solid rgba(255,255,255,.12);
 }
 
-.calendar-box{
-  flex:0 0 calc(45% - 5px);
+.shooting-star-container{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+
+.shooting-star{
+  position:absolute;
+  width:2px;
+  height:60px;
+  background:linear-gradient(to bottom,rgba(var(--primary-rgb,47,168,125),.6),transparent);
+  border-radius:50%;
+  animation:shootingStar 2s linear infinite;
+  opacity:0;
+}
+
+[data-theme="dark"] .shooting-star{
+  background:linear-gradient(to bottom,rgba(255,255,255,.55),transparent);
+}
+
+@keyframes shootingStar{
+  0%{transform:translateX(0) translateY(0) rotate(-35deg);opacity:0;}
+  10%{opacity:1;}
+  70%{opacity:1;}
+  100%{transform:translateX(-250px) translateY(320px) rotate(-35deg);opacity:0;}
+}
+
+.calendar-section{
+  flex:0 0 calc(48% - 5px);
+  padding:12px 10px;
+}
+
+.calendar-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+  position:relative;
+  z-index:1;
+}
+
+.calendar-nav{
+  width:26px;
+  height:26px;
+  border-radius:8px;
+  border:1px solid var(--glass-border);
+  background:rgba(255,255,255,.3);
+  cursor:pointer;
+  font-size:11px;
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all .2s ease;
+  font-family:var(--font);
+}
+
+[data-theme="dark"] .calendar-nav{
+  background:rgba(255,255,255,.06);
+}
+
+.calendar-nav:hover{background:var(--accent-bg);}
+.calendar-nav:active{transform:scale(.9);}
+
+.calendar-month-title{
+  font-size:12px;
+  font-weight:800;
+  color:var(--text);
+  user-select:none;
+}
+
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:2px;
+  position:relative;
+  z-index:1;
+}
+
+.calendar-day{
+  text-align:center;
+  padding:4px 1px;
+  border-radius:8px;
+  font-size:10px;
+  cursor:pointer;
+  transition:all .2s ease;
+  position:relative;
+  color:var(--text);
+  min-height:28px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:4px;
-  padding:16px 10px;
-  text-align:center;
+  border:1px solid transparent;
 }
 
-.calendar-weekday{
-  font-size:11px;
-  font-weight:700;
-  color:var(--text-soft);
-  letter-spacing:.5px;
+.calendar-day:hover{
+  background:var(--accent-bg);
+  border-color:var(--accent-line);
 }
 
-.calendar-day{
-  font-size:44px;
-  font-weight:900;
-  color:var(--accent);
-  line-height:1;
-  filter:drop-shadow(0 0 8px var(--accent-glow));
-  animation:softFloat 3.5s ease-in-out infinite;
+.calendar-day.today{
+  background:var(--accent);
+  color:#fff;
+  font-weight:800;
+  box-shadow:0 0 10px var(--accent-glow);
 }
 
-.calendar-month{
+.calendar-day .dots{
+  display:flex;
+  gap:2px;
+  justify-content:center;
+  margin-top:1px;
+}
+
+.calendar-day .dot{
+  width:3px;
+  height:3px;
+  border-radius:50%;
+}
+
+.calendar-day .dot.event{background:#10b981;}
+.calendar-day .dot.notice{background:#3b82f6;}
+
+.prayer-section{
+  flex:0 0 calc(52% - 5px);
+  padding:12px 10px;
+}
+
+.prayer-title{
   font-size:12px;
-  font-weight:700;
+  font-weight:800;
   color:var(--text);
+  margin-bottom:6px;
+  text-align:center;
+  position:relative;
+  z-index:1;
 }
 
-.calendar-year{
-  font-size:10px;
+.prayer-date{
+  grid-column:1 / -1;
+  text-align:center;
+  font-size:9px;
   font-weight:600;
   color:var(--text-soft);
+  margin-bottom:6px;
+  position:relative;
+  z-index:1;
+  padding:5px 6px;
+  background:rgba(255,255,255,.3);
+  border-radius:8px;
+  border:1px solid var(--glass-border);
 }
 
-.calendar-event{
-  margin-top:6px;
-  font-size:9px;
-  font-weight:700;
-  color:var(--accent);
-  background:var(--accent-bg);
-  padding:3px 10px;
-  border-radius:10px;
-  border:1px solid var(--accent-line);
-  display:none;
+[data-theme="dark"] .prayer-date{
+  background:rgba(255,255,255,.06);
 }
 
-.prayer-box{
-  flex:0 0 calc(55% - 5px);
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+.prayer-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+  position:relative;
+  z-index:1;
 }
 
 .prayer-item{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  padding:6px 8px;
-  border-radius:10px;
-  font-size:10px;
-  transition:background .25s ease;
+  align-items:center;
+  padding:5px 7px;
+  border-radius:8px;
+  background:rgba(255,255,255,.3);
+  transition:all .3s ease;
+  border:1px solid transparent;
+  font-size:9px;
 }
 
-.prayer-item:hover{background:var(--accent-bg);}
+[data-theme="dark"] .prayer-item{
+  background:rgba(255,255,255,.06);
+}
 
-.prayer-item .prayer-name{
+.prayer-item.next{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+  box-shadow:0 0 10px var(--accent-glow);
+}
+
+.prayer-item.next .prayer-name,
+.prayer-item.next .prayer-time,
+.prayer-item.next .prayer-name i{color:#fff;}
+
+.prayer-item.night{
+  grid-column:1 / -1;
+  justify-content:center;
+  gap:10px;
+}
+
+.prayer-name{
+  font-size:9px;
   font-weight:600;
-  color:var(--text-soft);
+  color:var(--text);
   display:flex;
   align-items:center;
-  gap:6px;
+  gap:3px;
 }
 
-.prayer-item .prayer-name i{
-  font-size:11px;
+.prayer-name i{
+  font-size:10px;
   color:var(--accent);
-  width:14px;
-  text-align:center;
 }
 
-.prayer-item .prayer-time{
+.prayer-time{
+  font-size:9px;
   font-weight:800;
-  color:var(--text);
-  font-size:11px;
+  color:var(--accent);
   direction:ltr;
-  font-family:'Vazirmatn',Tahoma,sans-serif;
-  letter-spacing:.5px;
-}
-
-.prayer-item.active{
-  background:var(--accent-bg);
-}
-
-.prayer-item.active .prayer-name,
-.prayer-item.active .prayer-name i,
-.prayer-item.active .prayer-time{
-  color:var(--accent);
-  font-weight:800;
 }
 
 .prayer-loading{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100%;
+  grid-column:1 / -1;
+  text-align:center;
   font-size:10px;
   color:var(--text-soft);
+  padding:20px 0;
 }
 
-@media (max-width:380px){
-  .calendar-day{font-size:36px;}
-  .prayer-item{font-size:9px;padding:5px 6px;}
-  .prayer-item .prayer-time{font-size:10px;}
+@media (max-width:400px){
+  .top-row{gap:8px;}
+  .calendar-section{padding:10px 8px;}
+  .prayer-section{padding:10px 8px;}
+  .calendar-month-title{font-size:11px;}
+  .calendar-day{font-size:9px;min-height:24px;padding:2px 0;}
+  .prayer-item{font-size:8px;padding:4px 5px;}
+  .prayer-name{font-size:8px;}
+  .prayer-name i{font-size:9px;}
+  .prayer-time{font-size:8px;}
 }
 </style>
 </head>
@@ -258,17 +381,23 @@
     <img src="../images/poster.png" alt="بنر" draggable="false">
   </div>
 
-  <div class="calendar-row">
-    <div class="glass-card calendar-box">
-      <div class="calendar-weekday" id="calWeekday">—</div>
-      <div class="calendar-day" id="calDay">—</div>
-      <div class="calendar-month" id="calMonth">—</div>
-      <div class="calendar-year" id="calYear">—</div>
-      <div class="calendar-event" id="calEvent"></div>
+  <div class="top-row">
+    <div class="glass-card calendar-section" id="calendarSection">
+      <div class="shooting-star-container" id="calendarStars"></div>
+      <div class="calendar-header">
+        <button class="calendar-nav" id="btnPrevMonth"><i class="fa-solid fa-chevron-right"></i></button>
+        <span class="calendar-month-title" id="calendarTitle">—</span>
+        <button class="calendar-nav" id="btnNextMonth"><i class="fa-solid fa-chevron-left"></i></button>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
     </div>
 
-    <div class="glass-card prayer-box" id="prayerBox">
-      <div class="prayer-loading">در حال دریافت اوقات شرعی...</div>
+    <div class="glass-card prayer-section">
+      <div class="shooting-star-container" id="prayerStars"></div>
+      <div class="prayer-title">اوقات شرعی اردبیل</div>
+      <div class="prayer-list" id="prayerList">
+        <div class="prayer-loading">در حال دریافت اوقات شرعی...</div>
+      </div>
     </div>
   </div>
 </main>
@@ -301,58 +430,111 @@
 (function(){
   'use strict';
 
-  var mahFinglish = [
-    'فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور',
-    'مهر','آبان','آذر','دی','بهمن','اسفند'
-  ];
+  var mahHa = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 
-  var roozFinglish = [
-    'یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'
-  ];
+  var mahghar = {
+    1:'محرم',2:'صفر',3:'ربیع‌الاول',4:'ربیع‌الثانی',
+    5:'جمادی‌الاول',6:'جمادی‌الثانی',7:'رجب',8:'شعبان',
+    9:'رمضان',10:'شوال',11:'ذی‌القعده',12:'ذی‌الحجه'
+  };
 
-  function taghirinMatn(id, matn){
-    var el = document.getElementById(id);
-    if(el) el.textContent = matn;
+  var roozHafte = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+
+  var mahFeli = 0;
+  var salFeli = 0;
+
+  function tabdilMiladiBeShamsi(gy, gm, gd){
+    var g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
+    var jy = gy <= 1600 ? 0 : 979;
+    gy -= gy <= 1600 ? 621 : 1600;
+    var gy2 = gm > 2 ? gy + 1 : gy;
+    var days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
+    var jy2 = jy + 33 * Math.floor(days / 12053);
+    days %= 12053;
+    jy2 += 4 * Math.floor(days / 1461);
+    days %= 1461;
+    if(days > 365){
+      jy2 += Math.floor((days - 1) / 365);
+      days = (days - 1) % 365;
+    }
+    var jm = days < 186 ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+    var jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
+    return {year:jy2, month:jm, day:jd};
   }
 
-  function gereftanTarikhShamsi(){
-    var now = new Date();
-    var y = now.getFullYear();
-    var m = now.getMonth() + 1;
-    var d = now.getDate();
-    var url = 'https://api.aladhan.com/v1/gToH?date=' + y + '-' + m + '-' + d;
-
-    fetch(url)
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        if(data && data.code === 200 && data.data && data.data.hijri){
-          var h = data.data.hijri;
-          taghirinMatn('calDay', h.day);
-          taghirinMatn('calMonth', h.month && h.month.ar ? h.month.ar : '');
-          taghirinMatn('calYear', h.year + ' هـ.ق');
-        }
-      })
-      .catch(function(){
-        taghirinMatn('calDay', '—');
-      });
-
-    var roozIndex = now.getDay();
-    var roozFarsi = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'][roozIndex];
-    taghirinMatn('calWeekday', roozFarsi);
+  function roozHayMah(sal, mah){
+    if(mah <= 6) return 31;
+    if(mah <= 11) return 30;
+    return ((sal - 1) % 4 === 3) ? 30 : 29;
   }
 
-  function namayeshAvaqat(data){
-    var box = document.getElementById('prayerBox');
-    if(!box || !data) return;
+  function avalinRoozMah(sal, mah){
+    var r = tabdilMiladiBeShamsi(2024, 3, 21);
+    var t = (sal - r.year) * 365;
+    for(var i = 1; i < mah; i++) t += roozHayMah(sal, i);
+    var totalDays = t;
+    var baseDay = 4;
+    return (baseDay + totalDays) % 7;
+  }
+
+  function sakhtanSetareha(containerId, tedad){
+    var container = document.getElementById(containerId);
+    if(!container) return;
+    container.innerHTML = '';
+    for(var i = 0; i < tedad; i++){
+      var s = document.createElement('div');
+      s.className = 'shooting-star';
+      s.style.left = (Math.random() * 90) + '%';
+      s.style.top = (Math.random() * 60) + '%';
+      s.style.animationDelay = (Math.random() * 3) + 's';
+      s.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+      container.appendChild(s);
+    }
+  }
+
+  function sakhtanTaghvim(){
+    var titleEl = document.getElementById('calendarTitle');
+    var gridEl = document.getElementById('calendarGrid');
+    if(!titleEl || !gridEl) return;
+
+    titleEl.textContent = mahHa[mahFeli - 1] + ' ' + salFeli;
+
+    var emroozMiladi = new Date();
+    var emrooz = tabdilMiladiBeShamsi(emroozMiladi.getFullYear(), emroozMiladi.getMonth() + 1, emroozMiladi.getDate());
+
+    var roozHa = roozHayMah(salFeli, mahFeli);
+    var shoroo = avalinRoozMah(salFeli, mahFeli);
+
+    var html = '';
+    for(var i = 0; i < shoroo; i++){
+      html += '<div></div>';
+    }
+    for(var d = 1; d <= roozHa; d++){
+      var isToday = (salFeli === emrooz.year && mahFeli === emrooz.month && d === emrooz.day);
+      html += '<div class="calendar-day' + (isToday ? ' today' : '') + '">' + d + '</div>';
+    }
+    gridEl.innerHTML = html;
+  }
+
+  function taghirMah(dir){
+    mahFeli += dir;
+    if(mahFeli > 12){mahFeli = 1; salFeli++;}
+    if(mahFeli < 1){mahFeli = 12; salFeli--;}
+    sakhtanTaghvim();
+    sakhtanSetareha('calendarStars', 6);
+  }
+
+  function namayeshAvaqat(timings, hijri){
+    var box = document.getElementById('prayerList');
+    if(!box) return;
 
     var items = [
-      {name:'اذان صبح', icon:'fa-cloud-moon',    key:'Fajr'},
-      {name:'طلوع آفتاب', icon:'fa-sun',          key:'Sunrise'},
-      {name:'اذان ظهر', icon:'fa-sun',           key:'Dhuhr'},
-      {name:'اذان عصر', icon:'fa-cloud-sun',     key:'Asr'},
-      {name:'اذان مغرب', icon:'fa-cloud-moon',   key:'Maghrib'},
-      {name:'اذان عشا', icon:'fa-moon',          key:'Isha'},
-      {name:'نیمه‌شب', icon:'fa-star',           key:'Midnight'}
+      {name:'صبح', icon:'fa-cloud-moon', key:'Fajr'},
+      {name:'طلوع', icon:'fa-sun', key:'Sunrise'},
+      {name:'ظهر', icon:'fa-cloud-sun', key:'Dhuhr'},
+      {name:'عصر', icon:'fa-cloud-sun-rain', key:'Asr'},
+      {name:'مغرب', icon:'fa-cloud-moon', key:'Maghrib'},
+      {name:'عشا', icon:'fa-moon', key:'Isha'}
     ];
 
     var saatFeli = new Date();
@@ -360,47 +542,81 @@
     var activeIndex = -1;
 
     for(var i = 0; i < items.length; i++){
-      var t = data[items[i].key];
+      var t = timings[items[i].key];
       if(!t) continue;
-      var parts = t.split(':');
-      var daghighe = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-      if(daghighe <= daghigheFeli) activeIndex = i;
+      var p = t.split(':');
+      var dg = parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+      if(dg <= daghigheFeli) activeIndex = i;
     }
 
-    var html = '';
+    var tarikhHijri = '';
+    if(hijri){
+      tarikhHijri = hijri.weekday.ar + ' - ' + hijri.day + ' ' + hijri.month.ar + ' ' + hijri.year;
+    }
+
+    var html = '<div class="prayer-date">' + (tarikhHijri || '—') + '</div>';
+
     for(var j = 0; j < items.length; j++){
-      var timeVal = data[items[j].key] || '—';
-      var activeClass = (j === activeIndex) ? ' active' : '';
+      var timeVal = (timings[items[j].key] || '--:--').split(' ')[0];
+      var activeClass = (j === activeIndex) ? ' next' : '';
       html += '<div class="prayer-item' + activeClass + '">' +
         '<span class="prayer-name"><i class="fa-solid ' + items[j].icon + '"></i>' + items[j].name + '</span>' +
         '<span class="prayer-time">' + timeVal + '</span>' +
       '</div>';
     }
+
+    var midnight = (timings.Midnight || '--:--').split(' ')[0];
+    var midnightActive = (activeIndex === items.length - 1) ? ' next' : '';
+    html += '<div class="prayer-item night' + midnightActive + '">' +
+      '<span class="prayer-name"><i class="fa-solid fa-clock"></i>نیمه‌شب</span>' +
+      '<span class="prayer-time">' + midnight + '</span>' +
+    '</div>';
+
     box.innerHTML = html;
   }
 
   function gereftanAvaqat(){
-    var url = 'https://api.aladhan.com/v1/timingsByCity?city=Ardabil&country=Iran&method=7';
+    var now = new Date();
+    var d = String(now.getDate()).padStart(2, '0');
+    var m = String(now.getMonth() + 1).padStart(2, '0');
+    var y = now.getFullYear();
+
+    var url = 'https://api.aladhan.com/v1/timingsByCity/' + d + '-' + m + '-' + y + '?city=Ardabil&country=Iran&method=7';
+
     fetch(url)
       .then(function(res){ return res.json(); })
       .then(function(data){
         if(data && data.code === 200 && data.data && data.data.timings){
-          namayeshAvaqat(data.data.timings);
+          namayeshAvaqat(data.data.timings, data.data.date && data.data.date.hijri);
         } else {
-          var box = document.getElementById('prayerBox');
+          var box = document.getElementById('prayerList');
           if(box) box.innerHTML = '<div class="prayer-loading">خطا در دریافت اطلاعات</div>';
         }
       })
       .catch(function(){
-        var box = document.getElementById('prayerBox');
+        var box = document.getElementById('prayerList');
         if(box) box.innerHTML = '<div class="prayer-loading">اتصال اینترنت را بررسی کنید</div>';
       });
   }
 
-  gereftanTarikhShamsi();
-  gereftanAvaqat();
+  function shoroo(){
+    var now = new Date();
+    var shamsi = tabdilMiladiBeShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    mahFeli = shamsi.month;
+    salFeli = shamsi.year;
 
-  setInterval(gereftanAvaqat, 60 * 60 * 1000);
+    sakhtanTaghvim();
+    sakhtanSetareha('calendarStars', 6);
+    sakhtanSetareha('prayerStars', 6);
+    gereftanAvaqat();
+
+    document.getElementById('btnPrevMonth').addEventListener('click', function(){ taghirMah(-1); });
+    document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
+
+    setInterval(gereftanAvaqat, 60 * 60 * 1000);
+  }
+
+  shoroo();
 
 })();
 </script>
