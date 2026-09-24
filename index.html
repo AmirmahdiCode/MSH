@@ -71,6 +71,11 @@ body{
   position:relative;
 }
 
+@keyframes softFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-2.5px);}
+}
+
 .bg-orbs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
 .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.22;animation:floatOrb 22s ease-in-out infinite;}
 .orb:nth-child(1){width:320px;height:320px;background:var(--accent-soft);top:-100px;right:-80px;}
@@ -175,6 +180,9 @@ body{
   flex-shrink:0;
   overflow:hidden;
 }
+.profile-avatar i{
+  animation:softFloat 3.6s ease-in-out infinite;
+}
 .profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 
 .profile-name{
@@ -274,26 +282,25 @@ body{
   font-size:20px;
   color:var(--text-soft);
   transition:color .3s ease;
-  animation:navFloat 4s ease-in-out infinite;
+  animation:softFloat 4s ease-in-out infinite;
 }
 .nav-item:nth-child(1) i{animation-delay:0s;animation-duration:3.8s;}
 .nav-item:nth-child(2) i{animation-delay:-.7s;animation-duration:4.4s;}
 .nav-item:nth-child(3) i{animation-delay:-1.6s;animation-duration:4.1s;}
 .nav-item:nth-child(4) i{animation-delay:-2.3s;animation-duration:4.6s;}
-.nav-item:nth-child(5) i{animation-delay:-3.1s;animation-duration:3.9s;}
-
-@keyframes navFloat{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-2.5px);}
-}
 
 .nav-item span{font-size:7px;font-weight:600;}
 .nav-item:active{transform:scale(.9);}
 .nav-item.active{color:var(--accent);}
 .nav-item.active i{
   color:var(--accent);
-  animation:none;
+  animation:navBounce 1s ease infinite;
   filter:drop-shadow(0 0 6px var(--accent-glow));
+}
+
+@keyframes navBounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-4px);}
 }
 </style>
 </head>
@@ -327,7 +334,7 @@ body{
 
   <div class="sub-actions">
     <button class="icon-btn" id="btnMusic" aria-label="موسیقی">
-      <i class="fa-solid fa-music fa-fade"></i>
+      <i class="fa-solid fa-music fa-jello"></i>
     </button>
     <button class="icon-btn" id="btnTheme" aria-label="تغییر تم">
       <i class="fa-solid fa-moon fa-flip-360"></i>
@@ -339,7 +346,7 @@ body{
 
 <footer class="footer">
   <button class="nav-item active">
-    <i class="fa-solid fa-house fa-bounce"></i>
+    <i class="fa-solid fa-house"></i>
     <span>خانه</span>
   </button>
   <button class="nav-item">
@@ -347,16 +354,12 @@ body{
     <span>رویداد</span>
   </button>
   <button class="nav-item">
-    <i class="fa-solid fa-user"></i>
-    <span>پروفایل</span>
+    <i class="fa-solid fa-book-bookmark"></i>
+    <span>کتابخانه</span>
   </button>
   <button class="nav-item">
     <i class="fa-solid fa-photo-film"></i>
     <span>اکسپلور</span>
-  </button>
-  <button class="nav-item">
-    <i class="fa-solid fa-book-bookmark"></i>
-    <span>کتابخانه</span>
   </button>
 </footer>
 
@@ -399,39 +402,23 @@ body{
   });
 
   var btnMusic = document.getElementById('btnMusic');
-  var musicIcon = btnMusic.querySelector('i');
   var musicRooshan = false;
 
   btnMusic.addEventListener('click', function(){
     musicRooshan = !musicRooshan;
     if(musicRooshan){
-      taghirIcon(musicIcon, 'fa-solid fa-music fa-buzz');
       btnMusic.classList.add('active');
     } else {
-      taghirIcon(musicIcon, 'fa-solid fa-music fa-fade');
       btnMusic.classList.remove('active');
     }
   });
 
   var navItems = document.querySelectorAll('.nav-item');
-  var iconMap = {
-    'خانه':     {on:'fa-solid fa-house fa-bounce',         off:'fa-solid fa-house'},
-    'رویداد':   {on:'fa-solid fa-calendar fa-bounce',      off:'fa-solid fa-calendar'},
-    'پروفایل':  {on:'fa-solid fa-user fa-bounce',          off:'fa-solid fa-user'},
-    'اکسپلور':  {on:'fa-solid fa-photo-film fa-bounce',    off:'fa-solid fa-photo-film'},
-    'کتابخانه': {on:'fa-solid fa-book-bookmark fa-bounce', off:'fa-solid fa-book-bookmark'}
-  };
 
   navItems.forEach(function(item){
     item.addEventListener('click', function(){
-      navItems.forEach(function(n){
-        n.classList.remove('active');
-        var label = n.querySelector('span').textContent.trim();
-        if(iconMap[label]) taghirIcon(n.querySelector('i'), iconMap[label].off);
-      });
+      navItems.forEach(function(n){ n.classList.remove('active'); });
       item.classList.add('active');
-      var label = item.querySelector('span').textContent.trim();
-      if(iconMap[label]) taghirIcon(item.querySelector('i'), iconMap[label].on);
     });
   });
 
