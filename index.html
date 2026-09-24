@@ -328,21 +328,25 @@ body{
   font-size:20px;
   color:var(--text-soft);
   transition:color .3s ease;
+}
+
+.nav-item i::before{
+  display:inline-block;
   animation:softFloat 4s ease-in-out infinite;
 }
-.nav-item:nth-child(1) i{animation-delay:0s;animation-duration:3.8s;}
-.nav-item:nth-child(2) i{animation-delay:-.7s;animation-duration:4.4s;}
-.nav-item:nth-child(3) i{animation-delay:-1.6s;animation-duration:4.1s;}
-.nav-item:nth-child(4) i{animation-delay:-2.3s;animation-duration:4.6s;}
-.nav-item:nth-child(5) i{animation-delay:-3.1s;animation-duration:3.9s;}
+
+.nav-item:nth-child(1) i::before{animation-delay:0s;animation-duration:3.8s;}
+.nav-item:nth-child(2) i::before{animation-delay:-.7s;animation-duration:4.4s;}
+.nav-item:nth-child(3) i::before{animation-delay:-1.6s;animation-duration:4.1s;}
+.nav-item:nth-child(4) i::before{animation-delay:-2.3s;animation-duration:4.6s;}
+.nav-item:nth-child(5) i::before{animation-delay:-3.1s;animation-duration:3.9s;}
 
 .nav-item span{font-size:7px;font-weight:600;}
 .nav-item:active{transform:scale(.9);}
 .nav-item.active{color:var(--accent);}
-.nav-item.active i{
-  color:var(--accent);
-  animation:none;
-  filter:drop-shadow(0 0 6px var(--accent-glow));
+.nav-item.active i{color:var(--accent);filter:drop-shadow(0 0 6px var(--accent-glow));}
+.nav-item.active i::before{
+  animation:fa-bounce 1s ease infinite;
 }
 </style>
 </head>
@@ -392,7 +396,7 @@ body{
 
 <footer class="footer">
   <button class="nav-item active">
-    <i class="fa-solid fa-house fa-bounce"></i>
+    <i class="fa-solid fa-house"></i>
     <span>خانه</span>
   </button>
   <button class="nav-item">
@@ -464,24 +468,11 @@ body{
   });
 
   var navItems = document.querySelectorAll('.nav-item');
-  var iconMap = {
-    'خانه':     {on:'fa-solid fa-house fa-bounce',                off:'fa-solid fa-house'},
-    'سرویس':    {on:'fa-solid fa-screwdriver-wrench fa-bounce',   off:'fa-solid fa-screwdriver-wrench'},
-    'رویداد':   {on:'fa-solid fa-calendar fa-bounce',             off:'fa-solid fa-calendar'},
-    'کتابخانه': {on:'fa-solid fa-book-bookmark fa-bounce',        off:'fa-solid fa-book-bookmark'},
-    'پروفایل':  {on:'fa-solid fa-user fa-bounce',                 off:'fa-solid fa-user'}
-  };
 
   navItems.forEach(function(item){
     item.addEventListener('click', function(){
-      navItems.forEach(function(n){
-        n.classList.remove('active');
-        var label = n.querySelector('span').textContent.trim();
-        if(iconMap[label]) taghirIcon(n.querySelector('i'), iconMap[label].off);
-      });
+      navItems.forEach(function(n){ n.classList.remove('active'); });
       item.classList.add('active');
-      var label = item.querySelector('span').textContent.trim();
-      if(iconMap[label]) taghirIcon(item.querySelector('i'), iconMap[label].on);
     });
   });
 
