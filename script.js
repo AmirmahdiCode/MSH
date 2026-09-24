@@ -47,6 +47,22 @@
     }
   });
 
+  var subProfile = document.getElementById('subProfile');
+  if(subProfile){
+    subProfile.addEventListener('click', function(){
+      var href = subProfile.getAttribute('data-href');
+      if(href) window.location.href = href;
+    });
+  }
+
+  var subNotif = document.getElementById('subNotif');
+  if(subNotif){
+    subNotif.addEventListener('click', function(){
+      var href = subNotif.getAttribute('data-href');
+      if(href) window.location.href = href;
+    });
+  }
+
   var navItems = document.querySelectorAll('.nav-item');
 
   navItems.forEach(function(item){
