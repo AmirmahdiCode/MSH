@@ -107,7 +107,7 @@
   position:absolute;
   width:2px;
   height:60px;
-  background:linear-gradient(to bottom,rgba(var(--primary-rgb,47,168,125),.6),transparent);
+  background:linear-gradient(to bottom,rgba(47,168,125,.6),transparent);
   border-radius:50%;
   animation:shootingStar 2s linear infinite;
   opacity:0;
@@ -432,14 +432,6 @@
 
   var mahHa = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 
-  var mahghar = {
-    1:'محرم',2:'صفر',3:'ربیع‌الاول',4:'ربیع‌الثانی',
-    5:'جمادی‌الاول',6:'جمادی‌الثانی',7:'رجب',8:'شعبان',
-    9:'رمضان',10:'شوال',11:'ذی‌القعده',12:'ذی‌الحجه'
-  };
-
-  var roozHafte = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
-
   var mahFeli = 0;
   var salFeli = 0;
 
@@ -468,15 +460,6 @@
     return ((sal - 1) % 4 === 3) ? 30 : 29;
   }
 
-  function avalinRoozMah(sal, mah){
-    var r = tabdilMiladiBeShamsi(2024, 3, 21);
-    var t = (sal - r.year) * 365;
-    for(var i = 1; i < mah; i++) t += roozHayMah(sal, i);
-    var totalDays = t;
-    var baseDay = 4;
-    return (baseDay + totalDays) % 7;
-  }
-
   function sakhtanSetareha(containerId, tedad){
     var container = document.getElementById(containerId);
     if(!container) return;
@@ -503,12 +486,8 @@
     var emrooz = tabdilMiladiBeShamsi(emroozMiladi.getFullYear(), emroozMiladi.getMonth() + 1, emroozMiladi.getDate());
 
     var roozHa = roozHayMah(salFeli, mahFeli);
-    var shoroo = avalinRoozMah(salFeli, mahFeli);
 
     var html = '';
-    for(var i = 0; i < shoroo; i++){
-      html += '<div></div>';
-    }
     for(var d = 1; d <= roozHa; d++){
       var isToday = (salFeli === emrooz.year && mahFeli === emrooz.month && d === emrooz.day);
       html += '<div class="calendar-day' + (isToday ? ' today' : '') + '">' + d + '</div>';
@@ -546,8 +525,19 @@
       if(!t) continue;
       var p = t.split(':');
       var dg = parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
-      if(dg <= daghigheFeli) activeIndex = i;
+      if(dg > daghigheFeli){
+        activeIndex = i;
+        break;
+      }
     }
+
+    var midnight = (timings.Midnight || '').split(' ')[0];
+    var midnightDg = 9999;
+    if(midnight && midnight.indexOf(':') !== -1){
+      var mp = midnight.split(':');
+      midnightDg = parseInt(mp[0], 10) * 60 + parseInt(mp[1], 10);
+    }
+    var midnightActive = (activeIndex === -1 && midnightDg > daghigheFeli) ? ' next' : '';
 
     var tarikhHijri = '';
     if(hijri){
@@ -565,11 +555,9 @@
       '</div>';
     }
 
-    var midnight = (timings.Midnight || '--:--').split(' ')[0];
-    var midnightActive = (activeIndex === items.length - 1) ? ' next' : '';
     html += '<div class="prayer-item night' + midnightActive + '">' +
       '<span class="prayer-name"><i class="fa-solid fa-clock"></i>نیمه‌شب</span>' +
-      '<span class="prayer-time">' + midnight + '</span>' +
+      '<span class="prayer-time">' + (midnight || '--:--') + '</span>' +
     '</div>';
 
     box.innerHTML = html;
