@@ -24,6 +24,23 @@
   --font:'Vazirmatn',Tahoma,sans-serif;
 }
 
+[data-theme="dark"]{
+  --text:#e8e8e8;
+  --text-soft:rgba(232,232,232,.55);
+  --glass-bg:rgba(60,60,60,.45);
+  --glass-bg-strong:rgba(45,45,45,.75);
+  --glass-border:rgba(47,168,125,.28);
+  --glass-shadow:0 6px 24px rgba(0,0,0,.35);
+}
+
+[data-theme="dark"] body{
+  background:#1e1e1e;
+}
+
+[data-theme="dark"][data-season="muharram"] body{
+  background:#1e1a1a;
+}
+
 [data-season="muharram"]{
   --accent:#a82f2f;
   --accent-soft:#c95a5a;
@@ -32,6 +49,10 @@
   --accent-bg:rgba(168,47,47,.10);
   --glass-border:rgba(168,47,47,.18);
   --glass-shadow:0 6px 24px rgba(168,47,47,.10);
+}
+
+[data-theme="dark"][data-season="muharram"]{
+  --glass-border:rgba(201,90,90,.30);
 }
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -48,10 +69,8 @@ body{
   position:relative;
 }
 
-[data-season="muharram"] body{background:#fdf9f9;}
-
 .bg-orbs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.25;animation:floatOrb 22s ease-in-out infinite;}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.22;animation:floatOrb 22s ease-in-out infinite;}
 .orb:nth-child(1){width:320px;height:320px;background:var(--accent-soft);top:-100px;right:-80px;}
 .orb:nth-child(2){width:260px;height:260px;background:var(--accent);bottom:-80px;left:-60px;animation-delay:-8s;}
 .orb:nth-child(3){width:200px;height:200px;background:var(--accent-soft);top:45%;left:35%;animation-delay:-15s;opacity:.12;}
@@ -153,8 +172,14 @@ body{
   font-size:12px;color:var(--accent);
   flex-shrink:0;
   overflow:hidden;
+  animation:avatarFloat 3s ease-in-out infinite;
 }
 .profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+@keyframes avatarFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-1.5px);}
+}
 
 .profile-name{
   font-size:11px;font-weight:700;
@@ -263,7 +288,7 @@ body{
 }
 </style>
 </head>
-<body data-season="normal">
+<body data-season="normal" data-theme="light">
 
 <div class="bg-orbs">
   <div class="orb"></div>
@@ -348,31 +373,10 @@ body{
   var themeIcon = btnTheme.querySelector('i');
 
   function aemalTheme(t){
+    body.setAttribute('data-theme', t);
     if(t === 'dark'){
-      body.style.background = '#0d1f18';
-      document.documentElement.style.setProperty('--text','#e8f5ef');
-      document.documentElement.style.setProperty('--text-soft','rgba(232,245,239,.6)');
-      document.documentElement.style.setProperty('--glass-bg','rgba(255,255,255,.08)');
-      document.documentElement.style.setProperty('--glass-bg-strong','rgba(20,40,32,.72)');
-      document.documentElement.style.setProperty('--accent','#5fd0a4');
-      document.documentElement.style.setProperty('--accent-soft','#7fe0b8');
-      document.documentElement.style.setProperty('--accent-glow','rgba(95,208,164,.5)');
-      document.documentElement.style.setProperty('--accent-bg','rgba(95,208,164,.12)');
-      document.documentElement.style.setProperty('--accent-line','rgba(95,208,164,.25)');
-      document.documentElement.style.setProperty('--glass-border','rgba(95,208,164,.22)');
       taghirIcon(themeIcon, 'fa-solid fa-sun fa-float');
     } else {
-      body.style.background = '#fdfcf9';
-      document.documentElement.style.setProperty('--text','#1a2e26');
-      document.documentElement.style.setProperty('--text-soft','rgba(26,46,38,.6)');
-      document.documentElement.style.setProperty('--glass-bg','rgba(255,255,255,.55)');
-      document.documentElement.style.setProperty('--glass-bg-strong','rgba(255,255,255,.72)');
-      document.documentElement.style.setProperty('--accent','#1e7a5a');
-      document.documentElement.style.setProperty('--accent-soft','#2fa87d');
-      document.documentElement.style.setProperty('--accent-glow','rgba(47,168,125,.45)');
-      document.documentElement.style.setProperty('--accent-bg','rgba(47,168,125,.10)');
-      document.documentElement.style.setProperty('--accent-line','rgba(30,122,90,.20)');
-      document.documentElement.style.setProperty('--glass-border','rgba(30,122,90,.18)');
       taghirIcon(themeIcon, 'fa-solid fa-moon fa-float');
     }
   }
