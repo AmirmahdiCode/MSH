@@ -8,6 +8,23 @@
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
+*{
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  user-drag:none;
+}
+
+img{
+  pointer-events:none;
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  user-drag:none;
+}
+
 .main{
   position:relative;
   z-index:5;
@@ -427,6 +444,11 @@
 
 <script src="../script.js"></script>
 <script>
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+document.addEventListener('dragstart', function(e){ e.preventDefault(); });
+document.addEventListener('copy', function(e){ e.preventDefault(); });
+document.addEventListener('cut', function(e){ e.preventDefault(); });
+
 (function(){
   'use strict';
 
