@@ -20,13 +20,13 @@
     localStorage.setItem('shohada-theme', v);
   }
 
-  var subBar = document.querySelector('.sub-bar');
+  var subBar = document.getElementById('subBar');
   var btnTheme = document.getElementById('btnTheme');
-  var themeIcon = btnTheme.querySelector('i');
-  var themeMsg = btnTheme.querySelector('.msg');
+  var themeIcon = btnTheme ? btnTheme.querySelector('i') : null;
+  var themeMsg = btnTheme ? btnTheme.querySelector('.msg') : null;
   var btnMusic = document.getElementById('btnMusic');
-  var musicIcon = btnMusic.querySelector('i');
-  var musicMsg = btnMusic.querySelector('.msg');
+  var musicIcon = btnMusic ? btnMusic.querySelector('i') : null;
+  var musicMsg = btnMusic ? btnMusic.querySelector('.msg') : null;
   var btnNotif = document.getElementById('btnNotif');
 
   var expandedTimer = null;
@@ -35,15 +35,16 @@
   function aemalTheme(t){
     body.setAttribute('data-theme', t);
     if(t === 'dark'){
-      taghirIcon(themeIcon, 'fa-solid fa-sun fa-spin');
-      themeMsg.textContent = 'تم به حالت تاریک تغییر کرد';
+      if(themeIcon) taghirIcon(themeIcon, 'fa-solid fa-sun fa-spin');
+      if(themeMsg) themeMsg.textContent = 'تم به حالت تاریک تغییر کرد';
     } else {
-      taghirIcon(themeIcon, 'fa-solid fa-moon fa-flip-360');
-      themeMsg.textContent = 'تم به حالت روشن تغییر کرد';
+      if(themeIcon) taghirIcon(themeIcon, 'fa-solid fa-moon fa-flip-360');
+      if(themeMsg) themeMsg.textContent = 'تم به حالت روشن تغییر کرد';
     }
   }
 
   function bazKardan(btn, moddat){
+    if(!btn || !subBar) return;
     if(expandedTimer) clearTimeout(expandedTimer);
     subBar.classList.remove('expanded');
     btn.classList.remove('expanded-btn');
@@ -70,10 +71,8 @@
   if(btnMusic){
     btnMusic.addEventListener('click', function(){
       musicRooshan = !musicRooshan;
-      if(musicRooshan){
-        musicMsg.textContent = 'موسیقی فعال شد';
-      } else {
-        musicMsg.textContent = 'موسیقی غیرفعال شد';
+      if(musicMsg){
+        musicMsg.textContent = musicRooshan ? 'موسیقی فعال شد' : 'موسیقی غیرفعال شد';
       }
       bazKardan(btnMusic, 3000);
     });
