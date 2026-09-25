@@ -37,7 +37,7 @@ img{
   width:calc(100% + 24px);
   margin-right:-12px;
   height:280px;
-  margin-top:112px;
+  margin-top:118px;
   overflow:hidden;
   animation:bannerEnter .9s ease;
   -webkit-mask-image:linear-gradient(to bottom,
@@ -222,22 +222,6 @@ img{
   box-shadow:0 0 10px var(--accent-glow);
 }
 
-.calendar-day .dots{
-  display:flex;
-  gap:2px;
-  justify-content:center;
-  margin-top:1px;
-}
-
-.calendar-day .dot{
-  width:3px;
-  height:3px;
-  border-radius:50%;
-}
-
-.calendar-day .dot.event{background:#10b981;}
-.calendar-day .dot.notice{background:#3b82f6;}
-
 .prayer-section{
   flex:0 0 calc(52% - 5px);
   padding:12px 10px;
@@ -352,6 +336,8 @@ img{
   .prayer-name{font-size:8px;}
   .prayer-name i{font-size:9px;}
   .prayer-time{font-size:8px;}
+  .header-title{font-size:12px;}
+  .profile-name{font-size:10px;}
 }
 </style>
 </head>
@@ -363,34 +349,40 @@ img{
   <div class="orb"></div>
 </div>
 
-<header class="header">
-  <img src="../images/logo.png" alt="لوگو" class="header-logo">
-  <div class="header-text">
-    <div class="header-title">شهدای گمنام شورابیل</div>
-    <div class="header-subtitle">سایت رسمی شهدای گمنام شورابیل</div>
-  </div>
-</header>
+<div class="top-bar">
+  <header class="header">
+    <img src="../images/logo.png" alt="لوگو" class="header-logo">
+    <div class="header-text">
+      <div class="header-title">شهدای گمنام شورابیل</div>
+      <div class="header-subtitle">سایت رسمی شهدای گمنام شورابیل</div>
+    </div>
+  </header>
 
-<div class="header-sub">
-  <div class="sub-profile" id="subProfile" data-href="../profile/new/">
+  <button class="profile-btn" id="profileBtn" data-href="../profile/new/">
     <div class="profile-avatar"><i class="fa-solid fa-user-plus fa-jello"></i></div>
-    <span class="profile-name">ثبت پروفایل</span>
-  </div>
+    <div class="profile-text">
+      <span class="profile-name">ثبت پروفایل</span>
+      <span class="profile-sub">برای ورود کلیک کنید</span>
+    </div>
+  </button>
+</div>
 
-  <div class="sub-notif" id="subNotif" data-href="../notif/">
+<div class="sub-bar" id="subBar">
+  <button class="sub-btn sub-notif" id="btnNotif" data-href="../notif/">
     <i class="fa-solid fa-bell fa-swing"></i>
     <span>اعلان‌ها</span>
     <span class="badge">3</span>
-  </div>
+  </button>
 
-  <div class="sub-actions">
-    <button class="icon-btn" id="btnMusic" aria-label="موسیقی">
-      <i class="fa-solid fa-music fa-jello"></i>
-    </button>
-    <button class="icon-btn" id="btnTheme" aria-label="تغییر تم">
-      <i class="fa-solid fa-moon fa-flip-360"></i>
-    </button>
-  </div>
+  <button class="sub-btn sub-music" id="btnMusic">
+    <i class="fa-solid fa-music fa-jello"></i>
+    <span class="msg"></span>
+  </button>
+
+  <button class="sub-btn sub-theme" id="btnTheme">
+    <i class="fa-solid fa-moon fa-flip-360"></i>
+    <span class="msg"></span>
+  </button>
 </div>
 
 <main class="main">
@@ -444,11 +436,6 @@ img{
 
 <script src="../script.js"></script>
 <script>
-document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
-document.addEventListener('dragstart', function(e){ e.preventDefault(); });
-document.addEventListener('copy', function(e){ e.preventDefault(); });
-document.addEventListener('cut', function(e){ e.preventDefault(); });
-
 (function(){
   'use strict';
 
