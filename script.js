@@ -71,8 +71,12 @@
   if(btnMusic){
     btnMusic.addEventListener('click', function(){
       musicRooshan = !musicRooshan;
-      if(musicMsg){
-        musicMsg.textContent = musicRooshan ? 'موسیقی فعال شد' : 'موسیقی غیرفعال شد';
+      if(musicRooshan){
+        btnMusic.classList.add('active');
+        if(musicMsg) musicMsg.textContent = 'موسیقی فعال شد';
+      } else {
+        btnMusic.classList.remove('active');
+        if(musicMsg) musicMsg.textContent = 'موسیقی غیرفعال شد';
       }
       bazKardan(btnMusic, 3000);
     });
