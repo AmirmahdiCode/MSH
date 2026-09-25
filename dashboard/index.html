@@ -8,23 +8,6 @@
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
-*{
-  -webkit-touch-callout:none;
-  -webkit-user-select:none;
-  user-select:none;
-  -webkit-user-drag:none;
-  user-drag:none;
-}
-
-img{
-  pointer-events:none;
-  -webkit-touch-callout:none;
-  -webkit-user-select:none;
-  user-select:none;
-  -webkit-user-drag:none;
-  user-drag:none;
-}
-
 .main{
   position:relative;
   z-index:5;
@@ -337,7 +320,6 @@ img{
   .prayer-name i{font-size:9px;}
   .prayer-time{font-size:8px;}
   .header-title{font-size:12px;}
-  .profile-name{font-size:10px;}
 }
 </style>
 </head>
@@ -350,6 +332,10 @@ img{
 </div>
 
 <div class="top-bar">
+  <button class="profile-btn" id="profileBtn" data-href="../profile/new/">
+    <div class="profile-avatar"><i class="fa-solid fa-user-plus fa-jello"></i></div>
+  </button>
+
   <header class="header">
     <img src="../images/logo.png" alt="لوگو" class="header-logo">
     <div class="header-text">
@@ -357,14 +343,6 @@ img{
       <div class="header-subtitle">سایت رسمی شهدای گمنام شورابیل</div>
     </div>
   </header>
-
-  <button class="profile-btn" id="profileBtn" data-href="../profile/new/">
-    <div class="profile-avatar"><i class="fa-solid fa-user-plus fa-jello"></i></div>
-    <div class="profile-text">
-      <span class="profile-name">ثبت پروفایل</span>
-      <span class="profile-sub">برای ورود کلیک کنید</span>
-    </div>
-  </button>
 </div>
 
 <div class="sub-bar" id="subBar">
