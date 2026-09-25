@@ -154,7 +154,7 @@ body{
 .profile-circle{
   flex:0 0 64px;
   width:64px;height:64px;
-  border-radius:50%;
+  border-radius:var(--radius);
   background:rgba(255,255,255,.55);
   backdrop-filter:blur(20px) saturate(160%);
   -webkit-backdrop-filter:blur(20px) saturate(160%);
@@ -180,7 +180,7 @@ body{
 .profile-circle:active{transform:scale(.96);}
 
 .profile-circle img{
-  width:100%;height:100%;object-fit:cover;border-radius:50%;
+  width:100%;height:100%;object-fit:cover;border-radius:var(--radius);
 }
 
 .sub-bar{
