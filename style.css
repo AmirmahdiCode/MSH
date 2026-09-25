@@ -159,7 +159,7 @@ body{
   -webkit-backdrop-filter:blur(20px) saturate(160%);
   border:1px solid var(--glass-border);
   box-shadow:var(--glass-shadow);
-  padding:8px;
+  padding:0;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -173,11 +173,11 @@ body{
 .profile-btn:active{transform:scale(.98);}
 
 .profile-avatar{
-  width:38px;height:38px;border-radius:50%;
+  width:56px;height:56px;border-radius:50%;
   background:var(--accent-bg);
   border:1px solid var(--accent-line);
   display:flex;align-items:center;justify-content:center;
-  font-size:15px;color:var(--accent);
+  font-size:22px;color:var(--accent);
   flex-shrink:0;
   overflow:hidden;
 }
@@ -231,22 +231,29 @@ body{
 }
 
 .sub-notif{
-  flex:0 0 calc(60% - 3px);
+  flex:1;
   position:relative;
+  overflow:visible;
 }
 
 .sub-notif .badge{
   position:absolute;
-  top:-4px;right:-4px;
-  min-width:16px;height:16px;
-  border-radius:8px;
+  top:-6px;right:-6px;
+  min-width:18px;height:18px;
+  border-radius:9px;
   background:var(--accent);
   color:#fff;
   font-size:9px;font-weight:800;
   display:flex;align-items:center;justify-content:center;
-  padding:0 4px;
+  padding:0 5px;
   animation:badgePulse 2s ease-in-out infinite;
-  z-index:2;
+  z-index:10;
+  border:2px solid var(--bg-body);
+  box-sizing:content-box;
+}
+
+[data-theme="dark"] .sub-notif .badge{
+  border-color:#222222;
 }
 
 @keyframes badgePulse{
@@ -254,12 +261,20 @@ body{
   50%{transform:scale(1.15);}
 }
 
-.sub-music{
-  flex:0 0 calc(20% - 3px);
+.sub-music,
+.sub-theme{
+  flex:0 0 36px;
+  padding:0;
 }
 
-.sub-theme{
-  flex:0 0 calc(20% - 3px);
+.sub-music.active{
+  background:var(--accent);
+  border-color:var(--accent);
+  box-shadow:0 0 12px var(--accent-glow);
+}
+
+.sub-music.active i{
+  color:#fff;
 }
 
 .sub-bar.expanded .sub-btn:not(.expanded-btn){
@@ -287,6 +302,11 @@ body{
 .sub-bar.expanded .sub-btn.expanded-btn .msg{
   display:inline;
   animation:msgIn .4s ease forwards;
+}
+
+.sub-bar.expanded .sub-btn.expanded-btn.sub-music.active .msg,
+.sub-bar.expanded .sub-btn.expanded-btn.sub-music.active i{
+  color:#fff;
 }
 
 @keyframes msgIn{
