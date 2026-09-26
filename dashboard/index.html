@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=1">
+<link rel="stylesheet" href="../style.css?v=2">
 <style>
 .main{
   position:relative;
@@ -51,21 +51,18 @@
 
 .banner-track{
   display:flex;
+  gap:5px;
   height:100%;
   will-change:transform;
-  cursor:grab;
-  user-select:none;
-}
-
-.banner-track:active{
-  cursor:grabbing;
+  padding:0 5px;
 }
 
 .banner-strip{
   flex:0 0 auto;
   height:100%;
-  width:157.5px;
+  width:150px;
   overflow:hidden;
+  border-radius:14px;
   opacity:0;
   transform:translateX(-30px);
   animation:stripIn .6s cubic-bezier(.2,.8,.2,1) forwards;
@@ -355,6 +352,7 @@
 <div class="top-bar">
   <button class="profile-circle" id="profileBtn" data-href="../profile/new/">
     <i class="fa-solid fa-user-plus fa-jello"></i>
+    <span>افزودن حساب</span>
   </button>
 
   <header class="header">
@@ -387,14 +385,14 @@
 <main class="main">
   <div class="banner">
     <div class="banner-track" id="bannerTrack">
-      <div class="banner-strip" style="animation-delay:.0s"><img src="https://cdn.imgurl.ir/uploads/l23215_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.08s"><img src="https://cdn.imgurl.ir/uploads/s688042_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.16s"><img src="https://cdn.imgurl.ir/uploads/p852836_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.24s"><img src="https://cdn.imgurl.ir/uploads/t279874_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.32s"><img src="https://cdn.imgurl.ir/uploads/c90662_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.4s"><img src="https://cdn.imgurl.ir/uploads/h85267_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.48s"><img src="https://cdn.imgurl.ir/uploads/x688847_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.56s"><img src="https://cdn.imgurl.ir/uploads/w76960_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/l23215_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/s688042_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/p852836_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/t279874_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/c90662_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/h85267_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/x688847_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/w76960_IMG__.jpg" alt=""></div>
     </div>
   </div>
 
@@ -442,7 +440,7 @@
   </button>
 </footer>
 
-<script src="../script.js?v=1"></script>
+<script src="../script.js?v=2"></script>
 <script>
 (function(){
   'use strict';
@@ -608,80 +606,52 @@
     var track = document.getElementById('bannerTrack');
     if(!track) return;
 
-    var strips = track.querySelectorAll('.banner-strip');
+    var strips = Array.prototype.slice.call(track.querySelectorAll('.banner-strip'));
     if(strips.length === 0) return;
 
-    var stripWidth = strips[0].offsetWidth;
-    if(stripWidth === 0) return;
+    strips.sort(function(){ return Math.random() - 0.5; });
 
-    var totalWidth = stripWidth * strips.length;
-
-    var cloneContainer = document.createDocumentFragment();
+    track.innerHTML = '';
+    var fragment = document.createDocumentFragment();
     for(var i = 0; i < strips.length; i++){
-      var clone = strips[i].cloneNode(true);
-      clone.style.animation = 'none';
-      clone.style.opacity = '1';
-      clone.style.transform = 'none';
-      cloneContainer.appendChild(clone);
+      var s = strips[i];
+      s.style.animationDelay = (i * 0.08) + 's';
+      fragment.appendChild(s);
     }
-    track.appendChild(cloneContainer);
+    track.appendChild(fragment);
 
-    var offset = 0;
-    var speed = 0.3;
-    var isDragging = false;
-    var startX = 0;
-    var startOffset = 0;
-    var animationId = null;
+    setTimeout(function(){
+      var stripWidth = strips[0].offsetWidth;
+      var gap = 5;
+      if(stripWidth === 0) return;
 
-    function wrapOffset(){
-      if(offset >= totalWidth){
-        offset -= totalWidth;
+      var step = stripWidth + gap;
+      var totalWidth = step * strips.length;
+
+      var cloneFragment = document.createDocumentFragment();
+      for(var i = 0; i < strips.length; i++){
+        var clone = strips[i].cloneNode(true);
+        clone.style.animation = 'none';
+        clone.style.opacity = '1';
+        clone.style.transform = 'none';
+        cloneFragment.appendChild(clone);
       }
-      if(offset < 0){
-        offset += totalWidth;
-      }
-    }
+      track.appendChild(cloneFragment);
 
-    function animate(){
-      if(!isDragging){
+      var offset = 0;
+      var speed = 0.3;
+
+      function animate(){
         offset += speed;
-        wrapOffset();
+        if(offset >= totalWidth){
+          offset -= totalWidth;
+        }
+        track.style.transform = 'translateX(' + (-offset) + 'px)';
+        requestAnimationFrame(animate);
       }
-      track.style.transform = 'translateX(' + (-offset) + 'px)';
-      animationId = requestAnimationFrame(animate);
-    }
 
-    function getClientX(e){
-      if(e.touches && e.touches.length) return e.touches[0].clientX;
-      return e.clientX;
-    }
-
-    function onStart(e){
-      isDragging = true;
-      startX = getClientX(e);
-      startOffset = offset;
-    }
-
-    function onMove(e){
-      if(!isDragging) return;
-      var dx = getClientX(e) - startX;
-      offset = startOffset - dx;
-      wrapOffset();
-      track.style.transform = 'translateX(' + (-offset) + 'px)';
-    }
-
-    function onEnd(){
-      isDragging = false;
-    }
-
-    track.addEventListener('mousedown', onStart);
-    track.addEventListener('touchstart', onStart, {passive:true});
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, {passive:true});
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
-
-    animationId = requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
+    }, 700);
   }
 
   function shoroo(){
@@ -700,7 +670,7 @@
 
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
 
-    setTimeout(راهاندازيبنر, 700);
+    راهاندازيبنر();
   }
 
   shoroo();
