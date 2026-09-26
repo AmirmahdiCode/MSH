@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../style.css?v=1">
 <style>
 .main{
   position:relative;
@@ -25,29 +28,19 @@
   animation:bannerEnter .9s ease;
   -webkit-mask-image:linear-gradient(to bottom,
     black 0%,
-    black 71.4%,
-    rgba(0,0,0,.99) 74%,
-    rgba(0,0,0,.96) 77%,
-    rgba(0,0,0,.92) 80%,
-    rgba(0,0,0,.86) 83%,
-    rgba(0,0,0,.78) 86%,
-    rgba(0,0,0,.68) 89%,
-    rgba(0,0,0,.56) 92%,
-    rgba(0,0,0,.42) 95%,
-    rgba(0,0,0,.25) 98%,
+    black 85%,
+    rgba(0,0,0,.95) 89%,
+    rgba(0,0,0,.85) 93%,
+    rgba(0,0,0,.6) 96%,
+    rgba(0,0,0,.3) 98%,
     transparent 100%);
   mask-image:linear-gradient(to bottom,
     black 0%,
-    black 71.4%,
-    rgba(0,0,0,.99) 74%,
-    rgba(0,0,0,.96) 77%,
-    rgba(0,0,0,.92) 80%,
-    rgba(0,0,0,.86) 83%,
-    rgba(0,0,0,.78) 86%,
-    rgba(0,0,0,.68) 89%,
-    rgba(0,0,0,.56) 92%,
-    rgba(0,0,0,.42) 95%,
-    rgba(0,0,0,.25) 98%,
+    black 85%,
+    rgba(0,0,0,.95) 89%,
+    rgba(0,0,0,.85) 93%,
+    rgba(0,0,0,.6) 96%,
+    rgba(0,0,0,.3) 98%,
     transparent 100%);
 }
 
@@ -56,12 +49,40 @@
   100%{opacity:1;transform:scale(1) translateY(0);}
 }
 
-.banner img{
+.banner-track{
+  display:flex;
+  height:100%;
+  will-change:transform;
+  cursor:grab;
+  user-select:none;
+}
+
+.banner-track:active{
+  cursor:grabbing;
+}
+
+.banner-strip{
+  flex:0 0 auto;
+  height:100%;
+  width:157.5px;
+  overflow:hidden;
+  opacity:0;
+  transform:translateX(-30px);
+  animation:stripIn .6s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+.banner-strip img{
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center 15%;
   display:block;
+  pointer-events:none;
+  -webkit-user-drag:none;
+}
+
+@keyframes stripIn{
+  0%{opacity:0;transform:translateX(-30px);}
+  100%{opacity:1;transform:translateX(0);}
 }
 
 .top-row{
@@ -365,7 +386,16 @@
 
 <main class="main">
   <div class="banner">
-    <img src="../images/poster.png" alt="بنر" draggable="false">
+    <div class="banner-track" id="bannerTrack">
+      <div class="banner-strip" style="animation-delay:.0s"><img src="https://cdn.imgurl.ir/uploads/l23215_IMG__.jpg" alt=""></div>
+      <div class="banner-strip" style="animation-delay:.08s"><img src="https://cdn.imgurl.ir/uploads/s688042_IMG__.jpg" alt=""></div>
+      <div class="banner-strip" style="animation-delay:.16s"><img src="https://cdn.imgurl.ir/uploads/p852836_IMG__.jpg" alt=""></div>
+      <div class="banner-strip" style="animation-delay:.24s"><img src="https://cdn.imgurl.ir/uploads/t279874_IMG__.jpg" alt=""></div>
+      <div class="banner-strip" style="animation-delay:.32s"><img src="https://cdn.imgurl.ir/uploads/c90662_IMG__.jpg" alt=""></div>
+      <div class="banner-strip" style="animation-delay:.4s"><img src="https://cdn.imgurl.ir/uploads/h85267_IMG__.jpg" alt=""></div>
+      <div class="banner-strip" style="animation-delay:.48s"><img src="https://cdn.imgurl.ir/uploads/x688847_IMG__.jpg" alt=""></div>
+      <div class="banner-strip" style="animation-delay:.56s"><img src="https://cdn.imgurl.ir/uploads/w76960_IMG__.jpg" alt=""></div>
+    </div>
   </div>
 
   <div class="top-row">
@@ -412,7 +442,7 @@
   </button>
 </footer>
 
-<script src="../script.js"></script>
+<script src="../script.js?v=1"></script>
 <script>
 (function(){
   'use strict';
@@ -574,6 +604,86 @@
       });
   }
 
+  function راهاندازيبنر(){
+    var track = document.getElementById('bannerTrack');
+    if(!track) return;
+
+    var strips = track.querySelectorAll('.banner-strip');
+    if(strips.length === 0) return;
+
+    var stripWidth = strips[0].offsetWidth;
+    if(stripWidth === 0) return;
+
+    var totalWidth = stripWidth * strips.length;
+
+    var cloneContainer = document.createDocumentFragment();
+    for(var i = 0; i < strips.length; i++){
+      var clone = strips[i].cloneNode(true);
+      clone.style.animation = 'none';
+      clone.style.opacity = '1';
+      clone.style.transform = 'none';
+      cloneContainer.appendChild(clone);
+    }
+    track.appendChild(cloneContainer);
+
+    var offset = 0;
+    var speed = 0.3;
+    var isDragging = false;
+    var startX = 0;
+    var startOffset = 0;
+    var animationId = null;
+
+    function wrapOffset(){
+      if(offset >= totalWidth){
+        offset -= totalWidth;
+      }
+      if(offset < 0){
+        offset += totalWidth;
+      }
+    }
+
+    function animate(){
+      if(!isDragging){
+        offset += speed;
+        wrapOffset();
+      }
+      track.style.transform = 'translateX(' + (-offset) + 'px)';
+      animationId = requestAnimationFrame(animate);
+    }
+
+    function getClientX(e){
+      if(e.touches && e.touches.length) return e.touches[0].clientX;
+      return e.clientX;
+    }
+
+    function onStart(e){
+      isDragging = true;
+      startX = getClientX(e);
+      startOffset = offset;
+    }
+
+    function onMove(e){
+      if(!isDragging) return;
+      var dx = getClientX(e) - startX;
+      offset = startOffset - dx;
+      wrapOffset();
+      track.style.transform = 'translateX(' + (-offset) + 'px)';
+    }
+
+    function onEnd(){
+      isDragging = false;
+    }
+
+    track.addEventListener('mousedown', onStart);
+    track.addEventListener('touchstart', onStart, {passive:true});
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, {passive:true});
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchend', onEnd);
+
+    animationId = requestAnimationFrame(animate);
+  }
+
   function shoroo(){
     var now = new Date();
     var shamsi = tabdilMiladiBeShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -589,6 +699,8 @@
     document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
 
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
+
+    setTimeout(راهاندازيبنر, 700);
   }
 
   shoroo();
