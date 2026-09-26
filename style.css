@@ -1,711 +1,391 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>شهدای گمنام شورابیل</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=1">
-<style>
-.main{
-  position:relative;
-  z-index:5;
-  padding:0 12px 110px;
-  min-height:100vh;
+:root{
+  --accent:#1e7a5a;
+  --accent-soft:#2fa87d;
+  --accent-glow:rgba(47,168,125,.45);
+  --accent-line:rgba(30,122,90,.20);
+  --accent-bg:rgba(47,168,125,.10);
+  --text:#1a2e26;
+  --text-soft:rgba(26,46,38,.6);
+  --glass-bg:rgba(255,255,255,.55);
+  --glass-bg-strong:rgba(255,255,255,.72);
+  --glass-border:rgba(30,122,90,.18);
+  --glass-shadow:0 6px 24px rgba(30,122,90,.10);
+  --radius:16px;
+  --radius-sm:12px;
+  --font:'Vazirmatn',Tahoma,sans-serif;
+  --bg-body:#fdfcf9;
 }
 
-.banner{
-  position:relative;
-  width:calc(100% + 24px);
-  margin-right:-12px;
-  height:280px;
-  margin-top:118px;
-  overflow:hidden;
-  animation:bannerEnter .9s ease;
-  -webkit-mask-image:linear-gradient(to bottom,
-    black 0%,
-    black 85%,
-    rgba(0,0,0,.95) 89%,
-    rgba(0,0,0,.85) 93%,
-    rgba(0,0,0,.6) 96%,
-    rgba(0,0,0,.3) 98%,
-    transparent 100%);
-  mask-image:linear-gradient(to bottom,
-    black 0%,
-    black 85%,
-    rgba(0,0,0,.95) 89%,
-    rgba(0,0,0,.85) 93%,
-    rgba(0,0,0,.6) 96%,
-    rgba(0,0,0,.3) 98%,
-    transparent 100%);
+[data-theme="dark"]{
+  --accent:#5fd0a4;
+  --accent-soft:#7fe0b8;
+  --accent-glow:rgba(95,208,164,.55);
+  --accent-line:rgba(95,208,164,.25);
+  --accent-bg:rgba(95,208,164,.14);
+  --text:#ececec;
+  --text-soft:rgba(236,236,236,.6);
+  --glass-bg:rgba(255,255,255,.08);
+  --glass-bg-strong:rgba(50,50,50,.72);
+  --glass-border:rgba(255,255,255,.12);
+  --glass-shadow:0 6px 24px rgba(0,0,0,.4);
+  --bg-body:#222222;
 }
 
-@keyframes bannerEnter{
-  0%{opacity:0;transform:scale(1.03) translateY(10px);}
-  100%{opacity:1;transform:scale(1) translateY(0);}
+[data-season="muharram"]{
+  --accent:#a82f2f;
+  --accent-soft:#c95a5a;
+  --accent-glow:rgba(168,47,47,.45);
+  --accent-line:rgba(168,47,47,.20);
+  --accent-bg:rgba(168,47,47,.10);
 }
 
-.banner-track{
-  display:flex;
-  height:100%;
-  will-change:transform;
-  cursor:grab;
+[data-theme="dark"][data-season="muharram"]{
+  --accent:#e07f7f;
+  --accent-soft:#f0a0a0;
+  --accent-glow:rgba(224,127,127,.55);
+  --accent-line:rgba(224,127,127,.25);
+  --accent-bg:rgba(224,127,127,.14);
+  --bg-body:#222020;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
   user-select:none;
-}
-
-.banner-track:active{
-  cursor:grabbing;
-}
-
-.banner-strip{
-  flex:0 0 auto;
-  height:100%;
-  width:157.5px;
-  overflow:hidden;
-  opacity:0;
-  transform:translateX(-30px);
-  animation:stripIn .6s cubic-bezier(.2,.8,.2,1) forwards;
-}
-
-.banner-strip img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  pointer-events:none;
   -webkit-user-drag:none;
+  user-drag:none;
 }
 
-@keyframes stripIn{
-  0%{opacity:0;transform:translateX(-30px);}
-  100%{opacity:1;transform:translateX(0);}
+html,body{height:100%;}
+
+img{
+  pointer-events:none;
+  -webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  user-drag:none;
 }
 
-.top-row{
-  display:flex;
-  gap:10px;
-  margin-top:-55px;
+body{
+  font-family:var(--font);
+  background:var(--bg-body);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background .8s ease,color .5s ease;
   position:relative;
-  z-index:10;
-  animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) .4s backwards;
 }
 
-@keyframes cardEnter{
-  from{opacity:0;transform:translateY(20px);}
+@keyframes softFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-2.5px);}
+}
+
+.bg-orbs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.22;animation:floatOrb 22s ease-in-out infinite;}
+.orb:nth-child(1){width:320px;height:320px;background:var(--accent-soft);top:-100px;right:-80px;}
+.orb:nth-child(2){width:260px;height:260px;background:var(--accent);bottom:-80px;left:-60px;animation-delay:-8s;}
+.orb:nth-child(3){width:200px;height:200px;background:var(--accent-soft);top:45%;left:35%;animation-delay:-15s;opacity:.12;}
+
+@keyframes floatOrb{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(30px,-40px) scale(1.15);}
+}
+
+.top-bar{
+  position:fixed;
+  top:3px;right:3px;left:3px;
+  z-index:100;
+  display:flex;
+  gap:6px;
+  align-items:stretch;
+  height:64px;
+}
+
+.header{
+  flex:1;
+  border-radius:var(--radius);
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  padding:8px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  animation:headerEnter .8s cubic-bezier(.2,.8,.2,1);
+  transition:background .5s ease,border .5s ease;
+}
+@keyframes headerEnter{
+  from{opacity:0;transform:translateY(-20px);}
   to{opacity:1;transform:translateY(0);}
 }
 
-.glass-card{
-  position:relative;
+.header-logo{
+  width:44px;height:44px;
+  object-fit:contain;
+  flex-shrink:0;
+  filter:drop-shadow(0 0 8px var(--accent-glow));
+  animation:logoGlow 3.5s ease-in-out infinite;
+}
+
+[data-theme="dark"] .header-logo{
+  filter:drop-shadow(0 0 8px var(--accent-glow)) brightness(0) invert(1);
+}
+
+@keyframes logoGlow{
+  0%,100%{filter:drop-shadow(0 0 6px var(--accent-glow));}
+  50%{filter:drop-shadow(0 0 14px var(--accent-glow));}
+}
+
+.header-text{display:flex;flex-direction:column;gap:1px;overflow:hidden;}
+.header-title{
+  font-size:13px;font-weight:800;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.header-subtitle{
+  font-size:8px;
+  color:var(--text-soft);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+.profile-circle{
+  flex:0 0 64px;
+  width:64px;height:64px;
+  border-radius:var(--radius);
   background:rgba(255,255,255,.55);
-  backdrop-filter:blur(22px) saturate(180%);
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
   border:1px solid var(--glass-border);
-  border-radius:24px;
   box-shadow:var(--glass-shadow);
-  overflow:hidden;
-  transition:background .5s ease,border .5s ease;
-}
-
-[data-theme="dark"] .glass-card{
-  background:rgba(50,50,50,.55);
-  border:1px solid rgba(255,255,255,.12);
-}
-
-.shooting-star-container{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-  pointer-events:none;
-  z-index:0;
-}
-
-.shooting-star{
-  position:absolute;
-  width:2px;
-  height:60px;
-  background:linear-gradient(to bottom,rgba(47,168,125,.6),transparent);
-  border-radius:50%;
-  animation:shootingStar 2s linear infinite;
-  opacity:0;
-}
-
-[data-theme="dark"] .shooting-star{
-  background:linear-gradient(to bottom,rgba(255,255,255,.55),transparent);
-}
-
-@keyframes shootingStar{
-  0%{transform:translateX(0) translateY(0) rotate(-35deg);opacity:0;}
-  10%{opacity:1;}
-  70%{opacity:1;}
-  100%{transform:translateX(-250px) translateY(320px) rotate(-35deg);opacity:0;}
-}
-
-.calendar-section{
-  flex:0 0 calc(48% - 5px);
-  padding:12px 10px;
-}
-
-.calendar-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:8px;
-  position:relative;
-  z-index:1;
-}
-
-.calendar-nav{
-  width:26px;
-  height:26px;
-  border-radius:8px;
-  border:1px solid var(--glass-border);
-  background:rgba(255,255,255,.3);
-  cursor:pointer;
-  font-size:11px;
-  color:var(--accent);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:all .2s ease;
-  font-family:var(--font);
-}
-
-[data-theme="dark"] .calendar-nav{
-  background:rgba(255,255,255,.06);
-}
-
-.calendar-nav:hover{background:var(--accent-bg);}
-.calendar-nav:active{transform:scale(.9);}
-
-.calendar-month-title{
-  font-size:12px;
-  font-weight:800;
-  color:var(--text);
-  user-select:none;
-}
-
-.calendar-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:2px;
-  position:relative;
-  z-index:1;
-}
-
-.calendar-day{
-  text-align:center;
-  padding:4px 1px;
-  border-radius:8px;
-  font-size:10px;
-  cursor:pointer;
-  transition:all .2s ease;
-  position:relative;
-  color:var(--text);
-  min-height:28px;
+  padding:4px 2px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  border:1px solid transparent;
+  gap:2px;
+  cursor:pointer;
+  color:var(--accent);
+  animation:headerEnter .8s cubic-bezier(.2,.8,.2,1) .1s backwards;
+  transition:background .3s ease,transform .3s ease;
+  overflow:hidden;
 }
 
-.calendar-day:hover{
-  background:var(--accent-bg);
-  border-color:var(--accent-line);
+[data-theme="dark"] .profile-circle{
+  background:rgba(70,70,70,.7);
 }
 
-.calendar-day.today{
-  background:var(--accent);
-  color:#fff;
-  font-weight:800;
-  box-shadow:0 0 10px var(--accent-glow);
+.profile-circle:hover{transform:scale(1.04);}
+.profile-circle:active{transform:scale(.96);}
+
+.profile-circle img{
+  width:100%;height:100%;object-fit:cover;border-radius:var(--radius);
 }
 
-.prayer-section{
-  flex:0 0 calc(52% - 5px);
-  padding:12px 10px;
+.profile-circle i{
+  font-size:20px;
 }
 
-.prayer-title{
-  font-size:12px;
-  font-weight:800;
+.profile-circle span{
+  font-size:8px;
+  font-weight:700;
   color:var(--text);
-  margin-bottom:6px;
-  text-align:center;
-  position:relative;
-  z-index:1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
 }
 
-.prayer-date{
-  grid-column:1 / -1;
-  text-align:center;
-  font-size:9px;
-  font-weight:600;
-  color:var(--text-soft);
-  margin-bottom:6px;
-  position:relative;
-  z-index:1;
-  padding:5px 6px;
-  background:rgba(255,255,255,.3);
-  border-radius:8px;
+.sub-bar{
+  position:fixed;
+  top:73px;right:3px;left:3px;
+  z-index:99;
+  display:flex;
+  gap:6px;
+  height:36px;
+  animation:headerEnter .8s cubic-bezier(.2,.8,.2,1) .2s backwards;
+  transition:gap .3s ease;
+}
+
+.sub-bar.expanded{
+  gap:0;
+}
+
+.sub-btn{
+  height:36px;
+  border-radius:10px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
   border:1px solid var(--glass-border);
-}
-
-[data-theme="dark"] .prayer-date{
-  background:rgba(255,255,255,.06);
-}
-
-.prayer-list{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4px;
-  position:relative;
-  z-index:1;
-}
-
-.prayer-item{
+  box-shadow:var(--glass-shadow);
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:5px 7px;
-  border-radius:8px;
-  background:rgba(255,255,255,.3);
-  transition:all .3s ease;
-  border:1px solid transparent;
-  font-size:9px;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+  color:var(--text);
+  font-family:var(--font);
+  font-size:11px;
+  font-weight:700;
+  padding:0 12px;
+  overflow:hidden;
+  white-space:nowrap;
+  transition:flex-basis .4s cubic-bezier(.2,.8,.2,1),
+             opacity .3s ease,
+             transform .4s cubic-bezier(.2,.8,.2,1),
+             background .3s ease,
+             padding .3s ease;
+  position:relative;
 }
 
-[data-theme="dark"] .prayer-item{
-  background:rgba(255,255,255,.06);
+.sub-btn:hover{background:var(--accent-bg);}
+.sub-btn:active{transform:scale(.97);}
+
+.sub-btn i{
+  font-size:15px;
+  color:var(--accent);
+  flex-shrink:0;
 }
 
-.prayer-item.next{
+.sub-notif{
+  flex:1;
+  position:relative;
+  overflow:visible;
+}
+
+.sub-notif .badge{
+  position:absolute;
+  top:-4px;right:-4px;
+  min-width:16px;height:16px;
+  border-radius:50%;
   background:var(--accent);
   color:#fff;
+  font-size:9px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px;
+  animation:badgePulse 2s ease-in-out infinite;
+  z-index:10;
+}
+
+@keyframes badgePulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.15);}
+}
+
+.sub-music,
+.sub-theme{
+  flex:0 0 36px;
+  padding:0;
+}
+
+.sub-music.active{
+  background:var(--accent);
   border-color:var(--accent);
-  box-shadow:0 0 10px var(--accent-glow);
+  box-shadow:0 0 12px var(--accent-glow);
 }
 
-.prayer-item.next .prayer-name,
-.prayer-item.next .prayer-time,
-.prayer-item.next .prayer-name i{color:#fff;}
-
-.prayer-item.night{
-  grid-column:1 / -1;
-  justify-content:center;
-  gap:10px;
+.sub-music.active i{
+  color:#fff;
 }
 
-.prayer-name{
-  font-size:9px;
-  font-weight:600;
+.sub-bar.expanded .sub-btn:not(.expanded-btn){
+  flex:0 0 0;
+  opacity:0;
+  padding:0;
+  margin:0;
+  transform:scale(.6);
+  pointer-events:none;
+  border-width:0;
+}
+
+.sub-bar.expanded .sub-btn.expanded-btn{
+  flex:1;
+  width:100%;
+  padding:0 16px;
+  justify-content:flex-start;
+}
+
+.sub-btn .msg{
+  display:none;
+  font-size:11px;
+  font-weight:700;
   color:var(--text);
-  display:flex;
-  align-items:center;
-  gap:3px;
 }
 
-.prayer-name i{
-  font-size:10px;
-  color:var(--accent);
+.sub-bar.expanded .sub-btn.expanded-btn .msg{
+  display:inline;
+  animation:msgIn .4s ease forwards;
 }
 
-.prayer-time{
-  font-size:9px;
-  font-weight:800;
-  color:var(--accent);
-  direction:ltr;
+.sub-bar.expanded .sub-btn.expanded-btn.sub-music.active .msg,
+.sub-bar.expanded .sub-btn.expanded-btn.sub-music.active i{
+  color:#fff;
 }
 
-.prayer-loading{
-  grid-column:1 / -1;
-  text-align:center;
-  font-size:10px;
+@keyframes msgIn{
+  from{opacity:0;transform:translateX(-8px);}
+  to{opacity:1;transform:translateX(0);}
+}
+
+.footer{
+  position:fixed;
+  bottom:8px;right:5%;left:5%;width:90%;
+  margin:0 auto;
+  z-index:999;
+  border-radius:25px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border:1px solid var(--accent-line);
+  box-shadow:var(--glass-shadow);
+  padding:4px 0;
+  display:flex;justify-content:space-around;align-items:center;
+  animation:footerEnter .8s cubic-bezier(.2,.8,.2,1) .3s backwards;
+  transition:background .5s ease,border .5s ease;
+}
+@keyframes footerEnter{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  background:none;border:none;
   color:var(--text-soft);
-  padding:20px 0;
+  font-family:var(--font);
+  cursor:pointer;
+  padding:4px 10px;
+  border-radius:12px;
+  transition:color .2s ease;
 }
 
-@media (max-width:400px){
-  .top-row{gap:8px;}
-  .calendar-section{padding:10px 8px;}
-  .prayer-section{padding:10px 8px;}
-  .calendar-month-title{font-size:11px;}
-  .calendar-day{font-size:9px;min-height:24px;padding:2px 0;}
-  .prayer-item{font-size:8px;padding:4px 5px;}
-  .prayer-name{font-size:8px;}
-  .prayer-name i{font-size:9px;}
-  .prayer-time{font-size:8px;}
-  .header-title{font-size:12px;}
+.nav-item i{
+  font-size:20px;
+  color:var(--text-soft);
+  transition:color .3s ease;
 }
-</style>
-</head>
-<body data-season="normal" data-theme="light">
 
-<div class="bg-orbs">
-  <div class="orb"></div>
-  <div class="orb"></div>
-  <div class="orb"></div>
-</div>
+.nav-item i::before{
+  display:inline-block;
+  animation:softFloat 4s ease-in-out infinite;
+}
 
-<div class="top-bar">
-  <button class="profile-circle" id="profileBtn" data-href="../profile/new/">
-    <i class="fa-solid fa-user-plus fa-jello"></i>
-  </button>
+.nav-item:nth-child(1) i::before{animation-delay:0s;animation-duration:3.8s;}
+.nav-item:nth-child(2) i::before{animation-delay:-.7s;animation-duration:4.4s;}
+.nav-item:nth-child(3) i::before{animation-delay:-1.6s;animation-duration:4.1s;}
+.nav-item:nth-child(4) i::before{animation-delay:-2.3s;animation-duration:4.6s;}
+.nav-item:nth-child(5) i::before{animation-delay:-3.1s;animation-duration:3.9s;}
 
-  <header class="header">
-    <img src="../images/logo.png" alt="لوگو" class="header-logo">
-    <div class="header-text">
-      <div class="header-title">شهدای گمنام شورابیل</div>
-      <div class="header-subtitle">سایت رسمی شهدای گمنام شورابیل</div>
-    </div>
-  </header>
-</div>
-
-<div class="sub-bar" id="subBar">
-  <button class="sub-btn sub-notif" id="btnNotif" data-href="../notif/">
-    <i class="fa-solid fa-bell fa-swing"></i>
-    <span>اعلان‌ها</span>
-    <span class="badge">3</span>
-  </button>
-
-  <button class="sub-btn sub-music" id="btnMusic">
-    <i class="fa-solid fa-music fa-jello"></i>
-    <span class="msg"></span>
-  </button>
-
-  <button class="sub-btn sub-theme" id="btnTheme">
-    <i class="fa-solid fa-moon fa-flip-360"></i>
-    <span class="msg"></span>
-  </button>
-</div>
-
-<main class="main">
-  <div class="banner">
-    <div class="banner-track" id="bannerTrack">
-      <div class="banner-strip" style="animation-delay:.0s"><img src="https://cdn.imgurl.ir/uploads/l23215_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.08s"><img src="https://cdn.imgurl.ir/uploads/s688042_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.16s"><img src="https://cdn.imgurl.ir/uploads/p852836_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.24s"><img src="https://cdn.imgurl.ir/uploads/t279874_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.32s"><img src="https://cdn.imgurl.ir/uploads/c90662_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.4s"><img src="https://cdn.imgurl.ir/uploads/h85267_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.48s"><img src="https://cdn.imgurl.ir/uploads/x688847_IMG__.jpg" alt=""></div>
-      <div class="banner-strip" style="animation-delay:.56s"><img src="https://cdn.imgurl.ir/uploads/w76960_IMG__.jpg" alt=""></div>
-    </div>
-  </div>
-
-  <div class="top-row">
-    <div class="glass-card calendar-section" id="calendarSection">
-      <div class="shooting-star-container" id="calendarStars"></div>
-      <div class="calendar-header">
-        <button class="calendar-nav" id="btnPrevMonth"><i class="fa-solid fa-chevron-right"></i></button>
-        <span class="calendar-month-title" id="calendarTitle">—</span>
-        <button class="calendar-nav" id="btnNextMonth"><i class="fa-solid fa-chevron-left"></i></button>
-      </div>
-      <div class="calendar-grid" id="calendarGrid"></div>
-    </div>
-
-    <div class="glass-card prayer-section">
-      <div class="shooting-star-container" id="prayerStars"></div>
-      <div class="prayer-title">اوقات شرعی اردبیل</div>
-      <div class="prayer-list" id="prayerList">
-        <div class="prayer-loading">در حال دریافت اوقات شرعی...</div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<footer class="footer">
-  <button class="nav-item active" data-href="index.html">
-    <i class="fa-solid fa-house"></i>
-    <span>خانه</span>
-  </button>
-  <button class="nav-item" data-href="../service/">
-    <i class="fa-solid fa-screwdriver-wrench"></i>
-    <span>سرویس</span>
-  </button>
-  <button class="nav-item" data-href="../event/">
-    <i class="fa-solid fa-calendar"></i>
-    <span>رویداد</span>
-  </button>
-  <button class="nav-item" data-href="../library/">
-    <i class="fa-solid fa-book-bookmark"></i>
-    <span>کتابخانه</span>
-  </button>
-  <button class="nav-item" data-href="../profile/">
-    <i class="fa-solid fa-user"></i>
-    <span>پروفایل</span>
-  </button>
-</footer>
-
-<script src="../script.js?v=1"></script>
-<script>
-(function(){
-  'use strict';
-
-  var mahHa = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-
-  var mahFeli = 0;
-  var salFeli = 0;
-
-  function tabdilMiladiBeShamsi(gy, gm, gd){
-    var g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
-    var jy = gy <= 1600 ? 0 : 979;
-    gy -= gy <= 1600 ? 621 : 1600;
-    var gy2 = gm > 2 ? gy + 1 : gy;
-    var days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
-    var jy2 = jy + 33 * Math.floor(days / 12053);
-    days %= 12053;
-    jy2 += 4 * Math.floor(days / 1461);
-    days %= 1461;
-    if(days > 365){
-      jy2 += Math.floor((days - 1) / 365);
-      days = (days - 1) % 365;
-    }
-    var jm = days < 186 ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
-    var jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
-    return {year:jy2, month:jm, day:jd};
-  }
-
-  function roozHayMah(sal, mah){
-    if(mah <= 6) return 31;
-    if(mah <= 11) return 30;
-    return ((sal - 1) % 4 === 3) ? 30 : 29;
-  }
-
-  function sakhtanSetareha(containerId, tedad){
-    var container = document.getElementById(containerId);
-    if(!container) return;
-    container.innerHTML = '';
-    for(var i = 0; i < tedad; i++){
-      var s = document.createElement('div');
-      s.className = 'shooting-star';
-      s.style.left = (Math.random() * 90) + '%';
-      s.style.top = (Math.random() * 60) + '%';
-      s.style.animationDelay = (Math.random() * 3) + 's';
-      s.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
-      container.appendChild(s);
-    }
-  }
-
-  function sakhtanTaghvim(){
-    var titleEl = document.getElementById('calendarTitle');
-    var gridEl = document.getElementById('calendarGrid');
-    if(!titleEl || !gridEl) return;
-
-    titleEl.textContent = mahHa[mahFeli - 1] + ' ' + salFeli;
-
-    var emroozMiladi = new Date();
-    var emrooz = tabdilMiladiBeShamsi(emroozMiladi.getFullYear(), emroozMiladi.getMonth() + 1, emroozMiladi.getDate());
-
-    var roozHa = roozHayMah(salFeli, mahFeli);
-
-    var html = '';
-    for(var d = 1; d <= roozHa; d++){
-      var isToday = (salFeli === emrooz.year && mahFeli === emrooz.month && d === emrooz.day);
-      html += '<div class="calendar-day' + (isToday ? ' today' : '') + '">' + d + '</div>';
-    }
-    gridEl.innerHTML = html;
-  }
-
-  function taghirMah(dir){
-    mahFeli += dir;
-    if(mahFeli > 12){mahFeli = 1; salFeli++;}
-    if(mahFeli < 1){mahFeli = 12; salFeli--;}
-    sakhtanTaghvim();
-    sakhtanSetareha('calendarStars', 6);
-  }
-
-  function namayeshAvaqat(timings, hijri){
-    var box = document.getElementById('prayerList');
-    if(!box) return;
-
-    var items = [
-      {name:'صبح', icon:'fa-cloud-moon', key:'Fajr'},
-      {name:'طلوع', icon:'fa-sun', key:'Sunrise'},
-      {name:'ظهر', icon:'fa-cloud-sun', key:'Dhuhr'},
-      {name:'عصر', icon:'fa-cloud-sun-rain', key:'Asr'},
-      {name:'مغرب', icon:'fa-cloud-moon', key:'Maghrib'},
-      {name:'عشا', icon:'fa-moon', key:'Isha'}
-    ];
-
-    var saatFeli = new Date();
-    var daghigheFeli = saatFeli.getHours() * 60 + saatFeli.getMinutes();
-    var activeIndex = -1;
-
-    for(var i = 0; i < items.length; i++){
-      var t = timings[items[i].key];
-      if(!t) continue;
-      var p = t.split(':');
-      var dg = parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
-      if(dg > daghigheFeli){
-        activeIndex = i;
-        break;
-      }
-    }
-
-    var midnight = (timings.Midnight || '').split(' ')[0];
-    var midnightDg = 9999;
-    if(midnight && midnight.indexOf(':') !== -1){
-      var mp = midnight.split(':');
-      midnightDg = parseInt(mp[0], 10) * 60 + parseInt(mp[1], 10);
-    }
-    var midnightActive = (activeIndex === -1 && midnightDg > daghigheFeli) ? ' next' : '';
-
-    var tarikhHijri = '';
-    if(hijri){
-      tarikhHijri = hijri.weekday.ar + ' - ' + hijri.day + ' ' + hijri.month.ar + ' ' + hijri.year;
-    }
-
-    var html = '<div class="prayer-date">' + (tarikhHijri || '—') + '</div>';
-
-    for(var j = 0; j < items.length; j++){
-      var timeVal = (timings[items[j].key] || '--:--').split(' ')[0];
-      var activeClass = (j === activeIndex) ? ' next' : '';
-      html += '<div class="prayer-item' + activeClass + '">' +
-        '<span class="prayer-name"><i class="fa-solid ' + items[j].icon + '"></i>' + items[j].name + '</span>' +
-        '<span class="prayer-time">' + timeVal + '</span>' +
-      '</div>';
-    }
-
-    html += '<div class="prayer-item night' + midnightActive + '">' +
-      '<span class="prayer-name"><i class="fa-solid fa-clock"></i>نیمه‌شب</span>' +
-      '<span class="prayer-time">' + (midnight || '--:--') + '</span>' +
-    '</div>';
-
-    box.innerHTML = html;
-  }
-
-  function gereftanAvaqat(){
-    var now = new Date();
-    var d = String(now.getDate()).padStart(2, '0');
-    var m = String(now.getMonth() + 1).padStart(2, '0');
-    var y = now.getFullYear();
-
-    var url = 'https://api.aladhan.com/v1/timingsByCity/' + d + '-' + m + '-' + y + '?city=Ardabil&country=Iran&method=7';
-
-    fetch(url)
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        if(data && data.code === 200 && data.data && data.data.timings){
-          namayeshAvaqat(data.data.timings, data.data.date && data.data.date.hijri);
-        } else {
-          var box = document.getElementById('prayerList');
-          if(box) box.innerHTML = '<div class="prayer-loading">خطا در دریافت اطلاعات</div>';
-        }
-      })
-      .catch(function(){
-        var box = document.getElementById('prayerList');
-        if(box) box.innerHTML = '<div class="prayer-loading">اتصال اینترنت را بررسی کنید</div>';
-      });
-  }
-
-  function راهاندازيبنر(){
-    var track = document.getElementById('bannerTrack');
-    if(!track) return;
-
-    var strips = track.querySelectorAll('.banner-strip');
-    if(strips.length === 0) return;
-
-    var stripWidth = strips[0].offsetWidth;
-    if(stripWidth === 0) return;
-
-    var totalWidth = stripWidth * strips.length;
-
-    var cloneContainer = document.createDocumentFragment();
-    for(var i = 0; i < strips.length; i++){
-      var clone = strips[i].cloneNode(true);
-      clone.style.animation = 'none';
-      clone.style.opacity = '1';
-      clone.style.transform = 'none';
-      cloneContainer.appendChild(clone);
-    }
-    track.appendChild(cloneContainer);
-
-    var offset = 0;
-    var speed = 0.3;
-    var isDragging = false;
-    var startX = 0;
-    var startOffset = 0;
-    var animationId = null;
-
-    function wrapOffset(){
-      if(offset >= totalWidth){
-        offset -= totalWidth;
-      }
-      if(offset < 0){
-        offset += totalWidth;
-      }
-    }
-
-    function animate(){
-      if(!isDragging){
-        offset += speed;
-        wrapOffset();
-      }
-      track.style.transform = 'translateX(' + (-offset) + 'px)';
-      animationId = requestAnimationFrame(animate);
-    }
-
-    function getClientX(e){
-      if(e.touches && e.touches.length) return e.touches[0].clientX;
-      return e.clientX;
-    }
-
-    function onStart(e){
-      isDragging = true;
-      startX = getClientX(e);
-      startOffset = offset;
-    }
-
-    function onMove(e){
-      if(!isDragging) return;
-      var dx = getClientX(e) - startX;
-      offset = startOffset - dx;
-      wrapOffset();
-      track.style.transform = 'translateX(' + (-offset) + 'px)';
-    }
-
-    function onEnd(){
-      isDragging = false;
-    }
-
-    track.addEventListener('mousedown', onStart);
-    track.addEventListener('touchstart', onStart, {passive:true});
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, {passive:true});
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
-
-    animationId = requestAnimationFrame(animate);
-  }
-
-  function shoroo(){
-    var now = new Date();
-    var shamsi = tabdilMiladiBeShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    mahFeli = shamsi.month;
-    salFeli = shamsi.year;
-
-    sakhtanTaghvim();
-    sakhtanSetareha('calendarStars', 6);
-    sakhtanSetareha('prayerStars', 6);
-    gereftanAvaqat();
-
-    document.getElementById('btnPrevMonth').addEventListener('click', function(){ taghirMah(-1); });
-    document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
-
-    setInterval(gereftanAvaqat, 60 * 60 * 1000);
-
-    setTimeout(راهاندازيبنر, 700);
-  }
-
-  shoroo();
-
-})();
-</script>
-</body>
-</html>
+.nav-item span{font-size:7px;font-weight:600;}
+.nav-item:active{transform:scale(.9);}
+.nav-item.active{color:var(--accent);}
+.nav-item.active i{color:var(--accent);filter:drop-shadow(0 0 6px var(--accent-glow));}
+.nav-item.active i::before{animation:fa-bounce 1s ease infinite;}
