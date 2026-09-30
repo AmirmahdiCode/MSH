@@ -57,6 +57,28 @@
     }, moddat);
   }
 
+  function gereftanTedadElaan(){
+    var API_URL = window.API_URL || '';
+    if(!API_URL) return;
+    fetch(API_URL + '?action=getActiveAnnouncements')
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        var badge = document.querySelector('.sub-notif .badge');
+        if(!badge) return;
+        var tedad = 0;
+        if(data && data.success && Array.isArray(data.data)){
+          tedad = data.data.length;
+        }
+        if(tedad > 0){
+          badge.textContent = tedad > 99 ? '99+' : String(tedad);
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      })
+      .catch(function(){});
+  }
+
   aemalTheme(gereftanTheme());
 
   if(btnTheme){
@@ -112,5 +134,7 @@
 
   var fasl = localStorage.getItem('shohada-season') || 'normal';
   body.setAttribute('data-season', fasl);
+
+  gereftanTedadElaan();
 
 })();
