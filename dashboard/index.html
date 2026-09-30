@@ -111,7 +111,7 @@
   filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));
   align-self:flex-start;
   margin-right:4px;
-  margin-bottom:-6px;
+  margin-bottom:1px;   /* ← از -6px به 1px */
 }
 
 @keyframes handWave{
@@ -137,7 +137,7 @@
   padding:12px 14px 8px;
   box-shadow:0 4px 20px rgba(0,0,0,.15);
   width:80%;
-  margin:50px auto 0;
+  margin:50px 0 0 auto;   /* ← راست‌چین شد */
   opacity:0;
   transform:translateY(15px) scale(.95);
   animation:bubbleEnter .6s cubic-bezier(.34,1.56,.64,1) .9s forwards;
@@ -263,7 +263,7 @@
   .header-title{font-size:12px;}
   .hand-wave{font-size:68px;}
   .welcome-wrap{padding:19px 10px 16px; min-height:290px;}
-  .telegram-bubble{width:85%; margin-top:45px;}
+  .telegram-bubble{width:85%; margin:45px 0 0 auto;}   /* ← راست‌چین شد */
   .tg-text{font-size:11px;}
   .tg-link{font-size:11px;}
 }
@@ -662,7 +662,7 @@
     راهاندازيبنر();
     راهاندازيویدیو();
     aemalSaateTelegram();
-    راهاندازیلینک‌ها();
+    راهاندازيلینک‌ها();
   }
 
   shoroo();
