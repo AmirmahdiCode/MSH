@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=17">
+<link rel="stylesheet" href="../style.css?v=18">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -56,7 +56,7 @@
 
 .welcome-wrap{
   margin-top:16px;
-  padding:16px 12px 18px;
+  padding:21px 12px 18px;
   border-radius:22px;
   position:relative;
   overflow:hidden;
@@ -68,7 +68,8 @@
   min-height:320px;
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:stretch;
+  direction:rtl;
 }
 
 @keyframes welcomeEnter{
@@ -110,7 +111,6 @@
   filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));
   align-self:flex-start;
   margin-right:4px;
-  margin-top:5px;
   margin-bottom:-6px;
 }
 
@@ -142,9 +142,7 @@
   transform:translateY(15px) scale(.95);
   animation:bubbleEnter .6s cubic-bezier(.34,1.56,.64,1) .9s forwards;
   direction:rtl;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
+  text-align:right;
 }
 
 @keyframes bubbleEnter{
@@ -178,9 +176,10 @@
   font-weight:500;
   color:#1a2e26;
   line-height:1.9;
-  direction:rtl;
-  text-align:right;
+  direction:rtl !important;
+  text-align:right !important;
   width:100%;
+  display:block;
 }
 
 [data-theme="dark"] .tg-text{
@@ -189,10 +188,9 @@
 
 .tg-links{
   margin-top:12px;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+  display:block;
   width:100%;
+  direction:rtl !important;
 }
 
 .tg-link{
@@ -205,10 +203,11 @@
   cursor:pointer;
   transition:all .2s ease;
   font-family:var(--font);
-  text-align:right;
+  text-align:right !important;
   border-radius:6px;
   position:relative;
-  direction:rtl;
+  direction:rtl !important;
+  width:100%;
 }
 
 [data-theme="dark"] .tg-link{
@@ -263,7 +262,7 @@
   .prayer-time{font-size:8px;}
   .header-title{font-size:12px;}
   .hand-wave{font-size:68px;}
-  .welcome-wrap{padding:14px 10px 16px; min-height:290px;}
+  .welcome-wrap{padding:19px 10px 16px; min-height:290px;}
   .telegram-bubble{width:85%; margin-top:45px;}
   .tg-text{font-size:11px;}
   .tg-link{font-size:11px;}
@@ -346,9 +345,7 @@
   </div>
 
   <div class="welcome-wrap">
-    <video class="welcome-video" autoplay muted loop playsinline webkit-playsinline preload="auto">
-      <source src="https://cdn.imgurl.ir/uploads/v67507_VID_20260930_200718_578.mp4" type="video/mp4">
-    </video>
+    <video class="welcome-video" src="https://cdn.imgurl.ir/uploads/v67507_VID_20260930_200718_578.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
     <div class="welcome-overlay"></div>
 
     <div class="hand-wave">👋</div>
@@ -397,7 +394,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=17"></script>
+<script src="../script.js?v=18"></script>
 <script>
 (function(){
   'use strict';
@@ -585,61 +582,45 @@
   }
 
   function راهاندازيویدیو(){
-    var videos = document.querySelectorAll('.welcome-video');
-    videos.forEach(function(v){
-      v.muted = true;
-      v.defaultMuted = true;
-      v.loop = true;
-      v.playsInline = true;
-      v.setAttribute('muted', '');
-      v.setAttribute('playsinline', '');
-      v.setAttribute('webkit-playsinline', '');
+    var v = document.querySelector('.welcome-video');
+    if(!v) return;
 
-      function tryPlay(){
-        try{
-          var p = v.play();
-          if(p && p.catch){
-            p.catch(function(){});
-          }
-        }catch(e){}
-      }
+    v.muted = true;
+    v.defaultMuted = true;
+    v.volume = 0;
+    v.loop = true;
+    v.playsInline = true;
+    v.setAttribute('muted', '');
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
 
-      tryPlay();
+    function play(){
+      try{
+        var p = v.play();
+        if(p && p.catch) p.catch(function(){});
+      }catch(e){}
+    }
 
-      v.addEventListener('loadeddata', tryPlay);
-      v.addEventListener('canplay', tryPlay);
-      v.addEventListener('canplaythrough', tryPlay);
+    play();
 
-      v.addEventListener('ended', function(){
-        v.currentTime = 0;
-        tryPlay();
-      });
-
-      v.addEventListener('pause', function(){
-        setTimeout(tryPlay, 100);
-      });
-
-      v.addEventListener('stalled', function(){
-        setTimeout(tryPlay, 100);
-      });
-
-      v.addEventListener('waiting', function(){
-        setTimeout(tryPlay, 100);
-      });
-
-      setInterval(function(){
-        if(v.paused || v.ended){
-          tryPlay();
-        }
-      }, 800);
-
-      var userHandler = function(){
-        tryPlay();
-      };
-      document.addEventListener('touchstart', userHandler, {passive:true});
-      document.addEventListener('click', userHandler);
-      window.addEventListener('scroll', userHandler, {passive:true});
+    v.addEventListener('loadedmetadata', play);
+    v.addEventListener('loadeddata', play);
+    v.addEventListener('canplay', play);
+    v.addEventListener('canplaythrough', play);
+    v.addEventListener('playing', function(){});
+    v.addEventListener('pause', play);
+    v.addEventListener('stalled', play);
+    v.addEventListener('waiting', play);
+    v.addEventListener('ended', function(){
+      v.currentTime = 0;
+      play();
     });
+
+    setInterval(function(){
+      if(v.paused || v.ended){
+        play();
+      }
+    }, 300);
   }
 
   function aemalSaateTelegram(){
