@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=15">
+<link rel="stylesheet" href="../style.css?v=16">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -110,6 +110,7 @@
   filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));
   align-self:flex-start;
   margin-right:4px;
+  margin-top:5px;
   margin-bottom:-6px;
 }
 
@@ -140,6 +141,7 @@
   opacity:0;
   transform:translateY(15px) scale(.95);
   animation:bubbleEnter .6s cubic-bezier(.34,1.56,.64,1) .9s forwards;
+  direction:rtl;
   text-align:right;
 }
 
@@ -176,6 +178,7 @@
   line-height:1.9;
   direction:rtl;
   text-align:right;
+  width:100%;
 }
 
 [data-theme="dark"] .tg-text{
@@ -187,6 +190,7 @@
   display:flex;
   flex-direction:column;
   gap:2px;
+  width:100%;
 }
 
 .tg-link{
@@ -202,6 +206,7 @@
   text-align:right;
   border-radius:6px;
   position:relative;
+  direction:rtl;
 }
 
 [data-theme="dark"] .tg-link{
@@ -390,7 +395,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=15"></script>
+<script src="../script.js?v=16"></script>
 <script>
 (function(){
   'use strict';
@@ -577,6 +582,26 @@
     }, 700);
   }
 
+  function راهاندازيویدیو(){
+    var videos = document.querySelectorAll('.welcome-video');
+    videos.forEach(function(v){
+      v.muted = true;
+      v.playsInline = true;
+      var playPromise = v.play();
+      if(playPromise && playPromise.catch){
+        playPromise.catch(function(){
+          var handler = function(){
+            v.play().catch(function(){});
+            document.removeEventListener('touchstart', handler);
+            document.removeEventListener('click', handler);
+          };
+          document.addEventListener('touchstart', handler, {once:true});
+          document.addEventListener('click', handler, {once:true});
+        });
+      }
+    });
+  }
+
   function aemalSaateTelegram(){
     var clock = document.getElementById('tgClock');
     if(!clock) return;
@@ -614,8 +639,9 @@
     document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
     راهاندازيبنر();
+    راهاندازيویدیو();
     aemalSaateTelegram();
-    راهاندازيلینک‌ها();
+    راهاندازیلینک‌ها();
   }
 
   shoroo();
