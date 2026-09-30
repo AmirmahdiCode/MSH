@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=16">
+<link rel="stylesheet" href="../style.css?v=17">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -142,7 +142,9 @@
   transform:translateY(15px) scale(.95);
   animation:bubbleEnter .6s cubic-bezier(.34,1.56,.64,1) .9s forwards;
   direction:rtl;
-  text-align:right;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
 }
 
 @keyframes bubbleEnter{
@@ -344,7 +346,7 @@
   </div>
 
   <div class="welcome-wrap">
-    <video class="welcome-video" autoplay muted loop playsinline preload="auto">
+    <video class="welcome-video" autoplay muted loop playsinline webkit-playsinline preload="auto">
       <source src="https://cdn.imgurl.ir/uploads/v67507_VID_20260930_200718_578.mp4" type="video/mp4">
     </video>
     <div class="welcome-overlay"></div>
@@ -395,7 +397,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=16"></script>
+<script src="../script.js?v=17"></script>
 <script>
 (function(){
   'use strict';
@@ -586,19 +588,57 @@
     var videos = document.querySelectorAll('.welcome-video');
     videos.forEach(function(v){
       v.muted = true;
+      v.defaultMuted = true;
+      v.loop = true;
       v.playsInline = true;
-      var playPromise = v.play();
-      if(playPromise && playPromise.catch){
-        playPromise.catch(function(){
-          var handler = function(){
-            v.play().catch(function(){});
-            document.removeEventListener('touchstart', handler);
-            document.removeEventListener('click', handler);
-          };
-          document.addEventListener('touchstart', handler, {once:true});
-          document.addEventListener('click', handler, {once:true});
-        });
+      v.setAttribute('muted', '');
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+
+      function tryPlay(){
+        try{
+          var p = v.play();
+          if(p && p.catch){
+            p.catch(function(){});
+          }
+        }catch(e){}
       }
+
+      tryPlay();
+
+      v.addEventListener('loadeddata', tryPlay);
+      v.addEventListener('canplay', tryPlay);
+      v.addEventListener('canplaythrough', tryPlay);
+
+      v.addEventListener('ended', function(){
+        v.currentTime = 0;
+        tryPlay();
+      });
+
+      v.addEventListener('pause', function(){
+        setTimeout(tryPlay, 100);
+      });
+
+      v.addEventListener('stalled', function(){
+        setTimeout(tryPlay, 100);
+      });
+
+      v.addEventListener('waiting', function(){
+        setTimeout(tryPlay, 100);
+      });
+
+      setInterval(function(){
+        if(v.paused || v.ended){
+          tryPlay();
+        }
+      }, 800);
+
+      var userHandler = function(){
+        tryPlay();
+      };
+      document.addEventListener('touchstart', userHandler, {passive:true});
+      document.addEventListener('click', userHandler);
+      window.addEventListener('scroll', userHandler, {passive:true});
     });
   }
 
