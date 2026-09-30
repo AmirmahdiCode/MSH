@@ -211,7 +211,6 @@ body{
   gap:6px;
   height:36px;
   animation:headerEnter .8s cubic-bezier(.2,.8,.2,1) .2s backwards;
-  transition:gap .3s ease;
 }
 
 .sub-bar.expanded{
@@ -275,6 +274,10 @@ body{
   z-index:10;
 }
 
+.sub-notif .badge.hidden{
+  display:none;
+}
+
 @keyframes badgePulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.15);}
@@ -297,17 +300,11 @@ body{
 }
 
 .sub-bar.expanded .sub-btn:not(.expanded-btn){
-  flex:0 0 0;
-  opacity:0;
-  padding:0;
-  margin:0;
-  transform:scale(.6);
-  pointer-events:none;
-  border-width:0;
+  display:none;
 }
 
 .sub-bar.expanded .sub-btn.expanded-btn{
-  flex:1;
+  flex:1 1 100%;
   width:100%;
   padding:0 16px;
   justify-content:flex-start;
