@@ -111,7 +111,7 @@
   filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));
   align-self:flex-start;
   margin-right:4px;
-  margin-bottom:1px;   /* ← از -6px به 1px */
+  margin-bottom:1px;
 }
 
 @keyframes handWave{
@@ -137,7 +137,7 @@
   padding:12px 14px 8px;
   box-shadow:0 4px 20px rgba(0,0,0,.15);
   width:80%;
-  margin:50px 0 0 auto;   /* ← راست‌چین شد */
+  margin:50px 0 0 auto;
   opacity:0;
   transform:translateY(15px) scale(.95);
   animation:bubbleEnter .6s cubic-bezier(.34,1.56,.64,1) .9s forwards;
@@ -263,7 +263,7 @@
   .header-title{font-size:12px;}
   .hand-wave{font-size:68px;}
   .welcome-wrap{padding:19px 10px 16px; min-height:290px;}
-  .telegram-bubble{width:85%; margin:45px 0 0 auto;}   /* ← راست‌چین شد */
+  .telegram-bubble{width:85%; margin:45px 0 0 auto;}
   .tg-text{font-size:11px;}
   .tg-link{font-size:11px;}
 }
@@ -345,7 +345,7 @@
   </div>
 
   <div class="welcome-wrap">
-    <video class="welcome-video" src="https://cdn.imgurl.ir/uploads/v67507_VID_20260930_200718_578.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
+    <video class="welcome-video" src="https://cdn.imgurl.ir/uploads/v67507_VID_20260930_200718_578.mp4" autoplay muted playsinline webkit-playsinline preload="auto" disablepictureinpicture></video>
     <div class="welcome-overlay"></div>
 
     <div class="hand-wave">👋</div>
@@ -588,11 +588,15 @@
     v.muted = true;
     v.defaultMuted = true;
     v.volume = 0;
-    v.loop = true;
+    v.loop = false;
     v.playsInline = true;
     v.setAttribute('muted', '');
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
+    v.setAttribute('disablepictureinpicture', '');
+    v.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+
+    var duration = 0;
 
     function play(){
       try{
@@ -601,13 +605,18 @@
       }catch(e){}
     }
 
-    play();
+    v.addEventListener('loadedmetadata', function(){
+      duration = v.duration || 0;
+      play();
+    });
 
-    v.addEventListener('loadedmetadata', play);
-    v.addEventListener('loadeddata', play);
-    v.addEventListener('canplay', play);
-    v.addEventListener('canplaythrough', play);
-    v.addEventListener('playing', function(){});
+    v.addEventListener('timeupdate', function(){
+      if(duration > 0 && v.currentTime >= duration - 0.15){
+        v.currentTime = 0;
+        play();
+      }
+    });
+
     v.addEventListener('pause', play);
     v.addEventListener('stalled', play);
     v.addEventListener('waiting', play);
@@ -616,11 +625,23 @@
       play();
     });
 
-    setInterval(function(){
-      if(v.paused || v.ended){
+    document.addEventListener('visibilitychange', function(){
+      if(!document.hidden && v.paused){
         play();
       }
-    }, 300);
+    });
+
+    window.addEventListener('focus', function(){
+      if(v.paused) play();
+    });
+
+    setInterval(function(){
+      if(v.paused && !v.ended && v.readyState >= 2){
+        play();
+      }
+    }, 500);
+
+    play();
   }
 
   function aemalSaateTelegram(){
