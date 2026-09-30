@@ -9,507 +9,50 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=3">
+<link rel="stylesheet" href="../style.css?v=4">
 <style>
-.main{
-  position:relative;
-  z-index:5;
-  padding:0 12px 110px;
-  min-height:100vh;
-}
-
-.banner{
-  position:relative;
-  width:calc(100% + 24px);
-  margin-right:-12px;
-  height:280px;
-  margin-top:118px;
-  overflow:hidden;
-  animation:bannerEnter .9s ease;
-  -webkit-mask-image:linear-gradient(to bottom,
-    black 0%,
-    black 85%,
-    rgba(0,0,0,.95) 89%,
-    rgba(0,0,0,.85) 93%,
-    rgba(0,0,0,.6) 96%,
-    rgba(0,0,0,.3) 98%,
-    transparent 100%);
-  mask-image:linear-gradient(to bottom,
-    black 0%,
-    black 85%,
-    rgba(0,0,0,.95) 89%,
-    rgba(0,0,0,.85) 93%,
-    rgba(0,0,0,.6) 96%,
-    rgba(0,0,0,.3) 98%,
-    transparent 100%);
-}
-
-@keyframes bannerEnter{
-  0%{opacity:0;transform:scale(1.03) translateY(10px);}
-  100%{opacity:1;transform:scale(1) translateY(0);}
-}
-
-.banner-track{
-  display:flex;
-  gap:5px;
-  height:100%;
-  will-change:transform;
-  padding:0 5px;
-}
-
-.banner-strip{
-  flex:0 0 auto;
-  height:100%;
-  width:150px;
-  overflow:hidden;
-  border-radius:14px;
-  opacity:0;
-  transform:translateX(-30px);
-  animation:stripIn .6s cubic-bezier(.2,.8,.2,1) forwards;
-}
-
-.banner-strip img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  pointer-events:none;
-  -webkit-user-drag:none;
-}
-
-@keyframes stripIn{
-  0%{opacity:0;transform:translateX(-30px);}
-  100%{opacity:1;transform:translateX(0);}
-}
-
-.top-row{
-  display:flex;
-  gap:10px;
-  margin-top:-55px;
-  position:relative;
-  z-index:10;
-  animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) .4s backwards;
-}
-
-@keyframes cardEnter{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-.glass-card{
-  position:relative;
-  background:rgba(255,255,255,.55);
-  backdrop-filter:blur(22px) saturate(180%);
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
-  border:1px solid var(--glass-border);
-  border-radius:24px;
-  box-shadow:var(--glass-shadow);
-  overflow:hidden;
-  transition:background .5s ease,border .5s ease;
-}
-
-[data-theme="dark"] .glass-card{
-  background:rgba(50,50,50,.55);
-  border:1px solid rgba(255,255,255,.12);
-}
-
-.shooting-star-container{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-  pointer-events:none;
-  z-index:0;
-}
-
-.shooting-star{
-  position:absolute;
-  width:2px;
-  height:60px;
-  background:linear-gradient(to bottom,rgba(47,168,125,.6),transparent);
-  border-radius:50%;
-  animation:shootingStar 2s linear infinite;
-  opacity:0;
-}
-
-[data-theme="dark"] .shooting-star{
-  background:linear-gradient(to bottom,rgba(255,255,255,.55),transparent);
-}
-
-@keyframes shootingStar{
-  0%{transform:translateX(0) translateY(0) rotate(-35deg);opacity:0;}
-  10%{opacity:1;}
-  70%{opacity:1;}
-  100%{transform:translateX(-250px) translateY(320px) rotate(-35deg);opacity:0;}
-}
-
-.calendar-section{
-  flex:0 0 calc(48% - 5px);
-  padding:12px 10px;
-}
-
-.calendar-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:8px;
-  position:relative;
-  z-index:1;
-}
-
-.calendar-nav{
-  width:26px;
-  height:26px;
-  border-radius:8px;
-  border:1px solid var(--glass-border);
-  background:rgba(255,255,255,.3);
-  cursor:pointer;
-  font-size:11px;
-  color:var(--accent);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:all .2s ease;
-  font-family:var(--font);
-}
-
-[data-theme="dark"] .calendar-nav{
-  background:rgba(255,255,255,.06);
-}
-
+.main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
+.banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
+  -webkit-mask-image:linear-gradient(to bottom,black 0%,black 85%,rgba(0,0,0,.95) 89%,rgba(0,0,0,.85) 93%,rgba(0,0,0,.6) 96%,rgba(0,0,0,.3) 98%,transparent 100%);
+  mask-image:linear-gradient(to bottom,black 0%,black 85%,rgba(0,0,0,.95) 89%,rgba(0,0,0,.85) 93%,rgba(0,0,0,.6) 96%,rgba(0,0,0,.3) 98%,transparent 100%);}
+@keyframes bannerEnter{0%{opacity:0;transform:scale(1.03) translateY(10px);}100%{opacity:1;transform:scale(1) translateY(0);}}
+.banner-track{display:flex;gap:5px;height:100%;will-change:transform;padding:0 5px;}
+.banner-strip{flex:0 0 auto;height:100%;width:150px;overflow:hidden;border-radius:14px;opacity:0;transform:translateX(-30px);animation:stripIn .6s cubic-bezier(.2,.8,.2,1) forwards;}
+.banner-strip img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none;}
+@keyframes stripIn{0%{opacity:0;transform:translateX(-30px);}100%{opacity:1;transform:translateX(0);}}
+.top-row{display:flex;gap:10px;margin-top:-55px;position:relative;z-index:10;animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) .4s backwards;}
+@keyframes cardEnter{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.glass-card{position:relative;background:rgba(255,255,255,.55);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);overflow:hidden;transition:background .5s ease,border .5s ease;}
+[data-theme="dark"] .glass-card{background:rgba(50,50,50,.55);border:1px solid rgba(255,255,255,.12);}
+.shooting-star-container{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.shooting-star{position:absolute;width:2px;height:60px;background:linear-gradient(to bottom,rgba(47,168,125,.6),transparent);border-radius:50%;animation:shootingStar 2s linear infinite;opacity:0;}
+[data-theme="dark"] .shooting-star{background:linear-gradient(to bottom,rgba(255,255,255,.55),transparent);}
+@keyframes shootingStar{0%{transform:translateX(0) translateY(0) rotate(-35deg);opacity:0;}10%{opacity:1;}70%{opacity:1;}100%{transform:translateX(-250px) translateY(320px) rotate(-35deg);opacity:0;}}
+.calendar-section{flex:0 0 calc(48% - 5px);padding:12px 10px;}
+.calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;position:relative;z-index:1;}
+.calendar-nav{width:26px;height:26px;border-radius:8px;border:1px solid var(--glass-border);background:rgba(255,255,255,.3);cursor:pointer;font-size:11px;color:var(--accent);display:flex;align-items:center;justify-content:center;transition:all .2s ease;font-family:var(--font);}
+[data-theme="dark"] .calendar-nav{background:rgba(255,255,255,.06);}
 .calendar-nav:hover{background:var(--accent-bg);}
 .calendar-nav:active{transform:scale(.9);}
-
-.calendar-month-title{
-  font-size:12px;
-  font-weight:800;
-  color:var(--text);
-  user-select:none;
-}
-
-.calendar-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:2px;
-  position:relative;
-  z-index:1;
-}
-
-.calendar-day{
-  text-align:center;
-  padding:4px 1px;
-  border-radius:8px;
-  font-size:10px;
-  cursor:pointer;
-  transition:all .2s ease;
-  position:relative;
-  color:var(--text);
-  min-height:28px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  border:1px solid transparent;
-}
-
-.calendar-day:hover{
-  background:var(--accent-bg);
-  border-color:var(--accent-line);
-}
-
-.calendar-day.today{
-  background:var(--accent);
-  color:#fff;
-  font-weight:800;
-  box-shadow:0 0 10px var(--accent-glow);
-}
-
-.prayer-section{
-  flex:0 0 calc(52% - 5px);
-  padding:12px 10px;
-}
-
-.prayer-title{
-  font-size:12px;
-  font-weight:800;
-  color:var(--text);
-  margin-bottom:6px;
-  text-align:center;
-  position:relative;
-  z-index:1;
-}
-
-.prayer-date{
-  grid-column:1 / -1;
-  text-align:center;
-  font-size:9px;
-  font-weight:600;
-  color:var(--text-soft);
-  margin-bottom:6px;
-  position:relative;
-  z-index:1;
-  padding:5px 6px;
-  background:rgba(255,255,255,.3);
-  border-radius:8px;
-  border:1px solid var(--glass-border);
-}
-
-[data-theme="dark"] .prayer-date{
-  background:rgba(255,255,255,.06);
-}
-
-.prayer-list{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4px;
-  position:relative;
-  z-index:1;
-}
-
-.prayer-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:5px 7px;
-  border-radius:8px;
-  background:rgba(255,255,255,.3);
-  transition:all .3s ease;
-  border:1px solid transparent;
-  font-size:9px;
-}
-
-[data-theme="dark"] .prayer-item{
-  background:rgba(255,255,255,.06);
-}
-
-.prayer-item.next{
-  background:var(--accent);
-  color:#fff;
-  border-color:var(--accent);
-  box-shadow:0 0 10px var(--accent-glow);
-}
-
-.prayer-item.next .prayer-name,
-.prayer-item.next .prayer-time,
-.prayer-item.next .prayer-name i{color:#fff;}
-
-.prayer-item.night{
-  grid-column:1 / -1;
-  justify-content:center;
-  gap:10px;
-}
-
-.prayer-name{
-  font-size:9px;
-  font-weight:600;
-  color:var(--text);
-  display:flex;
-  align-items:center;
-  gap:3px;
-}
-
-.prayer-name i{
-  font-size:10px;
-  color:var(--accent);
-}
-
-.prayer-time{
-  font-size:9px;
-  font-weight:800;
-  color:var(--accent);
-  direction:ltr;
-}
-
-.prayer-loading{
-  grid-column:1 / -1;
-  text-align:center;
-  font-size:10px;
-  color:var(--text-soft);
-  padding:20px 0;
-}
-
-.section-block{
-  margin-top:16px;
-  position:relative;
-  z-index:10;
-  animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) .5s backwards;
-}
-
-.section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 4px 8px;
-}
-
-.section-head-left{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:13px;
-  font-weight:800;
-  color:var(--text);
-}
-
-.section-head-left i{
-  color:var(--accent);
-  font-size:14px;
-}
-
-.section-head-more{
-  font-size:10px;
-  font-weight:700;
-  color:var(--accent);
-  text-decoration:none;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-
-.section-head-more i{
-  font-size:9px;
-}
-
-.horizontal-track{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  overflow-y:hidden;
-  padding:4px 4px 12px;
-  scroll-behavior:smooth;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-}
-
-.horizontal-track::-webkit-scrollbar{
-  display:none;
-}
-
-.item-card{
-  flex:0 0 180px;
-  border-radius:18px;
-  background:rgba(255,255,255,.55);
-  backdrop-filter:blur(22px) saturate(180%);
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
-  border:1px solid var(--glass-border);
-  box-shadow:var(--glass-shadow);
-  overflow:hidden;
-  cursor:pointer;
-  transition:transform .25s ease,background .3s ease;
-}
-
-[data-theme="dark"] .item-card{
-  background:rgba(50,50,50,.55);
-  border:1px solid rgba(255,255,255,.12);
-}
-
-.item-card:hover{
-  transform:translateY(-3px);
-}
-
-.item-card:active{
-  transform:scale(.97);
-}
-
-.item-card-image{
-  width:100%;
-  height:120px;
-  background:var(--accent-bg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--accent);
-  font-size:34px;
-  overflow:hidden;
-}
-
-.item-card-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-.item-card-body{
-  padding:10px 12px;
-}
-
-.item-card-title{
-  font-size:12px;
-  font-weight:800;
-  color:var(--text);
-  margin-bottom:6px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.item-card-meta{
-  font-size:9px;
-  color:var(--text-soft);
-  display:flex;
-  align-items:center;
-  gap:5px;
-  margin-bottom:4px;
-}
-
-.item-card-meta i{
-  color:var(--accent);
-  font-size:9px;
-}
-
-.item-card-tag{
-  display:inline-block;
-  font-size:9px;
-  font-weight:700;
-  color:var(--accent);
-  background:var(--accent-bg);
-  padding:2px 8px;
-  border-radius:8px;
-  border:1px solid var(--accent-line);
-  margin-top:6px;
-}
-
-.empty-block{
-  text-align:center;
-  padding:24px 12px;
-  color:var(--text-soft);
-  font-size:11px;
-  background:rgba(255,255,255,.4);
-  border-radius:18px;
-  border:1px dashed var(--glass-border);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  flex:1 0 100%;
-}
-
-[data-theme="dark"] .empty-block{
-  background:rgba(50,50,50,.4);
-}
-
-.empty-block i{
-  display:block;
-  font-size:28px;
-  color:var(--accent);
-  margin-bottom:8px;
-  opacity:.5;
-}
-
-.loading-block{
-  text-align:center;
-  padding:24px 12px;
-  color:var(--text-soft);
-  font-size:11px;
-  flex:1 0 100%;
-}
-
-.loading-block i{
-  display:inline-block;
-  font-size:18px;
-  color:var(--accent);
-  animation:fa-spin 1s linear infinite;
-}
-
+.calendar-month-title{font-size:12px;font-weight:800;color:var(--text);user-select:none;}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;position:relative;z-index:1;}
+.calendar-day{text-align:center;padding:4px 1px;border-radius:8px;font-size:10px;cursor:pointer;transition:all .2s ease;position:relative;color:var(--text);min-height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid transparent;}
+.calendar-day:hover{background:var(--accent-bg);border-color:var(--accent-line);}
+.calendar-day.today{background:var(--accent);color:#fff;font-weight:800;box-shadow:0 0 10px var(--accent-glow);}
+.prayer-section{flex:0 0 calc(52% - 5px);padding:12px 10px;}
+.prayer-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:6px;text-align:center;position:relative;z-index:1;}
+.prayer-date{grid-column:1 / -1;text-align:center;font-size:9px;font-weight:600;color:var(--text-soft);margin-bottom:6px;position:relative;z-index:1;padding:5px 6px;background:rgba(255,255,255,.3);border-radius:8px;border:1px solid var(--glass-border);}
+[data-theme="dark"] .prayer-date{background:rgba(255,255,255,.06);}
+.prayer-list{display:grid;grid-template-columns:1fr 1fr;gap:4px;position:relative;z-index:1;}
+.prayer-item{display:flex;justify-content:space-between;align-items:center;padding:5px 7px;border-radius:8px;background:rgba(255,255,255,.3);transition:all .3s ease;border:1px solid transparent;font-size:9px;}
+[data-theme="dark"] .prayer-item{background:rgba(255,255,255,.06);}
+.prayer-item.next{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 10px var(--accent-glow);}
+.prayer-item.next .prayer-name,.prayer-item.next .prayer-time,.prayer-item.next .prayer-name i{color:#fff;}
+.prayer-item.night{grid-column:1 / -1;justify-content:center;gap:10px;}
+.prayer-name{font-size:9px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:3px;}
+.prayer-name i{font-size:10px;color:var(--accent);}
+.prayer-time{font-size:9px;font-weight:800;color:var(--accent);direction:ltr;}
+.prayer-loading{grid-column:1 / -1;text-align:center;font-size:10px;color:var(--text-soft);padding:20px 0;}
 @media (max-width:400px){
   .top-row{gap:8px;}
   .calendar-section{padding:10px 8px;}
@@ -521,8 +64,6 @@
   .prayer-name i{font-size:9px;}
   .prayer-time{font-size:8px;}
   .header-title{font-size:12px;}
-  .item-card{flex:0 0 160px;}
-  .item-card-image{height:105px;}
 }
 </style>
 </head>
@@ -553,7 +94,7 @@
   <button class="sub-btn sub-notif" id="btnNotif" data-href="../notif/">
     <i class="fa-solid fa-bell fa-swing"></i>
     <span>اعلان‌ها</span>
-    <span class="badge">3</span>
+    <span class="badge hidden">0</span>
   </button>
 
   <button class="sub-btn sub-music" id="btnMusic">
@@ -600,70 +141,6 @@
       </div>
     </div>
   </div>
-
-  <div class="section-block">
-    <div class="section-head">
-      <div class="section-head-left">
-        <i class="fa-solid fa-bullhorn"></i>
-        <span>اطلاعیه‌ها</span>
-      </div>
-      <a class="section-head-more" data-href="../notif/">
-        <span>همه</span>
-        <i class="fa-solid fa-chevron-left"></i>
-      </a>
-    </div>
-    <div class="horizontal-track" id="announcementsTrack">
-      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
-    </div>
-  </div>
-
-  <div class="section-block">
-    <div class="section-head">
-      <div class="section-head-left">
-        <i class="fa-solid fa-calendar-check"></i>
-        <span>مراسمات</span>
-      </div>
-      <a class="section-head-more" data-href="../event/">
-        <span>همه</span>
-        <i class="fa-solid fa-chevron-left"></i>
-      </a>
-    </div>
-    <div class="horizontal-track" id="eventsTrack">
-      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
-    </div>
-  </div>
-
-  <div class="section-block">
-    <div class="section-head">
-      <div class="section-head-left">
-        <i class="fa-solid fa-star"></i>
-        <span>رویدادها</span>
-      </div>
-      <a class="section-head-more" data-href="../event/">
-        <span>همه</span>
-        <i class="fa-solid fa-chevron-left"></i>
-      </a>
-    </div>
-    <div class="horizontal-track" id="occasionsTrack">
-      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
-    </div>
-  </div>
-
-  <div class="section-block">
-    <div class="section-head">
-      <div class="section-head-left">
-        <i class="fa-solid fa-book-bookmark"></i>
-        <span>کتابخانه</span>
-      </div>
-      <a class="section-head-more" data-href="../library/">
-        <span>همه</span>
-        <i class="fa-solid fa-chevron-left"></i>
-      </a>
-    </div>
-    <div class="horizontal-track" id="libraryTrack">
-      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
-    </div>
-  </div>
 </main>
 
 <footer class="footer">
@@ -690,27 +167,14 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=3"></script>
+<script src="../script.js?v=4"></script>
 <script>
 (function(){
   'use strict';
 
-  var API_URL = window.API_URL || '';
-
   var mahHa = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-
   var mahFeli = 0;
   var salFeli = 0;
-
-  function escapeHtml(str){
-    if(str === null || str === undefined) return '';
-    return String(str)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#39;');
-  }
 
   function tabdilMiladiBeShamsi(gy, gm, gd){
     var g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
@@ -722,10 +186,7 @@
     days %= 12053;
     jy2 += 4 * Math.floor(days / 1461);
     days %= 1461;
-    if(days > 365){
-      jy2 += Math.floor((days - 1) / 365);
-      days = (days - 1) % 365;
-    }
+    if(days > 365){jy2 += Math.floor((days - 1) / 365); days = (days - 1) % 365;}
     var jm = days < 186 ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
     var jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
     return {year:jy2, month:jm, day:jd};
@@ -756,14 +217,10 @@
     var titleEl = document.getElementById('calendarTitle');
     var gridEl = document.getElementById('calendarGrid');
     if(!titleEl || !gridEl) return;
-
     titleEl.textContent = mahHa[mahFeli - 1] + ' ' + salFeli;
-
     var emroozMiladi = new Date();
     var emrooz = tabdilMiladiBeShamsi(emroozMiladi.getFullYear(), emroozMiladi.getMonth() + 1, emroozMiladi.getDate());
-
     var roozHa = roozHayMah(salFeli, mahFeli);
-
     var html = '';
     for(var d = 1; d <= roozHa; d++){
       var isToday = (salFeli === emrooz.year && mahFeli === emrooz.month && d === emrooz.day);
@@ -783,7 +240,6 @@
   function namayeshAvaqat(timings, hijri){
     var box = document.getElementById('prayerList');
     if(!box) return;
-
     var items = [
       {name:'صبح', icon:'fa-cloud-moon', key:'Fajr'},
       {name:'طلوع', icon:'fa-sun', key:'Sunrise'},
@@ -792,22 +248,16 @@
       {name:'مغرب', icon:'fa-cloud-moon', key:'Maghrib'},
       {name:'عشا', icon:'fa-moon', key:'Isha'}
     ];
-
     var saatFeli = new Date();
     var daghigheFeli = saatFeli.getHours() * 60 + saatFeli.getMinutes();
     var activeIndex = -1;
-
     for(var i = 0; i < items.length; i++){
       var t = timings[items[i].key];
       if(!t) continue;
       var p = t.split(':');
       var dg = parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
-      if(dg > daghigheFeli){
-        activeIndex = i;
-        break;
-      }
+      if(dg > daghigheFeli){activeIndex = i; break;}
     }
-
     var midnight = (timings.Midnight || '').split(' ')[0];
     var midnightDg = 9999;
     if(midnight && midnight.indexOf(':') !== -1){
@@ -815,14 +265,9 @@
       midnightDg = parseInt(mp[0], 10) * 60 + parseInt(mp[1], 10);
     }
     var midnightActive = (activeIndex === -1 && midnightDg > daghigheFeli) ? ' next' : '';
-
     var tarikhHijri = '';
-    if(hijri){
-      tarikhHijri = hijri.weekday.ar + ' - ' + hijri.day + ' ' + hijri.month.ar + ' ' + hijri.year;
-    }
-
+    if(hijri){tarikhHijri = hijri.weekday.ar + ' - ' + hijri.day + ' ' + hijri.month.ar + ' ' + hijri.year;}
     var html = '<div class="prayer-date">' + (tarikhHijri || '—') + '</div>';
-
     for(var j = 0; j < items.length; j++){
       var timeVal = (timings[items[j].key] || '--:--').split(' ')[0];
       var activeClass = (j === activeIndex) ? ' next' : '';
@@ -831,12 +276,10 @@
         '<span class="prayer-time">' + timeVal + '</span>' +
       '</div>';
     }
-
     html += '<div class="prayer-item night' + midnightActive + '">' +
       '<span class="prayer-name"><i class="fa-solid fa-clock"></i>نیمه‌شب</span>' +
       '<span class="prayer-time">' + (midnight || '--:--') + '</span>' +
     '</div>';
-
     box.innerHTML = html;
   }
 
@@ -845,9 +288,7 @@
     var d = String(now.getDate()).padStart(2, '0');
     var m = String(now.getMonth() + 1).padStart(2, '0');
     var y = now.getFullYear();
-
     var url = 'https://api.aladhan.com/v1/timingsByCity/' + d + '-' + m + '-' + y + '?city=Ardabil&country=Iran&method=7';
-
     fetch(url)
       .then(function(res){ return res.json(); })
       .then(function(data){
@@ -867,7 +308,6 @@
   function راهاندازيبنر(){
     var track = document.getElementById('bannerTrack');
     if(!track) return;
-
     var strips = Array.prototype.slice.call(track.querySelectorAll('.banner-strip'));
     if(strips.length === 0) return;
 
@@ -886,12 +326,11 @@
       var stripWidth = strips[0].offsetWidth;
       var gap = 5;
       if(stripWidth === 0) return;
-
       var step = stripWidth + gap;
       var totalWidth = step * strips.length;
 
       var cloneFragment = document.createDocumentFragment();
-      for(var i = 0; i < strips.length - 1; i++){
+      for(var i = 0; i < strips.length; i++){
         var clone = strips[i].cloneNode(true);
         clone.style.animation = 'none';
         clone.style.opacity = '1';
@@ -911,171 +350,8 @@
         track.style.transform = 'translateX(' + (-offset) + 'px)';
         requestAnimationFrame(animate);
       }
-
       requestAnimationFrame(animate);
     }, 700);
-  }
-
-  function gereftanData(action, callback){
-    if(!API_URL){
-      callback([]);
-      return;
-    }
-    fetch(API_URL + '?action=' + action)
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        if(data && data.success && Array.isArray(data.data)){
-          callback(data.data);
-        } else {
-          callback([]);
-        }
-      })
-      .catch(function(){
-        callback(null);
-      });
-  }
-
-  function namayeshKhali(trackId, payam, icon){
-    var el = document.getElementById(trackId);
-    if(el) el.innerHTML = '<div class="empty-block"><i class="fa-solid ' + (icon || 'fa-inbox') + '"></i>' + payam + '</div>';
-  }
-
-  function namayeshKhatta(trackId){
-    var el = document.getElementById(trackId);
-    if(el) el.innerHTML = '<div class="empty-block"><i class="fa-solid fa-wifi"></i>اتصال اینترنت را بررسی کنید</div>';
-  }
-
-  function sakhtanItemCard(gozine){
-    var imageHTML = '';
-    if(gozine.image){
-      imageHTML = '<img src="' + escapeHtml(gozine.image) + '" alt="">';
-    } else {
-      imageHTML = '<i class="fa-solid ' + (gozine.icon || 'fa-image') + '"></i>';
-    }
-
-    var metaHTML = '';
-    if(gozine.meta){
-      metaHTML = '<div class="item-card-meta"><i class="fa-solid ' + (gozine.metaIcon || 'fa-info-circle') + '"></i>' + escapeHtml(gozine.meta) + '</div>';
-    }
-
-    var tagHTML = '';
-    if(gozine.tag){
-      tagHTML = '<span class="item-card-tag">' + escapeHtml(gozine.tag) + '</span>';
-    }
-
-    return '<div class="item-card" data-id="' + escapeHtml(gozine.id) + '" data-href="' + escapeHtml(gozine.href || '') + '">' +
-      '<div class="item-card-image">' + imageHTML + '</div>' +
-      '<div class="item-card-body">' +
-      '<div class="item-card-title">' + escapeHtml(gozine.title) + '</div>' +
-      metaHTML +
-      tagHTML +
-      '</div>' +
-      '</div>';
-  }
-
-  function namayeshItemHa(trackId, items, kalidha){
-    var el = document.getElementById(trackId);
-    if(!el) return;
-    if(!items || items.length === 0){
-      namayeshKhali(trackId, 'فعلاً موردی ثبت نشده', 'fa-inbox');
-      return;
-    }
-
-    var html = '';
-    for(var i = 0; i < items.length; i++){
-      var item = items[i];
-      var gozine = {
-        id: item.id,
-        title: item[kalidha.title] || '—',
-        image: item[kalidha.image] || '',
-        icon: kalidha.icon || 'fa-image',
-        meta: item[kalidha.meta] || '',
-        metaIcon: kalidha.metaIcon || 'fa-info-circle',
-        tag: item[kalidha.tag] || '',
-        href: (kalidha.baseHref || '') + (item.id || '')
-      };
-      html += sakhtanItemCard(gozine);
-    }
-    el.innerHTML = html;
-
-    el.querySelectorAll('.item-card').forEach(function(card){
-      card.addEventListener('click', function(){
-        var href = card.getAttribute('data-href');
-        if(href) window.location.href = href;
-      });
-    });
-  }
-
-  function بارگذارياطلاعیه‌ها(){
-    gereftanData('getActiveAnnouncements', function(data){
-      if(data === null){
-        namayeshKhatta('announcementsTrack');
-        return;
-      }
-      namayeshItemHa('announcementsTrack', data, {
-        title: 'title',
-        image: 'image',
-        icon: 'fa-bullhorn',
-        meta: 'date',
-        metaIcon: 'fa-clock',
-        tag: 'tag',
-        baseHref: '../notif/detail/?id='
-      });
-    });
-  }
-
-  function بارگذاريمراسمات(){
-    gereftanData('getEvents', function(data){
-      if(data === null){
-        namayeshKhatta('eventsTrack');
-        return;
-      }
-      namayeshItemHa('eventsTrack', data, {
-        title: 'title',
-        image: 'poster',
-        icon: 'fa-calendar-check',
-        meta: 'date',
-        metaIcon: 'fa-clock',
-        tag: 'tag',
-        baseHref: '../event/detail/?id='
-      });
-    });
-  }
-
-  function بارگذاریرویدادها(){
-    gereftanData('getOccasions', function(data){
-      if(data === null){
-        namayeshKhatta('occasionsTrack');
-        return;
-      }
-      namayeshItemHa('occasionsTrack', data, {
-        title: 'title',
-        image: 'image',
-        icon: 'fa-star',
-        meta: 'tag',
-        metaIcon: 'fa-tag',
-        tag: '',
-        baseHref: '../event/detail/?id='
-      });
-    });
-  }
-
-  function بارگذاريکتابخانه(){
-    gereftanData('getLibrary', function(data){
-      if(data === null){
-        namayeshKhatta('libraryTrack');
-        return;
-      }
-      namayeshItemHa('libraryTrack', data, {
-        title: 'title',
-        image: 'mainImage',
-        icon: 'fa-book-bookmark',
-        meta: 'subtitle',
-        metaIcon: 'fa-info-circle',
-        tag: 'tag',
-        baseHref: '../library/detail/?id='
-      });
-    });
   }
 
   function shoroo(){
@@ -1083,23 +359,14 @@
     var shamsi = tabdilMiladiBeShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
     mahFeli = shamsi.month;
     salFeli = shamsi.year;
-
     sakhtanTaghvim();
     sakhtanSetareha('calendarStars', 6);
     sakhtanSetareha('prayerStars', 6);
     gereftanAvaqat();
-
     document.getElementById('btnPrevMonth').addEventListener('click', function(){ taghirMah(-1); });
     document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
-
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
-
     راهاندازيبنر();
-
-    بارگذارياطلاعیه‌ها();
-    بارگذاريمراسمات();
-    بارگذاریرویدادها();
-    بارگذاريکتابخانه();
   }
 
   shoroo();
