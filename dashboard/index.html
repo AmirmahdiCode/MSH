@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=2">
+<link rel="stylesheet" href="../style.css?v=3">
 <style>
 .main{
   position:relative;
@@ -327,6 +327,189 @@
   padding:20px 0;
 }
 
+.section-block{
+  margin-top:16px;
+  position:relative;
+  z-index:10;
+  animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) .5s backwards;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 4px 8px;
+}
+
+.section-head-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  font-weight:800;
+  color:var(--text);
+}
+
+.section-head-left i{
+  color:var(--accent);
+  font-size:14px;
+}
+
+.section-head-more{
+  font-size:10px;
+  font-weight:700;
+  color:var(--accent);
+  text-decoration:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.section-head-more i{
+  font-size:9px;
+}
+
+.horizontal-track{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:4px 4px 12px;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+
+.horizontal-track::-webkit-scrollbar{
+  display:none;
+}
+
+.item-card{
+  flex:0 0 180px;
+  border-radius:18px;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .25s ease,background .3s ease;
+}
+
+[data-theme="dark"] .item-card{
+  background:rgba(50,50,50,.55);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.item-card:hover{
+  transform:translateY(-3px);
+}
+
+.item-card:active{
+  transform:scale(.97);
+}
+
+.item-card-image{
+  width:100%;
+  height:120px;
+  background:var(--accent-bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--accent);
+  font-size:34px;
+  overflow:hidden;
+}
+
+.item-card-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.item-card-body{
+  padding:10px 12px;
+}
+
+.item-card-title{
+  font-size:12px;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.item-card-meta{
+  font-size:9px;
+  color:var(--text-soft);
+  display:flex;
+  align-items:center;
+  gap:5px;
+  margin-bottom:4px;
+}
+
+.item-card-meta i{
+  color:var(--accent);
+  font-size:9px;
+}
+
+.item-card-tag{
+  display:inline-block;
+  font-size:9px;
+  font-weight:700;
+  color:var(--accent);
+  background:var(--accent-bg);
+  padding:2px 8px;
+  border-radius:8px;
+  border:1px solid var(--accent-line);
+  margin-top:6px;
+}
+
+.empty-block{
+  text-align:center;
+  padding:24px 12px;
+  color:var(--text-soft);
+  font-size:11px;
+  background:rgba(255,255,255,.4);
+  border-radius:18px;
+  border:1px dashed var(--glass-border);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  flex:1 0 100%;
+}
+
+[data-theme="dark"] .empty-block{
+  background:rgba(50,50,50,.4);
+}
+
+.empty-block i{
+  display:block;
+  font-size:28px;
+  color:var(--accent);
+  margin-bottom:8px;
+  opacity:.5;
+}
+
+.loading-block{
+  text-align:center;
+  padding:24px 12px;
+  color:var(--text-soft);
+  font-size:11px;
+  flex:1 0 100%;
+}
+
+.loading-block i{
+  display:inline-block;
+  font-size:18px;
+  color:var(--accent);
+  animation:fa-spin 1s linear infinite;
+}
+
 @media (max-width:400px){
   .top-row{gap:8px;}
   .calendar-section{padding:10px 8px;}
@@ -338,6 +521,8 @@
   .prayer-name i{font-size:9px;}
   .prayer-time{font-size:8px;}
   .header-title{font-size:12px;}
+  .item-card{flex:0 0 160px;}
+  .item-card-image{height:105px;}
 }
 </style>
 </head>
@@ -415,6 +600,70 @@
       </div>
     </div>
   </div>
+
+  <div class="section-block">
+    <div class="section-head">
+      <div class="section-head-left">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>اطلاعیه‌ها</span>
+      </div>
+      <a class="section-head-more" data-href="../notif/">
+        <span>همه</span>
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </div>
+    <div class="horizontal-track" id="announcementsTrack">
+      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head">
+      <div class="section-head-left">
+        <i class="fa-solid fa-calendar-check"></i>
+        <span>مراسمات</span>
+      </div>
+      <a class="section-head-more" data-href="../event/">
+        <span>همه</span>
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </div>
+    <div class="horizontal-track" id="eventsTrack">
+      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head">
+      <div class="section-head-left">
+        <i class="fa-solid fa-star"></i>
+        <span>رویدادها</span>
+      </div>
+      <a class="section-head-more" data-href="../event/">
+        <span>همه</span>
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </div>
+    <div class="horizontal-track" id="occasionsTrack">
+      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-head">
+      <div class="section-head-left">
+        <i class="fa-solid fa-book-bookmark"></i>
+        <span>کتابخانه</span>
+      </div>
+      <a class="section-head-more" data-href="../library/">
+        <span>همه</span>
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </div>
+    <div class="horizontal-track" id="libraryTrack">
+      <div class="loading-block"><i class="fa-solid fa-spinner"></i></div>
+    </div>
+  </div>
 </main>
 
 <footer class="footer">
@@ -440,15 +689,28 @@
   </button>
 </footer>
 
-<script src="../script.js?v=2"></script>
+<script src="../url.js"></script>
+<script src="../script.js?v=3"></script>
 <script>
 (function(){
   'use strict';
+
+  var API_URL = window.API_URL || '';
 
   var mahHa = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 
   var mahFeli = 0;
   var salFeli = 0;
+
+  function escapeHtml(str){
+    if(str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
 
   function tabdilMiladiBeShamsi(gy, gm, gd){
     var g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
@@ -629,7 +891,7 @@
       var totalWidth = step * strips.length;
 
       var cloneFragment = document.createDocumentFragment();
-      for(var i = 0; i < strips.length; i++){
+      for(var i = 0; i < strips.length - 1; i++){
         var clone = strips[i].cloneNode(true);
         clone.style.animation = 'none';
         clone.style.opacity = '1';
@@ -654,6 +916,168 @@
     }, 700);
   }
 
+  function gereftanData(action, callback){
+    if(!API_URL){
+      callback([]);
+      return;
+    }
+    fetch(API_URL + '?action=' + action)
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        if(data && data.success && Array.isArray(data.data)){
+          callback(data.data);
+        } else {
+          callback([]);
+        }
+      })
+      .catch(function(){
+        callback(null);
+      });
+  }
+
+  function namayeshKhali(trackId, payam, icon){
+    var el = document.getElementById(trackId);
+    if(el) el.innerHTML = '<div class="empty-block"><i class="fa-solid ' + (icon || 'fa-inbox') + '"></i>' + payam + '</div>';
+  }
+
+  function namayeshKhatta(trackId){
+    var el = document.getElementById(trackId);
+    if(el) el.innerHTML = '<div class="empty-block"><i class="fa-solid fa-wifi"></i>اتصال اینترنت را بررسی کنید</div>';
+  }
+
+  function sakhtanItemCard(gozine){
+    var imageHTML = '';
+    if(gozine.image){
+      imageHTML = '<img src="' + escapeHtml(gozine.image) + '" alt="">';
+    } else {
+      imageHTML = '<i class="fa-solid ' + (gozine.icon || 'fa-image') + '"></i>';
+    }
+
+    var metaHTML = '';
+    if(gozine.meta){
+      metaHTML = '<div class="item-card-meta"><i class="fa-solid ' + (gozine.metaIcon || 'fa-info-circle') + '"></i>' + escapeHtml(gozine.meta) + '</div>';
+    }
+
+    var tagHTML = '';
+    if(gozine.tag){
+      tagHTML = '<span class="item-card-tag">' + escapeHtml(gozine.tag) + '</span>';
+    }
+
+    return '<div class="item-card" data-id="' + escapeHtml(gozine.id) + '" data-href="' + escapeHtml(gozine.href || '') + '">' +
+      '<div class="item-card-image">' + imageHTML + '</div>' +
+      '<div class="item-card-body">' +
+      '<div class="item-card-title">' + escapeHtml(gozine.title) + '</div>' +
+      metaHTML +
+      tagHTML +
+      '</div>' +
+      '</div>';
+  }
+
+  function namayeshItemHa(trackId, items, kalidha){
+    var el = document.getElementById(trackId);
+    if(!el) return;
+    if(!items || items.length === 0){
+      namayeshKhali(trackId, 'فعلاً موردی ثبت نشده', 'fa-inbox');
+      return;
+    }
+
+    var html = '';
+    for(var i = 0; i < items.length; i++){
+      var item = items[i];
+      var gozine = {
+        id: item.id,
+        title: item[kalidha.title] || '—',
+        image: item[kalidha.image] || '',
+        icon: kalidha.icon || 'fa-image',
+        meta: item[kalidha.meta] || '',
+        metaIcon: kalidha.metaIcon || 'fa-info-circle',
+        tag: item[kalidha.tag] || '',
+        href: (kalidha.baseHref || '') + (item.id || '')
+      };
+      html += sakhtanItemCard(gozine);
+    }
+    el.innerHTML = html;
+
+    el.querySelectorAll('.item-card').forEach(function(card){
+      card.addEventListener('click', function(){
+        var href = card.getAttribute('data-href');
+        if(href) window.location.href = href;
+      });
+    });
+  }
+
+  function بارگذارياطلاعیه‌ها(){
+    gereftanData('getActiveAnnouncements', function(data){
+      if(data === null){
+        namayeshKhatta('announcementsTrack');
+        return;
+      }
+      namayeshItemHa('announcementsTrack', data, {
+        title: 'title',
+        image: 'image',
+        icon: 'fa-bullhorn',
+        meta: 'date',
+        metaIcon: 'fa-clock',
+        tag: 'tag',
+        baseHref: '../notif/detail/?id='
+      });
+    });
+  }
+
+  function بارگذاريمراسمات(){
+    gereftanData('getEvents', function(data){
+      if(data === null){
+        namayeshKhatta('eventsTrack');
+        return;
+      }
+      namayeshItemHa('eventsTrack', data, {
+        title: 'title',
+        image: 'poster',
+        icon: 'fa-calendar-check',
+        meta: 'date',
+        metaIcon: 'fa-clock',
+        tag: 'tag',
+        baseHref: '../event/detail/?id='
+      });
+    });
+  }
+
+  function بارگذاریرویدادها(){
+    gereftanData('getOccasions', function(data){
+      if(data === null){
+        namayeshKhatta('occasionsTrack');
+        return;
+      }
+      namayeshItemHa('occasionsTrack', data, {
+        title: 'title',
+        image: 'image',
+        icon: 'fa-star',
+        meta: 'tag',
+        metaIcon: 'fa-tag',
+        tag: '',
+        baseHref: '../event/detail/?id='
+      });
+    });
+  }
+
+  function بارگذاريکتابخانه(){
+    gereftanData('getLibrary', function(data){
+      if(data === null){
+        namayeshKhatta('libraryTrack');
+        return;
+      }
+      namayeshItemHa('libraryTrack', data, {
+        title: 'title',
+        image: 'mainImage',
+        icon: 'fa-book-bookmark',
+        meta: 'subtitle',
+        metaIcon: 'fa-info-circle',
+        tag: 'tag',
+        baseHref: '../library/detail/?id='
+      });
+    });
+  }
+
   function shoroo(){
     var now = new Date();
     var shamsi = tabdilMiladiBeShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -671,6 +1095,11 @@
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
 
     راهاندازيبنر();
+
+    بارگذارياطلاعیه‌ها();
+    بارگذاريمراسمات();
+    بارگذاریرویدادها();
+    بارگذاريکتابخانه();
   }
 
   shoroo();
