@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=11">
+<link rel="stylesheet" href="../style.css?v=12">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -62,7 +62,7 @@
   overflow:hidden;
   opacity:0;
   transform:translateY(30px);
-  transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1);
+  animation:welcomeEnter .9s cubic-bezier(.2,.8,.2,1) .5s forwards;
   z-index:10;
   background:#000;
   min-height:300px;
@@ -72,9 +72,9 @@
   align-items:center;
 }
 
-.welcome-wrap.show{
-  opacity:1;
-  transform:translateY(0);
+@keyframes welcomeEnter{
+  0%{opacity:0;transform:translateY(30px);}
+  100%{opacity:1;transform:translateY(0);}
 }
 
 .welcome-video{
@@ -140,17 +140,17 @@
   width:100%;
   opacity:0;
   transform:translateY(15px) scale(.95);
-  transition:all .5s cubic-bezier(.34,1.56,.64,1) .6s;
+  animation:bubbleEnter .6s cubic-bezier(.34,1.56,.64,1) .9s forwards;
+}
+
+@keyframes bubbleEnter{
+  0%{opacity:0;transform:translateY(15px) scale(.95);}
+  100%{opacity:1;transform:translateY(0) scale(1);}
 }
 
 [data-theme="dark"] .telegram-bubble{
   background:#0f1a2e;
   box-shadow:0 4px 20px rgba(0,0,0,.5);
-}
-
-.welcome-wrap.show .telegram-bubble{
-  opacity:1;
-  transform:translateY(0) scale(1);
 }
 
 .telegram-bubble::after{
@@ -336,7 +336,7 @@
     </div>
   </div>
 
-  <div class="welcome-wrap" id="welcomeWrap">
+  <div class="welcome-wrap">
     <video class="welcome-video" autoplay muted loop playsinline preload="auto">
       <source src="https://cdn.imgurl.ir/uploads/v67507_VID_20260930_200718_578.mp4" type="video/mp4">
     </video>
@@ -388,7 +388,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=11"></script>
+<script src="../script.js?v=12"></script>
 <script>
 (function(){
   'use strict';
@@ -590,57 +590,13 @@
     setInterval(update, 30000);
   }
 
-  function راهاندازيخوشآمد(){
-    var wrap = document.getElementById('welcomeWrap');
-    if(!wrap) return;
-
-    var soundPlayed = false;
-    var revealed = false;
-
-    function showWelcome(){
-      if(revealed) return;
-      revealed = true;
-      wrap.classList.add('show');
-
-      if(!soundPlayed){
-        soundPlayed = true;
-        try{
-          var audio = new Audio('https://cdn.imgurl.ir/uploads/q55073_Bubbles_Sound.mp3');
-          audio.volume = 0.6;
-          audio.play().catch(function(){
-            var handler = function(){
-              audio.play().catch(function(){});
-              document.removeEventListener('touchstart', handler);
-              document.removeEventListener('click', handler);
-            };
-            document.addEventListener('touchstart', handler, {once:true});
-            document.addEventListener('click', handler, {once:true});
-          });
-        }catch(e){}
-      }
-    }
-
-    var SCROLL_THRESHOLD = 100;
-    var startY = window.scrollY || window.pageYOffset || 0;
-
-    function checkScroll(){
-      var currentY = window.scrollY || window.pageYOffset || 0;
-      if(currentY - startY > SCROLL_THRESHOLD){
-        setTimeout(showWelcome, 200);
-        window.removeEventListener('scroll', checkScroll);
-      }
-    }
-
-    window.addEventListener('scroll', checkScroll, {passive:true});
-
-    wrap.querySelectorAll('.tg-link').forEach(function(link){
+  function راهاندازيلینک‌ها(){
+    document.querySelectorAll('.tg-link').forEach(function(link){
       link.addEventListener('click', function(){
         var href = link.getAttribute('data-href');
         if(href) window.location.href = href;
       });
     });
-
-    aemalSaateTelegram();
   }
 
   function shoroo(){
@@ -656,7 +612,8 @@
     document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
     راهاندازيبنر();
-    راهاندازیخوشآمد();
+    aemalSaateTelegram();
+    راهاندازيلینک‌ها();
   }
 
   shoroo();
