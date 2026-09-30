@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=4">
+<link rel="stylesheet" href="../style.css?v=5">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -167,7 +167,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=4"></script>
+<script src="../script.js?v=5"></script>
 <script>
 (function(){
   'use strict';
@@ -340,14 +340,14 @@
       track.appendChild(cloneFragment);
 
       var offset = 0;
-      var speed = 0.3;
+      var speed = -0.3;
 
       function animate(){
         offset += speed;
-        if(offset >= totalWidth){
-          offset -= totalWidth;
+        if(offset <= -totalWidth){
+          offset += totalWidth;
         }
-        track.style.transform = 'translateX(' + (-offset) + 'px)';
+        track.style.transform = 'translateX(' + offset + 'px)';
         requestAnimationFrame(animate);
       }
       requestAnimationFrame(animate);
