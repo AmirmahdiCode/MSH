@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=8">
+<link rel="stylesheet" href="../style.css?v=9">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -133,30 +133,30 @@
 
 .sticker-arm{
   transform-origin:75px 80px;
-  animation:wave 1.2s ease-in-out infinite;
+  animation:wave 2.4s ease-in-out infinite;
 }
 
 @keyframes wave{
-  0%,100%{transform:rotate(-15deg);}
-  50%{transform:rotate(20deg);}
+  0%,100%{transform:rotate(-8deg);}
+  50%{transform:rotate(12deg);}
 }
 
 .sticker-body{
-  animation:bob 2s ease-in-out infinite;
+  animation:bob 3s ease-in-out infinite;
 }
 
 @keyframes bob{
   0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-4px);}
+  50%{transform:translateY(-3px);}
 }
 
 .telegram-bubble{
   position:relative;
   z-index:1;
-  background:#e6f2e6;
+  background:#ffffff;
   border-radius:16px;
   padding:14px 16px 10px;
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  box-shadow:0 2px 12px rgba(0,0,0,.10);
   max-width:100%;
   margin:0 auto;
   opacity:0;
@@ -165,8 +165,8 @@
 }
 
 [data-theme="dark"] .telegram-bubble{
-  background:#1e2a1e;
-  box-shadow:0 2px 10px rgba(0,0,0,.4);
+  background:#000000;
+  box-shadow:0 2px 12px rgba(0,0,0,.6);
 }
 
 .welcome-wrap.show .telegram-bubble{
@@ -181,14 +181,14 @@
   right:24px;
   width:16px;
   height:16px;
-  background:#e6f2e6;
+  background:#ffffff;
   transform:rotate(45deg);
   border-bottom-right-radius:4px;
   box-shadow:2px 2px 4px rgba(0,0,0,.05);
 }
 
 [data-theme="dark"] .telegram-bubble::after{
-  background:#1e2a1e;
+  background:#000000;
 }
 
 .tg-text{
@@ -231,13 +231,13 @@
 }
 
 .tg-link:hover{
-  background:rgba(30,122,90,.12);
+  background:rgba(30,122,90,.10);
   color:var(--accent);
   padding-right:10px;
 }
 
 [data-theme="dark"] .tg-link:hover{
-  background:rgba(95,208,164,.12);
+  background:rgba(95,208,164,.14);
 }
 
 .tg-link:active{
@@ -264,11 +264,6 @@
 
 [data-theme="dark"] .tg-time{
   color:#7fa07f;
-}
-
-.tg-time i{
-  font-size:10px;
-  color:#4a9d4a;
 }
 
 @media (max-width:400px){
@@ -381,7 +376,6 @@
 
       <div class="tg-time">
         <span id="tgClock">00:00</span>
-        <i class="fa-solid fa-check-double"></i>
       </div>
     </div>
   </div>
@@ -411,7 +405,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=8"></script>
+<script src="../script.js?v=9"></script>
 <script>
 (function(){
   'use strict';
@@ -693,9 +687,11 @@
     stickerWrap.innerHTML = entekhabSticker();
 
     var soundPlayed = false;
+    var revealed = false;
 
     function showWelcome(){
-      if(wrap.classList.contains('show')) return;
+      if(revealed) return;
+      revealed = true;
       wrap.classList.add('show');
 
       if(!soundPlayed){
@@ -703,28 +699,31 @@
         try{
           var audio = new Audio('https://cdn.imgurl.ir/uploads/q55073_Bubbles_Sound.mp3');
           audio.volume = 0.6;
-          audio.play().catch(function(){});
+          audio.play().catch(function(){
+            var handler = function(){
+              audio.play().catch(function(){});
+              document.removeEventListener('touchstart', handler);
+              document.removeEventListener('click', handler);
+            };
+            document.addEventListener('touchstart', handler, {once:true});
+            document.addEventListener('click', handler, {once:true});
+          });
         }catch(e){}
       }
     }
 
-    var observer = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          setTimeout(showWelcome, 300);
-          observer.disconnect();
-        }
-      });
-    }, {threshold: 0.2});
+    var SCROLL_THRESHOLD = 100;
+    var startY = window.scrollY || window.pageYOffset || 0;
 
-    observer.observe(wrap);
-
-    window.addEventListener('scroll', function(){
-      var rect = wrap.getBoundingClientRect();
-      if(rect.top < window.innerHeight * 0.9){
-        setTimeout(showWelcome, 300);
+    function checkScroll(){
+      var currentY = window.scrollY || window.pageYOffset || 0;
+      if(currentY - startY > SCROLL_THRESHOLD){
+        setTimeout(showWelcome, 200);
+        window.removeEventListener('scroll', checkScroll);
       }
-    }, {passive:true});
+    }
+
+    window.addEventListener('scroll', checkScroll, {passive:true});
 
     wrap.querySelectorAll('.tg-link').forEach(function(link){
       link.addEventListener('click', function(){
