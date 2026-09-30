@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=6">
+<link rel="stylesheet" href="../style.css?v=7">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -53,6 +53,168 @@
 .prayer-name i{font-size:10px;color:var(--accent);}
 .prayer-time{font-size:9px;font-weight:800;color:var(--accent);direction:ltr;}
 .prayer-loading{grid-column:1 / -1;text-align:center;font-size:10px;color:var(--text-soft);padding:20px 0;}
+
+/* پیام خوش‌آمد */
+.welcome-block{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1);
+  position:relative;
+  z-index:10;
+}
+
+.welcome-block.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.duck-sticker{
+  width:100px;
+  height:100px;
+  align-self:flex-start;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transform:scale(.5) rotate(-20deg);
+  transition:all .6s cubic-bezier(.34,1.56,.64,1) .2s;
+}
+
+.welcome-block.show .duck-sticker{
+  opacity:1;
+  transform:scale(1) rotate(0);
+}
+
+.duck-svg{
+  width:100%;
+  height:100%;
+  animation:duckBob 2s ease-in-out infinite;
+}
+
+@keyframes duckBob{
+  0%,100%{transform:translateY(0) rotate(-3deg);}
+  50%{transform:translateY(-6px) rotate(3deg);}
+}
+
+.msg-bubble{
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid var(--glass-border);
+  border-radius:20px 20px 20px 6px;
+  box-shadow:var(--glass-shadow);
+  padding:14px 16px;
+  max-width:100%;
+  position:relative;
+  animation:msgPop .5s cubic-bezier(.34,1.56,.64,1) .5s backwards;
+}
+
+[data-theme="dark"] .msg-bubble{
+  background:rgba(50,50,50,.65);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+@keyframes msgPop{
+  0%{opacity:0;transform:scale(.85) translateY(10px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
+
+.msg-bubble::before{
+  content:'';
+  position:absolute;
+  bottom:0;
+  right:-6px;
+  width:14px;
+  height:14px;
+  background:inherit;
+  border-right:1px solid var(--glass-border);
+  border-bottom:1px solid var(--glass-border);
+  border-radius:0 0 14px 0;
+  clip-path:polygon(0 0,100% 0,0 100%);
+}
+
+.msg-text{
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--text);
+  line-height:1.9;
+  margin-bottom:12px;
+}
+
+.msg-text .highlight{
+  color:var(--accent);
+  font-weight:800;
+}
+
+.msg-links{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-top:4px;
+  padding-top:10px;
+  border-top:1px dashed var(--glass-border);
+}
+
+.msg-link{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:10px;
+  background:rgba(255,255,255,.4);
+  border:1px solid var(--glass-border);
+  text-decoration:none;
+  color:var(--text);
+  font-size:11.5px;
+  font-weight:700;
+  transition:all .25s ease;
+  cursor:pointer;
+  font-family:var(--font);
+}
+
+[data-theme="dark"] .msg-link{
+  background:rgba(255,255,255,.06);
+}
+
+.msg-link:hover{
+  background:var(--accent-bg);
+  border-color:var(--accent-line);
+  transform:translateX(-3px);
+}
+
+.msg-link:active{
+  transform:scale(.97);
+}
+
+.msg-link-icon{
+  width:26px;
+  height:26px;
+  border-radius:8px;
+  background:var(--accent-bg);
+  border:1px solid var(--accent-line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--accent);
+  font-size:12px;
+  flex-shrink:0;
+}
+
+.msg-link-text{
+  flex:1;
+  color:var(--text);
+}
+
+.msg-link-arrow{
+  color:var(--accent);
+  font-size:10px;
+  opacity:.6;
+}
+
 @media (max-width:400px){
   .top-row{gap:8px;}
   .calendar-section{padding:10px 8px;}
@@ -64,6 +226,8 @@
   .prayer-name i{font-size:9px;}
   .prayer-time{font-size:8px;}
   .header-title{font-size:12px;}
+  .duck-sticker{width:80px;height:80px;}
+  .msg-text{font-size:11.5px;}
 }
 </style>
 </head>
@@ -141,6 +305,48 @@
       </div>
     </div>
   </div>
+
+  <div class="welcome-block" id="welcomeBlock">
+    <div class="duck-sticker">
+      <svg class="duck-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="105" rx="35" ry="5" fill="rgba(0,0,0,.08)"/>
+        <path d="M30 70 Q25 55 40 50 L40 40 Q40 30 50 28 L60 26 Q70 25 74 33 L76 42 Q80 44 82 50 Q85 60 78 68 Q72 76 60 78 Q45 80 36 76 Z" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M40 40 Q40 32 48 30 L58 28 Q66 27 70 33 L72 40 Z" fill="#fde68a" stroke="#d97706" stroke-width="1.5" stroke-linejoin="round"/>
+        <circle cx="58" cy="40" r="4" fill="#1a1a1a"/>
+        <circle cx="59" cy="39" r="1.5" fill="#fff"/>
+        <path d="M74 42 Q88 42 92 48 Q94 54 86 56 Q78 56 74 52 Z" fill="#f97316" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M76 48 L88 48" stroke="#c2410c" stroke-width="1" stroke-linecap="round"/>
+        <path d="M76 51 L86 51" stroke="#c2410c" stroke-width="1" stroke-linecap="round"/>
+        <path d="M34 58 Q28 62 26 68" stroke="#d97706" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M50 76 L48 84 M56 78 L55 86 M62 77 L62 85" stroke="#d97706" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="msg-bubble">
+      <div class="msg-text">
+        سلام به <span class="highlight">وب‌سایت شهدای گمنام شورابیل</span> خوش آمدی!<br>
+        امروز می‌خوای از کجا شروع کنی؟!
+      </div>
+
+      <div class="msg-links">
+        <a class="msg-link" data-href="../event/">
+          <span class="msg-link-icon"><i class="fa-solid fa-calendar-check"></i></span>
+          <span class="msg-link-text">مراسمات آتی</span>
+          <span class="msg-link-arrow"><i class="fa-solid fa-chevron-left"></i></span>
+        </a>
+        <a class="msg-link" data-href="../service/martyrs/">
+          <span class="msg-link-icon"><i class="fa-solid fa-star-and-crescent"></i></span>
+          <span class="msg-link-text">سرویس شهدا</span>
+          <span class="msg-link-arrow"><i class="fa-solid fa-chevron-left"></i></span>
+        </a>
+        <a class="msg-link" data-href="../about/">
+          <span class="msg-link-icon"><i class="fa-solid fa-circle-info"></i></span>
+          <span class="msg-link-text">درباره ما</span>
+          <span class="msg-link-arrow"><i class="fa-solid fa-chevron-left"></i></span>
+        </a>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer class="footer">
@@ -167,7 +373,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=6"></script>
+<script src="../script.js?v=7"></script>
 <script>
 (function(){
   'use strict';
@@ -354,6 +560,56 @@
     }, 700);
   }
 
+  function راهاندازيخوشآمد(){
+    var block = document.getElementById('welcomeBlock');
+    if(!block) return;
+
+    var key = 'shohada_welcome_shown';
+    if(sessionStorage.getItem(key) === '1') return;
+
+    var soundPlayed = false;
+
+    function showWelcome(){
+      if(block.classList.contains('show')) return;
+      block.classList.add('show');
+      sessionStorage.setItem(key, '1');
+
+      if(!soundPlayed){
+        soundPlayed = true;
+        try{
+          var audio = new Audio('https://cdn.imgurl.ir/uploads/q55073_Bubbles_Sound.mp3');
+          audio.volume = 0.6;
+          audio.play().catch(function(){});
+        }catch(e){}
+      }
+    }
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          setTimeout(showWelcome, 300);
+          observer.disconnect();
+        }
+      });
+    }, {threshold: 0.3});
+
+    observer.observe(block);
+
+    window.addEventListener('scroll', function(){
+      var rect = block.getBoundingClientRect();
+      if(rect.top < window.innerHeight * 0.85){
+        setTimeout(showWelcome, 300);
+      }
+    }, {passive:true});
+
+    block.querySelectorAll('.msg-link').forEach(function(link){
+      link.addEventListener('click', function(){
+        var href = link.getAttribute('data-href');
+        if(href) window.location.href = href;
+      });
+    });
+  }
+
   function shoroo(){
     var now = new Date();
     var shamsi = tabdilMiladiBeShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -367,6 +623,7 @@
     document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
     راهاندازيبنر();
+    راهاندازيخوشآمد();
   }
 
   shoroo();
