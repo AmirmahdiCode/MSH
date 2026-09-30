@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=5">
+<link rel="stylesheet" href="../style.css?v=6">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -17,9 +17,9 @@
   mask-image:linear-gradient(to bottom,black 0%,black 85%,rgba(0,0,0,.95) 89%,rgba(0,0,0,.85) 93%,rgba(0,0,0,.6) 96%,rgba(0,0,0,.3) 98%,transparent 100%);}
 @keyframes bannerEnter{0%{opacity:0;transform:scale(1.03) translateY(10px);}100%{opacity:1;transform:scale(1) translateY(0);}}
 .banner-track{display:flex;gap:5px;height:100%;will-change:transform;padding:0 5px;}
-.banner-strip{flex:0 0 auto;height:100%;width:150px;overflow:hidden;border-radius:14px;opacity:0;transform:translateX(-30px);animation:stripIn .6s cubic-bezier(.2,.8,.2,1) forwards;}
+.banner-strip{flex:0 0 auto;height:100%;width:150px;overflow:hidden;border-radius:14px;opacity:0;transform:translateX(30px);animation:stripIn .6s cubic-bezier(.2,.8,.2,1) forwards;}
 .banner-strip img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none;}
-@keyframes stripIn{0%{opacity:0;transform:translateX(-30px);}100%{opacity:1;transform:translateX(0);}}
+@keyframes stripIn{0%{opacity:0;transform:translateX(30px);}100%{opacity:1;transform:translateX(0);}}
 .top-row{display:flex;gap:10px;margin-top:-55px;position:relative;z-index:10;animation:cardEnter .8s cubic-bezier(.2,.8,.2,1) .4s backwards;}
 @keyframes cardEnter{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 .glass-card{position:relative;background:rgba(255,255,255,.55);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);overflow:hidden;transition:background .5s ease,border .5s ease;}
@@ -167,7 +167,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=5"></script>
+<script src="../script.js?v=6"></script>
 <script>
 (function(){
   'use strict';
@@ -340,14 +340,14 @@
       track.appendChild(cloneFragment);
 
       var offset = 0;
-      var speed = -0.3;
+      var speed = 0.3;
 
       function animate(){
         offset += speed;
-        if(offset <= -totalWidth){
-          offset += totalWidth;
+        if(offset >= totalWidth){
+          offset -= totalWidth;
         }
-        track.style.transform = 'translateX(' + offset + 'px)';
+        track.style.transform = 'translateX(' + (totalWidth - offset) + 'px)';
         requestAnimationFrame(animate);
       }
       requestAnimationFrame(animate);
