@@ -79,6 +79,33 @@
       .catch(function(){});
   }
 
+  function initScrollHeader(){
+    var topBar = document.querySelector('.top-bar');
+    var subBarEl = document.getElementById('subBar');
+    if(!topBar || !subBarEl) return;
+
+    var lastState = null;
+
+    function update(){
+      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var compact = y > 10;
+
+      if(compact === lastState) return;
+      lastState = compact;
+
+      if(compact){
+        topBar.classList.add('compact');
+        subBarEl.classList.add('hidden');
+      } else {
+        topBar.classList.remove('compact');
+        subBarEl.classList.remove('hidden');
+      }
+    }
+
+    window.addEventListener('scroll', update, {passive:true});
+    update();
+  }
+
   aemalTheme(gereftanTheme());
 
   if(btnTheme){
@@ -136,5 +163,6 @@
   body.setAttribute('data-season', fasl);
 
   gereftanTedadElaan();
+  initScrollHeader();
 
 })();
