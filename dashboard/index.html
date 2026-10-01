@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=20">
+<link rel="stylesheet" href="../style.css?v=21">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -390,6 +390,134 @@
   color:#7fa07f;
 }
 
+.martyr-refresh{
+  position:absolute;
+  top:12px;
+  left:12px;
+  z-index:3;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:var(--accent);
+  font-size:14px;
+  transition:transform .3s ease,background .3s ease;
+}
+
+[data-theme="dark"] .martyr-refresh{
+  background:rgba(50,50,50,.85);
+  border-color:rgba(255,255,255,.15);
+}
+
+.martyr-refresh:hover{
+  background:var(--accent);
+  color:#fff;
+}
+
+.martyr-refresh:active{
+  transform:scale(.9);
+}
+
+.martyr-refresh.spinning i{
+  animation:refreshSpin .8s linear infinite;
+}
+
+@keyframes refreshSpin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+.martyr-loading{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  transition:opacity .5s ease,visibility .5s ease;
+}
+
+.martyr-loading.hide{
+  opacity:0;
+  visibility:hidden;
+}
+
+.martyr-loader{
+  position:relative;
+  width:70px;
+  height:70px;
+}
+
+.martyr-loader span{
+  position:absolute;
+  inset:0;
+  border:3px solid transparent;
+  border-radius:50%;
+  animation:martyrSpin 1.4s cubic-bezier(.5,0,.5,1) infinite;
+}
+
+.martyr-loader span:nth-child(1){
+  border-top-color:var(--accent);
+  animation-delay:-.45s;
+}
+
+.martyr-loader span:nth-child(2){
+  inset:10px;
+  border-right-color:var(--accent-soft);
+  animation-delay:-.3s;
+}
+
+.martyr-loader span:nth-child(3){
+  inset:20px;
+  border-bottom-color:var(--accent);
+  animation-delay:-.15s;
+}
+
+.martyr-loader span:nth-child(4){
+  inset:28px;
+  background:var(--accent);
+  border:none;
+  border-radius:50%;
+  animation:martyrPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes martyrSpin{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+
+@keyframes martyrPulse{
+  0%,100%{transform:scale(.8);opacity:.6;}
+  50%{transform:scale(1.15);opacity:1;}
+}
+
+.martyr-loading-text{
+  font-size:11px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:.5px;
+  opacity:.85;
+  animation:loadingFade 1.6s ease-in-out infinite;
+}
+
+@keyframes loadingFade{
+  0%,100%{opacity:.4;}
+  50%{opacity:1;}
+}
+
 @media (max-width:400px){
   .top-row{gap:8px;}
   .calendar-section{padding:10px 8px;}
@@ -410,6 +538,8 @@
   .martyr-photo{width:68px;height:68px;}
   .martyr-bubble{width:85%; margin:45px 0 0 auto;}
   .mt-text{font-size:11px;}
+  .martyr-refresh{width:32px;height:32px;font-size:12px;top:10px;left:10px;}
+  .martyr-loader{width:56px;height:56px;}
 }
 </style>
 </head>
@@ -509,12 +639,26 @@
     <video class="martyr-video" src="https://cdn.imgurl.ir/uploads/w2862_InShot_20260930_220841337.mp4" autoplay muted playsinline webkit-playsinline preload="auto" disablepictureinpicture></video>
     <div class="martyr-overlay"></div>
 
+    <div class="martyr-loading" id="martyrLoading">
+      <div class="martyr-loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="martyr-loading-text">در حال دریافت پیام...</div>
+    </div>
+
+    <button class="martyr-refresh" id="martyrRefresh" aria-label="پیام جدید">
+      <i class="fa-solid fa-rotate-right"></i>
+    </button>
+
     <img class="martyr-photo" id="martyrPhoto" src="" alt="">
 
     <div class="martyr-bubble">
       <div class="mt-text" id="martyrText">
         <span class="mt-name" id="martyrName"></span>
-        <span class="mt-message" id="martyrMessage">در حال بارگذاری...</span>
+        <span class="mt-message" id="martyrMessage"></span>
       </div>
       <div class="mt-time" id="martyrDate"></div>
     </div>
@@ -544,8 +688,8 @@
   </button>
 </footer>
 
-<script src="../url.js"></script>
-<script src="../script.js?v=20"></script>
+<script src="../url.js?v=21"></script>
+<script src="../script.js?v=21"></script>
 <script>
 (function(){
   'use strict';
@@ -840,36 +984,87 @@
 
   function initMartyrMessage(){
     var API_URL = window.API_URL || '';
-    if(!API_URL) return;
+    var loadingEl = document.getElementById('martyrLoading');
+    var msgEl = document.getElementById('martyrMessage');
+    var refreshBtn = document.getElementById('martyrRefresh');
+    var refreshIcon = refreshBtn ? refreshBtn.querySelector('i') : null;
 
-    fetch(API_URL + '?action=getMartyrsMessages')
+    var allMessages = [];
+    var currentIndex = -1;
+
+    function hideLoading(){
+      if(loadingEl) loadingEl.classList.add('hide');
+    }
+
+    function renderMessage(r){
+      var nameEl = document.getElementById('martyrName');
+      var dateEl = document.getElementById('martyrDate');
+      var photoEl = document.getElementById('martyrPhoto');
+
+      if(nameEl) nameEl.textContent = (r.martyrName || 'شهید') + ':';
+      if(msgEl) msgEl.textContent = r.message || '';
+      if(dateEl) dateEl.textContent = r.date || '';
+      if(photoEl){
+        if(r.martyrImage){
+          photoEl.style.display = '';
+          photoEl.src = r.martyrImage;
+        } else {
+          photoEl.style.display = 'none';
+        }
+      }
+    }
+
+    function pickRandom(){
+      if(allMessages.length === 0) return null;
+      if(allMessages.length === 1) return allMessages[0];
+      var idx;
+      do{
+        idx = Math.floor(Math.random() * allMessages.length);
+      } while(idx === currentIndex);
+      currentIndex = idx;
+      return allMessages[idx];
+    }
+
+    function showNext(){
+      var r = pickRandom();
+      if(r) renderMessage(r);
+    }
+
+    if(!API_URL){
+      if(msgEl) msgEl.textContent = 'خطا در اتصال';
+      hideLoading();
+      return;
+    }
+
+    fetch(API_URL + '?action=getMartyrsMessages&t=' + Date.now(), {cache:'no-store'})
       .then(function(res){ return res.json(); })
       .then(function(data){
         if(!data || !data.success || !Array.isArray(data.data) || data.data.length === 0){
-          var msgEl = document.getElementById('martyrMessage');
           if(msgEl) msgEl.textContent = 'پیامی موجود نیست';
+          hideLoading();
           return;
         }
-        var r = data.data[Math.floor(Math.random() * data.data.length)];
-
-        var nameEl = document.getElementById('martyrName');
-        var msgEl = document.getElementById('martyrMessage');
-        var dateEl = document.getElementById('martyrDate');
-        var photoEl = document.getElementById('martyrPhoto');
-
-        if(nameEl) nameEl.textContent = (r.martyrName || 'شهید') + ':';
-        if(msgEl) msgEl.textContent = r.message || '';
-        if(dateEl) dateEl.textContent = r.date || '';
-        if(photoEl && r.martyrImage){
-          photoEl.src = r.martyrImage;
-        } else if(photoEl){
-          photoEl.style.display = 'none';
-        }
+        allMessages = data.data;
+        showNext();
+        hideLoading();
       })
       .catch(function(){
-        var msgEl = document.getElementById('martyrMessage');
         if(msgEl) msgEl.textContent = 'خطا در دریافت پیام';
+        hideLoading();
       });
+
+    if(refreshBtn){
+      refreshBtn.addEventListener('click', function(){
+        if(allMessages.length === 0) return;
+        if(refreshIcon){
+          refreshBtn.classList.add('spinning');
+          setTimeout(function(){
+            refreshBtn.classList.remove('spinning');
+          }, 800);
+        }
+        showNext();
+      });
+    }
   }
 
   function start(){
