@@ -1,1 +1,1 @@
-window.API_URL = 'https://script.google.com/macros/s/AKfycbw30HrmbzndzU6Lzy4jJZcaaejIu74BaOWW6sfclOL1MwWXXr8x94FvMf78xdRckuEP/exec';
+window.API_URL = 'https://script.google.com/macros/s/AKfycbz2r-yNuH_hOUgMNfNZoKZmOse4qmzkNjt2vU1xEiV0wZadjNTdmDFIxDaV1rFmYLa4/exec';
