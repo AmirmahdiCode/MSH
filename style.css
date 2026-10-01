@@ -137,7 +137,7 @@ body{
 }
 
 [data-theme="dark"] .header-logo{
-  filter:drop-shadow(0 0 8px var(--accent-glow)) brightness(0) invert(1);
+  filter:drop-shadow(0 0 8px var(--accent-glow)) brightness(0) invert(1) !important;
 }
 
 @keyframes logoGlow{
