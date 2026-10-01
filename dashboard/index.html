@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=21">
+<link rel="stylesheet" href="../style.css?v=23">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -688,8 +688,9 @@
   </button>
 </footer>
 
-<script src="../url.js?v=21"></script>
-<script src="../script.js?v=21"></script>
+<script src="../url.js?v=23"></script>
+<script src="../script.js?v=23"></script>
+<script src="../music.js?v=1"></script>
 <script>
 (function(){
   'use strict';
@@ -990,6 +991,7 @@
     var refreshIcon = refreshBtn ? refreshBtn.querySelector('i') : null;
 
     var allMessages = [];
+    var martyrsCache = {};
     var currentIndex = -1;
 
     function hideLoading(){
@@ -1001,13 +1003,16 @@
       var dateEl = document.getElementById('martyrDate');
       var photoEl = document.getElementById('martyrPhoto');
 
-      if(nameEl) nameEl.textContent = (r.martyrName || 'شهید') + ':';
+      var martyr = martyrsCache[r.martyrId] || null;
+
+      if(nameEl) nameEl.textContent = (martyr && martyr.name ? martyr.name : 'شهید') + ':';
       if(msgEl) msgEl.textContent = r.message || '';
       if(dateEl) dateEl.textContent = r.date || '';
+
       if(photoEl){
-        if(r.martyrImage){
+        if(martyr && martyr.image){
           photoEl.style.display = '';
-          photoEl.src = r.martyrImage;
+          photoEl.src = martyr.image;
         } else {
           photoEl.style.display = 'none';
         }
@@ -1036,15 +1041,27 @@
       return;
     }
 
-    fetch(API_URL + '?action=getMartyrsMessages&t=' + Date.now(), {cache:'no-store'})
-      .then(function(res){ return res.json(); })
-      .then(function(data){
-        if(!data || !data.success || !Array.isArray(data.data) || data.data.length === 0){
+    Promise.all([
+      fetch(API_URL + '?action=getMartyrMessages&t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.json(); }),
+      fetch(API_URL + '?action=getMartyrs&t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.json(); })
+    ])
+      .then(function(results){
+        var msgData = results[0];
+        var martyrData = results[1];
+
+        if(martyrData && martyrData.success && Array.isArray(martyrData.data)){
+          martyrData.data.forEach(function(m){
+            martyrsCache[String(m.id)] = m;
+          });
+        }
+
+        if(!msgData || !msgData.success || !Array.isArray(msgData.data) || msgData.data.length === 0){
           if(msgEl) msgEl.textContent = 'پیامی موجود نیست';
           hideLoading();
           return;
         }
-        allMessages = data.data;
+
+        allMessages = msgData.data;
         showNext();
         hideLoading();
       })
