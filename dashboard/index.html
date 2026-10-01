@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=18">
+<link rel="stylesheet" href="../style.css?v=19">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -250,6 +250,146 @@
   color:#7fa07f;
 }
 
+.martyr-wrap{
+  margin-top:16px;
+  padding:21px 12px 18px;
+  border-radius:22px;
+  position:relative;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(30px);
+  animation:welcomeEnter .9s cubic-bezier(.2,.8,.2,1) .7s forwards;
+  z-index:10;
+  background:#000;
+  min-height:320px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  direction:rtl;
+}
+
+.martyr-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.35;
+  z-index:0;
+  pointer-events:none;
+}
+
+[data-theme="dark"] .martyr-video{
+  opacity:.25;
+}
+
+.martyr-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.6) 100%);
+  z-index:1;
+  pointer-events:none;
+}
+
+.martyr-photo{
+  width:84px;
+  height:84px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,.85);
+  box-shadow:0 6px 22px rgba(0,0,0,.4);
+  position:relative;
+  z-index:2;
+  align-self:flex-start;
+  margin-right:4px;
+  margin-bottom:1px;
+  animation:martyrFloat 4s ease-in-out infinite;
+}
+
+@keyframes martyrFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-5px);}
+}
+
+.martyr-bubble{
+  position:relative;
+  z-index:2;
+  background:#ffffff;
+  border-radius:16px;
+  padding:12px 14px 8px;
+  box-shadow:0 4px 20px rgba(0,0,0,.15);
+  width:80%;
+  margin:50px 0 0 auto;
+  opacity:0;
+  transform:translateY(15px) scale(.95);
+  animation:bubbleEnter .6s cubic-bezier(.34,1.56,.64,1) 1.1s forwards;
+  direction:rtl;
+  text-align:right;
+}
+
+[data-theme="dark"] .martyr-bubble{
+  background:#0f1a2e;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+
+.martyr-bubble::after{
+  content:'';
+  position:absolute;
+  top:-8px;
+  right:24px;
+  width:16px;
+  height:16px;
+  background:#ffffff;
+  transform:rotate(45deg);
+  border-top-left-radius:4px;
+}
+
+[data-theme="dark"] .martyr-bubble::after{
+  background:#0f1a2e;
+}
+
+.mt-text{
+  font-size:12px;
+  font-weight:500;
+  color:#1a2e26;
+  line-height:1.9;
+  direction:rtl !important;
+  text-align:right !important;
+  width:100%;
+  display:block;
+}
+
+[data-theme="dark"] .mt-text{
+  color:#e6f2e6;
+}
+
+.mt-name{
+  display:block;
+  font-weight:800;
+  color:var(--accent);
+  margin-bottom:4px;
+}
+
+.mt-message{
+  display:block;
+  white-space:pre-line;
+}
+
+.mt-time{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:4px;
+  margin-top:6px;
+  font-size:10px;
+  color:#6b8a6b;
+  direction:ltr;
+}
+
+[data-theme="dark"] .mt-time{
+  color:#7fa07f;
+}
+
 @media (max-width:400px){
   .top-row{gap:8px;}
   .calendar-section{padding:10px 8px;}
@@ -266,6 +406,10 @@
   .telegram-bubble{width:85%; margin:45px 0 0 auto;}
   .tg-text{font-size:11px;}
   .tg-link{font-size:11px;}
+  .martyr-wrap{padding:19px 10px 16px; min-height:290px;}
+  .martyr-photo{width:68px;height:68px;}
+  .martyr-bubble{width:85%; margin:45px 0 0 auto;}
+  .mt-text{font-size:11px;}
 }
 </style>
 </head>
@@ -313,14 +457,10 @@
 <main class="main">
   <div class="banner">
     <div class="banner-track" id="bannerTrack">
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/l23215_IMG__.jpg" alt=""></div>
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/s688042_IMG__.jpg" alt=""></div>
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/p852836_IMG__.jpg" alt=""></div>
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/t279874_IMG__.jpg" alt=""></div>
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/c90662_IMG__.jpg" alt=""></div>
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/h85267_IMG__.jpg" alt=""></div>
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/x688847_IMG__.jpg" alt=""></div>
-      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/w76960_IMG__.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/z3470_InShot_20260930_213454249.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/y560316_InShot_20260930_213547273.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/c973164_InShot_20260930_213712458.jpg" alt=""></div>
+      <div class="banner-strip"><img src="https://cdn.imgurl.ir/uploads/y3029_InShot_20260930_213813747.jpg" alt=""></div>
     </div>
   </div>
 
@@ -357,15 +497,26 @@
         امروز دوست داری چطور شروع کنیم؟!
       </div>
 
-      <div class="tg-links">
-        <a class="tg-link" data-href="../event/">مراسمات آتی</a>
-        <a class="tg-link" data-href="../service/martyrs/">سرویس شهدا</a>
-        <a class="tg-link" data-href="../about/">درباره ما</a>
-      </div>
+      <div class="tg-links" id="tgLinks"></div>
 
       <div class="tg-time">
         <span id="tgClock">00:00</span>
       </div>
+    </div>
+  </div>
+
+  <div class="martyr-wrap">
+    <video class="martyr-video" src="https://cdn.imgurl.ir/uploads/w2862_InShot_20260930_220841337.mp4" autoplay muted playsinline webkit-playsinline preload="auto" disablepictureinpicture></video>
+    <div class="martyr-overlay"></div>
+
+    <img class="martyr-photo" id="martyrPhoto" src="" alt="">
+
+    <div class="martyr-bubble">
+      <div class="mt-text" id="martyrText">
+        <span class="mt-name" id="martyrName"></span>
+        <span class="mt-message" id="martyrMessage">در حال بارگذاری...</span>
+      </div>
+      <div class="mt-time" id="martyrDate"></div>
     </div>
   </div>
 </main>
@@ -394,7 +545,7 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=18"></script>
+<script src="../script.js?v=19"></script>
 <script>
 (function(){
   'use strict';
@@ -593,11 +744,8 @@
     v.setAttribute('muted', '');
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
-    v.setAttribute('disablepictureinpicture', '');
-    v.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
 
     var duration = 0;
-
     function play(){
       try{
         var p = v.play();
@@ -625,14 +773,54 @@
       play();
     });
 
-    document.addEventListener('visibilitychange', function(){
-      if(!document.hidden && v.paused){
+    setInterval(function(){
+      if(v.paused && !v.ended && v.readyState >= 2){
+        play();
+      }
+    }, 500);
+
+    play();
+  }
+
+  function راهاندازيویدیوپیامشهید(){
+    var v = document.querySelector('.martyr-video');
+    if(!v) return;
+
+    v.muted = true;
+    v.defaultMuted = true;
+    v.volume = 0;
+    v.loop = false;
+    v.playsInline = true;
+    v.setAttribute('muted', '');
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+
+    var duration = 0;
+    function play(){
+      try{
+        var p = v.play();
+        if(p && p.catch) p.catch(function(){});
+      }catch(e){}
+    }
+
+    v.addEventListener('loadedmetadata', function(){
+      duration = v.duration || 0;
+      play();
+    });
+
+    v.addEventListener('timeupdate', function(){
+      if(duration > 0 && v.currentTime >= duration - 0.15){
+        v.currentTime = 0;
         play();
       }
     });
 
-    window.addEventListener('focus', function(){
-      if(v.paused) play();
+    v.addEventListener('pause', play);
+    v.addEventListener('stalled', play);
+    v.addEventListener('waiting', play);
+    v.addEventListener('ended', function(){
+      v.currentTime = 0;
+      play();
     });
 
     setInterval(function(){
@@ -660,12 +848,67 @@
   }
 
   function راهاندازيلینک‌ها(){
-    document.querySelectorAll('.tg-link').forEach(function(link){
-      link.addEventListener('click', function(){
-        var href = link.getAttribute('data-href');
-        if(href) window.location.href = href;
+    var container = document.getElementById('tgLinks');
+    if(!container) return;
+
+    var allLinks = [
+      {text:'مراسمات آتی', href:'../event/'},
+      {text:'جدیدترین سرویس‌ها', href:'../service/'},
+      {text:'سرویس شهدا', href:'../service/martyrs/'},
+      {text:'درباره ما', href:'../library/about/'},
+      {text:'ارتباط با ما', href:'../library/connect/'},
+      {text:'مطالعه در کتابخانه', href:'../library/'},
+      {text:'آخرین اطلاعیه‌ها', href:'../notif/'},
+      {text:'پروفایل من', href:'../profile/'}
+    ];
+
+    var shuffled = allLinks.slice().sort(function(){ return Math.random() - 0.5; });
+    var selected = shuffled.slice(0, 3);
+
+    container.innerHTML = '';
+    selected.forEach(function(item){
+      var a = document.createElement('a');
+      a.className = 'tg-link';
+      a.textContent = item.text;
+      a.addEventListener('click', function(){
+        window.location.href = item.href;
       });
+      container.appendChild(a);
     });
+  }
+
+  function راهاندازيپیامشهید(){
+    var API_URL = window.API_URL || '';
+    if(!API_URL) return;
+
+    fetch(API_URL + '?action=getMartyrsMessages')
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        if(!data || !data.success || !Array.isArray(data.data) || data.data.length === 0){
+          var msgEl = document.getElementById('martyrMessage');
+          if(msgEl) msgEl.textContent = 'پیامی موجود نیست';
+          return;
+        }
+        var r = data.data[Math.floor(Math.random() * data.data.length)];
+
+        var nameEl = document.getElementById('martyrName');
+        var msgEl = document.getElementById('martyrMessage');
+        var dateEl = document.getElementById('martyrDate');
+        var photoEl = document.getElementById('martyrPhoto');
+
+        if(nameEl) nameEl.textContent = (r.martyrName || 'شهید') + ':';
+        if(msgEl) msgEl.textContent = r.message || '';
+        if(dateEl) dateEl.textContent = r.date || '';
+        if(photoEl && r.martyrImage){
+          photoEl.src = r.martyrImage;
+        } else if(photoEl){
+          photoEl.style.display = 'none';
+        }
+      })
+      .catch(function(){
+        var msgEl = document.getElementById('martyrMessage');
+        if(msgEl) msgEl.textContent = 'خطا در دریافت پیام';
+      });
   }
 
   function shoroo(){
@@ -682,8 +925,10 @@
     setInterval(gereftanAvaqat, 60 * 60 * 1000);
     راهاندازيبنر();
     راهاندازيویدیو();
+    راهاندازيویدیوپیامشهید();
     aemalSaateTelegram();
     راهاندازيلینک‌ها();
+    راهاندازيپیامشهید();
   }
 
   shoroo();
