@@ -24,13 +24,9 @@
   var btnTheme = document.getElementById('btnTheme');
   var themeIcon = btnTheme ? btnTheme.querySelector('i') : null;
   var themeMsg = btnTheme ? btnTheme.querySelector('.msg') : null;
-  var btnMusic = document.getElementById('btnMusic');
-  var musicIcon = btnMusic ? btnMusic.querySelector('i') : null;
-  var musicMsg = btnMusic ? btnMusic.querySelector('.msg') : null;
   var btnNotif = document.getElementById('btnNotif');
 
   var expandedTimer = null;
-  var musicRooshan = false;
 
   function aemalTheme(t){
     body.setAttribute('data-theme', t);
@@ -114,20 +110,6 @@
       zakhireTheme(jadid);
       aemalTheme(jadid);
       bazKardan(btnTheme, 3000);
-    });
-  }
-
-  if(btnMusic){
-    btnMusic.addEventListener('click', function(){
-      musicRooshan = !musicRooshan;
-      if(musicRooshan){
-        btnMusic.classList.add('active');
-        if(musicMsg) musicMsg.textContent = 'موسیقی فعال شد';
-      } else {
-        btnMusic.classList.remove('active');
-        if(musicMsg) musicMsg.textContent = 'موسیقی غیرفعال شد';
-      }
-      bazKardan(btnMusic, 3000);
     });
   }
 
