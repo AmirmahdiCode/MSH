@@ -9,7 +9,7 @@
 <title>شهدای گمنام شورابیل</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=19">
+<link rel="stylesheet" href="../style.css?v=20">
 <style>
 .main{position:relative;z-index:5;padding:0 12px 110px;min-height:100vh;}
 .banner{position:relative;width:calc(100% + 24px);margin-right:-12px;height:280px;margin-top:118px;overflow:hidden;animation:bannerEnter .9s ease;
@@ -545,16 +545,16 @@
 </footer>
 
 <script src="../url.js"></script>
-<script src="../script.js?v=19"></script>
+<script src="../script.js?v=20"></script>
 <script>
 (function(){
   'use strict';
 
-  var mahHa = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-  var mahFeli = 0;
-  var salFeli = 0;
+  var monthNames = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+  var currentMonth = 0;
+  var currentYear = 0;
 
-  function tabdilMiladiBeShamsi(gy, gm, gd){
+  function toShamsi(gy, gm, gd){
     var g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
     var jy = gy <= 1600 ? 0 : 979;
     gy -= gy <= 1600 ? 621 : 1600;
@@ -570,17 +570,17 @@
     return {year:jy2, month:jm, day:jd};
   }
 
-  function roozHayMah(sal, mah){
+  function daysInMonth(sal, mah){
     if(mah <= 6) return 31;
     if(mah <= 11) return 30;
     return ((sal - 1) % 4 === 3) ? 30 : 29;
   }
 
-  function sakhtanSetareha(containerId, tedad){
+  function buildStars(containerId, count){
     var container = document.getElementById(containerId);
     if(!container) return;
     container.innerHTML = '';
-    for(var i = 0; i < tedad; i++){
+    for(var i = 0; i < count; i++){
       var s = document.createElement('div');
       s.className = 'shooting-star';
       s.style.left = (Math.random() * 90) + '%';
@@ -591,31 +591,31 @@
     }
   }
 
-  function sakhtanTaghvim(){
+  function buildCalendar(){
     var titleEl = document.getElementById('calendarTitle');
     var gridEl = document.getElementById('calendarGrid');
     if(!titleEl || !gridEl) return;
-    titleEl.textContent = mahHa[mahFeli - 1] + ' ' + salFeli;
-    var emroozMiladi = new Date();
-    var emrooz = tabdilMiladiBeShamsi(emroozMiladi.getFullYear(), emroozMiladi.getMonth() + 1, emroozMiladi.getDate());
-    var roozHa = roozHayMah(salFeli, mahFeli);
+    titleEl.textContent = monthNames[currentMonth - 1] + ' ' + currentYear;
+    var now = new Date();
+    var today = toShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    var days = daysInMonth(currentYear, currentMonth);
     var html = '';
-    for(var d = 1; d <= roozHa; d++){
-      var isToday = (salFeli === emrooz.year && mahFeli === emrooz.month && d === emrooz.day);
+    for(var d = 1; d <= days; d++){
+      var isToday = (currentYear === today.year && currentMonth === today.month && d === today.day);
       html += '<div class="calendar-day' + (isToday ? ' today' : '') + '">' + d + '</div>';
     }
     gridEl.innerHTML = html;
   }
 
-  function taghirMah(dir){
-    mahFeli += dir;
-    if(mahFeli > 12){mahFeli = 1; salFeli++;}
-    if(mahFeli < 1){mahFeli = 12; salFeli--;}
-    sakhtanTaghvim();
-    sakhtanSetareha('calendarStars', 6);
+  function changeMonth(dir){
+    currentMonth += dir;
+    if(currentMonth > 12){currentMonth = 1; currentYear++;}
+    if(currentMonth < 1){currentMonth = 12; currentYear--;}
+    buildCalendar();
+    buildStars('calendarStars', 6);
   }
 
-  function namayeshAvaqat(timings, hijri){
+  function renderPrayers(timings, hijri){
     var box = document.getElementById('prayerList');
     if(!box) return;
     var items = [
@@ -626,26 +626,26 @@
       {name:'مغرب', icon:'fa-cloud-moon', key:'Maghrib'},
       {name:'عشا', icon:'fa-moon', key:'Isha'}
     ];
-    var saatFeli = new Date();
-    var daghigheFeli = saatFeli.getHours() * 60 + saatFeli.getMinutes();
+    var now = new Date();
+    var nowMin = now.getHours() * 60 + now.getMinutes();
     var activeIndex = -1;
     for(var i = 0; i < items.length; i++){
       var t = timings[items[i].key];
       if(!t) continue;
       var p = t.split(':');
       var dg = parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
-      if(dg > daghigheFeli){activeIndex = i; break;}
+      if(dg > nowMin){activeIndex = i; break;}
     }
     var midnight = (timings.Midnight || '').split(' ')[0];
-    var midnightDg = 9999;
+    var midnightMin = 9999;
     if(midnight && midnight.indexOf(':') !== -1){
       var mp = midnight.split(':');
-      midnightDg = parseInt(mp[0], 10) * 60 + parseInt(mp[1], 10);
+      midnightMin = parseInt(mp[0], 10) * 60 + parseInt(mp[1], 10);
     }
-    var midnightActive = (activeIndex === -1 && midnightDg > daghigheFeli) ? ' next' : '';
-    var tarikhHijri = '';
-    if(hijri){tarikhHijri = hijri.weekday.ar + ' - ' + hijri.day + ' ' + hijri.month.ar + ' ' + hijri.year;}
-    var html = '<div class="prayer-date">' + (tarikhHijri || '—') + '</div>';
+    var midnightActive = (activeIndex === -1 && midnightMin > nowMin) ? ' next' : '';
+    var hijriText = '';
+    if(hijri){hijriText = hijri.weekday.ar + ' - ' + hijri.day + ' ' + hijri.month.ar + ' ' + hijri.year;}
+    var html = '<div class="prayer-date">' + (hijriText || '—') + '</div>';
     for(var j = 0; j < items.length; j++){
       var timeVal = (timings[items[j].key] || '--:--').split(' ')[0];
       var activeClass = (j === activeIndex) ? ' next' : '';
@@ -661,7 +661,7 @@
     box.innerHTML = html;
   }
 
-  function gereftanAvaqat(){
+  function fetchPrayers(){
     var now = new Date();
     var d = String(now.getDate()).padStart(2, '0');
     var m = String(now.getMonth() + 1).padStart(2, '0');
@@ -671,7 +671,7 @@
       .then(function(res){ return res.json(); })
       .then(function(data){
         if(data && data.code === 200 && data.data && data.data.timings){
-          namayeshAvaqat(data.data.timings, data.data.date && data.data.date.hijri);
+          renderPrayers(data.data.timings, data.data.date && data.data.date.hijri);
         } else {
           var box = document.getElementById('prayerList');
           if(box) box.innerHTML = '<div class="prayer-loading">خطا در دریافت اطلاعات</div>';
@@ -683,7 +683,7 @@
       });
   }
 
-  function راهاندازيبنر(){
+  function initBanner(){
     var track = document.getElementById('bannerTrack');
     if(!track) return;
     var strips = Array.prototype.slice.call(track.querySelectorAll('.banner-strip'));
@@ -732,21 +732,24 @@
     }, 700);
   }
 
-  function راهاندازيویدیو(){
-    var v = document.querySelector('.welcome-video');
+  function initContinuousVideo(selector){
+    var v = document.querySelector(selector);
     if(!v) return;
 
     v.muted = true;
     v.defaultMuted = true;
     v.volume = 0;
-    v.loop = false;
+    v.loop = true;
     v.playsInline = true;
     v.setAttribute('muted', '');
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
+    v.setAttribute('disablepictureinpicture', '');
 
     var duration = 0;
+
     function play(){
+      if(!v.paused) return;
       try{
         var p = v.play();
         if(p && p.catch) p.catch(function(){});
@@ -759,80 +762,38 @@
     });
 
     v.addEventListener('timeupdate', function(){
-      if(duration > 0 && v.currentTime >= duration - 0.15){
-        v.currentTime = 0;
+      if(duration > 0 && v.currentTime >= duration - 0.2){
+        try{ v.currentTime = 0; }catch(e){}
         play();
       }
     });
 
-    v.addEventListener('pause', play);
-    v.addEventListener('stalled', play);
-    v.addEventListener('waiting', play);
+    ['pause','stalled','waiting','suspend','abort','emptied'].forEach(function(ev){
+      v.addEventListener(ev, function(){
+        setTimeout(play, 50);
+      });
+    });
+
     v.addEventListener('ended', function(){
-      v.currentTime = 0;
+      try{ v.currentTime = 0; }catch(e){}
       play();
     });
 
-    setInterval(function(){
-      if(v.paused && !v.ended && v.readyState >= 2){
-        play();
-      }
-    }, 500);
+    document.addEventListener('visibilitychange', function(){
+      if(!document.hidden) play();
+    });
+
+    window.addEventListener('focus', play);
+    window.addEventListener('pageshow', play);
+    window.addEventListener('touchstart', play, {passive:true});
+    window.addEventListener('scroll', play, {passive:true});
+
+    setInterval(play, 250);
 
     play();
   }
 
-  function راهاندازيویدیوپیامشهید(){
-    var v = document.querySelector('.martyr-video');
-    if(!v) return;
-
-    v.muted = true;
-    v.defaultMuted = true;
-    v.volume = 0;
-    v.loop = false;
-    v.playsInline = true;
-    v.setAttribute('muted', '');
-    v.setAttribute('playsinline', '');
-    v.setAttribute('webkit-playsinline', '');
-
-    var duration = 0;
-    function play(){
-      try{
-        var p = v.play();
-        if(p && p.catch) p.catch(function(){});
-      }catch(e){}
-    }
-
-    v.addEventListener('loadedmetadata', function(){
-      duration = v.duration || 0;
-      play();
-    });
-
-    v.addEventListener('timeupdate', function(){
-      if(duration > 0 && v.currentTime >= duration - 0.15){
-        v.currentTime = 0;
-        play();
-      }
-    });
-
-    v.addEventListener('pause', play);
-    v.addEventListener('stalled', play);
-    v.addEventListener('waiting', play);
-    v.addEventListener('ended', function(){
-      v.currentTime = 0;
-      play();
-    });
-
-    setInterval(function(){
-      if(v.paused && !v.ended && v.readyState >= 2){
-        play();
-      }
-    }, 500);
-
-    play();
-  }
-
-  function aemalSaateTelegram(){
+  function initClock(){
     var clock = document.getElementById('tgClock');
     if(!clock) return;
     function update(){
@@ -847,7 +808,7 @@
     setInterval(update, 30000);
   }
 
-  function راهاندازيلینک‌ها(){
+  function initQuickLinks(){
     var container = document.getElementById('tgLinks');
     if(!container) return;
 
@@ -877,7 +838,7 @@
     });
   }
 
-  function راهاندازيپیامشهید(){
+  function initMartyrMessage(){
     var API_URL = window.API_URL || '';
     if(!API_URL) return;
 
@@ -911,27 +872,27 @@
       });
   }
 
-  function shoroo(){
+  function start(){
     var now = new Date();
-    var shamsi = tabdilMiladiBeShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    mahFeli = shamsi.month;
-    salFeli = shamsi.year;
-    sakhtanTaghvim();
-    sakhtanSetareha('calendarStars', 6);
-    sakhtanSetareha('prayerStars', 6);
-    gereftanAvaqat();
-    document.getElementById('btnPrevMonth').addEventListener('click', function(){ taghirMah(-1); });
-    document.getElementById('btnNextMonth').addEventListener('click', function(){ taghirMah(1); });
-    setInterval(gereftanAvaqat, 60 * 60 * 1000);
-    راهاندازيبنر();
-    راهاندازيویدیو();
-    راهاندازيویدیوپیامشهید();
-    aemalSaateTelegram();
-    راهاندازيلینک‌ها();
-    راهاندازيپیامشهید();
+    var shamsi = toShamsi(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    currentMonth = shamsi.month;
+    currentYear = shamsi.year;
+    buildCalendar();
+    buildStars('calendarStars', 6);
+    buildStars('prayerStars', 6);
+    fetchPrayers();
+    document.getElementById('btnPrevMonth').addEventListener('click', function(){ changeMonth(-1); });
+    document.getElementById('btnNextMonth').addEventListener('click', function(){ changeMonth(1); });
+    setInterval(fetchPrayers, 60 * 60 * 1000);
+    initBanner();
+    initContinuousVideo('.welcome-video');
+    initContinuousVideo('.martyr-video');
+    initClock();
+    initQuickLinks();
+    initMartyrMessage();
   }
 
-  shoroo();
+  start();
 
 })();
 </script>
